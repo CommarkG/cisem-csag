@@ -250,6 +250,11 @@ control_plane_subsystems:
       version: '1.0'
       status: DRAFT
       sha256: 4374aa84de8546336ec36f6dbd10bd4ce8260abfe38da84854b12b917559bdec
+    unique_mechanisms_usage_report:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__UniquePlatformMechanismsUsageReport__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: bc69bd9d5f6bbba7913fefbd81d0f48c1fc53514c348cc2ff8db8a2ee3c04465
   consumers:
   - SUPPLIER_SCRAPER
   validation:
