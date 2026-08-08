@@ -65,8 +65,30 @@ Currently, the cognitive backlog is a sliding drawer. We propose promoting this 
 - **Feature 4: Axiom Coverage Analyzer**: Scans production source files and visualizes what percentage of your codebase conforms to specific platform pillars (10000–90000).
 
 ---
+
+## 5. Tracking Sandbox Projects & Promotion Lifecycle
+
+5.1. **The Sandbox Pipeline in the PM Framework**:
+To maintain absolute accountability during the exploration phase, all sandbox tasks are tracked through a defined lifecycle pipeline:
+
+1. **Staging (Backlog)**:
+   - *Action*: Every sandbox project begins as a task ticket in the **Cognitive Backlog** (Supabase) or **GitHub Project Board** (e.g., `Investigate image normalization triggers in sandbox`).
+2. **Exploration (In Progress)**:
+   - *Action*: The code is developed inside the designated category folder (e.g., `/sandbox/landing_page/`). Commits are pushed to GitHub regularly. Vercel automatically deploys the branch but excludes the sandbox files, allowing private tests.
+3. **Auditing (Pre-Review)**:
+   - *Action*: The developer executes `CisemAuditor.py`. The multi-persona expert panel reviews the sandbox files, logs warnings on formatting, and writes the `orchestration_trial_report.json` to prove the tests pass.
+4. **Cleanroom Promotion (Core Integration)**:
+   - *Action*: The developer answers the 5 promotion questions, recreates the feature cleanly inside `/src` or `/backend`, signs the files in `Registry.yaml`, and pushes to GitHub.
+5. **Resolution (Completed)**:
+   - *Action*: The sandbox exploration files are deleted, the local turn counter is reset via `CisemATV.py`, and the backlog task is marked `Completed` in the database.
+
+---
 history:
   - timestamp: "2026-08-08T23:38:00Z"
     action: "CREATED_PROJECT_MANAGEMENT_SPEC"
     actor: "GEMINI_BRAIN"
     version: "1.0"
+  - timestamp: "2026-08-08T23:42:00Z"
+    action: "ADDED_SANDBOX_TRACKING_LIFECYCLE"
+    actor: "GEMINI_BRAIN"
+    version: "1.1"
