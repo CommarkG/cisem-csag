@@ -78,6 +78,12 @@ To organize the platform cleanly so that every module has a defined home, the re
 │   ├── cisem_gate.py                  # Local Compiler Gate (Hardened checks)
 │   └── planning/                      # Canonical Specifications & Plans
 ├── sandbox/                           # Individual/Team Playgrounds (Iterative, Loose)
+│   ├── website/                       # CMS, portal layouts, navigation models
+│   ├── landing_page/                  # Dynamic pages, marketing funnels, images
+│   ├── crm/                           # Pipelines, deals, subcontractor configs
+│   ├── social_media/                  # Webhook connectors, social posting api
+│   ├── knowledge_hub/                 # RAG, embeddings, chunkers, LLM code
+│   └── vocabulary/                    # Glossaries, terminology, dictionary maps
 ├── src/                               # Production Web Application (TypeScript, Next.js)
 │   ├── app/                           # Production Pages and API Routes
 │   └── components/                    # Unified UI Components (Tailwind, shadcn/ui)
