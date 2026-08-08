@@ -58,7 +58,7 @@ export default function Home() {
     | "template_hub"
     | "crm_pipeline"
     | "design_studio"
-    | "sandbox_image_processor"
+    | "sandbox_playground"
     | "human_schema"
     | "system_schema"
     | "threshold"
@@ -140,6 +140,28 @@ export default function Home() {
   };
   const [activeTab, setActiveTab] = useState<"operator" | "client">("operator");
   const [activeRole, setActiveRole] = useState<"guest" | "buyer" | "partner" | "operator_admin">("operator_admin");
+
+  // --- Sandbox Playground States ---
+  const [sandboxTab, setSandboxTab] = useState<"website" | "landing_page" | "crm" | "social_media" | "knowledge_hub" | "vocabulary">("website");
+  const [sandboxWebTheme, setSandboxWebTheme] = useState<"emerald" | "indigo" | "rose" | "amber">("indigo");
+  const [sandboxWebFont, setSandboxWebFont] = useState<"sans" | "serif" | "mono">("sans");
+  const [sandboxCrmLeads, setSandboxCrmLeads] = useState<any[]>([
+    { id: "lead-1", name: "GreenTech Agricultural Supplies", status: "scraped", budget: "₪25,000" },
+    { id: "lead-2", name: "Apex Plastic Logistics", status: "enriched", budget: "₪12,000" },
+    { id: "lead-3", name: "Yariv Metal Casting Ltd", status: "contacted", budget: "₪45,000" },
+    { id: "lead-4", name: "Negev Drip Irrigation Corp", status: "won", budget: "₪85,000" }
+  ]);
+  const [sandboxBannerText, setSandboxBannerText] = useState("מערכות סינון B2B וצינורות השקיה");
+  const [sandboxBannerBg, setSandboxBannerBg] = useState("from-slate-900 via-slate-800 to-indigo-950");
+  const [sandboxSearchQuery, setSandboxSearchQuery] = useState("");
+  const [sandboxAxioms, setSandboxAxioms] = useState<any[]>([
+    { id: "AX-10000", name: "Platform Absolute Reality Principle", status: "Active", desc: "No shadow folder states permitted. Registry is the single source of truth." },
+    { id: "PR-11000", name: "Sparse ID Allocation Policy", status: "Active", desc: "Sparse numbering spacing (intervals of +100/500), space footprint <5%." },
+    { id: "PR-13980", name: "Variable Gate Severity Threshold", status: "Active", desc: "Gestation threshold scales based on task blast radius." }
+  ]);
+  const [newAxiomId, setNewAxiomId] = useState("");
+  const [newAxiomName, setNewAxiomName] = useState("");
+  const [newAxiomDesc, setNewAxiomDesc] = useState("");
 
   // --- Dynamic Chunks & Backlog states ---
   const [chunksList, setChunksList] = useState<any[]>([]);
@@ -2284,25 +2306,473 @@ export default function Home() {
             </div>
           )}
 
-          {/* TAB G: SANDBOX IMAGE PROCESSOR */}
-          {currentMenu === "sandbox_image_processor" && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center text-right" dir="rtl">
+          {/* TAB G: SANDBOX PLAYGROUND */}
+          {currentMenu === "sandbox_playground" && (
+            <div className="space-y-6" dir="rtl">
+              {/* Header */}
+              <div className="flex justify-between items-center text-right">
                 <div>
                   <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                    ממשק מעבד תמונות Sandbox (SIPI)
+                    ארגז החול הפלטפורמי (Sandbox Playground)
                   </h1>
                   <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                    מערכת אינטגרטיבית לעיבוד תמונה, מיתוג ורישום תכונות למוצרים.
+                    סביבת פיתוח מהיר, יצירת אבות-טיפוס ומדידת רעיונות לפני ייצוא לליבת המערכת.
                   </p>
                 </div>
               </div>
-              <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden dark:border-slate-800 dark:bg-slate-950/20 h-[800px] shadow-sm">
-                <iframe
-                  src="http://localhost:7880"
-                  className="w-full h-full border-none"
-                  title="Sandbox Image Processor"
-                />
+
+              {/* Category tabs switcher */}
+              <div className="flex border-b border-slate-200 dark:border-slate-800 gap-4 overflow-x-auto pb-px">
+                {[
+                  { id: "website", label: "🌐 Website", desc: "אתרי ספקים B2B" },
+                  { id: "landing_page", label: "📄 Landing Page", desc: "דפי נחיתה מהירים" },
+                  { id: "crm", label: "💼 CRM Stacker", desc: "ניהול לידים מונחה AI" },
+                  { id: "social_media", label: "📣 Social Banner", desc: "סטודיו באנרים" },
+                  { id: "knowledge_hub", label: "📚 Knowledge Hub", desc: "מאגר מסמכים" },
+                  { id: "vocabulary", label: "📝 Vocabulary", desc: "מילון אקסיומות" }
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setSandboxTab(tab.id as any)}
+                    className={`whitespace-nowrap pb-4 px-1 text-sm font-semibold border-b-2 transition-all ${
+                      sandboxTab === tab.id
+                        ? "border-amber-500 text-amber-500"
+                        : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Tab Contents */}
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50 backdrop-blur-md">
+                
+                {/* 1. Website prototype preview */}
+                {sandboxTab === "website" && (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                      {/* Left: Customizer controls */}
+                      <div className="lg:col-span-1 space-y-4 text-right">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">עיצוב ומיתוג</span>
+                        <div className="space-y-2">
+                          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">ערכת צבעים</label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {(["emerald", "indigo", "rose", "amber"] as const).map((theme) => (
+                              <button
+                                key={theme}
+                                onClick={() => setSandboxWebTheme(theme)}
+                                className={`px-2 py-1.5 rounded-lg text-xs font-bold capitalize transition-all border ${
+                                  sandboxWebTheme === theme
+                                    ? "bg-slate-100 dark:bg-slate-800 border-amber-500 text-amber-500"
+                                    : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                }`}
+                              >
+                                {theme}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">גופן (Typography)</label>
+                          <div className="flex gap-2">
+                            {(["sans", "serif", "mono"] as const).map((font) => (
+                              <button
+                                key={font}
+                                onClick={() => setSandboxWebFont(font)}
+                                className={`flex-1 px-2 py-1.5 rounded-lg text-xs font-bold capitalize transition-all border ${
+                                  sandboxWebFont === font
+                                    ? "bg-slate-100 dark:bg-slate-800 border-amber-500 text-amber-500"
+                                    : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400"
+                                }`}
+                              >
+                                {font}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Simulated browser mockup preview */}
+                      <div className="lg:col-span-3 space-y-4">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block text-right">תצוגה מקדימה במכשיר</span>
+                        
+                        <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-2xl bg-white dark:bg-slate-900">
+                          {/* Browser Address Bar */}
+                          <div className="bg-slate-100 dark:bg-slate-800 px-4 py-2 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+                            <div className="flex gap-1.5">
+                              <span className="w-3 h-3 rounded-full bg-red-400 block" />
+                              <span className="w-3 h-3 rounded-full bg-yellow-400 block" />
+                              <span className="w-3 h-3 rounded-full bg-green-400 block" />
+                            </div>
+                            <div className="flex-1 bg-white dark:bg-slate-950 px-3 py-1 rounded-md text-xs text-slate-400 text-left border border-slate-200/50 dark:border-slate-800">
+                              https://sandbox.commark.co.il/preview/supplier-store
+                            </div>
+                          </div>
+
+                          {/* Rendered Mock Content */}
+                          <div className={`p-8 min-h-[400px] text-right transition-all duration-300 ${
+                            sandboxWebFont === "serif" ? "font-serif" : sandboxWebFont === "mono" ? "font-mono" : "font-sans"
+                          } ${
+                            sandboxWebTheme === "emerald" ? "text-emerald-950 dark:text-emerald-100" :
+                            sandboxWebTheme === "rose" ? "text-rose-950 dark:text-rose-100" :
+                            sandboxWebTheme === "amber" ? "text-amber-950 dark:text-amber-100" :
+                            "text-indigo-950 dark:text-indigo-100"
+                          }`}>
+                            <div className="max-w-xl mx-auto space-y-6">
+                              <div className="flex items-center justify-between border-b pb-4 border-slate-100 dark:border-slate-800">
+                                <span className={`text-lg font-extrabold ${
+                                  sandboxWebTheme === "emerald" ? "text-emerald-600" :
+                                  sandboxWebTheme === "rose" ? "text-rose-600" :
+                                  sandboxWebTheme === "amber" ? "text-amber-600" :
+                                  "text-indigo-600"
+                                }`}>GreenTech Agri B2B</span>
+                                <nav className="flex gap-4 text-xs font-bold text-slate-600 dark:text-slate-400">
+                                  <span>ראשי</span>
+                                  <span>קטלוג</span>
+                                  <span>צור קשר</span>
+                                </nav>
+                              </div>
+
+                              <div className="space-y-4 py-8">
+                                <h1 className="text-3xl font-extrabold tracking-tight">ציוד השקיה ופולימרים מתקדמים לחקלאות</h1>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                  ספק מורשה של מערכות דישון, צינורות טפטוף מחוזקים ומוצרי פלסטיק מתקדמים עבור משקי העוטף והנגב המערבי.
+                                </p>
+                                <div className="pt-4 flex gap-3 justify-end">
+                                  <button className="px-4 py-2 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-850 hover:bg-slate-50">
+                                    הורד קטלוג מלא (PDF)
+                                  </button>
+                                  <button className={`px-4 py-2 text-xs font-bold text-white rounded-lg shadow-sm ${
+                                    sandboxWebTheme === "emerald" ? "bg-emerald-600 hover:bg-emerald-700" :
+                                    sandboxWebTheme === "rose" ? "bg-rose-600 hover:bg-rose-700" :
+                                    sandboxWebTheme === "amber" ? "bg-amber-600 hover:bg-amber-700" :
+                                    "bg-indigo-600 hover:bg-indigo-700"
+                                  }`}>
+                                    הזמן עכשיו
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Landing Page Customizer */}
+                {sandboxTab === "landing_page" && (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">עורך מבנה דף נחיתה</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-right">
+                      {/* Section Checklist */}
+                      <div className="space-y-4 p-4 border border-slate-100 rounded-xl dark:border-slate-800">
+                        <h3 className="text-sm font-bold">מבנה הדף המוצע (Drag & Drop Blueprint)</h3>
+                        <p className="text-xs text-slate-400">השתמש בסכמת הרכיבים ליצירת עמוד שיווקי מתואם:</p>
+                        
+                        <div className="space-y-2">
+                          {[
+                            { name: "Hero Header", status: "מיוצא" },
+                            { name: "Feature Matrix grid", status: "מיוצא" },
+                            { name: "Live Catalog search bar", status: "טיוטה" },
+                            { name: "B2B Price Calculator", status: "טיוטה" },
+                            { name: "Testimonials Carousel", status: "מיוצא" },
+                            { name: "Footer disclaimer", status: "מיוצא" }
+                          ].map((sec, idx) => (
+                            <div key={idx} className="flex justify-between items-center p-3 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-xs">
+                              <span className="text-slate-400 font-medium">#{idx + 1}</span>
+                              <span className="font-bold text-slate-700 dark:text-slate-300">{sec.name}</span>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                sec.status === "מיוצא" ? "bg-green-100 text-green-700 dark:bg-green-950/20" : "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/20"
+                              }`}>{sec.status}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Code Generator Output */}
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold text-slate-400 block">מחולל קוד HTML/CSS (Boilerplate)</span>
+                        <div className="relative">
+                          <pre className="p-4 rounded-xl bg-slate-950 text-slate-200 text-left text-xs font-mono overflow-x-auto h-[320px]">
+{`<!-- Landing Page Section Blueprint -->
+<section class="relative bg-slate-900 text-white py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center">
+      <h1 class="text-5xl font-extrabold tracking-tight">
+        הזמן מהספקים הגדולים בארץ
+      </h1>
+      <p class="mt-4 text-lg text-slate-300">
+        פלטפורמת B2B מקושרת Supabase עם הזרקת DNA ולימוד לולאות.
+      </p>
+    </div>
+  </div>
+</section>`}
+                          </pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. CRM Leads Stacker */}
+                {sandboxTab === "crm" && (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">לוח ניהול לידים B2B</span>
+                      <span className="text-xs font-bold bg-amber-500/10 px-2.5 py-1 rounded-full text-amber-500">מסונכרן עם PostgreSQL</span>
+                    </div>
+
+                    {/* Columns grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-right">
+                      {(["scraped", "enriched", "contacted", "won"] as const).map((stage) => {
+                        const stageLeads = sandboxCrmLeads.filter(l => l.status === stage);
+                        return (
+                          <div key={stage} className="rounded-xl border border-slate-100 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col gap-3 min-h-[300px]">
+                            <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-2">
+                              <span className="text-xs text-slate-400 font-bold">({stageLeads.length})</span>
+                              <span className="text-xs font-extrabold uppercase text-slate-700 dark:text-slate-300 capitalize">{stage}</span>
+                            </div>
+
+                            <div className="flex-1 space-y-3">
+                              {stageLeads.map((lead) => (
+                                <div key={lead.id} className="p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm space-y-2 text-xs">
+                                  <div className="font-bold text-slate-800 dark:text-slate-200">{lead.name}</div>
+                                  <div className="text-slate-400">תקציב: {lead.budget}</div>
+                                  
+                                  {/* Movement buttons */}
+                                  <div className="flex justify-between items-center pt-2 gap-1 border-t border-slate-100 dark:border-slate-850/50">
+                                    <button 
+                                      disabled={stage === "scraped"}
+                                      onClick={() => {
+                                        const order = ["scraped", "enriched", "contacted", "won"];
+                                        const prevStage = order[order.indexOf(stage) - 1];
+                                        setSandboxCrmLeads(sandboxCrmLeads.map(l => l.id === lead.id ? { ...l, status: prevStage } : l));
+                                      }}
+                                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 disabled:opacity-40"
+                                    >
+                                      ◀ הקודם
+                                    </button>
+                                    <button 
+                                      disabled={stage === "won"}
+                                      onClick={() => {
+                                        const order = ["scraped", "enriched", "contacted", "won"];
+                                        const nextStage = order[order.indexOf(stage) + 1];
+                                        setSandboxCrmLeads(sandboxCrmLeads.map(l => l.id === lead.id ? { ...l, status: nextStage } : l));
+                                      }}
+                                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 disabled:opacity-40"
+                                    >
+                                      הבא ➔
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                              {stageLeads.length === 0 && (
+                                <div className="text-xs text-slate-400 italic text-center py-8">אין לידים בשלב זה</div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* 4. Social Media Banner Studio */}
+                {sandboxTab === "social_media" && (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-right">
+                      {/* Left: Input Text Customizer */}
+                      <div className="lg:col-span-1 space-y-4">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">עריכת תוכן הבאנר</span>
+                        <div className="space-y-2">
+                          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">כותרת הבאנר (שם המבצע / מיתוג)</label>
+                          <input
+                            type="text"
+                            value={sandboxBannerText}
+                            onChange={(e) => setSandboxBannerText(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 focus:ring-1 focus:ring-amber-500 text-right font-medium"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">צבע רקע (CSS Gradients)</label>
+                          <div className="flex flex-col gap-2">
+                            {[
+                              { label: "Indigo Dusk", class: "from-slate-900 via-slate-800 to-indigo-950" },
+                              { label: "Emerald Canopy", class: "from-slate-950 via-slate-900 to-emerald-950" },
+                              { label: "Amber Sunset", class: "from-slate-950 via-slate-900 to-amber-950" },
+                              { label: "Crimson Eclipse", class: "from-slate-950 via-slate-900 to-rose-950" }
+                            ].map((bg, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setSandboxBannerBg(bg.class)}
+                                className={`px-3 py-2 rounded-lg text-xs font-bold transition-all text-right border ${
+                                  sandboxBannerBg === bg.class ? "border-amber-500 text-amber-500 bg-slate-50 dark:bg-slate-850" : "border-slate-200 dark:border-slate-750 text-slate-600 dark:text-slate-400"
+                                }`}
+                              >
+                                {bg.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Mock banner canvas rendering */}
+                      <div className="lg:col-span-2 space-y-4">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">תצוגת באנר שיווקי B2B</span>
+                        
+                        <div className={`w-full rounded-2xl bg-gradient-to-tr ${sandboxBannerBg} p-12 min-h-[300px] flex flex-col justify-between items-center text-center shadow-2xl relative overflow-hidden border border-slate-850`}>
+                          {/* Pattern overlay simulation */}
+                          <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+                          
+                          <div className="flex items-center gap-1.5 z-10">
+                            <span className="text-xl">🚀</span>
+                            <span className="text-xs font-bold tracking-widest text-amber-500 uppercase">COMMARK PLATFORM TRIAL</span>
+                          </div>
+
+                          <div className="z-10 text-white font-extrabold text-3xl leading-snug max-w-lg mt-6">
+                            {sandboxBannerText || "טקסט לדוגמה לבאנר שיווקי"}
+                          </div>
+
+                          <div className="z-10 flex gap-4 text-[10px] text-slate-400 font-bold border-t border-slate-800 w-full justify-center pt-4 mt-6">
+                            <span>תואם LinkedIn</span>
+                            <span>•</span>
+                            <span>תואם Twitter</span>
+                            <span>•</span>
+                            <span>תואם Facebook Ads</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 5. Knowledge Hub */}
+                {sandboxTab === "knowledge_hub" && (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">חיפוש וגילוי מסמכי מערכת</span>
+                      <input
+                        type="text"
+                        placeholder="חפש מסמכים..."
+                        value={sandboxSearchQuery}
+                        onChange={(e) => setSandboxSearchQuery(e.target.value)}
+                        className="px-3 py-1.5 rounded-lg text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 w-64 text-right"
+                      />
+                    </div>
+
+                    {/* Files list */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-right">
+                      {[
+                        { title: "EnterpriseScaleArchitectureBlueprint V1.0", path: "planning/2026-08-08__AntigravityLocal__YarivHuman__EnterpriseScaleArchitectureBlueprint__V1.0.md", type: "Plan" },
+                        { title: "SandboxSystemSchemaAndStructure V1.0", path: "planning/2026-08-08__AntigravityLocal__YarivHuman__SandboxSystemSchemaAndStructure__V1.0.md", type: "Schema" },
+                        { title: "ProjectManagementAndAccountabilityFramework V1.0", path: "planning/2026-08-08__AntigravityLocal__YarivHuman__ProjectManagementAndAccountabilityFramework__V1.0.md", type: "Framework" },
+                        { title: "KnowledgeManagementAndPlatformDnaEnforcement V1.0", path: "planning/2026-08-08__AntigravityLocal__YarivHuman__KnowledgeManagementAndPlatformDnaEnforcement__V1.0.md", type: "Enforcement" },
+                        { title: "PersonaAuditSandboxPositioning V1.0", path: "planning/2026-08-08__AntigravityLocal__YarivHuman__PersonaAuditSandboxPositioning__V1.0.md", type: "Audit" },
+                        { title: "SandboxThresholdProtocol V1.0", path: "planning/2026-08-08__AntigravityLocal__YarivHuman__SandboxThresholdProtocol__V1.0.md", type: "Protocol" }
+                      ].filter(f => f.title.toLowerCase().includes(sandboxSearchQuery.toLowerCase()))
+                       .map((doc, idx) => (
+                        <div key={idx} className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2 hover:border-amber-500/50 transition-colors">
+                          <div className="flex justify-between items-center">
+                            <span className="text-[10px] font-bold bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-full">{doc.type}</span>
+                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">{doc.title}</h4>
+                          </div>
+                          <p className="text-[11px] text-slate-400 break-all">{doc.path}</p>
+                          <div className="flex justify-start gap-2 pt-2">
+                            <a
+                              href={`http://localhost:3000/api/download?filename=${doc.title}.md`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="px-2 py-1 text-[10px] font-bold rounded-lg bg-amber-500 text-white shadow-sm hover:bg-amber-600"
+                            >
+                              הורד קובץ MD
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 6. Vocabulary & Axioms */}
+                {sandboxTab === "vocabulary" && (
+                  <div className="space-y-6 text-right">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">עריכת מילון מונחי פלטפורמה</span>
+                    
+                    {/* Add Axiom Form */}
+                    <div className="p-4 border border-slate-100 dark:border-slate-800 rounded-xl space-y-3 bg-slate-50/50 dark:bg-slate-900/50">
+                      <h4 className="text-xs font-bold text-slate-700 dark:text-slate-350">הוסף מונח / אקסיומה למאגר</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input
+                          type="text"
+                          placeholder="קוד מונח (למשל: AX-200)"
+                          value={newAxiomId}
+                          onChange={(e) => setNewAxiomId(e.target.value)}
+                          className="px-3 py-2 rounded-lg text-xs border border-slate-200 dark:border-slate-750 bg-white dark:bg-slate-950 text-right"
+                        />
+                        <input
+                          type="text"
+                          placeholder="שם המונח"
+                          value={newAxiomName}
+                          onChange={(e) => setNewAxiomName(e.target.value)}
+                          className="px-3 py-2 rounded-lg text-xs border border-slate-200 dark:border-slate-750 bg-white dark:bg-slate-950 text-right"
+                        />
+                        <input
+                          type="text"
+                          placeholder="תיאור ואקסיומת פלטפורמה"
+                          value={newAxiomDesc}
+                          onChange={(e) => setNewAxiomDesc(e.target.value)}
+                          className="px-3 py-2 rounded-lg text-xs border border-slate-200 dark:border-slate-750 bg-white dark:bg-slate-950 text-right md:col-span-1"
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (!newAxiomId.trim() || !newAxiomName.trim()) return;
+                          setSandboxAxioms([...sandboxAxioms, { id: newAxiomId, name: newAxiomName, status: "Active", desc: newAxiomDesc }]);
+                          setNewAxiomId("");
+                          setNewAxiomName("");
+                          setNewAxiomDesc("");
+                        }}
+                        className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm"
+                      >
+                        הוסף למילון המקומי
+                      </button>
+                    </div>
+
+                    {/* Axioms table */}
+                    <div className="overflow-x-auto border border-slate-100 dark:border-slate-800 rounded-xl">
+                      <table className="min-w-full divide-y divide-slate-100 dark:divide-slate-800 text-right text-xs">
+                        <thead className="bg-slate-50 dark:bg-slate-900/80 font-bold text-slate-500">
+                          <tr>
+                            <th className="px-4 py-3">מזהה</th>
+                            <th className="px-4 py-3">מונח / אקסיומה</th>
+                            <th className="px-4 py-3">סטטוס</th>
+                            <th className="px-4 py-3">תיאור העיקרון</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                          {sandboxAxioms.map((ax, idx) => (
+                            <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                              <td className="px-4 py-3 font-mono font-bold text-amber-500">{ax.id}</td>
+                              <td className="px-4 py-3 font-bold">{ax.name}</td>
+                              <td className="px-4 py-3">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700 dark:bg-green-950/20">{ax.status}</span>
+                              </td>
+                              <td className="px-4 py-3 text-slate-400">{ax.desc}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
               </div>
             </div>
           )}

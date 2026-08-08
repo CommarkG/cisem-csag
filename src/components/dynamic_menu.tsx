@@ -62,6 +62,61 @@ export default function DynamicMenu({
 
           {/* Center Category navigation links */}
           <nav className="hidden md:flex space-x-6 items-center" dir="rtl">
+
+            {/* 🎮 Sandbox Dropdown */}
+            <div className="relative group">
+              <button
+                type="button"
+                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
+              >
+                <span>🎮 Sandbox</span>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div className="absolute right-0 top-full w-[240px] rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-4 flex flex-col gap-2 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-50">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1 text-right">
+                  ארגז חול (Sandbox)
+                </span>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  🌐 Website Prototype
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  📄 Landing Page
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  💼 CRM Stacker
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  📣 Social Banner Studio
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  📚 Knowledge Hub
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  📝 Vocabulary & Axioms
+                </button>
+              </div>
+            </div>
             
             {/* 1. 🛠️ Tools Dropdown */}
             <div className="relative group">
@@ -82,37 +137,37 @@ export default function DynamicMenu({
                     Marketing ➔ Studio ➔ Image
                   </span>
                   <button
-                    onClick={() => onSelectCategory("sandbox_image_processor")}
+                    onClick={() => onSelectCategory("sandbox_playground")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     💎 Normalizer
                   </button>
                   <button
-                    onClick={() => onSelectCategory("sandbox_image_processor")}
+                    onClick={() => onSelectCategory("sandbox_playground")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     📊 Batch Auditor
                   </button>
                   <button
-                    onClick={() => onSelectCategory("sandbox_image_processor")}
+                    onClick={() => onSelectCategory("sandbox_playground")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     📐 Shape Library
                   </button>
                   <button
-                    onClick={() => onSelectCategory("sandbox_image_processor")}
+                    onClick={() => onSelectCategory("sandbox_playground")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     📁 Folder Manager
                   </button>
                   <button
-                    onClick={() => onSelectCategory("sandbox_image_processor")}
+                    onClick={() => onSelectCategory("sandbox_playground")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     💡 Learning Lab
                   </button>
                   <button
-                    onClick={() => onSelectCategory("sandbox_image_processor")}
+                    onClick={() => onSelectCategory("sandbox_playground")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     🛠️ Diagnostics
