@@ -2,10 +2,10 @@
 
 metadata:
   owner: CISEM_GOVERNOR
-  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.15.yaml
+  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.16.yaml
   artifact_status: DRAFT
   maturity: WORKING_DRAFT
-  version: '1.15'
+  version: '1.16'
   inherited_authorities:
   - CISEM Project Constitution
   related_implementation_adapter: GOOGLE_ANTIGRAVITY_ADAPTER
@@ -44,6 +44,10 @@ history:
   action: REGISTERED_SANDBOX_AND_ACCOUNTABILITY_BLUEPRINTS_INCREMENTED_TO_V1.15
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.15'
+- timestamp: '2026-08-08T23:55:00Z'
+  action: REGISTERED_SANDBOX_THRESHOLD_PROTOCOL_SPEC_INCREMENTED_TO_V1.16
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.16'
 ---
 workspace:
   root_path: .
@@ -241,6 +245,11 @@ control_plane_subsystems:
       version: '1.0'
       status: DRAFT
       sha256: 7c5227037663d3e3b7529da631e735bfa2ef48f8daa0c17e2ba05cac72b7642a
+    sandbox_threshold_protocol:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__SandboxThresholdProtocol__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: 4374aa84de8546336ec36f6dbd10bd4ce8260abfe38da84854b12b917559bdec
   consumers:
   - SUPPLIER_SCRAPER
   validation:
@@ -497,3 +506,7 @@ history:
   action: REGISTERED_SANDBOX_AND_ACCOUNTABILITY_BLUEPRINTS_INCREMENTED_TO_V1.15
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.15'
+- timestamp: '2026-08-08T23:55:00Z'
+  action: REGISTERED_SANDBOX_THRESHOLD_PROTOCOL_SPEC_INCREMENTED_TO_V1.16
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.16'
