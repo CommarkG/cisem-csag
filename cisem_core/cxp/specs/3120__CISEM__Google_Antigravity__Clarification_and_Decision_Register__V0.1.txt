@@ -1,0 +1,47 @@
+﻿CISEM — GOOGLE ANTIGRAVITY CLARIFICATION AND DECISION REGISTER
+
+
+Purpose
+Provide the durable record that allows Google Antigravity to continue long implementation work without relying on transient chat context or repeatedly asking the human bridge the same questions.
+
+
+Record Schema
+ID
+Date or CoreCycle
+Source file or repository evidence
+Issue or decision point
+Type: UX / UI / BACKEND / DATA / CONNECTIVITY / SECURITY / PERFORMANCE / PROVIDER / GOVERNANCE / SCOPE
+Known facts
+Unknowns
+Options considered
+Trade-offs
+Antigravity recommendation
+CISEM recommendation, when available
+Human decision
+Disposition: RESOLVED / SAFE_BOUNDED_ASSUMPTION / BLOCKING_UNRESOLVED / PARKED
+Authority
+Affected files and components
+Required validation
+Revisit trigger
+Evidence link
+
+
+Rules
+1. No hidden assumptions.
+2. Repository evidence is checked before a question is sent through the bridge.
+3. A safe bounded assumption must state its boundary, reversibility and validation method.
+4. Any decision affecting architecture, security, data ownership, external-provider coupling, inherited rules or scope remains blocking until authorized.
+5. Resolved decisions must be reflected in the implementation plan, tests and relevant durable workspace artifacts.
+6. Superseded decisions remain traceable and link to their replacement.
+7. The register is updated before every phase advancement and at every CoreCycle close.
+
+
+Initial Open Areas
+- Actual marketing-platform codebase location and current architecture.
+- Existing frontend framework, backend services, persistence and authentication.
+- Existing product-image storage, naming and metadata.
+- Nano Banana access method, capabilities, limits, cost and credentials handling.
+- Other image-provider candidates and provider-selection policy.
+- Exact acceptance criteria for the first processed image.
+- Human review interface and approval flow.
+- Provenance, versioning and rollback requirements.

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UniversalSubsystemMapping",
+  "description": "Enforces that all sub-project workspaces align to the parent root universal assets and configuration parameters.",
+  "type": "object",
+  "required": [
+    "root_assets",
+    "project_mappings"
+  ],
+  "properties": {
+    "root_assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "asset_id",
+          "canonical_path",
+          "immutable"
+        ],
+        "properties": {
+          "asset_id": {
+            "type": "string"
+          },
+          "canonical_path": {
+            "type": "string"
+          },
+          "immutable": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "project_mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "project_id",
+          "local_directory",
+          "required_inherits",
+          "alignment_approved"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "local_directory": {
+            "type": "string"
+          },
+          "required_inherits": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "alignment_approved": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

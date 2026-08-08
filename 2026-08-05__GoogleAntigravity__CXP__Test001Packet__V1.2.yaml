@@ -1,0 +1,152 @@
+# TEST-001 Handshake Event-Sourced Packet Template
+
+---
+metadata:
+  owner: "CISEM_GOVERNOR"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Marketing CoreHub CsAg\\2026-08-05__GoogleAntigravity__CXP__Test001Packet__V1.2.yaml"
+  artifact_status: "DRAFT"
+  maturity: "WORKING_DRAFT"
+  version: "1.2"
+  inherited_authorities:
+    - "CISEM Project Constitution"
+  related_implementation_adapter: "GOOGLE_ANTIGRAVITY_ADAPTER"
+  local_edits_allowed: false
+  role_type: "CANONICAL_TEST_PACKET"
+---
+
+protocol:
+  protocol_name: "CXP"
+  protocol_version: "1.2"
+  schema_version: "1.2"
+  adapter_contract_version: "0.1"
+  repository_snapshot: "git-commit-hash-or-none"
+
+identity:
+  project: "Marketing CoreHub"
+  core_cycle: "01"
+  purpose: "Execute loop infrastructure validation via handshake intent."
+
+immutable_request:
+  header:
+    packet_id: "CXP-PKT-20260805-000001"
+    timestamp: "2026-08-05T13:45:00Z"
+    sender: "CISEM_CLOUD"
+    recipient: "GOOGLE_ANTIGRAVITY_ADAPTER"
+  repository_target:
+    path: "C:\\Users\\finky\\Desktop\\AntiGravity\\Marketing CoreHub CsAg"
+    branch: "main"
+    commit_before: "git-commit-hash-or-none"
+    dirty_before: false
+  authority:
+    ratifying_authority:
+      identity: "Yariv Fink"
+      role: "Governor"
+    human_bridge:
+      identity: "Yariv Fink"
+      enabled: true
+      role: "Transport and coordination"
+    issuing_system:
+      identity: "CISEM_CLOUD"
+      authority_scope:
+        - "issue_pre_authorized_packets"
+        - "audit_results"
+    implementation_adapter:
+      identity: "GOOGLE_ANTIGRAVITY_ADAPTER"
+      authority_scope:
+        - "claim_packet"
+        - "execute_registered_intent"
+        - "write_response_evidence"
+  governance:
+    dependencies: []
+    blocking_conditions: []
+    parking_rules: []
+    acceptance_criteria:
+      - "Local Watcher claims packet by appending PACKET_CLAIMED event"
+      - "Local Runner executes TEST_HANDSHAKE intent successfully"
+      - "Local Adapter validates evidence and appends PACKET_COMPLETED event"
+      - "Cloud Auditor verifies response and appends AUDIT_VERIFIED event"
+  execution:
+    intent: "TEST_HANDSHAKE"
+    parameters:
+      token: "handshake-verification-token-xyz"
+    inputs: {}
+    required_outputs:
+      - "stdout"
+    evidence_required:
+      - "token_match_verification"
+
+event_stream:
+  - event_id: "CXP-EVT-20260805-000001-000001"
+    event_type: "PACKET_CREATED"
+    sequence_number: 1
+    previous_event_id: "CXP-EVT-20260805-000001-000000"
+    packet_id: "CXP-PKT-20260805-000001"
+    actor:
+      identity: "CISEM_CLOUD"
+      role: "CLOUD_ORCHESTRATOR"
+    occurred_at: "2026-08-05T13:45:00Z"
+    recorded_at: "2026-08-05T13:45:00Z"
+    transition:
+      from_state: "NONE"
+      to_state: "CREATED"
+      transition_id: "CXP-T-001"
+    payload: {}
+    evidence_refs: []
+    correlation_id: "TEST-001"
+    causation_event_id: "CXP-EVT-20260805-000001-000000"
+    schema_version: "1.2"
+    integrity:
+      content_hash: "sha256-hash-value-1"
+
+  - event_id: "CXP-EVT-20260805-000001-000002"
+    event_type: "PACKET_PUBLISHED"
+    sequence_number: 2
+    previous_event_id: "CXP-EVT-20260805-000001-000001"
+    packet_id: "CXP-PKT-20260805-000001"
+    actor:
+      identity: "CISEM_CLOUD"
+      role: "CLOUD_ORCHESTRATOR"
+    occurred_at: "2026-08-05T13:45:05Z"
+    recorded_at: "2026-08-05T13:45:05Z"
+    transition:
+      from_state: "CREATED"
+      to_state: "READY"
+      transition_id: "CXP-T-002"
+    payload: {}
+    evidence_refs: []
+    correlation_id: "TEST-001"
+    causation_event_id: "CXP-EVT-20260805-000001-000001"
+    schema_version: "1.2"
+    integrity:
+      content_hash: "sha256-hash-value-2"
+
+derived_view:
+  current_state: "READY"
+  execution_control:
+    idempotency_key: "idemp-key-test-001"
+    attempt_number: 1
+    max_attempts: 3
+    claimed_by: ""
+    claimed_at: ""
+    lease_expires_at: ""
+    timeout_seconds: 300
+    requires_clean_repository: false
+  response:
+    status: ""
+    stdout: ""
+    stderr: ""
+    evidence: {}
+  audit:
+    result: ""
+    auditor_id: ""
+    timestamp: ""
+  lessons_learned: []
+
+integrity:
+  packet_hash: "sha256-hash-packet"
+  latest_event_hash: "sha256-hash-value-2"
+
+history:
+  - timestamp: "2026-08-05T13:45:05Z"
+    action: "PACKET_PUBLISHED_AS_V1.2"
+    actor: "CISEM_CLOUD"

@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Canonical schema specification for the CISEM Exchange Protocol (CXP) V1.2. Details immutable requests, event streams, and derived views.">
+    <title>CISEM Packet Schema V1.2 Reference</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #08090d;
+            --accent-cyan: #00f2fe;
+            --accent-purple: #9b51e0;
+            --text-main: #f5f6fa;
+            --text-muted: #a4b0be;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(18, 22, 33, 0.6);
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Backgrounds */
+        .ambient-glow-1 {
+            position: absolute;
+            top: -200px;
+            left: -200px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            top: 40%;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(155, 81, 224, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Container Layout */
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar navigation */
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid var(--border-color);
+            background: rgba(8, 9, 13, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 100;
+        }
+
+        .logo-area h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .logo-area p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .nav-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            display: block;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-item a:hover, .nav-item.active a {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+            border-color: var(--border-color);
+            padding-left: 1.2rem;
+        }
+
+        .nav-item.active a {
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        /* Main Content Panel */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+        }
+
+        .header-section {
+            margin-bottom: 3.5rem;
+        }
+
+        .header-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.8rem;
+        }
+
+        .header-section p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 800px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 242, 254, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .card h3 span {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Required Tags */
+        .required-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .required-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-purple);
+            font-weight: 700;
+        }
+
+        .required-tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            background: rgba(155, 81, 224, 0.1);
+            color: #d8b4fe;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid rgba(155, 81, 224, 0.2);
+        }
+
+        /* Table design */
+        .property-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .property-table th, .property-table td {
+            text-align: left;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .property-table th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .prop-name {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .prop-type {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+        }
+
+        .prop-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Codeblock styling */
+        .raw-viewer {
+            margin-top: 3.5rem;
+        }
+
+        .raw-viewer h3 {
+            margin-bottom: 1rem;
+        }
+
+        pre {
+            background: #040507;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #d1d8e0;
+        }
+
+        /* Scrollbar styling */
+        pre::-webkit-scrollbar, .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Interactive tabs/buttons */
+        .btn-copy {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-family: var(--font-main);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-color);
+            box-shadow: var(--shadow-glow);
+            border-color: var(--accent-cyan);
+        }
+
+        @media (max-width: 1024px) {
+            .wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <div class="wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <h1 id="logo-title">CISEM Schemas</h1>
+                <p>CXP Packet Protocol Specification</p>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li class="nav-item active"><a href="#protocol" id="nav-protocol">Protocol Header</a></li>
+                    <li class="nav-item"><a href="#identity" id="nav-identity">Identity Profile</a></li>
+                    <li class="nav-item"><a href="#immutable" id="nav-immutable">Immutable Request</a></li>
+                    <li class="nav-item"><a href="#event" id="nav-event">Event Stream</a></li>
+                    <li class="nav-item"><a href="#derived" id="nav-derived">Derived View</a></li>
+                    <li class="nav-item"><a href="#integrity" id="nav-integrity">Integrity Blocks</a></li>
+                    <li class="nav-item" style="margin-top: 1rem;"><a href="#raw-schema" id="nav-raw">Raw JSON Schema</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header-section">
+                <h2>CXP Packet Schema V1.2</h2>
+                <p>Detailed mapping of the structured communication interface. Every transaction, plan validation, or execution handshake is packed, signed, and validated against these constraints.</p>
+            </header>
+
+            <!-- Card: Protocol -->
+            <section id="protocol" class="card">
+                <h3>protocol <span>object</span></h3>
+                <p class="card-desc">Defines protocol type and core configuration contracts.</p>
+                <div class="required-fields">
+                    <span class="required-label">Required:</span>
+                    <span class="required-tag">protocol_name</span>
+                    <span class="required-tag">protocol_version</span>
+                    <span class="required-tag">schema_version</span>
+                    <span class="required-tag">adapter_contract_version</span>
+                </div>
+                <table class="property-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="prop-name">protocol_name</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Must be exactly "CXP"</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">protocol_version</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Current protocol version (e.g. "1.2")</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">schema_version</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Current schema version constraints (e.g. "1.2")</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">adapter_contract_version</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Version identifier of the running adapter contract</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">repository_snapshot</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Optional git reference hash matching the current checkpoint</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Card: Identity -->
+            <section id="identity" class="card">
+                <h3>identity <span>object</span></h3>
+                <p class="card-desc">Identifies ownership layers and structural boundaries of the package.</p>
+                <div class="required-fields">
+                    <span class="required-label">Required:</span>
+                    <span class="required-tag">project</span>
+                    <span class="required-tag">core_cycle</span>
+                    <span class="required-tag">purpose</span>
+                </div>
+                <table class="property-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="prop-name">project</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Name of the target project or application endpoint</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">core_cycle</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Cycle token representing current sprint (e.g., "01")</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">purpose</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Short description of why this specific packet exists</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Card: Immutable Request -->
+            <section id="immutable" class="card">
+                <h3>immutable_request <span>object</span></h3>
+                <p class="card-desc">The request parameter block written by the sender. Never modified after creation.</p>
+                <div class="required-fields">
+                    <span class="required-label">Required:</span>
+                    <span class="required-tag">header</span>
+                    <span class="required-tag">repository_target</span>
+                    <span class="required-tag">authority</span>
+                    <span class="required-tag">governance</span>
+                    <span class="required-tag">execution</span>
+                </div>
+                <table class="property-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="prop-name">header</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Contains packet_id matching regex pattern and sender/recipient descriptors</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">repository_target</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Defines absolute execution path, target branch, and dirty state checks</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">authority</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Credential profiles for ratifying governor, adapters, and human-bridge keys</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">governance</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Dependencies list, blocking gates, and targeted acceptance criteria</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">execution</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Requested intent (e.g. TEST_HANDSHAKE), input parameters, and required output items</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Card: Event Stream -->
+            <section id="event" class="card">
+                <h3>event_stream <span>array [object]</span></h3>
+                <p class="card-desc">An append-only chronological list of state events. Once logged, events cannot be modified.</p>
+                <div class="required-fields">
+                    <span class="required-label">Required:</span>
+                    <span class="required-tag">event_id</span>
+                    <span class="required-tag">event_type</span>
+                    <span class="required-tag">sequence_number</span>
+                    <span class="required-tag">transition</span>
+                    <span class="required-tag">payload</span>
+                </div>
+                <table class="property-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="prop-name">event_id</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">Unique ID matching regex pattern CXP-EVT-YYYYMMDD-XXXXXX-XXXXXX</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">event_type</td>
+                            <td class="prop-type">string (enum)</td>
+                            <td class="prop-desc">CREATED, CLAIMED, EXECUTING, EVIDENCE_RECORDED, COMPLETED, AUDITED, etc.</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">sequence_number</td>
+                            <td class="prop-type">integer</td>
+                            <td class="prop-desc">Chronological index of event. Starts at 1. Must be contiguous.</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">transition</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Defines from_state -> to_state mappings and the transition identifier</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">payload</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Dynamic argument context and validation output references</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Card: Derived View -->
+            <section id="derived" class="card">
+                <h3>derived_view <span>object</span></h3>
+                <p class="card-desc">Projection constructed by playing the event stream sequentially. Regenerated dynamically.</p>
+                <div class="required-fields">
+                    <span class="required-label">Required:</span>
+                    <span class="required-tag">current_state</span>
+                    <span class="required-tag">execution_control</span>
+                    <span class="required-tag">response</span>
+                    <span class="required-tag">audit</span>
+                    <span class="required-tag">lessons_learned</span>
+                </div>
+                <table class="property-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="prop-name">current_state</td>
+                            <td class="prop-type">string (enum)</td>
+                            <td class="prop-desc">READY, CLAIMED, EXECUTING, VALIDATING, COMPLETED, FAILED_VALIDATION, etc.</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">execution_control</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Logs lease parameters, actor name, attempt counts, and expiration limits</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">response</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">Aggregated execution stdout/stderr streams and captured evidence</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">audit</td>
+                            <td class="prop-type">object</td>
+                            <td class="prop-desc">State of the audit check (VERIFIED/REJECTED), auditor ID, and timestamp</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">lessons_learned</td>
+                            <td class="prop-type">array [object]</td>
+                            <td class="prop-desc">Structured learning logs generated during execution to prevent recurring bugs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Card: Integrity -->
+            <section id="integrity" class="card">
+                <h3>integrity <span>object</span></h3>
+                <p class="card-desc">Cryptographic validation blocks to prevent packet alterations or event sequence modifications.</p>
+                <div class="required-fields">
+                    <span class="required-label">Required:</span>
+                    <span class="required-tag">packet_hash</span>
+                    <span class="required-tag">latest_event_hash</span>
+                </div>
+                <table class="property-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="prop-name">packet_hash</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">SHA-256 hash computed across the entire immutable request block</td>
+                        </tr>
+                        <tr>
+                            <td class="prop-name">latest_event_hash</td>
+                            <td class="prop-type">string</td>
+                            <td class="prop-desc">The content hash of the latest event in the sequence, verifying stream continuity</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Section: Raw JSON Schema -->
+            <section id="raw-schema" class="raw-viewer">
+                <h3>Raw JSON Schema Specification</h3>
+                <button class="btn-copy" id="btn-copy-schema" onclick="copySchema()">Copy to Clipboard</button>
+                <pre id="schema-code">
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CISEM Exchange Packet Schema V1.2",
+  "type": "object",
+  "required": [
+    "protocol",
+    "identity",
+    "immutable_request",
+    "event_stream",
+    "derived_view",
+    "integrity"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "protocol": {
+      "type": "object",
+      "required": ["protocol_name", "protocol_version", "schema_version", "adapter_contract_version"],
+      "additionalProperties": false,
+      "properties": {
+        "protocol_name": { "type": "string", "enum": ["CXP"] },
+        "protocol_version": { "type": "string", "enum": ["1.2"] },
+        "schema_version": { "type": "string", "enum": ["1.2"] },
+        "adapter_contract_version": { "type": "string" },
+        "repository_snapshot": { "type": "string" }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": ["project", "core_cycle", "purpose"],
+      "additionalProperties": false,
+      "properties": {
+        "project": { "type": "string" },
+        "core_cycle": { "type": "string" },
+        "purpose": { "type": "string" }
+      }
+    },
+    "immutable_request": {
+      "type": "object",
+      "required": ["header", "repository_target", "authority", "governance", "execution"],
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "type": "object",
+          "required": ["packet_id", "timestamp", "sender", "recipient"],
+          "additionalProperties": false,
+          "properties": {
+            "packet_id": { "type": "string", "pattern": "^CXP-PKT-\\d{8}-\\d{6}$" },
+            "timestamp": { "type": "string", "format": "date-time" },
+            "sender": { "type": "string" },
+            "recipient": { "type": "string" }
+          }
+        },
+        "repository_target": {
+          "type": "object",
+          "required": ["path", "branch", "commit_before", "dirty_before"],
+          "additionalProperties": false,
+          "properties": {
+            "path": { "type": "string" },
+            "branch": { "type": "string" },
+            "commit_before": { "type": "string" },
+            "dirty_before": { "type": "boolean" }
+          }
+        },
+        "authority": {
+          "type": "object",
+          "required": ["ratifying_authority", "human_bridge", "issuing_system", "implementation_adapter"],
+          "additionalProperties": false,
+          "properties": {
+            "ratifying_authority": {
+              "type": "object",
+              "required": ["identity", "role"],
+              "additionalProperties": false,
+              "properties": {
+                "identity": { "type": "string" },
+                "role": { "type": "string", "enum": ["Governor"] }
+              }
+            },
+            "human_bridge": {
+              "type": "object",
+              "required": ["identity", "enabled", "role"],
+              "additionalProperties": false,
+              "properties": {
+                "identity": { "type": "string" },
+                "enabled": { "type": "boolean" },
+                "role": { "type": "string" }
+              }
+            },
+            "issuing_system": {
+              "type": "object",
+              "required": ["identity", "authority_scope"],
+              "additionalProperties": false,
+              "properties": {
+                "identity": { "type": "string" },
+                "authority_scope": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "implementation_adapter": {
+              "type": "object",
+              "required": ["identity", "authority_scope"],
+              "additionalProperties": false,
+              "properties": {
+                "identity": { "type": "string" },
+                "authority_scope": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "governance": {
+          "type": "object",
+          "required": ["dependencies", "blocking_conditions", "parking_rules", "acceptance_criteria"],
+          "additionalProperties": false,
+          "properties": {
+            "dependencies": { "type": "array", "items": { "type": "string" } },
+            "blocking_conditions": { "type": "array", "items": { "type": "string" } },
+            "parking_rules": { "type": "array", "items": { "type": "string" } },
+            "acceptance_criteria": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "execution": {
+          "type": "object",
+          "required": ["intent", "parameters", "inputs", "required_outputs", "evidence_required"],
+          "additionalProperties": false,
+          "properties": {
+            "intent": { "type": "string" },
+            "parameters": { "type": "object" },
+            "inputs": { "type": "object" },
+            "required_outputs": { "type": "array", "items": { "type": "string" } },
+            "evidence_required": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "event_stream": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "event_id",
+          "event_type",
+          "sequence_number",
+          "previous_event_id",
+          "packet_id",
+          "actor",
+          "occurred_at",
+          "recorded_at",
+          "transition",
+          "payload"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "event_id": { "type": "string", "pattern": "^CXP-EVT-\\d{8}-\\d{6}-\\d{6}$" },
+          "event_type": { 
+            "type": "string",
+            "enum": [
+              "PACKET_CREATED",
+              "PACKET_PUBLISHED",
+              "PACKET_CLAIMED",
+              "EXECUTION_STARTED",
+              "EXECUTION_OUTPUT_RECORDED",
+              "EXECUTION_FAILED",
+              "EVIDENCE_RECORDED",
+              "VALIDATION_PASSED",
+              "VALIDATION_FAILED",
+              "PACKET_COMPLETED",
+              "AUDIT_STARTED",
+              "AUDIT_VERIFIED",
+              "AUDIT_REJECTED",
+              "PACKET_ARCHIVED"
+            ]
+          },
+          "sequence_number": { "type": "integer", "minimum": 1 },
+          "previous_event_id": { "type": "string" },
+          "packet_id": { "type": "string", "pattern": "^CXP-PKT-\\d{8}-\\d{6}$" },
+          "actor": {
+            "type": "object",
+            "required": ["identity", "role"],
+            "additionalProperties": false,
+            "properties": {
+              "identity": { "type": "string" },
+              "role": { "type": "string" }
+            }
+          },
+          "occurred_at": { "type": "string", "format": "date-time" },
+          "recorded_at": { "type": "string", "format": "date-time" },
+          "transition": {
+            "type": "object",
+            "required": ["from_state", "to_state", "transition_id"],
+            "additionalProperties": false,
+            "properties": {
+              "from_state": { "type": "string" },
+              "to_state": { "type": "string" },
+              "transition_id": { "type": "string" }
+            }
+          },
+          "payload": { "type": "object" },
+          "evidence_refs": { "type": "array", "items": { "type": "string" } },
+          "correlation_id": { "type": "string" },
+          "causation_event_id": { "type": "string" },
+          "schema_version": { "type": "string" },
+          "integrity": {
+            "type": "object",
+            "required": ["content_hash"],
+            "additionalProperties": false,
+            "properties": {
+              "content_hash": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "derived_view": {
+      "type": "object",
+      "required": ["current_state", "execution_control", "response", "audit", "lessons_learned"],
+      "additionalProperties": false,
+      "properties": {
+        "current_state": { 
+          "type": "string",
+          "enum": [
+            "CREATED", "READY", "CLAIMED", "EXECUTING", "VALIDATING", 
+            "COMPLETED", "FAILED", "BLOCKED", "AWAITING_RATIFICATION", 
+            "EXPIRED", "CANCELLED", "AUDITED", "ARCHIVED"
+          ]
+        },
+        "execution_control": {
+          "type": "object",
+          "required": ["idempotency_key", "attempt_number", "max_attempts", "claimed_by", "claimed_at", "lease_expires_at", "timeout_seconds", "requires_clean_repository"],
+          "additionalProperties": false,
+          "properties": {
+            "idempotency_key": { "type": "string" },
+            "attempt_number": { "type": "integer" },
+            "max_attempts": { "type": "integer" },
+            "claimed_by": { "type": "string" },
+            "claimed_at": { "type": "string" },
+            "lease_expires_at": { "type": "string" },
+            "timeout_seconds": { "type": "integer" },
+            "requires_clean_repository": { "type": "boolean" }
+          }
+        },
+        "response": {
+          "type": "object",
+          "required": ["status", "stdout", "stderr", "evidence"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "type": "string" },
+            "stdout": { "type": "string" },
+            "stderr": { "type": "string" },
+            "evidence": { "type": "object" }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "required": ["result", "auditor_id", "timestamp"],
+          "additionalProperties": false,
+          "properties": {
+            "result": { "type": "string" },
+            "auditor_id": { "type": "string" },
+            "timestamp": { "type": "string" }
+          }
+        },
+        "lessons_learned": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lesson_id",
+              "source_packet_id",
+              "source_event_ids",
+              "category",
+              "observation",
+              "context",
+              "evidence_refs",
+              "proposed_improvement",
+              "applicability",
+              "status",
+              "maturity",
+              "proposed_canonical_home",
+              "requires_human_ratification"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lesson_id": { "type": "string", "pattern": "^CXP-LESSON-\\d{6}$" },
+              "source_packet_id": { "type": "string", "pattern": "^CXP-PKT-\\d{8}-\\d{6}$" },
+              "source_event_ids": { "type": "array", "items": { "type": "string" } },
+              "category": { "type": "string" },
+              "observation": { "type": "string" },
+              "context": { "type": "string" },
+              "evidence_refs": { "type": "array", "items": { "type": "string" } },
+              "proposed_improvement": { "type": "string" },
+              "applicability": {
+                "type": "object",
+                "required": ["scope"],
+                "additionalProperties": false,
+                "properties": {
+                  "scope": { "type": "string", "enum": ["LOCAL", "ADAPTER", "PROJECT", "UNIVERSAL"] }
+                }
+              },
+              "status": { "type": "string", "enum": ["CAPTURED", "REVIEWED", "APPLIED"] },
+              "maturity": { "type": "string", "enum": ["RAW", "REFINED", "RATIFIED"] },
+              "proposed_canonical_home": { "type": "string" },
+              "requires_human_ratification": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "required": ["packet_hash", "latest_event_hash"],
+      "additionalProperties": false,
+      "properties": {
+        "packet_hash": { "type": "string" },
+        "latest_event_hash": { "type": "string" }
+      }
+    }
+  }
+}
+                </pre>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function copySchema() {
+            var codeText = document.getElementById("schema-code").innerText;
+            navigator.clipboard.writeText(codeText).then(function() {
+                var btn = document.getElementById("btn-copy-schema");
+                btn.innerText = "Copied!";
+                setTimeout(function() {
+                    btn.innerText = "Copy to Clipboard";
+                }, 2000);
+            });
+        }
+
+        // Active class sidebar highlighting on scroll
+        const sections = document.querySelectorAll('section');
+        const navLi = document.querySelectorAll('.nav-item');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLi.forEach(li => {
+                li.classList.remove('active');
+                if (li.querySelector('a').getAttribute('href').substring(1) === current) {
+                    li.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

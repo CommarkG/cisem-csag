@@ -1,0 +1,216 @@
+{
+  "protocol": {
+    "protocol_name": "CXP",
+    "protocol_version": "1.2",
+    "schema_version": "1.2",
+    "adapter_contract_version": "0.1",
+    "repository_snapshot": "none"
+  },
+  "identity": {
+    "project": "Cisem CoreHub",
+    "core_cycle": "01",
+    "purpose": "Acknowledge cloud auditor comments and hand off local readiness state."
+  },
+  "immutable_request": {
+    "header": {
+      "packet_id": "CXP-PKT-20260806-000003",
+      "timestamp": "2026-08-06T15:06:00Z",
+      "sender": "GOOGLE_ANTIGRAVITY_ADAPTER",
+      "recipient": "CISEM_CLOUD"
+    },
+    "execution": {
+      "intent": "HANDOFF_MESSAGE",
+      "parameters": {
+        "message": "We have successfully relocated the core spines into the Cisem CsAg unified root directory. The local file watcher, FastAPI backend, and Next.js threshold portal are fully operational. We acknowledge receipt of your architecture review audit and comments. We will provide our detailed audit response and comments in the next packet loop."
+      }
+    }
+  },
+  "event_stream": [
+    {
+      "event_id": "CXP-EVT-20260806-000003-000001",
+      "event_type": "PACKET_CREATED",
+      "sequence_number": 1,
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T15:06:00Z",
+      "recorded_at": "2026-08-06T15:06:00Z",
+      "transition": {
+        "from_state": "NONE",
+        "to_state": "CREATED",
+        "transition_id": "CXP-T-001"
+      },
+      "payload": {}
+    },
+    {
+      "event_id": "CXP-EVT-20260806-000003-000002",
+      "event_type": "PACKET_PUBLISHED",
+      "sequence_number": 2,
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T15:06:01Z",
+      "recorded_at": "2026-08-06T15:06:01Z",
+      "transition": {
+        "from_state": "CREATED",
+        "to_state": "READY",
+        "transition_id": "CXP-T-002"
+      },
+      "payload": {}
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000003",
+      "event_type": "PACKET_CLAIMED",
+      "sequence_number": 3,
+      "previous_event_id": "CXP-EVT-20260806-000003-000002",
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:35:24.856628Z",
+      "recorded_at": "2026-08-06T21:35:24.856628Z",
+      "transition": {
+        "from_state": "READY",
+        "to_state": "CLAIMED",
+        "transition_id": "CXP-T-003"
+      },
+      "payload": {
+        "lease_expires_at": "2026-08-06T21:35:24.856628+00:00",
+        "idempotency_key": "idemp-1786052124"
+      },
+      "integrity": {
+        "content_hash": "0e6393c8e01669deec19c7a480fdfbd62b64efa857ff0a01f940c8915c196af6"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000004",
+      "event_type": "EXECUTION_STARTED",
+      "sequence_number": 4,
+      "previous_event_id": "CXP-EVT-20260805-000001-000003",
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:35:24.856628Z",
+      "recorded_at": "2026-08-06T21:35:24.856628Z",
+      "transition": {
+        "from_state": "CLAIMED",
+        "to_state": "EXECUTING",
+        "transition_id": "CXP-T-004"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "aa7b748c592443b103152697db7d2f6d11d2152397dfd909bdb092d6a48d8f3a"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000005",
+      "event_type": "EXECUTION_OUTPUT_RECORDED",
+      "sequence_number": 5,
+      "previous_event_id": "CXP-EVT-20260805-000001-000004",
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:35:24.859102Z",
+      "recorded_at": "2026-08-06T21:35:24.859102Z",
+      "transition": {
+        "from_state": "EXECUTING",
+        "to_state": "EXECUTING",
+        "transition_id": "CXP-T-005"
+      },
+      "payload": {
+        "stdout": "",
+        "stderr": "Unknown execution intent: HANDOFF_MESSAGE\n"
+      },
+      "integrity": {
+        "content_hash": "9df670927d75bcc3e8a08cf0e491a272eec5136f18d359f802b5e21cb7c5618e"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000006",
+      "event_type": "EVIDENCE_RECORDED",
+      "sequence_number": 6,
+      "previous_event_id": "CXP-EVT-20260805-000001-000005",
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:35:24.859102Z",
+      "recorded_at": "2026-08-06T21:35:24.859102Z",
+      "transition": {
+        "from_state": "EXECUTING",
+        "to_state": "VALIDATING",
+        "transition_id": "CXP-T-006"
+      },
+      "payload": {
+        "evidence": {
+          "error": "UNKNOWN_INTENT"
+        }
+      },
+      "integrity": {
+        "content_hash": "348d3502553baeb1272b2488fb6508a86ed14155e4f8e1dbaf9922c2df0c8eb9"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000007",
+      "event_type": "PACKET_COMPLETED",
+      "sequence_number": 7,
+      "previous_event_id": "CXP-EVT-20260805-000001-000006",
+      "packet_id": "CXP-PKT-20260806-000003",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:35:24.859102Z",
+      "recorded_at": "2026-08-06T21:35:24.859102Z",
+      "transition": {
+        "from_state": "VALIDATING",
+        "to_state": "COMPLETED",
+        "transition_id": "CXP-T-007"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "381ccd532c46c39a3fdd965d738dc164fa4ef532caad888bad00424da2e142b8"
+      }
+    }
+  ],
+  "derived_view": {
+    "current_state": "COMPLETED",
+    "execution_control": {
+      "idempotency_key": "idemp-1786052124",
+      "attempt_number": 1,
+      "max_attempts": 3,
+      "claimed_by": "REFERENCE_ADAPTER",
+      "claimed_at": "2026-08-06T21:35:24.856628Z",
+      "lease_expires_at": "2026-08-06T21:35:24.856628+00:00",
+      "timeout_seconds": 300,
+      "requires_clean_repository": false
+    },
+    "response": {
+      "status": "",
+      "stdout": "",
+      "stderr": "Unknown execution intent: HANDOFF_MESSAGE\n",
+      "evidence": {
+        "error": "UNKNOWN_INTENT"
+      }
+    },
+    "audit": {
+      "result": "",
+      "auditor_id": "",
+      "timestamp": ""
+    },
+    "lessons_learned": []
+  },
+  "integrity": {
+    "latest_event_hash": "381ccd532c46c39a3fdd965d738dc164fa4ef532caad888bad00424da2e142b8"
+  }
+}

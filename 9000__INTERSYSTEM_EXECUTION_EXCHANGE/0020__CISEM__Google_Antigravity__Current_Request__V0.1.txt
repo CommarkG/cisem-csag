@@ -1,0 +1,229 @@
+﻿CISEM — GOOGLE ANTIGRAVITY CURRENT REQUEST
+
+
+Request ID
+CISEM-AG-2026-08-05-001
+
+
+Created
+2026-08-05 09:37 Israel time
+
+
+Status
+OPEN — HANDSHAKE ONLY
+
+
+Authority
+Yariv Fink is the Human Bridge and final ratifying authority.
+
+
+Goal
+Verify that Google Antigravity can inspect the local Marketing CoreHub workspace, follow the CISEM file-absorption protocol, communicate through the shared Google Drive exchange folder and avoid premature implementation.
+
+
+Inputs
+1. Initial Boot Prompt:
+0010__CISEM__Google_Antigravity__Initial_Boot_Prompt__V0.1
+
+
+2. Local workspace:
+C:\Users\finky\Desktop\AntiGravity\Marketing CoreHub CsAg
+
+
+3. Shared exchange folder:
+https://drive.google.com/drive/u/0/folders/1dy0hixngOGeRhvLsvi5dEY9F3Y8pl8ct
+
+
+Required actions
+1. Read and absorb the Initial Boot Prompt.
+2. Inspect the local workspace in read-only mode.
+3. Do not create, rename, move, delete or edit any local or Drive file.
+4. Do not propose an implementation architecture yet.
+5. Prepare the structured handshake response.
+6. Write the complete response into:
+0030__CISEM__Google_Antigravity__Platform_Response__V0.1
+7. Include the request ID and the date/time of the response.
+8. End by requesting exactly this next file:
+2100__CISEM__Marketing_Platform_Trial__Root_and_Index__V0.1
+
+
+Required response content
+- Repository Inspection Summary
+- Existing Structure
+- Immediate Risks
+- Clarification Questions
+- False-Assumption Risks
+- Readiness Status
+- Next Requested Document
+
+
+Completion condition
+This request is complete only when the response has been written to the designated Platform Response document and the document can be reopened and verified.
+
+
+Next permitted action
+No coding or repository modification. Await CISEM audit of the handshake response.
+
+
+
+
+2026-08-05 12:29 +03:00 — CISEM RESPONSE TO ANTIGRAVITY
+
+
+Q1 — CODEBASE LOCATION
+The implementation codebase will reside in the existing local workspace:
+C:\Users\finky\Desktop\AntiGravity\Marketing CoreHub CsAg
+
+
+Do not initialize Next.js, FastAPI, or any other stack yet. No stack decision has been ratified. First absorb the governing files, inspect the local workspace, determine whether any reusable repository, template, configuration, or code already exists, and record the unresolved implementation decision points. A stack may be proposed only after the Current-System Snapshot and platform-specific clarification process are complete.
+
+
+Q2 — EXCHANGE FOLDER
+Yes. Continue using the dedicated Google Drive folder 9000__INTERSYSTEM_EXECUTION_EXCHANGE as the primary governed exchange channel between CISEM and Google Antigravity. The local workspace remains the execution environment; Google Drive remains the governed exchange and canonical instruction channel.
+
+
+NEXT DOCUMENT
+The requested file is now available in this exchange folder:
+2100__CISEM__Marketing_Platform_Trial__Root_and_Index__V0.1
+
+
+Required next action:
+1. Absorb the complete 2100 document.
+2. Return the mandated structured absorption report.
+3. Write the report into 0030__CISEM__Google_Antigravity__Platform_Response__V0.1.
+4. Do not initialize code or select the stack yet.
+
+
+2026-08-05 14:29 +03:00 — AUTONOMOUS COMPLETION DIRECTIVE
+
+
+Authority model
+Yariv Fink remains the sole Governor. He must be removed from every operational loop that does not require Governor authority. Do not ask Yariv to relay content, choose routine implementation details, approve pre-authorized steps, or decide matters resolvable from existing policy, repository evidence, tests, or bounded assumptions.
+
+
+Active Finish Line
+Complete the minimum autonomous CISEM–Google Antigravity execution loop and prove it end to end without further architectural expansion.
+
+
+Governance freeze
+CXP V1.2, GEMINI.md V1.2, the Four-Question Checkpoint, Destructive Operation Governance, and the current alignment rules are frozen for this CoreCycle. New insights must be recorded in Parking or Lessons Learned unless they invalidate safety, authority, ownership, or the active finish line.
+
+
+Mandatory first correction
+The Alignment Audit and all universal CXP artifacts are not Marketing-owned. Relocate or project them to the highest valid CISEM Core location. Marketing may retain only project-specific configuration, adapter binding, packets, evidence, and references. Perform Check What Exists, dependency inspection, migration logging, and post-move verification. Do not delete canonical artifacts without explicit Governor authority.
+
+
+Delegated authority
+Google Antigravity and the CISEM cloud agent are authorized to continue autonomously for:
+- repository inspection and evidence collection;
+- classification of canonical, projected, cache, adapter, project, and execution artifacts;
+- non-destructive relocation planning and reference correction;
+- creation of bounded test artifacts required for BOOTSTRAP-001 and TEST-001;
+- running local schema, lifecycle, event-integrity, replay, tamper, duplicate, lease, and handshake tests;
+- correcting implementation defects that do not change ratified architecture or scope;
+- updating execution records, evidence, audit, synchronization, parking, and lessons learned;
+- advancing automatically between pre-authorized phases after acceptance checks pass.
+
+
+Governor gates — stop only when one applies
+1. Ratification: a new architecture, scope, irreversible trade-off, production release, or canonical doctrine requires approval.
+2. Missing intent: the mission or finish line is genuinely undefined and cannot be resolved from existing artifacts.
+3. Irrecoverable conflict: two valid paths remain after evidence and policy review.
+4. External dependency: credentials, payment, legal approval, unavailable account access, hardware, or another external act is required.
+5. Safety boundary: continuation would violate security, privacy, destructive-operation, ownership, or authority rules.
+
+
+Do not escalate routine uncertainty. Use SAFE_BOUNDED_ASSUMPTION when reversible, documented, tested, and inside delegated scope.
+
+
+Execution sequence
+Phase 1 — Ownership alignment
+- identify the correct CISEM Core destination for universal CXP and alignment artifacts;
+- prepare and execute a governed move or projection plan;
+- update all references;
+- verify Marketing no longer appears as the canonical owner.
+
+
+Phase 2 — BOOTSTRAP verification
+- rerun and preserve evidence for schema, event-stream integrity, state replay, ownership, transition, tamper, duplicate, and stale-lease tests;
+- distinguish LOCALLY_VALIDATED from END_TO_END_VERIFIED.
+
+
+Phase 3 — TEST-001 closed loop
+- create and publish the governed TEST_HANDSHAKE packet;
+- prove Drive-to-local detection, claim, execution, validation, response, cloud audit, and archive;
+- prove duplicate rejection, stale-lease recovery, invalid-packet rejection, and safe stop behavior.
+
+
+Phase 4 — Completion report
+Write one integrated report containing:
+- active finish line result;
+- files and locations before and after;
+- ownership verification;
+- tests executed and evidence;
+- full loop result;
+- unresolved blockers;
+- Governor gate triggered, if any;
+- lessons learned and parking;
+- exact next permitted CoreCycle.
+
+
+Communication rule
+Use the Drive exchange directly. Write progress and completion evidence into 0030__CISEM__Google_Antigravity__Platform_Response__V0.1 and the relevant governed artifacts. Do not require Yariv to copy and paste intermediate content. Request Governor involvement only by writing GOVERNOR_RATIFICATION_REQUIRED with the exact decision, options, recommendation, consequences, and default safe stop.
+
+
+Completion condition
+This directive is complete only when ownership is corrected, BOOTSTRAP evidence is preserved, TEST-001 completes end to end, and the result is independently auditable from Drive without Yariv acting as messenger.
+
+
+
+
+
+
+2026-08-05 15:38 +03:00 — SUCCESSOR CORECYCLE REGISTRATION
+
+
+Current mission status
+The current CAEL/CXP mission remains active with verdict:
+READY_FOR_CORE_PROMOTION_AWAITING_AUTONOMOUS_ENDURANCE_VALIDATION
+
+
+Do not activate the successor CoreCycle yet.
+
+
+Queued successor artifact
+2026-08-05__CISEM__Multi_Model_Code_Review_and_Independent_Audit_Layer__V1.0
+Drive document ID: 1v9j-msbO7YzWzHKQ9oimC0ZggiSzo3N3Zpyl9YhDIlo
+Drive exchange folder: 9000__INTERSYSTEM_EXECUTION_EXCHANGE
+Target local canonical path after activation:
+C:\Users\finky\Desktop\AntiGravity\2026-08-05__CISEM__Multi_Model_Code_Review_and_Independent_Audit_Layer__V1.0.md
+
+
+Activation conditions
+Activate automatically only when all are true:
+1. Autonomous endurance validation has completed successfully.
+2. The current mission completion package exists.
+3. The final current-mission verdict is READY_FOR_CISEM_CORE or READY_FOR_CORE_PROMOTION.
+4. No Governor Gate is active.
+5. The watcher/orchestrator loop is still operational and evidence is available.
+
+
+Before activation, complete and evidence the known current-cycle debt:
+- remove remaining hardcoded Google Drive folder-ID coupling from the orchestrator by using governed configuration or Script Properties;
+- replace adapter ../ path assumptions with registry/environment-based path resolution;
+- resolve the Google Doc packet serialization/parsing limitation or explicitly retain it as bounded non-production debt;
+- verify obsolete files listed in the hardening report were actually removed or archived;
+- confirm the watcher survives restart and remains active beyond the initiating Antigravity session.
+
+
+Successor behavior
+When the activation conditions pass:
+1. Download/absorb the queued successor artifact directly from Drive.
+2. Place its canonical Markdown projection at the target AntiGravity root path.
+3. Register it as CISEM-REVIEW-CC01.
+4. Begin the smallest executable proof without waiting for Yariv.
+5. Use a configurable multi-model reviewer registry. Codex is one reviewer adapter, not the sole architecture.
+6. Interrupt Yariv only through a genuine Governor Gate.
+
+
+If conditions are not met, keep the successor QUEUED and continue the current endurance-validation mission.

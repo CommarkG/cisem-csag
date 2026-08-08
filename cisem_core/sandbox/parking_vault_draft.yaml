@@ -1,0 +1,452 @@
+parked_items:
+- description: Switching themes in the dashboard portal has a latency lag on Vercel
+    Edge. Needs client hydration bypass.
+  governor_signature: null
+  item_id: PARK-001
+  linked_plans: []
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[PERFORMANCE.CACHE]'
+  - '[UI.THEME]'
+  title: Edge Cache Caching Lag for UI theme swaps
+- description: Prevent watcher daemon from syncing unapproved file changes to Drive
+    using temporary state files.
+  governor_signature: GOV-YARIV-20260806-GATE-HARDENING-V1.0
+  item_id: PARK-002
+  linked_plans:
+  - CISEM-IP-20260805-CXP-MIGRATION
+  - CISEM-IP-20260806-GATE-HARDENING
+  ratified_by_governor: true
+  requires_governor_approval: true
+  status: validated_impact
+  tags:
+  - '[STABILITY.LOCKS]'
+  - '[ARCHITECTURE.SYNC]'
+  title: Decoupled Local Watcher Lock-Before-Sync block
+- description: Sanitizer layer that scans brief text inputs dropped in Drive for prompt
+    injection patterns prior to DB insertion.
+  governor_signature: GOV-YARIV-20260806-SANITIZATION-V1.0
+  item_id: PARK-003
+  linked_plans:
+  - CISEM-IP-20260806-GATE-HARDENING
+  - CISEM-IP-20260806-SANITIZATION-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: true
+  status: validated_impact
+  tags:
+  - '[SECURITY.INJECTION]'
+  - '[INGESTION.SANITIZATION]'
+  title: MCE Ingestion Sanitization against prompt injection
+- description: 'Every implementation must be measured against original intent post-completion.
+
+    If outcome delta > 10%, auto-generate a new PARK item tagged [IMPROVEMENT.GAP].
+
+    Loop fires on every 10th development turn and on every promoted_to_core event.
+
+    No improvement is done until status reaches validated_impact.
+
+    '
+  governor_signature: GOV-YARIV-20260806-IMPROVEMENT-LOOP-V1.0
+  item_id: PARK-004
+  linked_plans:
+  - CISEM-IP-20260806-GATE-HARDENING
+  ratified_by_governor: true
+  requires_governor_approval: true
+  status: ratified
+  tags:
+  - '[ARCHITECTURE.IMPROVEMENT]'
+  - '[IMPROVEMENT.LOOP]'
+  title: Deep Root Continuous Improvement Loop
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.179565+00:00'
+  description: ATV detected 70.0% of registered personas never triggered. This means
+    platform scenarios are not exercising the full expert panel. Either scenarios
+    are too narrow or personas are misconfigured.
+  governor_signature: GOV-YARIV-20260806-PERSONA-EXPANSION-V1.0
+  item_id: PARK-005
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-PERSONA-EXPANSION-V1.0
+  outcome_delta_pct: 70.0
+  ratified_by_governor: true
+  requires_governor_approval: true
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.COVERAGE]'
+  title: Intent Gap -- Only 30% persona coverage in last audit
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.183571+00:00'
+  description: ATV detected 1 constructive finding(s) from ['Consolidation & Single
+    Source of Truth Expert'] that were not in the original scenario intent but represent
+    genuine platform improvement opportunities. Recommend ratifying these as planned
+    improvements.
+  governor_signature: null
+  item_id: PARK-006
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: true
+  source_findings:
+  - CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA
+  status: parked
+  tags:
+  - '[BENEFICIAL.DRIFT]'
+  - '[AUDIT.POSITIVE]'
+  title: Beneficial Drift -- Scenario 'consolidated_sync_lock_trial' surfaced constructive
+    findings
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.191567+00:00'
+  description: 'Four-phase hard blocking compilation gate has only 3 of 20 required
+    trigger activations. Gap: 17. This mechanism may not be wired into execution paths
+    correctly.'
+  governor_signature: GOV-YARIV-20260806-UNDERACTIVATED-V1.0
+  item_id: PARK-007
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-UNDERACTIVATED-V1.0
+  mechanism_id: CISEM-GATE-V2
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  title: 'Underactivated Mechanism: CISEM-GATE-V2'
+  trigger_gap: 17
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.197640+00:00'
+  description: 'CisemSync naming pattern validator has only 3 of 16 required trigger
+    activations. Gap: 13. This mechanism may not be wired into execution paths correctly.'
+  governor_signature: GOV-YARIV-20260806-UNDERACTIVATED-V1.0
+  item_id: PARK-008
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-UNDERACTIVATED-V1.0
+  mechanism_id: CISEM-SYNC-V1.1
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  title: 'Underactivated Mechanism: CISEM-SYNC-V1.1'
+  trigger_gap: 13
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.203648+00:00'
+  description: 'CxpWatcher .gate_lock witness positional violation detector has only
+    1 of 8 required trigger activations. Gap: 7. This mechanism may not be wired into
+    execution paths correctly.'
+  governor_signature: GOV-YARIV-20260806-UNDERACTIVATED-V1.0
+  item_id: PARK-009
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-UNDERACTIVATED-V1.0
+  mechanism_id: CISEM-WATCHER-LOCK
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  title: 'Underactivated Mechanism: CISEM-WATCHER-LOCK'
+  trigger_gap: 7
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.211638+00:00'
+  description: 'Anti-Theater Validator — intent alignment, beneficial drift, theater
+    detection, activation tracking, process feedback has only 0 of 4 required trigger
+    activations. Gap: 4. This mechanism may not be wired into execution paths correctly.'
+  governor_signature: GOV-YARIV-20260806-UNDERACTIVATED-V1.0
+  item_id: PARK-010
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-UNDERACTIVATED-V1.0
+  mechanism_id: CISEM-ATV-V1
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  title: 'Underactivated Mechanism: CISEM-ATV-V1'
+  trigger_gap: 4
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.219307+00:00'
+  description: '10-Turn audit cycle enforcer — blocks gate at turn 10 until audit
+    runs has only 0 of 4 required trigger activations. Gap: 4. This mechanism may
+    not be wired into execution paths correctly.'
+  governor_signature: GOV-YARIV-20260806-UNDERACTIVATED-V1.0
+  item_id: PARK-011
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-UNDERACTIVATED-V1.0
+  mechanism_id: CISEM-TURN-COUNTER
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  title: 'Underactivated Mechanism: CISEM-TURN-COUNTER'
+  trigger_gap: 4
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:35:14.228226+00:00'
+  description: 'CisemAuditor 10-persona expert panel orchestrator has only 1 of 4
+    required trigger activations. Gap: 3. This mechanism may not be wired into execution
+    paths correctly.'
+  governor_signature: GOV-YARIV-20260806-UNDERACTIVATED-V1.0
+  item_id: PARK-012
+  linked_plans:
+  - CISEM-IP-20260806-ANTITHEATER-V1.0
+  - CISEM-IP-20260806-UNDERACTIVATED-V1.0
+  mechanism_id: CISEM-PERSONA-AUDITOR
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  title: 'Underactivated Mechanism: CISEM-PERSONA-AUDITOR'
+  trigger_gap: 3
+- atv_generated: true
+  atv_timestamp: '2026-08-06T19:48:12.705405+00:00'
+  description: 'ATV Contextual check detected expected personas for ''STABILITY_LOCKING''
+    scenario did not fire. Expected: [''STABILITY_EXPERT_PERSONA'', ''SECURITY_AUDITOR_PERSONA'',
+    ''SCALABILITY_EXPERT_PERSONA'', ''PLATFORM_DEVELOPER_PERSONA'']. Fired: [''STABILITY_EXPERT_PERSONA'',
+    ''SECURITY_AUDITOR_PERSONA''].'
+  governor_signature: GOV-YARIV-20260806-PERSONA-EXPANSION-V1.0
+  item_id: PARK-013
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  - CISEM-IP-20260806-PERSONA-EXPANSION-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: true
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.CONTEXTUAL]'
+  title: Contextual Audit Gap -- Low persona trigger relevance (50.0%) in scenario
+    'STABILITY_LOCKING'
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:07:11.385217+00:00'
+  description: 'ATV Naked Number Audit detected 550 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''08''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''0''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L17
+    (''1''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-014
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 550 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:26:07.411074+00:00'
+  description: 'ATV Naked Number Audit detected 568 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''08''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''0''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L17
+    (''1''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-015
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 568 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:29:32.319168+00:00'
+  description: 'ATV Contextual check detected expected personas for ''SECURITY'' scenario
+    did not fire. Expected: [''SECURITY_AUDITOR_PERSONA'', ''STABILITY_EXPERT_PERSONA'',
+    ''GOVERNOR_PROXY_PERSONA'']. Fired: [''SECURITY_AUDITOR_PERSONA'', ''STABILITY_EXPERT_PERSONA''].'
+  governor_signature: GOV-YARIV-20260806-PERSONA-EXPANSION-V1.0
+  item_id: PARK-016
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  - CISEM-IP-20260806-PERSONA-EXPANSION-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: true
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.CONTEXTUAL]'
+  title: Contextual Audit Gap -- Low persona trigger relevance (66.7%) in scenario
+    'SECURITY'
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:29:32.335029+00:00'
+  description: 'ATV detected constructive findings representing genuine improvements
+    in: [''duplicate_registry_controller: Consolidation & Single Source of Truth Expert'',
+    ''edge_cache_latency_lag: Platform Performance & Latency Architect''].'
+  governor_signature: null
+  item_id: PARK-017
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: true
+  source_findings:
+  - CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA
+  - PERFORMANCE_ARCHITECT_PERSONA
+  status: parked
+  tags:
+  - '[BENEFICIAL.DRIFT]'
+  - '[AUDIT.POSITIVE]'
+  title: Beneficial Drift -- Dynamic scenario suite surfaced constructive findings
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:29:32.435470+00:00'
+  description: 'ATV Naked Number Audit detected 574 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''08''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''0''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L17
+    (''1''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-018
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 574 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:38:38.195174+00:00'
+  description: 'ATV Naked Number Audit detected 604 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''08''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L6
+    (''0''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L17
+    (''1''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-019
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 604 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:39:16.513776+00:00'
+  description: 'ATV Naked Number Audit detected 339 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L17
+    (''1''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L17
+    (''8''); 2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md:L21
+    (''1''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-020
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 339 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:39:54.829389+00:00'
+  description: 'ATV Naked Number Audit detected 21 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-06__CISEM__AntigravityLocal__UmbrellaImplementationPlan__V1.0.md:L19
+    (''01''); 2026-08-06__CISEM__AntigravityLocal__UmbrellaImplementationPlan__V1.0.md:L23
+    (''02''); 2026-08-06__CISEM__AntigravityLocal__UmbrellaImplementationPlan__V1.0.md:L28
+    (''03''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-021
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 21 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:40:04.014274+00:00'
+  description: 'ATV Naked Number Audit detected 8 occurrences of raw numbers without
+    surrounding context keywords. Examples: AGENTS.md:L72 (''15''); AGENTS.md:L80
+    (''10''); CISEM-Antigravity_Session_Continuation_Walkthrough_V122_Gate_Verified_Walkthrough__2026-08-06__V1.2.2.md:L84
+    (''10''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-022
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 8 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T20:40:18.741625+00:00'
+  description: 'ATV Naked Number Audit detected 2 occurrences of raw numbers without
+    surrounding context keywords. Examples: CISEM-Antigravity_Session_Continuation_Walkthrough_V122_Gate_Verified_Walkthrough__2026-08-06__V1.2.2.md:L84
+    (''10''); CISEM-Antigravity_Session_Continuation_Walkthrough_V122_Gate_Verified_Walkthrough__2026-08-06__V1.2.2.md:L100
+    (''15''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: GOV-YARIV-20260806-NAKED-NUMBERS-V1.0
+  item_id: PARK-023
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 2 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-06T21:26:32.098094+00:00'
+  description: 'ATV detected P/E Ratio mismatch: 0.00 (Target bounds: 0.33 - 3.00).'
+  governor_signature: null
+  item_id: PARK-024
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[PROCESS.CODE_RUSHING_WARNING]'
+  title: 'P/E Ratio Violation: CODE_RUSHING_WARNING'
+- atv_generated: true
+  atv_timestamp: '2026-08-08T12:34:20.667692+00:00'
+  description: 'ATV Naked Number Audit detected 10 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-08__AntigravityLocal__YarivHuman__Walkthrough_Target_Studio_Operator_Architecture_Results_Walkthrough__V1.0.md:L13
+    (''17''); 2026-08-08__AntigravityLocal__YarivHuman__Walkthrough_Target_Studio_Operator_Architecture_Results_Walkthrough__V1.0.md:L19
+    (''17''); 2026-08-08__AntigravityLocal__YarivHuman__Walkthrough_Target_Studio_Operator_Architecture_Results_Walkthrough__V1.0.md:L23
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-025
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 10 numbers

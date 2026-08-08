@@ -30,5 +30,15 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "cisem_core",
+    "Cisem CsAG Core Councils",
+    "backend",
+    "9000__INTERSYSTEM_EXECUTION_EXCHANGE",
+    "temp_archive",
+    "dist",
+    "src/collections",
+    "src/hooks"
+  ]
 }

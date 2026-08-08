@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PersonaProfile",
+  "type": "object",
+  "required": [
+    "persona_id",
+    "role_name",
+    "focus_tags",
+    "system_instructions",
+    "socratic_query_depth"
+  ],
+  "properties": {
+    "persona_id": { "type": "string" },
+    "role_name": { "type": "string" },
+    "focus_tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "system_instructions": { "type": "string" },
+    "socratic_query_depth": {
+      "type": "string",
+      "enum": ["shallow", "balanced", "deep"]
+    },
+    "audit_weight": { "type": "integer" }
+  }
+}

@@ -1,0 +1,53 @@
+﻿CISEM — GOOGLE ANTIGRAVITY HUMAN BRIDGE AND FILE ABSORPTION PROTOCOL
+
+
+Purpose
+Define the controlled human-mediated exchange between CISEM and Google Antigravity so that context is transferred incrementally, misunderstandings are exposed early, and implementation can later continue autonomously from durable workspace records.
+
+
+Bridge Role
+Yariv Fink transfers exact content between systems. The bridge does not summarize, reinterpret or silently resolve disagreements unless explicitly choosing to do so as the human authority.
+
+
+File-by-File Absorption Sequence
+For each file, Antigravity must:
+1. Request the exact filename.
+2. Read the complete file.
+3. Confirm the filename and version received.
+4. Return an Understanding Restatement using CISEM vocabulary.
+5. List inherited obligations and mandatory constraints.
+6. Identify unclear terms, missing information and implementation decision points.
+7. Identify likely false assumptions it would otherwise make.
+8. Identify conflicts with the inspected repository or platform behavior.
+9. Propose improvements without implementing them.
+10. Classify readiness as ABSORBED, ABSORBED_WITH_OPEN_ISSUES or NOT_ABSORBED.
+11. Ask for the next file only when the current file is ABSORBED and its blocking issues are resolved or explicitly parked by authority.
+
+
+Required Response Format
+FILE RECEIVED
+UNDERSTANDING RESTATEMENT
+BINDING OBLIGATIONS
+REPOSITORY IMPLICATIONS
+UNCLEAR ISSUES
+DECISION POINTS
+FALSE-ASSUMPTION RISKS
+IMPROVEMENT PROPOSALS
+READINESS STATUS
+NEXT REQUEST
+
+
+Clarification Dialogue
+Questions must be conversational, grouped by dependency and asked at the pace needed to reach reliable understanding. Antigravity should answer questions it can resolve through repository inspection before asking the bridge. It must distinguish FACT, INFERENCE, SAFE_BOUNDED_ASSUMPTION and BLOCKING_UNRESOLVED.
+
+
+No Premature Planning
+Antigravity may not freeze an architecture, create implementation tasks or write code before the mandatory reading sequence is complete and the Clarification and Decision Register contains no unhandled blocking issue.
+
+
+Long-Run Autonomy
+Before autonomous work begins, Antigravity must persist the active goal, approved plan, current phase, decisions, assumptions, coverage matrix, evidence locations, parking and next permitted action inside the execution workspace. It may continue independently across phases only when each phase passes its predefined gate.
+
+
+Return Loop
+After each absorption or implementation phase, Yariv transfers Antigravity's exact response back to CISEM for audit, correction or ratification when required.

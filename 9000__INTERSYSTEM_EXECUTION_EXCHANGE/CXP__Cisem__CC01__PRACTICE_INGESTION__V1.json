@@ -1,0 +1,218 @@
+{
+  "protocol": {
+    "protocol_name": "CXP",
+    "protocol_version": "1.2",
+    "schema_version": "1.2",
+    "adapter_contract_version": "0.1",
+    "repository_snapshot": "none"
+  },
+  "identity": {
+    "project": "Cisem CoreHub",
+    "core_cycle": "01",
+    "purpose": "Test raw input ingestion and validation under the 3-Tier Scope rules."
+  },
+  "immutable_request": {
+    "header": {
+      "packet_id": "CXP-PKT-20260807-000001",
+      "timestamp": "2026-08-07T00:34:00Z",
+      "sender": "GOOGLE_ANTIGRAVITY_ADAPTER",
+      "recipient": "CISEM_CLOUD"
+    },
+    "execution": {
+      "intent": "PRACTICE_VALIDATION",
+      "parameters": {
+        "message": "This is a test of the critical ingestion pipeline under the new Scope and Sandboxing axioms. We are validating that the local watcher picks up, sanitizes, and projects this state nominal."
+      }
+    }
+  },
+  "event_stream": [
+    {
+      "event_id": "CXP-EVT-20260807-000001-000001",
+      "event_type": "PACKET_CREATED",
+      "sequence_number": 1,
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-07T00:34:00Z",
+      "recorded_at": "2026-08-07T00:34:00Z",
+      "transition": {
+        "from_state": "NONE",
+        "to_state": "CREATED",
+        "transition_id": "CXP-T-001"
+      },
+      "payload": {}
+    },
+    {
+      "event_id": "CXP-EVT-20260807-000001-000002",
+      "event_type": "PACKET_PUBLISHED",
+      "sequence_number": 2,
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-07T00:34:01Z",
+      "recorded_at": "2026-08-07T00:34:01Z",
+      "transition": {
+        "from_state": "CREATED",
+        "to_state": "READY",
+        "transition_id": "CXP-T-002"
+      },
+      "payload": {}
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000003",
+      "event_type": "PACKET_CLAIMED",
+      "sequence_number": 3,
+      "previous_event_id": "CXP-EVT-20260807-000001-000002",
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:45:05.995730Z",
+      "recorded_at": "2026-08-06T21:45:05.995730Z",
+      "transition": {
+        "from_state": "READY",
+        "to_state": "CLAIMED",
+        "transition_id": "CXP-T-003"
+      },
+      "payload": {
+        "lease_expires_at": "2026-08-06T21:45:05.995730+00:00",
+        "idempotency_key": "idemp-1786052705"
+      },
+      "integrity": {
+        "content_hash": "08baf9de2c5b3f58d49f3cb9900968da0ac52f1a5700e59a4a6bea0f347b5b80"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000004",
+      "event_type": "EXECUTION_STARTED",
+      "sequence_number": 4,
+      "previous_event_id": "CXP-EVT-20260805-000001-000003",
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:45:05.995730Z",
+      "recorded_at": "2026-08-06T21:45:05.995730Z",
+      "transition": {
+        "from_state": "CLAIMED",
+        "to_state": "EXECUTING",
+        "transition_id": "CXP-T-004"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "3c7b5436d04334ec03875360a5e886ea0ac6677f4c8e9011ac151bb75e07ba5f"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000005",
+      "event_type": "EXECUTION_OUTPUT_RECORDED",
+      "sequence_number": 5,
+      "previous_event_id": "CXP-EVT-20260805-000001-000004",
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:45:05.999600Z",
+      "recorded_at": "2026-08-06T21:45:05.999600Z",
+      "transition": {
+        "from_state": "EXECUTING",
+        "to_state": "EXECUTING",
+        "transition_id": "CXP-T-005"
+      },
+      "payload": {
+        "stdout": "",
+        "stderr": "Unknown execution intent: PRACTICE_VALIDATION\n"
+      },
+      "integrity": {
+        "content_hash": "115b31ef543eb0df1ab1b7ff561f41840cd0068cebc275b2d076ad8ad89da7bf"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000006",
+      "event_type": "EVIDENCE_RECORDED",
+      "sequence_number": 6,
+      "previous_event_id": "CXP-EVT-20260805-000001-000005",
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:45:05.999600Z",
+      "recorded_at": "2026-08-06T21:45:05.999600Z",
+      "transition": {
+        "from_state": "EXECUTING",
+        "to_state": "VALIDATING",
+        "transition_id": "CXP-T-006"
+      },
+      "payload": {
+        "evidence": {
+          "error": "UNKNOWN_INTENT"
+        }
+      },
+      "integrity": {
+        "content_hash": "d56c2f0f7c15df7047f5aa35a84a6e56a5173a665a61ac3b0d4449d0c87d37e0"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000007",
+      "event_type": "VALIDATION_FAILED",
+      "sequence_number": 7,
+      "previous_event_id": "CXP-EVT-20260805-000001-000006",
+      "packet_id": "CXP-PKT-20260807-000001",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-06T21:45:06.001065Z",
+      "recorded_at": "2026-08-06T21:45:06.001065Z",
+      "transition": {
+        "from_state": "VALIDATING",
+        "to_state": "FAILED_VALIDATION",
+        "transition_id": "CXP-T-007"
+      },
+      "payload": {
+        "error": "UNKNOWN_INTENT"
+      },
+      "integrity": {
+        "content_hash": "64659c54dfefb6a991eb1e6a9bbc17668066bf0bf10509ab110b9d37dd50693f"
+      }
+    }
+  ],
+  "derived_view": {
+    "current_state": "FAILED_VALIDATION",
+    "execution_control": {
+      "idempotency_key": "idemp-1786052705",
+      "attempt_number": 1,
+      "max_attempts": 3,
+      "claimed_by": "REFERENCE_ADAPTER",
+      "claimed_at": "2026-08-06T21:45:05.995730Z",
+      "lease_expires_at": "2026-08-06T21:45:05.995730+00:00",
+      "timeout_seconds": 300,
+      "requires_clean_repository": false
+    },
+    "response": {
+      "status": "",
+      "stdout": "",
+      "stderr": "Unknown execution intent: PRACTICE_VALIDATION\n",
+      "evidence": {
+        "error": "UNKNOWN_INTENT"
+      }
+    },
+    "audit": {
+      "result": "",
+      "auditor_id": "",
+      "timestamp": ""
+    },
+    "lessons_learned": []
+  },
+  "integrity": {
+    "latest_event_hash": "64659c54dfefb6a991eb1e6a9bbc17668066bf0bf10509ab110b9d37dd50693f"
+  }
+}

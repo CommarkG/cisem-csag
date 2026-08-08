@@ -1,0 +1,45 @@
+# CISEM CXP Capability Registry
+
+---
+metadata:
+  owner: "CISEM_GOVERNOR"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\2026-08-05__CISEM__CXP__CapabilityRegistry__V1.2.yaml"
+  artifact_status: "DRAFT"
+  maturity: "WORKING_DRAFT"
+  version: "1.2"
+  inherited_authorities:
+    - "CISEM Project Constitution"
+  related_implementation_adapter: "GOOGLE_ANTIGRAVITY_ADAPTER"
+  local_edits_allowed: false
+  role_type: "CANONICAL_CAPABILITY_REGISTRY"
+---
+
+adapters:
+  - adapter_id: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "0.1"
+    platform: "WINDOWS_POWERSHELL"
+    capabilities:
+      - "PYTHON_3"
+      - "LOCAL_FILESYSTEM_WATCH"
+      - "GOOGLE_DRIVE_POLL"
+      - "GIT_CLIENT"
+      - "JSON_SCHEMA_VALIDATION"
+      - "YAML_PARSING"
+      - "ATOMIC_FILE_WRITE"
+      - "STDOUT_LOGGING"
+      - "ENV_READ"
+    limits:
+      max_execution_timeout_seconds: 600
+
+  - adapter_id: "CLAUDE_CODE_ADAPTER"
+    version: "0.1"
+    platform: "POSIX_BASH"
+    capabilities:
+      - "PYTHON_3"
+      - "LOCAL_FILESYSTEM_WATCH"
+      - "GIT_CLIENT"
+      - "JSON_SCHEMA_VALIDATION"
+      - "YAML_PARSING"
+      - "STDOUT_LOGGING"
+    limits:
+      max_execution_timeout_seconds: 300

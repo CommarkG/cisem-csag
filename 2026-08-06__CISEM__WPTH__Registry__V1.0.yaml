@@ -1,0 +1,53 @@
+# CISEM Web Page Template Hub (WPTH) Registry
+# Version: 1.0
+# Description: Single Source of Truth for frontend layout structures and theme tokens.
+
+approved_themes:
+  - id: "minimalist"
+    name: "Minimalist Style"
+    description: "High whitespace, monocolor slate text, clean thin borders."
+    tokens:
+      primary_button: "bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-800"
+      surface_card: "bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+      title_text: "text-slate-900 dark:text-white font-medium"
+      body_text: "text-slate-600 dark:text-slate-400 font-normal"
+
+  - id: "balanced"
+    name: "Balanced Style"
+    description: "Default B2B portal interface, medium amber gradients and slate shadows."
+    tokens:
+      primary_button: "bg-amber-500 hover:bg-amber-600 text-white font-semibold transition-colors duration-250 shadow-sm"
+      surface_card: "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 shadow-md"
+      title_text: "text-slate-950 dark:text-white font-bold"
+      body_text: "text-slate-600 dark:text-slate-400 font-normal"
+
+  - id: "saturated"
+    name: "Saturated Style"
+    description: "Vibrant glowing gradients, deep active drop shadows, active scale animations."
+    tokens:
+      primary_button: "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:scale-105 active:scale-95 transition-transform duration-200 font-bold"
+      surface_card: "bg-gradient-to-tr from-slate-900 via-slate-950 to-slate-900 border border-slate-800 shadow-2xl relative overflow-hidden"
+      title_text: "text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 font-extrabold"
+      body_text: "text-slate-300 dark:text-slate-300 font-medium"
+
+  - id: "high_contrast"
+    name: "High Contrast Style"
+    description: "Pure white/black layout, thick outlines, highly visible highlights."
+    tokens:
+      primary_button: "bg-black text-white dark:bg-white dark:text-black border-2 border-white dark:border-black font-black uppercase tracking-wider"
+      surface_card: "bg-black dark:bg-black border-4 border-white dark:border-white shadow-none"
+      title_text: "text-white dark:text-white font-black"
+      body_text: "text-slate-200 dark:text-slate-200 font-bold"
+
+registered_layouts:
+  - layout_id: "TEMPLATE_DASHBOARD_GRID"
+    description: "Dynamic 3-column customizable stats and options panel widget structure."
+  - layout_id: "TEMPLATE_SPLIT_CLARIFIER"
+    description: "Divided view container for side navigation filters/choices alongside interactive output charts."
+
+registered_pages:
+  - page_id: "PAGE_PORTAL_THRESHOLD"
+    project_id: "SUPPLIER_SCRAPER"
+    layout_id: "TEMPLATE_DASHBOARD_GRID"
+    governor_signature: "GOV-APPROVED-2026-08-06-THRESHOLD"
+    alignment_approved: true

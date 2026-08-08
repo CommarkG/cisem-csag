@@ -1,0 +1,57 @@
+reviewers:
+  - reviewer_id: "OPENAI_COMPLETIONS_AUDITOR"
+    provider: "OPENAI"
+    adapter_id: "gpt-4o"
+    status: "ACTIVE"
+    capabilities:
+      - "CODE_REVIEW"
+      - "ARCHITECTURE_REVIEW"
+      - "SECURITY_AUDIT"
+    supported_languages:
+      - "typescript"
+      - "javascript"
+      - "python"
+    read_only_default: true
+    can_modify_code: false
+    network_access_default: true
+    cost_profile: "standard_api"
+    latency_profile: "medium"
+    context_limits: "128k"
+    credential_reference: "OPENAI_API_KEY"
+    last_verified_at: "2026-08-06T18:20:00Z"
+
+  - reviewer_id: "GOOGLE_ANTIGRAVITY_AUDITOR"
+    provider: "GOOGLE"
+    adapter_id: "antigravity-self-audit"
+    status: "ACTIVE"
+    capabilities:
+      - "CODE_REVIEW"
+    supported_languages:
+      - "python"
+      - "javascript"
+      - "typescript"
+    read_only_default: true
+    can_modify_code: false
+    network_access_default: false
+    cost_profile: "zero_cost"
+    latency_profile: "fast"
+    context_limits: "32k"
+    credential_reference: "none"
+    last_verified_at: "2026-08-06T18:20:00Z"
+
+  - reviewer_id: "LOCAL_SYNTAX_AUDITOR"
+    provider: "LOCAL"
+    adapter_id: "python-ast-check"
+    status: "ACTIVE"
+    capabilities:
+      - "CODE_REVIEW"
+    supported_languages:
+      - "python"
+    read_only_default: true
+    can_modify_code: false
+    network_access_default: false
+    cost_profile: "offline"
+    latency_profile: "instant"
+    context_limits: "unlimited"
+    credential_reference: "none"
+    last_verified_at: "2026-08-06T18:20:00Z"

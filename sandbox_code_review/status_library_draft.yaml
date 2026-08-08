@@ -1,0 +1,50 @@
+statuses:
+  - status_id: "CREATED"
+    label: "Created"
+    description: "The task packet has been generated but not published."
+    requires_governor_sig: false
+
+  - status_id: "READY"
+    label: "Ready"
+    description: "The task is published and ready to be claimed by the local adapter."
+    requires_governor_sig: false
+
+  - status_id: "CLAIMED"
+    label: "Claimed"
+    description: "The local adapter has claimed the task and locked the execution lease."
+    requires_governor_sig: false
+
+  - status_id: "EXECUTING"
+    label: "Executing"
+    description: "The local adapter is actively running the intent scripts."
+    requires_governor_sig: false
+
+  - status_id: "VALIDATING"
+    label: "Validating"
+    description: "Mechanical check scripts are verifying execution results."
+    requires_governor_sig: false
+
+  - status_id: "COMPLETED"
+    label: "Completed"
+    description: "Execution is complete and evidence files have been written."
+    requires_governor_sig: false
+
+  - status_id: "FAILED"
+    label: "Failed"
+    description: "Mechanical validator or run script failed execution."
+    requires_governor_sig: false
+
+  - status_id: "BLOCKED"
+    label: "Blocked"
+    description: "A security, dependency, or structural lock blocks processing."
+    requires_governor_sig: true
+
+  - status_id: "AWAITING_RATIFICATION"
+    label: "Awaiting Ratification"
+    description: "The task requires Governor sign-off inside the threshold portal before proceeding."
+    requires_governor_sig: true
+
+  - status_id: "ARCHIVED"
+    label: "Archived"
+    description: "The audit has successfully concluded and the packet is closed."
+    requires_governor_sig: false

@@ -1,8 +1,115 @@
 @import "tailwindcss";
 
+/* Override default prefers-color-scheme to use class-based dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* slate-50 */
+  --foreground: #0f172a; /* slate-900 */
+}
+
+:root.dark {
+  --background: #020617; /* slate-950 */
+  --foreground: #f8fafc; /* slate-50 */
+}
+
+/* ==================================================
+   2-AXIS DESIGN TOKEN SYSTEM (ISOLATED TO PREVIEW)
+   ================================================== */
+
+/* 1. Spacing / Density Scales (Isolated) */
+.design-studio-preview, .design-studio-preview.density-balanced {
+  --spacing-multiplier: 1.5rem;
+  --radius-base: 1rem;
+}
+
+.design-studio-preview.density-condensed {
+  --spacing-multiplier: 0.75rem;
+  --radius-base: 0.5rem;
+}
+
+/* 2. Slate/Silver Theme (Default) */
+.design-studio-preview.theme-slate {
+  --color-primary: #475569;
+  --color-primary-hover: #334155;
+  --color-primary-bg: #f1f5f9;
+  --color-border-custom: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-background-preview: #f8fafc;
+  --color-foreground-preview: #0f172a;
+}
+
+.design-studio-preview.theme-slate.dark, .dark .design-studio-preview.theme-slate {
+  --color-primary: #94a3b8;
+  --color-primary-hover: #cbd5e1;
+  --color-primary-bg: #1e293b;
+  --color-border-custom: #334155;
+  --color-surface: #0f172a;
+  --color-background-preview: #020617;
+  --color-foreground-preview: #f8fafc;
+}
+
+/* 3. Emerald/Forest Theme */
+.design-studio-preview.theme-emerald {
+  --color-primary: #059669;
+  --color-primary-hover: #047857;
+  --color-primary-bg: #ecfdf5;
+  --color-border-custom: #d1fae5;
+  --color-surface: #ffffff;
+  --color-background-preview: #f0fdf4;
+  --color-foreground-preview: #064e3b;
+}
+
+.design-studio-preview.theme-emerald.dark, .dark .design-studio-preview.theme-emerald {
+  --color-primary: #34d399;
+  --color-primary-hover: #6ee7b7;
+  --color-primary-bg: #064e3b;
+  --color-border-custom: #065f46;
+  --color-surface: #022c22;
+  --color-background-preview: #020617;
+  --color-foreground-preview: #ecfdf5;
+}
+
+/* 4. Indigo/Amethyst Theme */
+.design-studio-preview.theme-indigo {
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-bg: #e0e7ff;
+  --color-border-custom: #e0e7ff;
+  --color-surface: #ffffff;
+  --color-background-preview: #f5f3ff;
+  --color-foreground-preview: #1e1b4b;
+}
+
+.design-studio-preview.theme-indigo.dark, .dark .design-studio-preview.theme-indigo {
+  --color-primary: #818cf8;
+  --color-primary-hover: #a5b4fc;
+  --color-primary-bg: #1e1b4b;
+  --color-border-custom: #312e81;
+  --color-surface: #0f0d2c;
+  --color-background-preview: #020617;
+  --color-foreground-preview: #e0e7ff;
+}
+
+/* 5. Amber/Rust Theme */
+.design-studio-preview.theme-amber {
+  --color-primary: #d97706;
+  --color-primary-hover: #b45309;
+  --color-primary-bg: #fef3c7;
+  --color-border-custom: #fde68a;
+  --color-surface: #ffffff;
+  --color-background-preview: #fffbeb;
+  --color-foreground-preview: #78350f;
+}
+
+.design-studio-preview.theme-amber.dark, .dark .design-studio-preview.theme-amber {
+  --color-primary: #fbbf24;
+  --color-primary-hover: #fcd34d;
+  --color-primary-bg: #78350f;
+  --color-border-custom: #92400e;
+  --color-surface: #1e1302;
+  --color-background-preview: #020617;
+  --color-foreground-preview: #fef3c7;
 }
 
 @theme inline {
@@ -10,17 +117,22 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Theme-specific tokens mapped */
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-bg: var(--color-primary-bg);
+  --color-border-custom: var(--color-border-custom);
+  --color-surface: var(--color-surface);
+  --color-background-preview: var(--color-background-preview);
+  --color-foreground-preview: var(--color-foreground-preview);
+  --spacing-multiplier: var(--spacing-multiplier);
+  --radius-base: var(--radius-base);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

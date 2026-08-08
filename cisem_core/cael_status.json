@@ -1,0 +1,114 @@
+{
+  "status": "running",
+  "pid": 21476,
+  "last_heartbeat": "2026-08-08T04:52:29.359920Z",
+  "loop_count": 5494,
+  "exchange_directory": "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\9000__INTERSYSTEM_EXECUTION_EXCHANGE",
+  "active_packets_in_queue": [
+    {
+      "packet_id": "CXP-PKT-20260806-000003",
+      "filename": "CXP__Cisem__CC01__GPT-HANDOFF-ACK__V1.json",
+      "state": "COMPLETED"
+    },
+    {
+      "packet_id": "CXP-PKT-20260807-000001",
+      "filename": "CXP__Cisem__CC01__PRACTICE_INGESTION__V1.json",
+      "state": "FAILED_VALIDATION"
+    },
+    {
+      "packet_id": "CXP-PKT-20260806-000002",
+      "filename": "CXP__Cisem__CC01__TEST-LOCAL-002__V1.json",
+      "state": "COMPLETED"
+    },
+    {
+      "packet_id": "CXP-PKT-20260805-000001",
+      "filename": "CXP__Marketing-CoreHub__CC01__TEST-001__V1.yaml",
+      "state": "COMPLETED"
+    },
+    {
+      "packet_id": "CXP-PKT-20260805-000001",
+      "filename": "CXP__Marketing-CoreHub__CC01__TEST-001__V1.yaml.txt",
+      "state": "ARCHIVED"
+    }
+  ],
+  "witness_change_profile": {
+    "lock_reason": "UNAPPROVED_UNVERSIONED_FILE",
+    "target_file": "2026-08-08__AntigravityLocal__YarivHuman__Marketing_and_Sales_Hub_CsAg_Finalized_Image_Processing_and_SWIFT_Trial_Plan__V1.0.md",
+    "error_type": "MISSING_VERSION_METADATA",
+    "timestamp": "2026-08-08T04:52:29.342649Z"
+  },
+  "activation_registry": [
+    {
+      "mechanism_id": "CISEM-GATE-V2",
+      "description": "Four-phase hard blocking compilation gate",
+      "created_date": "2026-08-06",
+      "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
+      "estimated_triggers_per_cycle": 5,
+      "validation_target": 20,
+      "actual_triggers": 142,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-08T19:06:39.864476Z",
+      "notes": "Tested manually 20+ times. Gate correctly blocks on all phases."
+    },
+    {
+      "mechanism_id": "CISEM-SYNC-V1.1",
+      "description": "CisemSync naming pattern validator",
+      "created_date": "2026-08-06",
+      "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
+      "estimated_triggers_per_cycle": 4,
+      "validation_target": 16,
+      "actual_triggers": 194,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-08T19:06:37.985143Z",
+      "notes": "Called on every gate Phase 2 run. 16+ confirmed runs."
+    },
+    {
+      "mechanism_id": "CISEM-WATCHER-LOCK",
+      "description": "CxpWatcher .gate_lock witness positional violation detector",
+      "created_date": "2026-08-06",
+      "ratified_plan": "CISEM-IP-20260805-CXP-MIGRATION",
+      "estimated_triggers_per_cycle": 2,
+      "validation_target": 8,
+      "actual_triggers": 6788,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-08T04:52:29.346908Z",
+      "notes": "Tested multiple times during gate lock integration."
+    },
+    {
+      "mechanism_id": "CISEM-ATV-V1",
+      "description": "Anti-Theater Validator \u2014 intent alignment, beneficial drift, theater detection, activation tracking, process feedback",
+      "created_date": "2026-08-06",
+      "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
+      "estimated_triggers_per_cycle": 1,
+      "validation_target": 4,
+      "actual_triggers": 44,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-08T18:42:22.377711Z",
+      "notes": "Verified through 4 run cycles in Sandbox environment."
+    },
+    {
+      "mechanism_id": "CISEM-TURN-COUNTER",
+      "description": "10-Turn audit cycle enforcer \u2014 blocks gate at turn 10 until audit runs",
+      "created_date": "2026-08-06",
+      "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
+      "estimated_triggers_per_cycle": 1,
+      "validation_target": 4,
+      "actual_triggers": 200,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-08T19:06:37.425840Z",
+      "notes": "Turn counter increments logged and verified through 4 cycle resets."
+    },
+    {
+      "mechanism_id": "CISEM-PERSONA-AUDITOR",
+      "description": "CisemAuditor 10-persona expert panel orchestrator",
+      "created_date": "2026-08-06",
+      "ratified_plan": "CISEM-IP-20260806-ACCUMULATED-DESIGN",
+      "estimated_triggers_per_cycle": 1,
+      "validation_target": 4,
+      "actual_triggers": 14,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-08T18:42:18.583330Z",
+      "notes": "Orchestrated across 4 simulation test runs."
+    }
+  ]
+}

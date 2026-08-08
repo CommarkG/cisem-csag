@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReviewEngineRegistry",
+  "type": "object",
+  "required": ["reviewers"],
+  "properties": {
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "reviewer_id",
+          "provider",
+          "adapter_id",
+          "status",
+          "capabilities"
+        ],
+        "properties": {
+          "reviewer_id": { "type": "string" },
+          "provider": { "type": "string", "enum": ["OPENAI", "ANTHROPIC", "GOOGLE", "LOCAL", "HUMAN"] },
+          "adapter_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["ACTIVE", "INACTIVE", "UNVERIFIED"] },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["CODE_REVIEW", "TEST_EXECUTION", "ARCHITECTURE_REVIEW", "SECURITY_AUDIT"]
+            }
+          },
+          "supported_languages": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "read_only_default": { "type": "boolean" },
+          "can_modify_code": { "type": "boolean" },
+          "network_access_default": { "type": "boolean" },
+          "cost_profile": { "type": "string" },
+          "latency_profile": { "type": "string" },
+          "context_limits": { "type": "string" },
+          "credential_reference": { "type": "string" },
+          "last_verified_at": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

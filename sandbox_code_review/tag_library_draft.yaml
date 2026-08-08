@@ -1,0 +1,25 @@
+tags:
+  - tag_id: "SECURITY"
+    label: "Security Audit"
+    description: "Identifies backdoors, permission bypasses, secret leaks, and security vulnerabilities."
+    owner_role: "governor"
+
+  - tag_id: "CORRECTNESS"
+    label: "Functional Correctness"
+    description: "Validates code correctness, syntax, type compliance, and logic flows."
+    owner_role: "operator_admin"
+
+  - tag_id: "STYLE"
+    label: "Style & Theme Guidelines"
+    description: "Enforces UI style consistency, token usage, and layout guidelines."
+    owner_role: "operator_admin"
+
+  - tag_id: "DESTRUCTIVE"
+    label: "Destructive Operations Check"
+    description: "Tracks file deletions, moves, and config changes subject to audit logs."
+    owner_role: "governor"
+
+  - tag_id: "ARCHITECTURE"
+    label: "Core Architecture Compliance"
+    description: "Enforces alignment with decoupled universal structures and templates."
+    owner_role: "governor"

@@ -1,0 +1,32 @@
+﻿CISEM — GOOGLE ANTIGRAVITY MARKETING EXECUTION WORKSPACE
+
+
+Purpose
+This workspace is the controlled execution environment for implementing the CISEM Marketing Platform through Google Antigravity. It translates canonical CISEM governance into platform-specific execution without becoming a competing source of truth.
+
+
+Authority Model
+Canonical Truth: CISEM Core and Marketing Reference Project documents.
+Execution Truth: the current codebase and implementation state inside Google Antigravity.
+Learning Truth: unresolved findings, risks, opportunities and improvement proposals awaiting review.
+
+
+Human Bridge
+Yariv Fink is the authorized bridge between CISEM and Google Antigravity. He transfers one file or response at a time. Neither side may infer unseen content or claim that a message was delivered until the bridge confirms it.
+
+
+Mandatory Reading Order
+1. 2100__CISEM__Marketing_Platform_Trial__Root_and_Index__V0.1
+2. 2110__CISEM__Google_Antigravity__Marketing_Implementation_Adapter__V0.1
+3. 2120__CISEM__Google_Antigravity__Full_Stack_CoreCycle_Pipeline_and_Wizard__V0.1
+4. 2130__CISEM__Google_Antigravity__Image_Processing_CoreCycle_01__Working_Draft__V0.1
+5. 3110__CISEM__Google_Antigravity__Human_Bridge_and_File_Absorption_Protocol__V0.1
+6. 3120__CISEM__Google_Antigravity__Clarification_and_Decision_Register__V0.1
+
+
+Operating Rule
+Antigravity requests one file, absorbs it completely, returns the required absorption report, and only then requests the next file. Planning and implementation are prohibited until all mandatory files are processed and all blocking uncertainties are resolved.
+
+
+Synchronization
+Every completed CoreCycle must update implementation evidence, decisions, parking, next permitted action and improvement proposals. Canonical changes require separate review and human ratification.

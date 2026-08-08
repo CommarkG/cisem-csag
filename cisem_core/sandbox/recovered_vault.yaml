@@ -1,0 +1,16 @@
+import sys
+import json
+import yaml
+import subprocess
+from datetime import datetime, timezone
+
+CORE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CORE_DIR)
+REGISTRY_PATH      = os.path.join(CORE_DIR, "2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.3.yaml")
+SYNC_SCRIPT        = os.path.join(CORE_DIR, "CisemSync.py")
+GATE_LOCK_PATH     = os.path.join(ROOT_DIR, ".gate_lock")
+PARKING_VAULT_PATH = os.path.join(CORE_DIR, "sandbox", "parking_vault_draft.yaml")
+TURN_COUNTER_PATH  = os.path.join(CORE_DIR, "cisem_turn_counter.json")
+CAEL_STATUS_PATH   = os.path.join(CORE_DIR, "cael_status.json")
+
+# -----------------------------------------------------------------------------

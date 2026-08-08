@@ -1,0 +1,96 @@
+# CISEM Exchange Protocol Intent Registry
+
+---
+metadata:
+  owner: "CISEM_GOVERNOR"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\2026-08-05__CISEM__CXP__IntentRegistry__V1.2.yaml"
+  artifact_status: "DRAFT"
+  maturity: "WORKING_DRAFT"
+  version: "1.2"
+  inherited_authorities:
+    - "CISEM Project Constitution"
+  related_implementation_adapter: "GOOGLE_ANTIGRAVITY_ADAPTER"
+  local_edits_allowed: false
+  role_type: "CANONICAL_INTENT_REGISTRY"
+---
+
+intents:
+  - intent_id: "TEST_HANDSHAKE"
+    version: "1.0"
+    purpose: "Verify bi-directional communication loop infrastructure between cloud and local adapter."
+    allowed_adapters:
+      - "GOOGLE_ANTIGRAVITY_ADAPTER"
+    parameter_schema:
+      type: "object"
+      required: ["token"]
+      properties:
+        token:
+          type: "string"
+    allowed_tools:
+      - "stdout_log"
+      - "timestamp"
+    allowed_paths: []
+    read_permissions: []
+    write_permissions: []
+    network_permission: false
+    timeout_seconds: 60
+    repository_requirements:
+      clean_repo_required: false
+    required_evidence:
+      - "token_match_verification"
+    success_criteria: "Output token matches the parameter input token exactly."
+    failure_classifications:
+      - "TIMEOUT"
+      - "TOKEN_MISMATCH"
+    ratification_threshold: "NONE"
+
+  - intent_id: "VERIFY_CREDENTIAL_AVAILABILITY"
+    version: "1.0"
+    purpose: "Confirm presence and format of required credential variables in the local env without printing, modifying, or leaking secrets."
+    allowed_adapters:
+      - "GOOGLE_ANTIGRAVITY_ADAPTER"
+    parameter_schema:
+      type: "object"
+      required: ["keys"]
+      properties:
+        keys:
+          type: "array"
+          items:
+            type: "string"
+    allowed_tools:
+      - "file_exists"
+      - "env_check"
+    allowed_paths:
+      - "C:\\Users\\finky\\Desktop\\AntiGravity\\Marketing CoreHub CsAg\\.env"
+    read_permissions:
+      - "check_keys_only"
+    write_permissions: []
+    network_permission: false
+    timeout_seconds: 120
+    repository_requirements:
+      clean_repo_required: false
+    required_evidence:
+      - "keys_verified_present"
+    success_criteria: "All specified keys are present in .env and follow standard length/format rules."
+    failure_classifications:
+      - "KEY_MISSING"
+      - "INVALID_FORMAT"
+    ratification_threshold: "HUMAN_RATIFICATION_REQUIRED"
+
+history:
+  - timestamp: "2026-08-05T13:47:00Z"
+    action: "CREATED_INITIAL_INTENT_REGISTRY"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.0"
+  - timestamp: "2026-08-05T14:05:00Z"
+    action: "INCREMENT_TO_V1.1_MIGRATION"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.1"
+  - timestamp: "2026-08-05T14:10:00Z"
+    action: "UPGRADED_TO_V1.2_SPEC"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.2"
+  - timestamp: "2026-08-05T14:50:00Z"
+    action: "MIGRATED_CANONICAL_LOCATION_TO_WORKSPACE_ROOT"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.2"

@@ -1,0 +1,500 @@
+﻿# CISEM — Multi-Model Code Review and Independent Audit Layer
+
+
+**Canonical owner:** CISEM Core  
+**Target local path:**  
+`C:\Users\finky\Desktop\AntiGravity\2026-08-05__CISEM__Multi_Model_Code_Review_and_Independent_Audit_Layer__V1.0.md`
+
+
+**Activation rule:** Activate only after the current CAEL/CXP mission completes and no Governor Gate is active.
+
+
+## Goal
+
+
+Create a universal, configurable code-review and audit layer that can route code changes to one or more independent AI review engines and deterministic validators.
+
+
+The system must not depend on Codex, Claude, Gemini, Antigravity, or any single vendor.
+
+
+Each reviewer is an adapter behind one CISEM review contract.
+
+
+## Active Finish Line
+
+
+This CoreCycle is complete when:
+
+
+1. A governed Review Engine Registry exists.
+2. At least two independent AI reviewer adapters can be configured.
+3. Mechanical validators run independently of AI reviewers.
+4. All findings are normalized into one canonical schema.
+5. Conflicting reviewer findings are reconciled by evidence.
+6. The builder cannot act as the sole approver of its own work.
+7. Every review produces evidence, disposition, and a final verdict.
+8. The process runs without Yariv unless a Governor Gate is triggered.
+
+
+## Ownership
+
+
+### CISEM Core owns
+
+
+- review protocol;
+- reviewer registry schema;
+- normalized finding schema;
+- reviewer-selection policy;
+- conflict-resolution policy;
+- evidence requirements;
+- promotion gates;
+- Governor escalation rules.
+
+
+### Platform adapters own
+
+
+- Codex reviewer adapter;
+- Claude reviewer adapter;
+- Gemini reviewer adapter;
+- Antigravity reviewer adapter;
+- local-model reviewer adapter;
+- GitHub-native reviewer adapter;
+- future provider-specific integrations.
+
+
+### Projects own
+
+
+- project-specific review profiles;
+- risk thresholds;
+- reviewer-count requirements;
+- specialist-review requirements;
+- project acceptance criteria.
+
+
+Marketing consumes this layer. Marketing does not own it.
+
+
+## Supported Reviewer Classes
+
+
+The registry must support any number of reviewers.
+
+
+Initial adapter identities may include:
+
+
+- `OPENAI_CODEX_REVIEWER`
+- `ANTHROPIC_CLAUDE_REVIEWER`
+- `GOOGLE_GEMINI_REVIEWER`
+- `GOOGLE_ANTIGRAVITY_REVIEWER`
+- `GITHUB_COPILOT_REVIEWER`
+- `LOCAL_LLM_REVIEWER`
+- `HUMAN_SPECIALIST_REVIEWER`
+- `CISEM_ARCHITECTURE_AUDITOR`
+
+
+These are configurable adapters, not mandatory hardcoded dependencies.
+
+
+## Mechanical Validators
+
+
+AI review must not replace deterministic checks.
+
+
+Support:
+
+
+- unit tests;
+- integration tests;
+- schema validation;
+- linting;
+- type checking;
+- static analysis;
+- dependency vulnerability scanning;
+- secret scanning;
+- license checks;
+- mutation testing;
+- coverage thresholds;
+- build verification;
+- reproducibility checks.
+
+
+## Universal Review Request
+
+
+```yaml
+review_request:
+  review_id: ""
+  project_id: ""
+  corecycle_id: ""
+
+
+  repository:
+    path: ""
+    branch: ""
+    commit_before: ""
+    commit_after: ""
+    diff_reference: ""
+    dirty_state_allowed: false
+
+
+  review_scope:
+    files: []
+    directories: []
+    excluded_paths: []
+    review_types: []
+
+
+  context:
+    project_root: ""
+    governing_artifacts: []
+    architecture_constraints: []
+    acceptance_criteria: []
+    known_risks: []
+
+
+  permissions:
+    read_only: true
+    may_run_tests: false
+    may_modify_files: false
+    network_access: false
+    may_read_secrets: false
+
+
+  required_output:
+    normalized_findings_schema: "CISEM_CODE_REVIEW_FINDING_V1"
+    evidence_required: true
+    final_verdict_required: true
+```
+
+
+## Normalized Finding Schema
+
+
+```yaml
+finding:
+  finding_id: ""
+  reviewer_id: ""
+  review_id: ""
+  category: ""
+  severity: "CRITICAL|HIGH|MEDIUM|LOW|INFORMATIONAL"
+  confidence: 0.0
+  title: ""
+  description: ""
+  affected_files: []
+  affected_lines: []
+  evidence: []
+  reproduction_steps: []
+  architectural_owner: ""
+  recommended_resolution: ""
+  complete_integrated_fix_available: false
+  blocks_completion: false
+  duplicate_of: null
+  conflicts_with: []
+  disposition: "OPEN|ACCEPTED|REJECTED|MERGED|FIXED|DEFERRED"
+  disposition_reason: ""
+```
+
+
+Reviewers must provide integrated resolutions whenever possible, not isolated criticism.
+
+
+## Review Engine Registry
+
+
+Create:
+
+
+`2026-08-05__CISEM__Code_Review_Engine_Registry__V1.0.yaml`
+
+
+Example:
+
+
+```yaml
+reviewers:
+  - reviewer_id: "OPENAI_CODEX_REVIEWER"
+    provider: "OPENAI"
+    adapter_id: ""
+    status: "UNVERIFIED"
+    capabilities:
+      - "CODE_REVIEW"
+      - "TEST_EXECUTION"
+      - "ARCHITECTURE_REVIEW"
+    supported_languages: []
+    read_only_default: true
+    can_modify_code: false
+    network_access_default: false
+    cost_profile: ""
+    latency_profile: ""
+    context_limits: ""
+    credential_reference: ""
+    last_verified_at: null
+```
+
+
+Never store secret values in the registry.
+
+
+Use only environment-variable or secret-manager references.
+
+
+## Review Profiles
+
+
+Projects choose review behavior through profiles.
+
+
+```yaml
+review_profile:
+  profile_id: "HIGH_RISK_CORE_CHANGE"
+  minimum_ai_reviewers: 2
+  require_independent_provider_families: true
+  prohibit_builder_as_sole_reviewer: true
+  required_review_types:
+    - "ARCHITECTURE"
+    - "SECURITY"
+    - "CORRECTNESS"
+    - "FAILURE_RECOVERY"
+  required_mechanical_validators:
+    - "UNIT_TESTS"
+    - "STATIC_ANALYSIS"
+    - "SECRET_SCAN"
+  blocking_severities:
+    - "CRITICAL"
+    - "HIGH"
+  conflict_resolution_policy: "CISEM_AUDITOR"
+```
+
+
+Supported profiles may include:
+
+
+- `FAST_LOCAL_CHECK`
+- `STANDARD_PROJECT_CHANGE`
+- `HIGH_RISK_CORE_CHANGE`
+- `SECURITY_SENSITIVE_CHANGE`
+- `RELEASE_PROMOTION`
+- `MIGRATION_OR_DESTRUCTIVE_CHANGE`
+
+
+## Reviewer Selection
+
+
+The system must support:
+
+
+- one named reviewer;
+- several named reviewers;
+- any N available reviewers;
+- reviewers from different provider families;
+- specialist reviewers;
+- local models for privacy-sensitive code;
+- human specialists when required.
+
+
+```yaml
+review_selection:
+  mode: "MULTI_REVIEWER"
+  required_reviewers:
+    - "OPENAI_CODEX_REVIEWER"
+    - "ANTHROPIC_CLAUDE_REVIEWER"
+  optional_reviewers:
+    - "GOOGLE_GEMINI_REVIEWER"
+    - "LOCAL_LLM_REVIEWER"
+  minimum_successful_reviews: 2
+  require_provider_diversity: true
+```
+
+
+## Builder–Reviewer Separation
+
+
+Mandatory rule:
+
+
+> The builder may contribute self-review, but may never be the sole approval source for its own work.
+
+
+For Antigravity-built code:
+
+
+- Antigravity self-review is supplementary.
+- At least one independent reviewer is required.
+- High-risk Core changes require the active review profile’s minimum independent review coverage.
+
+
+## Workflow
+
+
+```text
+Builder completes bounded change
+→ immutable diff or review package created
+→ mechanical validators run
+→ review profile resolves required reviewers
+→ review requests dispatched
+→ findings normalized
+→ duplicates consolidated
+→ conflicts identified
+→ CISEM auditor evaluates evidence
+→ builder receives integrated correction package
+→ approved fixes applied
+→ mechanical checks rerun
+→ blocking findings independently rechecked
+→ final verdict recorded
+```
+
+
+## Conflict Resolution
+
+
+When reviewers disagree:
+
+
+1. Compare evidence, not model prestige.
+2. Reproduce claims mechanically where possible.
+3. Separate factual defects from architectural preferences.
+4. Apply governing artifacts and acceptance criteria.
+5. Add another reviewer only when it provides distinct evidence.
+6. Escalate to Yariv only through a genuine Governor Gate.
+
+
+Do not resolve by majority vote alone.
+
+
+## Canonical Verdicts
+
+
+- `VERIFIED`
+- `VERIFIED_WITH_NONBLOCKING_DEBT`
+- `BLOCKED_BY_CODE_DEFECTS`
+- `BLOCKED_BY_ARCHITECTURE`
+- `BLOCKED_BY_SECURITY`
+- `BLOCKED_BY_MISSING_EVIDENCE`
+- `GOVERNOR_RATIFICATION_REQUIRED`
+
+
+## Evidence Requirements
+
+
+Preserve:
+
+
+- code revision or diff hash;
+- reviewer identity and adapter version;
+- review context hash;
+- raw reviewer response;
+- normalized findings;
+- validator outputs;
+- accepted and rejected findings;
+- fixes applied;
+- re-review results;
+- final verdict;
+- lessons learned;
+- pending debt.
+
+
+## Security Defaults
+
+
+```yaml
+permissions:
+  read_only: true
+  may_run_tests: false
+  may_modify_files: false
+  may_access_network: false
+  may_read_secrets: false
+```
+
+
+Additional permissions require an explicit profile and recorded authority.
+
+
+## Smallest Executable Proof
+
+
+Use one real Antigravity-generated code change and prove:
+
+
+1. A Git diff or immutable review package is created.
+2. Two configurable AI reviewers are registered.
+3. At least one independent AI reviewer actually audits the code.
+4. One mechanical validator runs.
+5. Findings are normalized.
+6. Duplicate or conflicting findings can be identified.
+7. Antigravity receives one integrated correction package.
+8. Blocking issues are fixed.
+9. The independent reviewer rechecks the fix.
+10. A canonical verdict and evidence report are produced.
+11. Yariv is not used as content relay.
+
+
+## Activation Conditions
+
+
+```yaml
+prerequisites:
+  current_mission_complete: true
+  current_completion_report_exists: true
+  governor_gate_active: false
+  cael_status:
+    - "READY_FOR_CISEM_CORE"
+    - "READY_FOR_CORE_PROMOTION"
+```
+
+
+If prerequisites are not met, remain queued.
+
+
+## Successor CoreCycle Link
+
+
+Add to the active mission:
+
+
+```yaml
+next_corecycle_on_success:
+  corecycle_id: "CISEM-REVIEW-CC01"
+  artifact:
+    path: "2026-08-05__CISEM__Multi_Model_Code_Review_and_Independent_Audit_Layer__V1.0.md"
+  activation_mode: "AUTOMATIC_IF_NO_GOVERNOR_GATE"
+  goal: "Establish configurable independent multi-model code review."
+```
+
+
+## Required Outputs
+
+
+1. Review Engine Registry schema.
+2. Initial Review Engine Registry.
+3. Normalized Finding Schema.
+4. Review Profile schema.
+5. Reviewer-selection policy.
+6. Builder–reviewer separation policy.
+7. Conflict-resolution policy.
+8. Mechanical validator integration contract.
+9. First independent review evidence.
+10. Final promotion recommendation.
+
+
+Do not build dashboards or broad UI in this CoreCycle.
+
+
+## Instruction to Antigravity
+
+
+When the current active mission finishes:
+
+
+1. Place this file in the AntiGravity root at the target path.
+2. Register it as the successor CoreCycle.
+3. Do not activate it while a Governor Gate is active.
+4. When no Governor Gate is active, begin the smallest executable proof without waiting for Yariv.
+5. Use a configurable reviewer registry.
+6. Do not hardcode Codex as the only reviewer.
+7. Treat Codex as one reviewer adapter among several.

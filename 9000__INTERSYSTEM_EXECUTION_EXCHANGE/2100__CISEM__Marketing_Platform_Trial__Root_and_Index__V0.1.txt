@@ -1,0 +1,74 @@
+﻿CISEM MARKETING PLATFORM TRIAL — ROOT AND INDEX
+
+
+Metadata
+ID: CISEM-RP-2100
+Status: DRAFT
+Operational State: ACTIVE_USE
+Maturity: WORKING_DRAFT
+Authority: Human Ratification Required
+
+
+Purpose
+Defines the bounded marketing-platform reference project used to validate CISEM through real implementation. The initial executable scope is the product-image processing pipeline; later cycles may add knowledge extraction, product grouping, search, campaign assets and personalized offers only through approved CoreCycles.
+
+
+Canonical Scope
+Owns the project goal, project-level navigation, active CoreCycle order, platform-selection record and project completion state. Universal governance remains in the CISEM Core files.
+
+
+INHERITS_FROM
+- CISEM Project Constitution
+- CISEM Creation and Audit Control Protocol
+
+
+DEPENDS_ON
+- Vibe-Coding Platform Comparison and Selection Guide
+- Expert Audit Personas
+
+
+Project Goal
+Transform approximately 3,000 heterogeneous corporate-award product images into a governed, searchable and reusable marketing asset system. The system must preserve originals, identify same-product image sets, normalize presentation, extract structured product knowledge, and later support websites, offers, campaigns and content generation.
+
+
+Selected Implementation Platform
+Google Antigravity is selected for the first implementation trial because the current need combines repository work, browser-visible UI, pipeline orchestration and iterative artifact review. Selection is provisional and must be re-evaluated when evidence changes.
+
+
+MiniTree Index
+1. 2110 — Marketing Antigravity Handoff Contract
+2. 2120 — Full-Stack CoreCycle Pipeline and Wizard
+3. 2130 — Image Processing CoreCycle 01 Working Draft
+
+
+Mandatory Reading Order for External Builders
+1. 2110
+2. 2120
+3. The active CoreCycle file only
+4. Linked CISEM governing files where required
+
+
+Active Finish Line
+A single raw product image can be submitted through a visible frontend, processed through a traceable backend pipeline, returned as a 1080×1080 normalized image on a bright surface with controlled reflection and shadow, reviewed against explicit criteria, and preserved with metadata and evidence without altering the original.
+
+
+CoreCycle Advancement Rule
+No later image grouping, tagging, batch scaling or supplier harvesting begins until CoreCycle 01 satisfies its acceptance criteria and survives controlled variation.
+
+
+CoreSpine Navigation
+Up: CISEM Root Index → Constitution → Creation and Audit Control Protocol
+Down: Handoff Contract → Full-Stack CoreCycle Pipeline → Active Working Drafts
+Related: Platform Comparison Guide; Tag Library; Status Library
+
+
+Out of Scope for CoreCycle 01
+- bulk processing of all images
+- automatic product-set grouping
+- full knowledge graph
+- supplier website harvesting
+- campaign generation
+- personalized offers
+
+
+These remain preserved project goals, not active implementation scope.

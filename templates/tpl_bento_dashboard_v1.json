@@ -1,0 +1,44 @@
+{
+  "templateId": "tpl_bento_dashboard_v1",
+  "version": "1.0.0",
+  "governorConfig": {
+    "requiresAdminSignOff": true,
+    "allowDelegatedApproval": true
+  },
+  "structureNodes": [
+    {
+      "nodeId": "dashboard_grid_wrapper",
+      "engineType": "CONTAINER_GRID",
+      "dataBinding": {
+        "endpoint": "/api/v1/dashboard/meta",
+        "method": "GET"
+      },
+      "children": [
+        {
+          "nodeId": "kpi_card_revenue",
+          "engineType": "DATA_GRID_CARD",
+          "dataBinding": {
+            "endpoint": "/api/v1/analytics/revenue",
+            "method": "GET"
+          }
+        },
+        {
+          "nodeId": "kpi_card_users",
+          "engineType": "DATA_GRID_CARD",
+          "dataBinding": {
+            "endpoint": "/api/v1/analytics/active-users",
+            "method": "GET"
+          }
+        },
+        {
+          "nodeId": "main_chart_flow",
+          "engineType": "DATA_VISUALIZATION_NODE",
+          "dataBinding": {
+            "endpoint": "/api/v1/analytics/time-series",
+            "method": "GET"
+          }
+        }
+      ]
+    }
+  ]
+}

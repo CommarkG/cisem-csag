@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReviewProfile",
+  "type": "object",
+  "required": [
+    "profile_id",
+    "minimum_ai_reviewers",
+    "require_independent_provider_families",
+    "prohibit_builder_as_sole_reviewer",
+    "required_review_types",
+    "required_mechanical_validators"
+  ],
+  "properties": {
+    "profile_id": { "type": "string" },
+    "minimum_ai_reviewers": { "type": "integer" },
+    "require_independent_provider_families": { "type": "boolean" },
+    "prohibit_builder_as_sole_reviewer": { "type": "boolean" },
+    "required_review_types": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["ARCHITECTURE", "SECURITY", "CORRECTNESS", "STYLE"] }
+    },
+    "required_mechanical_validators": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["UNIT_TESTS", "STATIC_ANALYSIS", "SECRET_SCAN", "LINT"] }
+    },
+    "blocking_severities": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"] }
+    }
+  }
+}

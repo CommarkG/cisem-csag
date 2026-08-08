@@ -1,0 +1,286 @@
+# CISEM Universal Workspace and Accountability Registry
+
+---
+metadata:
+  owner: "CISEM_GOVERNOR"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\cisem_core\\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.4.yaml"
+  artifact_status: "DRAFT"
+  maturity: "WORKING_DRAFT"
+  version: "1.4"
+  inherited_authorities:
+    - "CISEM Project Constitution"
+  related_implementation_adapter: "GOOGLE_ANTIGRAVITY_ADAPTER"
+  local_edits_allowed: true
+  role_type: "UNIVERSAL_WORKSPACE_REGISTRY"
+---
+
+workspace:
+  root_path: "."
+  registry_id: "CISEM_WORKSPACE_REGISTRY"
+  last_reconciled_at: "2026-08-07T01:42:00Z"
+  registry_status: "ACTIVE"
+
+control_plane_subsystems:
+  - subsystem_id: "CISEM_CXP"
+    name: "CISEM Exchange Protocol"
+    ownership_layer: "CISEM_CORE"
+    canonical_directory: "./cisem_core"
+    maturity: "WORKING_IMPLEMENTATION"
+    status: "ACTIVE"
+    canonical_artifacts:
+      specification:
+        path: "2026-08-05__CISEM__CXP__Specification__V1.2.md"
+        version: "1.2"
+        status: "DRAFT"
+        sha256: "59d287721313deeadc9b1d72429d03850b3d1ac85add5c100af76a80331df57c"
+      packet_schema:
+        path: "2026-08-05__CISEM__CXP__PacketSchema__V1.2.schema.json"
+        version: "1.2"
+        status: "DRAFT"
+        sha256: "49a1c7258c9022b980192a269fc5fc7625fc7e6a455dc2da2c995d3002ced025"
+      state_transition_matrix:
+        path: "2026-08-05__CISEM__CXP__StateTransitionMatrix__V1.3.yaml"
+        version: "1.3"
+        status: "DRAFT"
+        sha256: "563d59e6ff9d62199269be08b80cb072dcbc6ebc72bd4f841083e32cc601e365"
+      intent_registry:
+        path: "2026-08-05__CISEM__CXP__IntentRegistry__V1.2.yaml"
+        version: "1.2"
+        status: "DRAFT"
+        sha256: "7b6d1453031555912a105002bf569d1d664e360e3c9046bbbd143471378a82d7"
+      capability_registry:
+        path: "2026-08-05__CISEM__CXP__CapabilityRegistry__V1.2.yaml"
+        version: "1.2"
+        status: "DRAFT"
+        sha256: "93fcf4726bec895296fdc289544ef44acfbf11ba8846fbc1e2ed654ce292a081"
+      completeness_matrix:
+        path: "2026-08-05__CISEM__CXP__CompletenessMatrix__V1.2.yaml"
+        version: "1.2"
+        status: "DRAFT"
+        sha256: "4d278e5d8b6e326ef50dc3864c23e2964d7f803899c1ce826ff5057c6902e6d8"
+    consumers:
+      - "SUPPLIER_SCRAPER"
+    validation:
+      bootstrap_status: "PASSED"
+      integration_status: "VERIFIED"
+      latest_evidence: "RESTORED_WORKSPACE_CORE_SPINE_ALIGNED_CXP"
+
+  - subsystem_id: "CISEM_PLANNING"
+    name: "CISEM Planning Control Plane"
+    ownership_layer: "CISEM_CORE"
+    canonical_directory: "./cisem_core/planning"
+    maturity: "WORKING_IMPLEMENTATION"
+    status: "ACTIVE"
+    canonical_artifacts:
+      specification:
+        path: "2026-08-07__CISEM__Planning__Specification__V1.0.md"
+        version: "1.0"
+        status: "DRAFT"
+        sha256: "8800cfd76233550f8c5797f46f307ab4dc825bc4c47c7932639261b2401ac108"
+      plan_ingestor:
+        path: "2026-08-07__GoogleAntigravity__Planning__PlanIngestor__V0.1.py"
+        version: "0.1"
+        status: "DRAFT"
+        sha256: "797d7002c598d86e240de739e19c8ca37b581380edc59f16db36026d51ceed5b"
+    consumers:
+      - "SUPPLIER_SCRAPER"
+    validation:
+      bootstrap_status: "PASSED"
+      integration_status: "VERIFIED"
+      latest_evidence: "PLANNING_CONTROL_PLANE_BOOTSTRAPPED"
+
+  - subsystem_id: "CISEM_COMMUNICATION"
+    name: "CISEM Communication Control Spine"
+    ownership_layer: "CISEM_CORE"
+    canonical_directory: "./"
+    maturity: "WORKING_IMPLEMENTATION"
+    status: "ACTIVE"
+    canonical_artifacts:
+      specification:
+        path: "2026-08-07__CISEM__AntigravityLocal__CommunicationSpecification__V1.0.md"
+        version: "1.0"
+        status: "DRAFT"
+        sha256: "fec41e6ca26f4a826558fad56f49294577953f4c1f30fe3c6eb58c3e63c3d14f"
+    consumers:
+      - "SUPPLIER_SCRAPER"
+    validation:
+      bootstrap_status: "PASSED"
+      integration_status: "VERIFIED"
+      latest_evidence: "COMMUNICATION_SPINE_RATIFIED"
+
+  - subsystem_id: "CISEM_TRACEABILITY"
+    name: "CISEM Traceability Overlay"
+    ownership_layer: "CISEM_CORE"
+    canonical_directory: "./"
+    maturity: "WORKING_IMPLEMENTATION"
+    status: "ACTIVE"
+    canonical_artifacts:
+      specification:
+        path: "2026-08-07__CISEM__AntigravityLocal__TraceabilitySpecification__V1.0.md"
+        version: "1.0"
+        status: "DRAFT"
+        sha256: "f51ebc57b21875d89e6be266f21e35191493e7e46070b4ac0087af67830bdb34"
+    consumers:
+      - "SUPPLIER_SCRAPER"
+    validation:
+      bootstrap_status: "PASSED"
+      integration_status: "VERIFIED"
+      latest_evidence: "TRACEABILITY_OVERLAY_RATIFIED"
+
+  - subsystem_id: "CISEM_PLAN_PROTOCOL"
+    name: "CISEM Plan Creation Protocol"
+    ownership_layer: "CISEM_CORE"
+    canonical_directory: "./"
+    maturity: "WORKING_IMPLEMENTATION"
+    status: "ACTIVE"
+    canonical_artifacts:
+      specification:
+        path: "2026-08-07__CISEM__AntigravityLocal__PlanProtocolSpecification__V1.0.md"
+        version: "1.0"
+        status: "DRAFT"
+        sha256: "c114f1ae07e9a88ccd95321ec76ec220fffbeff0f4522f9ff41c9a7bdce002a4"
+    consumers:
+      - "SUPPLIER_SCRAPER"
+    validation:
+      bootstrap_status: "PASSED"
+      integration_status: "VERIFIED"
+      latest_evidence: "PLAN_PROTOCOL_RATIFIED"
+
+platform_adapters:
+  - adapter_id: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    platform: "WINDOWS_POWERSHELL"
+    ownership_layer: "PLATFORM_ADAPTER"
+    canonical_directory: "./cisem_core"
+    bootstrap_instruction: "python cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpAdapter__V0.1.py --generate-bootstrap"
+    capability_profile: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\cisem_core\\2026-08-05__CISEM__CXP__CapabilityRegistry__V1.2.yaml"
+    current_version: "0.1"
+    status: "ACTIVE"
+    supported_transports:
+      - "TRANSPORT_MARKETING_DRIVE"
+    active_projects:
+      - "SUPPLIER_SCRAPER"
+    last_verified_at: "2026-08-07T01:42:00Z"
+
+  - adapter_id: "CLAUDE_CODE_ADAPTER"
+    platform: "POSIX_BASH"
+    ownership_layer: "PLATFORM_ADAPTER"
+    canonical_directory: "./cisem_core"
+    bootstrap_instruction: "UNVERIFIED"
+    capability_profile: "UNVERIFIED"
+    current_version: "none"
+    status: "UNVERIFIED"
+    supported_transports: []
+    active_projects: []
+    last_verified_at: "UNVERIFIED"
+
+projects:
+  - project_id: "SUPPLIER_SCRAPER"
+    alignment_approved: true
+    name: "Supplier Scraper"
+    ownership_layer: "PROJECT"
+    directory: "Supplier Scraper CsAg"
+    maturity: "DEVELOPMENT"
+    status: "ACTIVE"
+    goal: "Perform automated supply and vendor listings crawling and parsing."
+    active_finish_line: "UNVERIFIED"
+    active_mission_id: null
+    active_corecycle: "CC01"
+    inherits:
+      control_plane_subsystems:
+        - "CISEM_CXP"
+        - "CISEM_PLANNING"
+      governance:
+        - "CISEM_PROJECT_INSTRUCTIONS"
+      platform_adapters:
+        - "GOOGLE_ANTIGRAVITY_ADAPTER"
+    project_artifacts:
+      root_index: "Supplier Scraper CsAg/ARCHITECTURE.md"
+      implementation_adapter: null
+      corecycle_specification: "Supplier Scraper CsAg/PRD.md"
+      marketing_pipeline: null
+      project_decision_register: null
+      project_evidence_register: "Supplier Scraper CsAg/CONTRACTS.md"
+    transport_id: null
+    current_execution:
+      executor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+      validator: "CISEM_CLOUD"
+      auditor: "CISEM_CLOUD"
+      governor_required: false
+      next_permitted_action: null
+    blockers: []
+    pending_issue_ids: []
+
+active_missions: []
+
+transports:
+  - transport_id: "TRANSPORT_MARKETING_DRIVE"
+    type: "GOOGLE_DRIVE"
+    ownership_layer: "EXECUTION_EXCHANGE"
+    folder_id: "1dy0hixngOGeRhvLsvi5dEY9F3Y8pl8ct"
+    local_sync_path: "./9000__INTERSYSTEM_EXECUTION_EXCHANGE"
+    cloud_status: "ACTIVE"
+    local_status: "VERIFIED"
+    last_verified_at: "2026-08-07T01:42:00Z"
+
+pending_register:
+  registry_id: "CISEM_PENDING_REGISTER"
+  canonical_reference: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\cisem_core\\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.4.yaml"
+  review_frequency: "DAILY"
+  autonomous_progress_allowed: true
+  notify_governor_only_on_gates:
+    - "G1"
+    - "G2"
+    - "G3"
+    - "G4"
+    - "G5"
+
+governor_gates:
+  - gate_id: "G1"
+    name: "RATIFICATION"
+  - gate_id: "G2"
+    name: "MISSING_INTENT"
+  - gate_id: "G3"
+    name: "IRRECOVERABLE_CONFLICT"
+  - gate_id: "G4"
+    name: "EXTERNAL_DEPENDENCY"
+  - gate_id: "G5"
+    name: "SAFETY_BOUNDARY"
+
+reconciliation:
+  last_run_at: "2026-08-07T01:42:00Z"
+  checked:
+    - "canonical_paths"
+    - "duplicate_owners"
+    - "missing_files"
+    - "stale_versions"
+    - "broken_references"
+    - "project_owned_universal_artifacts"
+    - "unverified_completion_claims"
+  findings: []
+  result: "SUCCESS"
+
+history:
+  - timestamp: "2026-08-05T14:41:00Z"
+    action: "CREATED_INITIAL_WORKSPACE_REGISTRY_DRAFT"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.0"
+  - timestamp: "2026-08-05T14:50:00Z"
+    action: "CORRECTED_OWNERSHIP_HIERARCHY_AND_LAYER_DECOUPLING"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.1"
+  - timestamp: "2026-08-06T18:20:00Z"
+    action: "RECONCILED_PATHS_TO_NEW_WORKSPACE_ROOT_CISEM_CSAG"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.2"
+  - timestamp: "2026-08-06T23:55:00Z"
+    action: "RESTRUCTURED_WORKSPACE_CONSOLIDATED_CORE_SPINES_TO_CISEM_CORE"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.2"
+  - timestamp: "2026-08-07T00:43:00Z"
+    action: "UPDATED_STATE_TRANSITION_MATRIX_TO_V1.3_SUPPORTED_FAILURE"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.3"
+  - timestamp: "2026-08-07T01:42:00Z"
+    action: "ADDED_CISEM_PLANNING_CORE_SPINE_SUBSYSTEM"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.4"

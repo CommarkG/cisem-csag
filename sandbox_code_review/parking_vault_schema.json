@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ParkingVault",
+  "type": "object",
+  "required": ["parked_items"],
+  "properties": {
+    "parked_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "title",
+          "description",
+          "status",
+          "requires_governor_approval",
+          "ratified_by_governor"
+        ],
+        "properties": {
+          "item_id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "status": { "type": "string", "enum": ["PARKED", "UNDER_REVIEW", "RATIFIED_AND_PROMOTED", "REJECTED"] },
+          "requires_governor_approval": { "type": "boolean" },
+          "ratified_by_governor": { "type": "boolean" },
+          "governor_signature": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

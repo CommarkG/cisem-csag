@@ -1,0 +1,315 @@
+﻿{
+  "protocol": {
+    "protocol_name": "CXP",
+    "protocol_version": "1.2",
+    "schema_version": "1.2",
+    "adapter_contract_version": "0.1",
+    "repository_snapshot": "none"
+  },
+  "identity": {
+    "project": "Marketing CoreHub",
+    "core_cycle": "01",
+    "purpose": "Verify cloud auditor connection and credentials loop."
+  },
+  "immutable_request": {
+    "header": {
+      "packet_id": "CXP-PKT-20260805-000001",
+      "timestamp": "2026-08-05T15:00:00Z",
+      "sender": "CISEM_CLOUD",
+      "recipient": "GOOGLE_ANTIGRAVITY_ADAPTER"
+    },
+    "repository_target": {
+      "path": "C:\\Users\\finky\\Desktop\\AntiGravity\\Marketing CoreHub CsAg",
+      "branch": "main",
+      "commit_before": "none",
+      "dirty_before": false
+    },
+    "authority": {
+      "ratifying_authority": {
+        "identity": "Yariv Fink",
+        "role": "Governor"
+      },
+      "human_bridge": {
+        "identity": "Yariv Fink",
+        "enabled": true,
+        "role": "Transport and coordination"
+      },
+      "issuing_system": {
+        "identity": "CISEM_CLOUD",
+        "authority_scope": [
+          "issue_pre_authorized_packets",
+          "audit_results"
+        ]
+      },
+      "implementation_adapter": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "authority_scope": [
+          "claim_packet",
+          "execute_registered_intent",
+          "write_response_evidence"
+        ]
+      }
+    },
+    "governance": {
+      "dependencies": [],
+      "blocking_conditions": [],
+      "parking_rules": [],
+      "acceptance_criteria": [
+        "Local handshake token matching verification passes"
+      ]
+    },
+    "execution": {
+      "intent": "TEST_HANDSHAKE",
+      "parameters": {
+        "token": "verification-loop-active-success-1"
+      },
+      "inputs": {},
+      "required_outputs": [
+        "stdout"
+      ],
+      "evidence_required": [
+        "token_match_verification"
+      ]
+    }
+  },
+  "event_stream": [
+    {
+      "event_id": "CXP-EVT-20260805-000001-000001",
+      "event_type": "PACKET_CREATED",
+      "sequence_number": 1,
+      "previous_event_id": "CXP-EVT-20260805-000001-000000",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "CISEM_CLOUD",
+        "role": "CLOUD_ORCHESTRATOR"
+      },
+      "occurred_at": "2026-08-05T15:00:01Z",
+      "recorded_at: ": "2026-08-05T15:00:01Z",
+      "transition": {
+        "from_state": "NONE",
+        "to_state": "CREATED",
+        "transition_id": "CXP-T-001"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "b5ac07b9736c535492d52549d16bc832"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000002",
+      "event_type": "PACKET_PUBLISHED",
+      "sequence_number": 2,
+      "previous_event_id": "CXP-EVT-20260805-000001-000001",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "CISEM_CLOUD",
+        "role": "CLOUD_ORCHESTRATOR"
+      },
+      "occurred_at": "2026-08-05T15:00:02Z",
+      "recorded_at": "2026-08-05T15:00:02Z",
+      "transition": {
+        "from_state": "CREATED",
+        "to_state": "READY",
+        "transition_id": "CXP-T-002"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "da5d1656bc83ac54254f5ac07b23cf57"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000003",
+      "event_type": "PACKET_CLAIMED",
+      "sequence_number": 3,
+      "previous_event_id": "CXP-EVT-20260805-000001-000002",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-05T15:00:10Z",
+      "recorded_at": "2026-08-05T15:00:11Z",
+      "transition": {
+        "from_state": "READY",
+        "to_state": "CLAIMED",
+        "transition_id": "CXP-T-003"
+      },
+      "payload": {
+        "lease_expires_at": "2026-08-05T15:05:10Z",
+        "idempotency_key": "idemp-verify-001"
+      },
+      "integrity": {
+        "content_hash": "ac2354c07b6bc83d5f5a2b5ac07542d1"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000004",
+      "event_type": "EXECUTION_STARTED",
+      "sequence_number": 4,
+      "previous_event_id": "CXP-EVT-20260805-000001-000003",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-05T15:00:12Z",
+      "recorded_at": "2026-08-05T15:00:12Z",
+      "transition": {
+        "from_state": "CLAIMED",
+        "to_state": "EXECUTING",
+        "transition_id": "CXP-T-004"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "df5a2b5ac07542d1ac2354c07b6bc83d"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000005",
+      "event_type": "EXECUTION_OUTPUT_RECORDED",
+      "sequence_number": 5,
+      "previous_event_id": "CXP-EVT-20260805-000001-000004",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-05T15:00:15Z",
+      "recorded_at": "2026-08-05T15:00:15Z",
+      "transition": {
+        "from_state": "EXECUTING",
+        "to_state": "EXECUTING",
+        "transition_id": "CXP-T-005"
+      },
+      "payload": {
+        "stdout": "Handshake token match successfully validated: verification-loop-active-success-1\n",
+        "stderr": ""
+      },
+      "integrity": {
+        "content_hash": "c07542d1ac2354c07b6bc83ddf5a2b5a"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000006",
+      "event_type": "EVIDENCE_RECORDED",
+      "sequence_number": 6,
+      "previous_event_id": "CXP-EVT-20260805-000001-000005",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-05T15:00:18Z",
+      "recorded_at": "2026-08-05T15:00:19Z",
+      "transition": {
+        "from_state": "EXECUTING",
+        "to_state": "VALIDATING",
+        "transition_id": "CXP-T-006"
+      },
+      "payload": {
+        "evidence": {
+          "token_match_verification": "SUCCESS"
+        }
+      },
+      "integrity": {
+        "content_hash": "2354c07b6bc83ddf5a2b5ac07542d1ac"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000007",
+      "event_type": "PACKET_COMPLETED",
+      "sequence_number": 7,
+      "previous_event_id": "CXP-EVT-20260805-000001-000006",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "GOOGLE_ANTIGRAVITY_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-05T15:00:20Z",
+      "recorded_at": "2026-08-05T15:00:20Z",
+      "transition": {
+        "from_state": "VALIDATING",
+        "to_state": "COMPLETED",
+        "transition_id": "CXP-T-007"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "c535492d52549d16bc832b5ac07b9736"
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000008",
+      "event_type": "AUDIT_VERIFIED",
+      "sequence_number": 8,
+      "previous_event_id": "CXP-EVT-20260805-000001-000007",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "CISEM_CLOUD_AUDITOR",
+        "role": "CLOUD_AUDITOR"
+      },
+      "occurred_at": "2026-08-05T12:33:01.049Z",
+      "recorded_at": "2026-08-05T12:33:01.049Z",
+      "transition": {
+        "from_state": "COMPLETED",
+        "to_state": "AUDITED",
+        "transition_id": "CXP-T-008"
+      },
+      "payload": {
+        "rationale": "The execution response indicates that the handshake token 'verification-loop-active-success-1' was successfully validated, which matches the acceptance criteria of a local handshake token matching verification passing. The evidence further supports this with a 'SUCCESS' status for token match verification."
+      }
+    },
+    {
+      "event_id": "CXP-EVT-20260805-000001-000009",
+      "event_type": "PACKET_ARCHIVED",
+      "sequence_number": 9,
+      "previous_event_id": "CXP-EVT-20260805-000001-000008",
+      "packet_id": "CXP-PKT-20260805-000001",
+      "actor": {
+        "identity": "REFERENCE_ADAPTER",
+        "role": "LOCAL_ADAPTER"
+      },
+      "occurred_at": "2026-08-05T12:49:35.350965Z",
+      "recorded_at": "2026-08-05T12:49:35.350965Z",
+      "transition": {
+        "from_state": "AUDITED",
+        "to_state": "ARCHIVED",
+        "transition_id": "CXP-T-009"
+      },
+      "payload": {},
+      "integrity": {
+        "content_hash": "966bfc950b32ae1676fcf8965d74a0b2e0bb5894c4abb8e52344f76c3dda61e6"
+      }
+    }
+  ],
+  "derived_view": {
+    "current_state": "ARCHIVED",
+    "execution_control": {
+      "idempotency_key": "idemp-verify-001",
+      "attempt_number": 1,
+      "max_attempts": 3,
+      "claimed_by": "GOOGLE_ANTIGRAVITY_ADAPTER",
+      "claimed_at": "2026-08-05T15:00:10Z",
+      "lease_expires_at": "2026-08-05T15:05:10Z",
+      "timeout_seconds": 300,
+      "requires_clean_repository": false
+    },
+    "response": {
+      "status": "",
+      "stdout": "Handshake token match successfully validated: verification-loop-active-success-1\n",
+      "stderr": "",
+      "evidence": {
+        "token_match_verification": "SUCCESS"
+      }
+    },
+    "audit": {
+      "result": "VERIFIED",
+      "auditor_id": "CISEM_CLOUD_AUDITOR",
+      "timestamp": "2026-08-05T12:33:01.049Z"
+    },
+    "lessons_learned": []
+  },
+  "integrity": {
+    "packet_hash": "sha256-hash-packet-1",
+    "latest_event_hash": "966bfc950b32ae1676fcf8965d74a0b2e0bb5894c4abb8e52344f76c3dda61e6"
+  }
+}

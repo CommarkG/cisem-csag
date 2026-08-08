@@ -1,0 +1,155 @@
+{
+  "last_updated": "2026-08-08T18:42:22.360695+00:00",
+  "registry": [
+    {
+      "timestamp": "2026-08-06T22:05:40.096028+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-06T22:44:13.233256+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-06T22:47:55.648309+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-06T23:01:46.209247+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T01:50:08.686835+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T04:42:37.376804+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T05:09:34.754280+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T05:34:38.538957+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T05:34:59.182908+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:26:59.787088+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:41:00.763988+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:41:13.629872+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:44:57.721588+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:48:27.504036+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "planning gap -- scenarios designed too narrowly to trigger expected personas",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:48:57.664122+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T18:55:43.303950+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T19:12:53.757619+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-07T20:49:27.271354+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T12:03:09.266158+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T12:34:20.703235+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T12:52:06.494477+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T15:21:23.198205+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T16:28:29.271756+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T17:36:26.345356+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-08T18:42:22.360695+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    }
+  ]
+}
