@@ -92,8 +92,24 @@ To organize the platform cleanly so that every module has a defined home, the re
 - All background tasks and AI orchestration scripts must log their outcomes in `9000__INTERSYSTEM_EXECUTION_EXCHANGE` to maintain absolute traceability.
 
 ---
+
+## 5. The Sandbox Promotion Positioning Checkpoint
+
+5.1. **Mandatory Promotion Questions**:
+Before promoting any module (such as the Image Processing Sandbox) from the sandbox into the core, the developer must answer these five positioning questions:
+1. **The Delta Check**: What files, configurations, or database items exist in the sandbox version that do not exist in the core?
+2. **The Cleanroom Choice**: Based on the refactor-vs-rewrite matrix, are we refactoring the sandbox code or building the core implementation from scratch based on a clean design contract?
+3. **The Architectural Anchor**: How does this promoted feature satisfy the "Nothing Stands Alone" rule? Which parent axioms or 5-digit pillar does it link to?
+4. **The Scaling Path**: How will this component handle high concurrency and multi-tenancy? (e.g. Does it use RLS, partitioned PostgreSQL schemas, or decoupled API worker queues?)
+5. **The Reality Proof**: What is the smallest automated test or check that we can plug into `cisem_gate.py` to prove that the promoted module is functioning correctly in production?
+
+---
 history:
   - timestamp: "2026-08-08T23:25:00Z"
     action: "DRAFT_ENTERPRISE_ARCH_BLUEPRINT"
     actor: "GEMINI_BRAIN"
     version: "1.0"
+  - timestamp: "2026-08-08T23:31:00Z"
+    action: "ADDED_PROMOTION_POSITIONING_CHECKPOINT"
+    actor: "GEMINI_BRAIN"
+    version: "1.1"
