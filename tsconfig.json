@@ -39,6 +39,7 @@
     "temp_archive",
     "dist",
     "src/collections",
-    "src/hooks"
+    "src/hooks",
+    "sandbox"
   ]
 }

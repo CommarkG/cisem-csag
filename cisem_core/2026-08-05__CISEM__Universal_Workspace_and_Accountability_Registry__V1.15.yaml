@@ -2,10 +2,10 @@
 
 metadata:
   owner: CISEM_GOVERNOR
-  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.14.yaml
+  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.15.yaml
   artifact_status: DRAFT
   maturity: WORKING_DRAFT
-  version: '1.14'
+  version: '1.15'
   inherited_authorities:
   - CISEM Project Constitution
   related_implementation_adapter: GOOGLE_ANTIGRAVITY_ADAPTER
@@ -40,6 +40,10 @@ history:
   action: INTEGRATED_5_DIGIT_NAMING_SCHEMAS_HARDENED_GATE_TEETH_CONSOLIDATED_COMPONENT_SALAD
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.14'
+- timestamp: '2026-08-08T23:46:00Z'
+  action: REGISTERED_SANDBOX_AND_ACCOUNTABILITY_BLUEPRINTS_INCREMENTED_TO_V1.15
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.15'
 ---
 workspace:
   root_path: .
@@ -212,6 +216,31 @@ control_plane_subsystems:
       version: '0.2'
       status: DRAFT
       sha256: c6e37d02d5766b07d996826ca0767ddee88e293f101d5d8ade387676a6aa691e
+    enterprise_scale_architecture_blueprint:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__EnterpriseScaleArchitectureBlueprint__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: d818e4b5cb8b30f2ba728707eb6da7855aba8faaa859057cfbc0f6d2dbfc56d2
+    sandbox_system_schema_and_structure:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__SandboxSystemSchemaAndStructure__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: 8b5f0f37bae544b43be811c6a1b54d0b36097f30dff12fd66c869407795a3b0a
+    project_management_and_accountability_framework:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__ProjectManagementAndAccountabilityFramework__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: 7514182f5a3a61a890bf1388657422e577c2b3c49700ac8a75c1a8034b691c4b
+    knowledge_management_and_platform_dna_enforcement_specification:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__KnowledgeManagementAndPlatformDnaEnforcement__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: d33efeda944ae45964edaa9ed703be662ffd879bf02105814289e2196529e8b1
+    persona_audit_report_on_sandbox_positioning:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__PersonaAuditSandboxPositioning__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: 7c5227037663d3e3b7529da631e735bfa2ef48f8daa0c17e2ba05cac72b7642a
   consumers:
   - SUPPLIER_SCRAPER
   validation:
@@ -464,3 +493,7 @@ history:
   action: INTEGRATED_5_DIGIT_NAMING_SCHEMAS_HARDENED_GATE_TEETH_CONSOLIDATED_COMPONENT_SALAD
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.14'
+- timestamp: '2026-08-08T23:46:00Z'
+  action: REGISTERED_SANDBOX_AND_ACCOUNTABILITY_BLUEPRINTS_INCREMENTED_TO_V1.15
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.15'

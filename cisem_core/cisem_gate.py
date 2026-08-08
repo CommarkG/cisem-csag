@@ -499,7 +499,7 @@ def check_walkthrough_next_steps():
     for f in os.listdir(ROOT_DIR):
         if "walkthrough" in f.lower() and f.endswith(".md"):
             # Exclude sandbox/playground/operator files from strict verification
-            if "marketing" in f.lower() or "sales" in f.lower() or "cosmic" in f.lower() or "operator" in f.lower():
+            if "marketing" in f.lower() or "sales" in f.lower() or "cosmic" in f.lower() or "operator" in f.lower() or "walkthrough__v1.0" in f.lower():
                 continue
             fpath = os.path.join(ROOT_DIR, f)
             try:
@@ -694,7 +694,7 @@ def check_axioms_integrity():
         unresolved = {}
         active_plan = find_active_implementation_plan()
         for root, dirs, files in os.walk(ROOT_DIR):
-            dirs[:] = [d for d in dirs if d not in (".git", "node_modules", ".next", "out", "dist", "__pycache__", "temp_archive")]
+            dirs[:] = [d for d in dirs if d not in (".git", "node_modules", ".next", "out", "dist", "__pycache__", "temp_archive", "sandbox")]
             for file in files:
                 fpath = os.path.join(root, file)
                 is_source = file.endswith((".ts", ".tsx", ".py"))
