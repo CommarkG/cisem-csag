@@ -110,6 +110,23 @@ Before promoting any module (such as the Image Processing Sandbox) from the sand
 5. **The Reality Proof**: What is the smallest automated test or check that we can plug into `cisem_gate.py` to prove that the promoted module is functioning correctly in production?
 
 ---
+
+## 6. Dynamic Scale Adaptation During Development
+
+6.1. **Handling Mid-Flight Scale Shifts**:
+If user volume or tenant scaling requirements change during the active development of a module, the system adapts using decoupled architectural layers:
+
+1. **No-Code Tenant Schema Upgrades**:
+   - *Scenario*: A tenant grows and requires migration from a standard RLS shared table to a physically isolated database schema.
+   - *Handling*: The API router checks a dynamic registry. To upgrade the tenant, a migration script clones the tenant's data into a new schema, and the registry configuration is updated. The frontend and controller code remain unchanged.
+2. **Database Query Offloading**:
+   - *Scenario*: Search queries or vector index searches degrade performance due to a traffic surge.
+   - *Handling*: We decouple the search functions (`match_product_embeddings`) and route them to dedicated read-replicas, keeping transactional writes isolated on the primary node.
+3. **Developer Collision Fencing (Gate Scaling)**:
+   - *Scenario*: The development team grows, causing index ID overlaps and git conflicts.
+   - *Handling*: We enforce the **Sparse ID Allocation policy (`PR-11000`)** which keeps step intervals (+100/500) and separates sandbox boundaries, allowing multiple developers to create distinct rules without overlapping ID conflicts.
+
+---
 history:
   - timestamp: "2026-08-08T23:25:00Z"
     action: "DRAFT_ENTERPRISE_ARCH_BLUEPRINT"
@@ -119,3 +136,7 @@ history:
     action: "ADDED_PROMOTION_POSITIONING_CHECKPOINT"
     actor: "GEMINI_BRAIN"
     version: "1.1"
+  - timestamp: "2026-08-08T23:36:00Z"
+    action: "ADDED_DYNAMIC_SCALE_ADAPTATION_GUIDELINE"
+    actor: "GEMINI_BRAIN"
+    version: "1.2"
