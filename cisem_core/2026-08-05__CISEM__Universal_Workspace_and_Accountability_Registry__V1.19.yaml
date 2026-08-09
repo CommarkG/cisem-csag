@@ -2,10 +2,10 @@
 
 metadata:
   owner: CISEM_GOVERNOR
-  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.18.yaml
+  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.19.yaml
   artifact_status: DRAFT
   maturity: WORKING_DRAFT
-  version: '1.18'
+  version: '1.19'
   inherited_authorities:
   - CISEM Project Constitution
   related_implementation_adapter: GOOGLE_ANTIGRAVITY_ADAPTER
@@ -56,11 +56,15 @@ history:
   action: REGISTERED_CLOUD_ROUTED_OPENROUTER_API_AGENT_CHAT_INTEGRATION
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.18'
+- timestamp: '2026-08-09T10:18:00Z'
+  action: INTEGRATED_GIT_DIFF_OPTIMIZATION_IN_COMPILATION_GATE
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.19'
 ---
 workspace:
   root_path: .
   registry_id: CISEM_WORKSPACE_REGISTRY
-  last_reconciled_at: '2026-08-09T10:10:00Z'
+  last_reconciled_at: '2026-08-09T10:18:00Z'
   registry_status: ACTIVE
 control_plane_subsystems:
 - subsystem_id: CISEM_CXP
@@ -210,6 +214,11 @@ control_plane_subsystems:
       version: '1.2'
       status: RAW
       sha256: c89357915804e4ac9a54376f93e10c9b1c8da230dffe463cba167b26b190f9e7
+    2026_08_09__AntigravityLocal__YarivHuman__CisemGateScript__V2_6_py:
+      path: cisem_gate.py
+      version: '2.6'
+      status: DRAFT
+      sha256: 8133fb6100a4c685b92a1b23865df3d0840893682237d6eddad5932c3196c4e6
   consumers:
   - SUPPLIER_SCRAPER
   validation:
@@ -273,6 +282,11 @@ control_plane_subsystems:
       version: '1.0'
       status: DRAFT
       sha256: bf22657e49f3193bc621134a928b41da38bde13b184eef1a6c412334243ed3c5
+    2026_08_09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1_0_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      sha256: 8ec12b25679c0e7ea51be9b2dc1f07d8de497fc478f2137186f25a81d8e24f62
   consumers:
   - SUPPLIER_SCRAPER
   validation:

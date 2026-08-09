@@ -76,6 +76,12 @@ Reconciliation Result: SUCCESS
 - **Accountability Dashboard UI & Backend Bridge**:
   - Created the new API route [`route.ts`](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%2520CsAg/src/app/api/dashboard/route.ts) that reads local files (`cael_status.json`, `atv_report.json`, `cisem_turn_counter.json`) with safe fallbacks and parses registered files from Registry V1.17.
   - Mounted the dynamic **Accountability Dashboard** inside `{currentMenu === "threshold"}` view in [`page.tsx`](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%2520CsAg/src/app/page.tsx), rendering a color-shifting circular turn gauge (emerald ➔ amber ➔ crimson), ATV audit indicators, and a scrolling cryptographic registry ledger table.
+- **OpenRouter Cloud-Hosted Multi-LLM Routing**:
+  - Integrated cloud routing into the chatbot API route [`route.ts`](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%2520CsAg/src/app/api/agent/chat/route.ts). If `OPENROUTER_API_KEY` is present in environment variables, the system securely routes user queries and Twenty CRM functions via OpenRouter's cloud-hosted completions (`google/gemini-2.5-flash`), with a zero-laptop-dependency design.
+  - Retained fully functional direct Gemini API completion as a secure local fallback if the cloud keys are not configured.
+  - Appended `OPENROUTER_API_KEY=` configuration fields to the system `.env` file.
+- **Workspace Registry V1.18 Increment**:
+  - Upgraded the workspace registry to [`Registry V1.18`](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%2520CsAg/cisem_core/2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.18.yaml) to register the updated `route.ts` as artifact `ChatApiRoute__V1_3_ts` and computed its fresh SHA-256 hash using the reconciler utility.
 
 ## Next Steps
 

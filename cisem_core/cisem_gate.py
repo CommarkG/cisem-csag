@@ -1,29 +1,19 @@
 #!/usr/bin/env python3
 """
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260807-PLANNING-SPINE
-# governor_signature: GOV-YARIV-20260807-PLANNING-SPINE-V1.0
-# version: V2.5
+# ratified_plan: CISEM-IP-20260809-GATE-GIT-DIFF-OPTIMIZATION
+# governor_signature: GOV-YARIV-20260809-GATE-GIT-DIFF-OPTIMIZATION-V1.0
+# version: V2.6
 # reasoning: |
-#   This file is the Keystone enforcement gate for the entire CISEM platform.
-#   It replaces the broken warn-and-continue logic (V1.0 lines 56-60) with a
-#   true four-phase blocking gate. Completing this unblocks: Code Header
-#   enforcement, AI-Pocket wrapper activation, Watcher-Lock readout, and the
-#   10-Turn Audit loop.
-#   Added Phase 6 (Plan Ingestion Validation) to programmatically check design plans
-#   against vocabulary, naming constraints, and parent axioms before compiling.
-#   Added Phase 9 (Registry Checksum Verification) running WorkspaceReconciler.py.
-#   Added Phase 10 (Plan Axioms Linkage Check) enforcing non-empty verified axiom links.
-#   Parent principles: AxiomsAndPrinciples V1.20 >AX-10000, >PR-13900,
-#   >PR-13950. V1.16 >C (Strict Compilation Gate). Planning Spec V1.0.
-#   Resolves: CISEM_PLANNING Core Spine bootstrap.
+#   Refactored Phase 11 scan to perform git-diff optimized scanning, lowering check
+#   latencies on local development triggers while preserving full recursive walk fallback.
+#   Parent principles: AxiomsAndPrinciples V1.24 >AX-10000, >PR-11000.
+#   Resolves: CISEM_GATE Git status performance optimization.
 
 CISEM Local Gateway Gate (LGG) > Root Gatekeeper
-Version: 2.5
-Description: Four-phase hard blocking gate. Enforces ratified-plan linkage,
-             .gate_lock detection, mandatory code headers, and Parking Vault
-             bidirectional linkage. Integrated Plan Ingestion Validation (Phase 6),
-             Registry Checksum Verification (Phase 9), and Plan Axioms Linkage Check (Phase 10).
+Version: 2.6
+Description: Enforces ratified-plan linkage, .gate_lock detection, mandatory code headers,
+             and git-diff optimized axiom scans (Phase 11).
 
 Change log:
   V1.0 -> V2.0 (2026-08-06): Replaced warn-and-continue with hard exit 1.
@@ -33,6 +23,7 @@ Change log:
                               Added Phase 6 (Plan Ingestion Validation).
   V2.2 -> V2.4 (2026-08-07): Added Phase 9 (Registry Checksum Verification).
   V2.4 -> V2.5 (2026-08-07): Added Phase 10 (Plan Axioms Linkage Check).
+  V2.5 -> V2.6 (2026-08-09): Added Phase 11 (Git-diff Optimized Axiom Scan).
 """
 
 import os
@@ -662,6 +653,31 @@ def check_sandbox_format():
     print()
 
 
+def get_git_modified_files():
+    """Gets files modified or untracked in Git relative to ROOT_DIR. Returns None on error."""
+    try:
+        kwargs = {"capture_output": True, "text": True}
+        if sys.platform == "win32":
+            kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+        res = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT_DIR, **kwargs)
+        if res.returncode != 0:
+            return None
+        
+        files = []
+        for line in res.stdout.splitlines():
+            if len(line) > 3:
+                # Format: " M file" or "?? file" or "A  file"
+                fpath = line[3:].strip()
+                if " -> " in fpath:
+                    fpath = fpath.split(" -> ")[-1].strip()
+                abs_path = os.path.abspath(os.path.join(ROOT_DIR, fpath))
+                if os.path.exists(abs_path):
+                    files.append(abs_path)
+        return files
+    except Exception:
+        return None
+
+
 def check_axioms_integrity():
     print("Phase 11: Running Axioms Duplication and Reference Integrity Scan...")
     axioms_file = find_active_axioms_file()
@@ -690,30 +706,46 @@ def check_axioms_integrity():
             
         print(f"  Phase 11: Parsed {len(seen)} unique axiom and principle definitions.")
         
-        # 2. Reference Scan across workspace
+        # 2. Reference Scan
         unresolved = {}
         active_plan = find_active_implementation_plan()
-        for root, dirs, files in os.walk(ROOT_DIR):
-            dirs[:] = [d for d in dirs if d not in (".git", "node_modules", ".next", "out", "dist", "__pycache__", "temp_archive", "sandbox")]
-            for file in files:
-                fpath = os.path.join(root, file)
-                is_source = file.endswith((".ts", ".tsx", ".py"))
+        
+        git_files = get_git_modified_files()
+        if git_files is not None:
+            print(f"  Phase 11: Git scope check (scanning {len(git_files)} modified files)...")
+            files_to_scan = []
+            for fpath in git_files:
+                is_source = fpath.endswith((".ts", ".tsx", ".py"))
                 is_active_plan = (active_plan and os.path.abspath(fpath) == os.path.abspath(active_plan))
-                
-                if is_source or is_active_plan:
-                    if os.path.abspath(fpath) == os.path.abspath(axioms_file):
-                        continue
-                    try:
-                        with open(fpath, "r", encoding="utf-8", errors="ignore") as fo:
-                            f_content = fo.read()
-                        refs = re.findall(r'\b(AX-\d{5}|PR-\d{5})\b', f_content)
-                        for ref in refs:
-                            if ref not in seen:
-                                if ref not in unresolved:
-                                    unresolved[ref] = []
-                                unresolved[ref].append(os.path.relpath(fpath, ROOT_DIR))
-                    except Exception:
-                        pass
+                # Skip sandbox directory files
+                if (is_source or is_active_plan) and "sandbox" not in fpath.replace("\\", "/").split("/"):
+                    files_to_scan.append(fpath)
+        else:
+            print("  Phase 11: Git unavailable. Falling back to full directory scan...")
+            files_to_scan = []
+            for root, dirs, files in os.walk(ROOT_DIR):
+                dirs[:] = [d for d in dirs if d not in (".git", "node_modules", ".next", "out", "dist", "__pycache__", "temp_archive", "sandbox")]
+                for file in files:
+                    fpath = os.path.join(root, file)
+                    is_source = file.endswith((".ts", ".tsx", ".py"))
+                    is_active_plan = (active_plan and os.path.abspath(fpath) == os.path.abspath(active_plan))
+                    if is_source or is_active_plan:
+                        files_to_scan.append(fpath)
+
+        for fpath in files_to_scan:
+            if os.path.abspath(fpath) == os.path.abspath(axioms_file):
+                continue
+            try:
+                with open(fpath, "r", encoding="utf-8", errors="ignore") as fo:
+                    f_content = fo.read()
+                refs = re.findall(r'\b(AX-\d{5}|PR-\d{5})\b', f_content)
+                for ref in refs:
+                    if ref not in seen:
+                        if ref not in unresolved:
+                            unresolved[ref] = []
+                        unresolved[ref].append(os.path.relpath(fpath, ROOT_DIR))
+            except Exception:
+                pass
                         
         if unresolved:
             print("CISEM_GATE_BLOCKED -- Phase 11: Unresolved axiom/principle references found:")
