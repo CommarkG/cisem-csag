@@ -1,5 +1,5 @@
 {
-  "current_turn": 13,
+  "current_turn": 4,
   "turn_limit_ceiling": 15,
   "turn_minimum_floor": 3,
   "audit_due": false,
@@ -12,60 +12,24 @@
     "last_maturity_score": null
   },
   "maturity_score_threshold": 70,
-  "last_reset": "2026-08-08T20:56:25.484790+00:00",
+  "last_reset": "2026-08-09T08:04:26.551330+00:00",
   "ratified_plan": "CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0",
   "governor_signature": "GOV-YARIV-20260806-CONTEXT-ADAPTIVE-V1.0",
   "turns_log": [
     {
-      "timestamp": "2026-08-08T20:56:29.331250Z",
+      "timestamp": "2026-08-09T08:04:30.990353Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-08T20:58:02.028536Z",
+      "timestamp": "2026-08-09T08:05:15.822862Z",
+      "action": "2026-08-08__AntigravityLocal__YarivHuman__Permanent_Planning_Mode_and_State_Locked_Gate_Walkthrough__V1.0.md"
+    },
+    {
+      "timestamp": "2026-08-09T08:05:19.613052Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-08T20:59:24.474208Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-08T20:59:31.588609Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-08T21:08:46.750254Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-08T21:08:56.296759Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-08T21:09:44.681110Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-08T21:22:47.428313Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-09T07:12:37.860432Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-09T07:18:19.426011Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-09T07:18:41.568539Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-09T07:18:47.682045Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-08-09T07:18:53.607034Z",
+      "timestamp": "2026-08-09T08:05:34.155033Z",
       "action": "cisem_gate.py"
     }
   ]

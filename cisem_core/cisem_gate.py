@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260809-GATE-GIT-DIFF-OPTIMIZATION
-# governor_signature: GOV-YARIV-20260809-GATE-GIT-DIFF-OPTIMIZATION-V1.0
-# version: V2.6
+# ratified_plan: CISEM-IP-20260809-PERMANENT-PLANNING-LOCK
+# governor_signature: GOV-YARIV-20260809-PERMANENT-PLANNING-LOCK-V1.0
+# version: V2.7
 # reasoning: |
-#   Refactored Phase 11 scan to perform git-diff optimized scanning, lowering check
-#   latencies on local development triggers while preserving full recursive walk fallback.
+#   Hardwired Phase 12 (Planning Mode Lock Check) to mechanically block all code
+#   compilations when locked in PLANNING mode, and auto-reset lock to PLANNING
+#   on walkthrough compilations.
 #   Parent principles: AxiomsAndPrinciples V1.24 >AX-10000, >PR-11000.
-#   Resolves: CISEM_GATE Git status performance optimization.
+#   Resolves: CISEM_GATE Permanent Planning Mode enforcement.
 
 CISEM Local Gateway Gate (LGG) > Root Gatekeeper
-Version: 2.6
+Version: 2.7
 Description: Enforces ratified-plan linkage, .gate_lock detection, mandatory code headers,
-             and git-diff optimized axiom scans (Phase 11).
+             and git-diff optimized axiom scans (Phase 11), and Planning Mode lock (Phase 12).
 
 Change log:
   V1.0 -> V2.0 (2026-08-06): Replaced warn-and-continue with hard exit 1.
@@ -60,6 +61,7 @@ GATE_LOCK_PATH     = os.path.join(ROOT_DIR, ".gate_lock")
 PARKING_VAULT_PATH = os.path.join(CORE_DIR, "sandbox", "parking_vault_draft.yaml")
 TURN_COUNTER_PATH  = os.path.join(CORE_DIR, "cisem_turn_counter.json")
 CAEL_STATUS_PATH   = os.path.join(CORE_DIR, "cael_status.json")
+PLANNING_MODE_PATH = os.path.join(CORE_DIR, "planning", "cisem_planning_mode.json")
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -760,6 +762,80 @@ def check_axioms_integrity():
         sys.exit(1)
 
 
+# -----------------------------------------------------------------------------
+# PHASE 12: Permanent Planning Mode Check & Auto-Reset Hooks
+# -----------------------------------------------------------------------------
+def check_planning_mode(target_file_path):
+    print("Phase 12: Running Planning Mode Lock Check...")
+    if not os.path.exists(PLANNING_MODE_PATH):
+        return
+
+    try:
+        with open(PLANNING_MODE_PATH, "r", encoding="utf-8") as f:
+            state = json.load(f)
+    except Exception:
+        print("CISEM_GATE_WARNING: Could not parse cisem_planning_mode.json. Skipping Phase 12.")
+        return
+
+    mode = state.get("mode", "PLANNING")
+    if mode == "PLANNING":
+        # Check if target file is a source code file modification
+        is_source = target_file_path.endswith((".ts", ".tsx", ".py"))
+        is_gate_script = os.path.abspath(target_file_path) == os.path.abspath(__file__)
+
+        if is_source and not is_gate_script:
+            active_plan = find_active_implementation_plan()
+            if not active_plan:
+                print("CISEM_GATE_BLOCKED -- Phase 12: Planning Lock Active.")
+                print("  System is currently locked in PLANNING mode.")
+                print("  Action: No code modifications are permitted without an active, approved implementation plan.")
+                print("  Triage: Update cisem_planning_mode.json to mode: 'EXECUTION' to override.")
+                sys.exit(1)
+
+            try:
+                with open(active_plan, "r", encoding="utf-8") as pf:
+                    plan_content = pf.read()
+                parts = plan_content.split("---")
+                if len(parts) >= 3:
+                    meta = yaml.safe_load(parts[1])
+                    if meta and meta.get("governor_signature") == "PENDING-REVIEW":
+                        print("CISEM_GATE_BLOCKED -- Phase 12: Plan is PENDING-REVIEW.")
+                        print(f"  Plan: {os.path.basename(active_plan)}")
+                        print("  Action: The plan must be ratified/signed off by the Governor before execution.")
+                        sys.exit(1)
+            except Exception:
+                pass
+
+    print("  Phase 12: PASS.")
+
+
+def reset_planning_mode(target_file_path):
+    is_walkthrough = "walkthrough" in os.path.basename(target_file_path).lower()
+    if not is_walkthrough:
+        try:
+            modified = get_git_modified_files()
+            for f in modified:
+                if "walkthrough" in os.path.basename(f).lower():
+                    is_walkthrough = True
+                    break
+        except Exception:
+            pass
+
+    if is_walkthrough:
+        if os.path.exists(PLANNING_MODE_PATH):
+            try:
+                with open(PLANNING_MODE_PATH, "r", encoding="utf-8") as f:
+                    state = json.load(f)
+                if state.get("mode") != "PLANNING":
+                    state["mode"] = "PLANNING"
+                    state["active_plan_id"] = None
+                    with open(PLANNING_MODE_PATH, "w", encoding="utf-8") as f:
+                        json.dump(state, f, indent=2)
+                    print("  [Planning Lock]: Walkthrough compiled. Automatically locked compiler to PLANNING mode.")
+            except Exception as e:
+                print(f"CISEM_GATE_WARNING: Failed to reset planning mode state: {e}")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -791,6 +867,8 @@ def enforce_gate():
     check_registry_checksums()     # Phase 9
     check_plan_axioms_linkage()    # Phase 10
     check_axioms_integrity()       # Phase 11
+    check_planning_mode(target_file) # Phase 12
+    reset_planning_mode(target_file) # Auto-Reset hook
     check_sandbox_format()         # Sandbox DNA Check
 
     increment_mechanism_trigger("CISEM-GATE-V2")

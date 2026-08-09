@@ -35,6 +35,10 @@ Example format:
      - The ratified plan it resolves.
      - The architectural reasoning behind the code path.
      - Traceable links to the parent principles in AxiomsAndPrinciples.md.
+
+3.1. **Mandatory Planning Mode Default**:
+   - The agent is permanently restricted to planning/design mode until a plan is signed off or approved by the Governor.
+   - Once implementation is finished and verified, the agent must immediately and automatically return to planning mode.
 <!-- END:cisem-collaborative-reasoning-rules -->
 
 <!-- BEGIN:cisem-senior-builder-attitude -->
