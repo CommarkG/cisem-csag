@@ -2,10 +2,10 @@
 
 metadata:
   owner: CISEM_GOVERNOR
-  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.16.yaml
+  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.17.yaml
   artifact_status: DRAFT
   maturity: WORKING_DRAFT
-  version: '1.16'
+  version: '1.17'
   inherited_authorities:
   - CISEM Project Constitution
   related_implementation_adapter: GOOGLE_ANTIGRAVITY_ADAPTER
@@ -48,11 +48,15 @@ history:
   action: REGISTERED_SANDBOX_THRESHOLD_PROTOCOL_SPEC_INCREMENTED_TO_V1.16
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.16'
+- timestamp: '2026-08-09T00:12:00Z'
+  action: REGISTERED_ACCOUNTABILITY_DASHBOARD_API_ROUTE_AND_AXIOMS_V1.24
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.17'
 ---
 workspace:
   root_path: .
   registry_id: CISEM_WORKSPACE_REGISTRY
-  last_reconciled_at: '2026-08-08T18:10:00Z'
+  last_reconciled_at: '2026-08-09T00:12:00Z'
   registry_status: ACTIVE
 control_plane_subsystems:
 - subsystem_id: CISEM_CXP
@@ -255,6 +259,11 @@ control_plane_subsystems:
       version: '1.0'
       status: DRAFT
       sha256: bc69bd9d5f6bbba7913fefbd81d0f48c1fc53514c348cc2ff8db8a2ee3c04465
+    2026_08_09__AntigravityLocal__YarivHuman__AccountabilityDashboardApiRoute__V1_0_ts:
+      path: ../../src/app/api/dashboard/route.ts
+      version: '1.0'
+      status: DRAFT
+      sha256: bf22657e49f3193bc621134a928b41da38bde13b184eef1a6c412334243ed3c5
   consumers:
   - SUPPLIER_SCRAPER
   validation:
@@ -451,7 +460,7 @@ governor_gates:
 - gate_id: G5
   name: SAFETY_BOUNDARY
 reconciliation:
-  last_run_at: '2026-08-08T16:47:00Z'
+  last_run_at: '2026-08-09T00:12:00Z'
   checked:
   - canonical_paths
   - duplicate_owners
@@ -515,3 +524,7 @@ history:
   action: REGISTERED_SANDBOX_THRESHOLD_PROTOCOL_SPEC_INCREMENTED_TO_V1.16
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.16'
+- timestamp: '2026-08-09T00:12:00Z'
+  action: REGISTERED_ACCOUNTABILITY_DASHBOARD_API_ROUTE_AND_AXIOMS_V1.24
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.17'

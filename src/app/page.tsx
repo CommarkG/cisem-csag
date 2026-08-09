@@ -163,6 +163,31 @@ export default function Home() {
   const [newAxiomName, setNewAxiomName] = useState("");
   const [newAxiomDesc, setNewAxiomDesc] = useState("");
 
+  // --- Accountability Dashboard States ---
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
+
+  const fetchDashboardMetrics = async () => {
+    setIsLoadingDashboard(true);
+    try {
+      const res = await fetch("/api/dashboard");
+      if (res.ok) {
+        const data = await res.json();
+        setDashboardData(data);
+      }
+    } catch (e) {
+      console.error("Error fetching dashboard metrics:", e);
+    } finally {
+      setIsLoadingDashboard(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentMenu === "threshold") {
+      fetchDashboardMetrics();
+    }
+  }, [currentMenu]);
+
   // --- Dynamic Chunks & Backlog states ---
   const [chunksList, setChunksList] = useState<any[]>([]);
   const [selectedChunk, setSelectedChunk] = useState<any | null>(null);
@@ -2849,30 +2874,223 @@ export default function Home() {
             </div>
           )}
 
-          {/* TAB J: GOV - THRESHOLD */}
+          {/* TAB J: GOV - THRESHOLD (ACCOUNTABILITY DASHBOARD) */}
           {currentMenu === "threshold" && (
             <div className="space-y-6 text-right" dir="rtl">
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">בקרת סף כניסה ואחריות (Threshold & Accountability)</h1>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">ניהול מדדי שלמות מפרטים ומעבר לשלב עיבוד תמונה.</p>
+              {/* Title & Refresh Button */}
+              <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-850 pb-4">
+                <div>
+                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    לוח בקרת אחריות ושלמות (Accountability & Gate Dashboard)
+                  </h1>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                    מעקב בזמן אמת אחר מחזור ביצוע, שערי קומפילציה, דוחות ATV ורישום קבצים קריפטוגרפי.
+                  </p>
+                </div>
+                <button
+                  onClick={fetchDashboardMetrics}
+                  className="px-4 py-2 text-xs font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-lg shadow-sm flex items-center gap-1.5 transition-colors"
+                >
+                  <span>🔄 רענן נתונים</span>
+                </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-2">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase">ציון שלמות מינימלי</h3>
-                  <div className="text-3xl font-extrabold text-amber-500 font-mono">80%</div>
-                  <p className="text-[11px] text-slate-400">מפרטים מתחת לציון זה לא מורשים לעבור Normalization.</p>
+
+              {isLoadingDashboard ? (
+                <div className="flex flex-col items-center justify-center py-24 space-y-4">
+                  <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-bold">טוען מדדי אחריות מהשרת המקומי...</p>
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-2">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase">זמני גדילה של רעיונות</h3>
-                  <div className="text-3xl font-extrabold text-emerald-500 font-mono">3 Cycles</div>
-                  <p className="text-[11px] text-slate-400">זמן השהייה מינימלי לרעיון ב-Parking Vault לפני מיזוג לליבה.</p>
+              ) : (
+                <div className="space-y-6">
+                  {/* Grid Cards */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    {/* Card 1: Circular Turn Gauge */}
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 flex flex-col items-center justify-between min-h-[320px]">
+                      <div className="w-full flex justify-between items-center">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">שער הקומפילציה (LGG Gate Counter)</span>
+                        <span className="text-[10px] font-bold bg-indigo-500/10 text-indigo-500 px-2 py-0.5 rounded-full">מופעל אוטומטית</span>
+                      </div>
+
+                      {/* SVG Circle Ring */}
+                      {(() => {
+                        const current = dashboardData?.turnData?.current ?? 0;
+                        const ceiling = dashboardData?.turnData?.ceiling ?? 15;
+                        const pct = Math.min(current / ceiling, 1);
+                        const radius = 45;
+                        const circ = 2 * Math.PI * radius;
+                        const strokeDashoffset = circ - pct * circ;
+
+                        // Dynamic Color selection based on turn thresholds
+                        let strokeColor = "stroke-emerald-500";
+                        let textColor = "text-emerald-500";
+                        let levelText = "פיתוח שוטף (Standard)";
+                        if (current >= 9 && current <= 13) {
+                          strokeColor = "stroke-amber-500";
+                          textColor = "text-amber-500";
+                          levelText = "אזהרה (Approaching Ceiling)";
+                        } else if (current >= 14) {
+                          strokeColor = "stroke-rose-500";
+                          textColor = "text-rose-500";
+                          levelText = "סכנת חסימה (Audit Imminent)";
+                        }
+
+                        return (
+                          <div className="flex flex-col items-center py-4 space-y-3">
+                            <div className="relative w-32 h-32">
+                              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                                {/* Track */}
+                                <circle
+                                  cx="60"
+                                  cy="60"
+                                  r={radius}
+                                  className="stroke-slate-100 dark:stroke-slate-800 fill-none"
+                                  strokeWidth="8"
+                                />
+                                {/* Progress Indicator */}
+                                <circle
+                                  cx="60"
+                                  cy="60"
+                                  r={radius}
+                                  className={`${strokeColor} fill-none transition-all duration-500`}
+                                  strokeWidth="8"
+                                  strokeDasharray={circ}
+                                  strokeDashoffset={strokeDashoffset}
+                                  strokeLinecap="round"
+                                />
+                              </svg>
+                              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className={`text-2xl font-extrabold font-mono ${textColor}`}>{current}</span>
+                                <span className="text-[10px] text-slate-400 font-bold uppercase">מתוך {ceiling} תורות</span>
+                              </div>
+                            </div>
+                            <span className={`text-xs font-bold ${textColor}`}>{levelText}</span>
+                          </div>
+                        );
+                      })()}
+
+                      <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                        בכל סיבוב פיתוח מונה התורות עולה. בהגעה ל-15 תורות המערכת תינעל עד לביצוע בדיקת Persona Audit מקיפה.
+                      </p>
+                    </div>
+
+                    {/* Card 2: ATV Gaps & Verdict */}
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 flex flex-col justify-between min-h-[320px]">
+                      <div className="w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">ממצאי אימות ATV (Anti-Theater Validator)</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          dashboardData?.atv?.verdict === "GAPS_FOUND" ? "bg-rose-500/10 text-rose-500" : "bg-emerald-500/10 text-emerald-500"
+                        }`}>
+                          {dashboardData?.atv?.verdict || "NOMINAL"}
+                        </span>
+                      </div>
+
+                      <div className="space-y-4 py-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">מספר פערים שהתגלו:</span>
+                          <span className={`text-lg font-mono font-bold ${
+                            dashboardData?.atv?.gaps > 0 ? "text-rose-500" : "text-emerald-500"
+                          }`}>{dashboardData?.atv?.gaps ?? 0} פערים</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">מנגנונים משופרים (Beneficial Drifts):</span>
+                          <span className="text-lg font-mono font-bold text-indigo-500">{dashboardData?.atv?.drifts ?? 0} רשומים</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">אזהרת קצב פיתוח (P/E Ratio):</span>
+                          <span className={`text-xs font-bold ${
+                            dashboardData?.atv?.feedback?.pe_ratio_warning ? "text-amber-500" : "text-emerald-500"
+                          }`}>{dashboardData?.atv?.feedback?.pe_ratio_warning || "nominal"}</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+                        <span className="font-bold text-slate-700 dark:text-slate-350 block mb-1">המלצת סבב נוכחי:</span>
+                        <p className="text-slate-400 leading-normal italic">
+                          "{dashboardData?.atv?.feedback?.recommendation || "אין המלצות ספציפיות לסבב זה."}"
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Card 3: Active Security Checks */}
+                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 flex flex-col justify-between min-h-[320px]">
+                      <div className="w-full flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">מונה הפעלת מנגנוני הגנה</span>
+                        <span className="text-[10px] font-bold bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-full">מבוקר</span>
+                      </div>
+
+                      <div className="flex-1 overflow-y-auto space-y-2 py-3 pr-1 max-h-[160px]">
+                        {(dashboardData?.registry || []).map((m: any, idx: number) => (
+                          <div key={idx} className="flex justify-between items-center p-2 rounded-lg border border-slate-100 dark:border-slate-805 bg-slate-50/50 dark:bg-slate-950/20 text-xs">
+                            <span className="font-mono font-bold text-slate-400">x{m.actual_triggers} triggers</span>
+                            <div className="text-right">
+                              <div className="font-bold text-slate-750 dark:text-slate-300">{m.mechanism_id}</div>
+                              <div className="text-[10px] text-slate-450">{m.description.substring(0, 32)}...</div>
+                            </div>
+                          </div>
+                        ))}
+                        {(dashboardData?.registry || []).length === 0 && (
+                          <div className="text-xs text-slate-400 italic text-center py-8">לא נטענו מנגנונים</div>
+                        )}
+                      </div>
+
+                      <div className="text-[10px] text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-2 leading-relaxed text-center">
+                        המנגנונים סופרים אירועי אינטגרציה קבועים ומאמתים שאין שימוש במונחים לא קשיחים.
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Cryptographic Registry Ledger Table */}
+                  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/40 overflow-hidden">
+                    <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">ספר רישום הקבצים הקריפטוגרפי (Workspace Cryptographic Registry Ledger)</span>
+                      <span className="text-xs font-bold bg-emerald-500/10 text-emerald-500 px-2.5 py-1 rounded-full font-mono">Registry v1.16</span>
+                    </div>
+
+                    <div className="overflow-x-auto max-h-[300px]">
+                      <table className="min-w-full divide-y divide-slate-150 dark:divide-slate-800 text-right text-xs">
+                        <thead className="bg-slate-50 dark:bg-slate-900/80 font-bold text-slate-500 sticky top-0 z-10">
+                          <tr>
+                            <th className="px-4 py-3">שם הקובץ ומסלול מקומי</th>
+                            <th className="px-4 py-3">גרסה פעילה</th>
+                            <th className="px-4 py-3">מצב אישור</th>
+                            <th className="px-4 py-3">מפתח אבטחה SHA-256 Checksum</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-750 dark:text-slate-350">
+                          {(dashboardData?.files || []).map((file: any, idx: number) => (
+                            <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-850/40">
+                              <td className="px-4 py-3 font-semibold break-all max-w-[280px]">
+                                {file.path}
+                              </td>
+                              <td className="px-4 py-3 font-mono font-bold text-slate-500">{file.version}</td>
+                              <td className="px-4 py-3">
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                  file.status === "RATIFIED" ? "bg-green-500/10 text-green-500" : "bg-amber-500/10 text-amber-500"
+                                }`}>
+                                  {file.status}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 font-mono text-[10px] text-slate-400 break-all select-all">
+                                {file.sha256 || "PENDING_RECONCILIATION"}
+                              </td>
+                            </tr>
+                          ))}
+                          {(dashboardData?.files || []).length === 0 && (
+                            <tr>
+                              <td colSpan={4} className="px-4 py-8 text-center text-slate-400 italic">
+                                אין קבצים רשומים במפתח הנוכחי.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
                 </div>
-                <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-2">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase">מזהה משימה פעיל</h3>
-                  <div className="text-3xl font-extrabold text-indigo-500 font-mono">CC01-M03</div>
-                  <p className="text-[11px] text-slate-400">מחזור ביצוע ואינטגרציה פעיל מול ספקי מיתוג חיצוניים.</p>
-                </div>
-              </div>
+              )}
             </div>
           )}
 

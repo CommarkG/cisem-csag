@@ -1,10 +1,10 @@
 ---
 metadata:
   owner: "CISEM_GOVERNOR"
-  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-07__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.22.md"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-07__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.24.md"
   artifact_status: "DRAFT"
   maturity: "WORKING_DRAFT"
-  version: "1.23"
+  version: "1.24"
   inherited_authorities: []
   role_type: "CANONICAL_PHILOSOPHICAL_ROOT"
 ---
@@ -44,6 +44,10 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 ### PR-13980: Variable Gate Severity Threshold
 *   **Definition**: To prevent planning paralysis on low-risk updates, the compiler gate scales its blocking severity based on blast-radius. Low-impact styling or text modifications bypass the ratification block and compile immediately, while logging a post-commit check in the Weekly Review Registry.
 *   **Derivation**: Derived from `AX-10000` and `AX-55000`.
+
+### PR-13990: Sandbox Creation and Ingestion Threshold Protocol
+*   **Definition**: Establishes physical boundaries and ingestion gates for the sandbox environment. Precludes any direct sandbox import from the core production branch, mandates prefixing database tables with `sandbox_`, and enforces cleanroom refactoring when promoting prototypes to production.
+*   **Derivation**: Derived from `AX-10000` and `AX-80000`.
 
 ### PR-14500: Mandatory Registry Pre-Inspection
 *   **Definition**: Agents and developers must verify the existence of all registered workspace components and schemas prior to proposing changes.
@@ -101,7 +105,7 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 *   **Definition**: Any input segment that does not align with active work is routed to the Parking Vault with a status of `raw_and_context` to await scheduled triage.
 *   **Derivation**: Derived from `AX-30000`.
 
-### PR-37500: Dynamic Magnitude Gestation Sizing
+### PR-37505: Dynamic Magnitude Gestation Sizing
 *   **Definition**: Rather than applying static promotion counts, the gestation threshold scales dynamically based on task magnitude. An AI pocket evaluates the scope and blast radius of a parked item; complex core architectural changes require greater reference accumulation (e.g. 5+ distinct mentions) to qualify for triage compared to low-risk updates.
 *   **Derivation**: Derived from `AX-30000`.
 
@@ -176,7 +180,7 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 *   **Definition**: The agent must ask targeted, single questions to resolve design choices sequentially, preventing cognitive overload and large text dumps.
 *   **Derivation**: Derived from `AX-60000`.
 
-### PR-67500: Intent-Carrying Samples & Questions
+### PR-67505: Intent-Carrying Samples & Questions
 *   **Definition**: Abstract prose is insufficient to convey complex intent. All design proposals and implementation plans must include concrete input/output samples and single, targeted questions to carry intent.
 *   **Derivation**: Derived from `AX-60000`.
 
@@ -220,7 +224,7 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 *   **Definition**: To balance developer agility (execution polarity) with architectural safety (planning polarity), the platform operates in two modes. In the isolated local Sandbox workspace, developers compile freely while GRS personas run asynchronously in the background. In the main production branch, compile gates transition to strict HEP locks, forcing full planning ratification and cryptographic signatures.
 *   **Derivation**: Derived from `AX-80000` and `AX-40000`.
 
-### PR-84500: The Triage & Regroup Protocol
+### PR-84505: The Triage & Regroup Protocol
 *   **Definition**: When the system triggers a Pondering Point, the engine initiates a context-driven regroup:
     1.  *Park Gestating Items*: Identify all inputs or issues that lack complete reference maturity or consensus, update their context files, and save them in the Parking Vault with status `parked`.
     2.  *Multi-Persona Review*: Select the mature issues that have met the gestation magnitude threshold and run them through a structured evaluation process across multiple AI/Human personas to verify platform value before coding is unlocked.
@@ -245,7 +249,7 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 *   **Definition**: Large, bloated files degrade model reasoning accuracy and dilute rules visibility. The system must mechanically restrict workspace file volumes.
 *   **System Impact**: Prevents compilation of giant source or rules files.
 
-### PR-93500: Documentation Length Boundaries
+### PR-93505: Documentation Length Boundaries
 *   **Definition**: No rule document, wizard instruction, or plan is permitted to exceed **3000 words**. If exceeded, the document must be refactored into a tree hierarchy of sub-rules indexed by a parent file.
 *   **Derivation**: Derived from `AX-90000`.
 
@@ -288,6 +292,7 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 - **2026-08-08T06:40:00Z**: Added PR-99000 (Cloud Model Selection and Obsolescence Policy), retired gpt-4o/gpt-4o-mini and set gpt-5.6-sol/o4-mini as active standard. (GOOGLE_ANTIGRAVITY_ADAPTER - Version 1.21)
 - **2026-08-08T16:49:00Z**: Added Sandbox Image Processor and Sync Gate rules to PR-98000. (GOOGLE_ANTIGRAVITY_ADAPTER - Version 1.22)
 - **2026-08-08T21:22:00Z**: Added PR-11000 (Sparse ID Allocation Policy) to Pillar 10000. (GOOGLE_ANTIGRAVITY_ADAPTER - Version 1.23)
+- **2026-08-09T00:10:00Z**: Added PR-13990 (Sandbox Creation and Ingestion Threshold Protocol) to Pillar 10000. (GOOGLE_ANTIGRAVITY_ADAPTER - Version 1.24)
 
 <!-- @swift_placeholder: PARK-014 -->
 <!-- @swift_placeholder: PARK-015 -->
