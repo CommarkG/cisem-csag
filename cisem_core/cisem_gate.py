@@ -707,8 +707,38 @@ def check_axioms_integrity():
             sys.exit(1)
             
         print(f"  Phase 11: Parsed {len(seen)} unique axiom and principle definitions.")
+
+        # 2. Canonical Template Hub / Web Pages Gate Check
+        template_registry_path = os.path.join(ROOT_DIR, "cisem_core", "templates_registry.json")
+        if os.path.exists(template_registry_path):
+            with open(template_registry_path, "r", encoding="utf-8") as temp_file:
+                template_payload = json.load(temp_file)
+
+            template_ids = {template.get("template_id") for template in template_payload.get("templates", []) if template.get("template_id")}
+            if not template_ids:
+                print("CISEM_GATE_BLOCKED -- Phase 11: The template registry is empty.")
+                sys.exit(1)
+
+            for template in template_payload.get("templates", []):
+                if template.get("review_gate_status") != "PASSED":
+                    print(f"CISEM_GATE_BLOCKED -- Phase 11: Template '{template.get('template_id')}' is not review-gated for production exposure.")
+                    sys.exit(1)
+
+            for page in template_payload.get("pages", []):
+                page_template = page.get("template_id")
+                if page_template not in template_ids:
+                    print(f"CISEM_GATE_BLOCKED -- Phase 11: Page '{page.get('page_id')}' points to unregistered template_id '{page_template}'.")
+                    sys.exit(1)
+                if page.get("review_gate_status") != "PASSED":
+                    print(f"CISEM_GATE_BLOCKED -- Phase 11: Page '{page.get('page_id')}' is not review-gated for production exposure.")
+                    sys.exit(1)
+
+            print("  Phase 11: PASS. Template Hub / Web Pages registry references and review gates are aligned.")
+        else:
+            print("CISEM_GATE_BLOCKED -- Phase 11: Template registry file not found at cisem_core/templates_registry.json.")
+            sys.exit(1)
         
-        # 2. Reference Scan
+        # 3. Reference Scan
         unresolved = {}
         active_plan = find_active_implementation_plan()
         
@@ -777,8 +807,38 @@ def check_planning_mode(target_file_path):
         print("CISEM_GATE_WARNING: Could not parse cisem_planning_mode.json. Skipping Phase 12.")
         return
 
+    # Hardcoded Security Boundaries check (CSO Mitigation - PR-58960)
+    is_security_boundary = any(
+        kw in os.path.basename(target_file_path).lower() or kw in target_file_path.lower()
+        for kw in ["route.ts", "cisem_gate.py", "permission", "tenancy", "auth", "pool", "connection"]
+    )
+
     mode = state.get("mode", "PLANNING")
     if mode == "PLANNING":
+        # Strict AST / file-path UI bypass calculation (Systems Architect Mitigation - PR-13980)
+        is_ui_file = target_file_path.endswith((".css", ".html", ".png", ".jpg", ".svg", ".json"))
+        is_presentational_component = (
+            target_file_path.endswith(".tsx") 
+            and "src/components" in target_file_path.replace("\\", "/")
+        )
+        
+        is_safe_ui = False
+        if is_presentational_component and os.path.exists(target_file_path):
+            try:
+                with open(target_file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    file_content = f.read()
+                server_logic_keywords = ["getServerSideProps", "use server", "GET", "POST", "api", "fs.", "subprocess", "child_process"]
+                if not any(kw in file_content for kw in server_logic_keywords):
+                    is_safe_ui = True
+            except Exception:
+                pass
+                
+        is_ui_bypass = (is_ui_file or is_safe_ui) and not is_security_boundary
+
+        if is_ui_bypass:
+            print("  Phase 12: PASS (Low-impact UI bypass allowed by PR-13980).")
+            return
+
         # Check if target file is a source code file modification
         is_source = target_file_path.endswith((".ts", ".tsx", ".py"))
         is_gate_script = os.path.abspath(target_file_path) == os.path.abspath(__file__)
@@ -805,6 +865,12 @@ def check_planning_mode(target_file_path):
                         sys.exit(1)
             except Exception:
                 pass
+
+    # Block auto-fixing inside security boundaries (CSO Mitigation - PR-58960)
+    if is_security_boundary and mode == "PLANNING":
+        print("CISEM_GATE_BLOCKED -- Phase 12: Security Boundary Auto-Fixing Blocked.")
+        print("  Cannot modify core security routes, pools, or gate code inside PLANNING mode.")
+        sys.exit(1)
 
     print("  Phase 12: PASS.")
 

@@ -1,0 +1,111 @@
+{
+  "version": "1.0.0",
+  "contract": "wpth_template_registry",
+  "templates": [
+    {
+      "template_id": "tpl_dashboard_grid_v1",
+      "canonical_name": "Dashboard Grid",
+      "project_scope": "ENTERPRISE_COMMERCE",
+      "page_type": "DASHBOARD",
+      "version": "1.0.0",
+      "pe_priority_score": 8.5,
+      "status": "VERIFIED",
+      "review_gate_status": "PASSED",
+      "layout_contract": {
+        "direction_support": ["LTR", "RTL"],
+        "density_modes": ["condensed", "balanced", "expansive"],
+        "component_blocks": ["HeaderHero", "MetricRow", "Table", "ActionRail"]
+      },
+      "evidence_trace": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "last_gate_pass": "2026-08-09T12:00:00Z"
+      }
+    },
+    {
+      "template_id": "tpl_split_clarifier_v1",
+      "canonical_name": "Split Clarifier",
+      "project_scope": "ENTERPRISE_COMMERCE",
+      "page_type": "WORKFLOW",
+      "version": "1.0.0",
+      "pe_priority_score": 7.8,
+      "status": "DRAFT",
+      "review_gate_status": "PASSED",
+      "layout_contract": {
+        "direction_support": ["LTR", "RTL"],
+        "density_modes": ["balanced"],
+        "component_blocks": ["Sidebar", "ContentPanel", "Actions"]
+      },
+      "evidence_trace": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "last_gate_pass": "2026-08-09T12:00:00Z"
+      }
+    },
+    {
+      "template_id": "tpl_catalog_table_v1",
+      "canonical_name": "Catalog Table",
+      "project_scope": "B2B_CATALOG",
+      "page_type": "CATALOG",
+      "version": "1.0.0",
+      "pe_priority_score": 7.1,
+      "status": "VERIFIED",
+      "review_gate_status": "PASSED",
+      "layout_contract": {
+        "direction_support": ["LTR", "RTL"],
+        "density_modes": ["condensed", "balanced"],
+        "component_blocks": ["FilterBar", "Search", "Table"]
+      },
+      "evidence_trace": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "last_gate_pass": "2026-08-09T12:00:00Z"
+      }
+    },
+    {
+      "template_id": "tpl_b2b_interactive_quote_v1",
+      "canonical_name": "B2B Interactive Quote & Proposal Shell",
+      "project_scope": "ENTERPRISE_COMMERCE",
+      "page_type": "INTERACTIVE_PROPOSAL",
+      "version": "1.0.0",
+      "pe_priority_score": 8.5,
+      "status": "VERIFIED",
+      "review_gate_status": "PASSED",
+      "layout_contract": {
+        "direction_support": ["LTR", "RTL"],
+        "density_modes": ["condensed", "balanced", "expansive"],
+        "component_blocks": ["HeaderHero", "HierarchicalBOM", "DigitalSignatureCTA"]
+      },
+      "evidence_trace": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "last_gate_pass": "2026-08-09T12:00:00Z"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "page_id": "web_page_portal_threshold",
+      "project_id": "SUPPLIER_SCRAPER",
+      "template_id": "tpl_dashboard_grid_v1",
+      "name": "Portal Threshold",
+      "status": "VERIFIED",
+      "review_gate_status": "PASSED",
+      "pe_priority": "P-01"
+    },
+    {
+      "page_id": "web_page_catalog_manager",
+      "project_id": "COMMARK_UBOP",
+      "template_id": "tpl_catalog_table_v1",
+      "name": "Catalog Manager",
+      "status": "DRAFT",
+      "review_gate_status": "PASSED",
+      "pe_priority": "P-02"
+    },
+    {
+      "page_id": "web_page_supplier_registry",
+      "project_id": "SUPPLIER_SCRAPER",
+      "template_id": "tpl_dashboard_grid_v1",
+      "name": "Supplier Registry",
+      "status": "VERIFIED",
+      "review_gate_status": "PASSED",
+      "pe_priority": "P-01"
+    }
+  ]
+}

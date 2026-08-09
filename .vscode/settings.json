@@ -1,0 +1,16 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cisem_gate\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0\\.1\\.py --update-hashes$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0\\.1\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

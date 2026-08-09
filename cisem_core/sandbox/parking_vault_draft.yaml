@@ -470,3 +470,23 @@ parked_items:
   - '[AUDIT.RIGIDITY]'
   - '[WEEKLY_SESSION_PARKING]'
   title: Naked Numbers Found -- Context/Reasoning missing for 4 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-09T09:46:42.610426+00:00'
+  description: 'ATV Naked Number Audit detected 14 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L37
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''51''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-027
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 14 numbers

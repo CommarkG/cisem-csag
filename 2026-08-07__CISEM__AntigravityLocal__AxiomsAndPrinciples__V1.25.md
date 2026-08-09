@@ -1,10 +1,10 @@
 ---
 metadata:
   owner: "CISEM_GOVERNOR"
-  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-07__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.24.md"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-07__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.25.md"
   artifact_status: "DRAFT"
   maturity: "WORKING_DRAFT"
-  version: "1.24"
+  version: "1.25"
   inherited_authorities: []
   role_type: "CANONICAL_PHILOSOPHICAL_ROOT"
 ---
@@ -163,6 +163,10 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 ### PR-58960: Governed Auto-Fixing
 *   **Definition**: If an audit check detects a low-risk gap (e.g. comment additions, typos, or documentation naked numbers) with zero ripple risk to schemas or cross-file imports, the developer agent should execute an automated repair immediately on the same turn, bypassing plan ratification to maintain velocity.
 *   **Derivation**: Derived from `AX-50000`.
+
+### PR-59500: Canonical Definition of "Done"
+*   **Definition**: An asset, feature, or plan is only considered "Done" when it works exactly according to the original design intent and measurable goals, and has been proven correct through recurring regression cycles and various execution environments. The validation loops must measure whether the actual outcome matches the intent, ensuring that planning and verification iterations continue until this standard is reached.
+*   **Derivation**: Derived from `AX-50000` and `AX-20000`.
 
 ---
 

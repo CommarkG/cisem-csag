@@ -279,6 +279,18 @@ export default function DynamicMenu({
                     Design & Diffs
                   </span>
                   <button
+                    onClick={() => onSelectCategory("template_hub")}
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  >
+                    🧱 Template Hub
+                  </button>
+                  <button
+                    onClick={() => onSelectCategory("web_pages")}
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  >
+                    🌍 Web Pages
+                  </button>
+                  <button
                     onClick={() => onSelectCategory("design_studio")}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >

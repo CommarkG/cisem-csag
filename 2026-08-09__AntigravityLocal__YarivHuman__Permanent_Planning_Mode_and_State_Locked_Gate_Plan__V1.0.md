@@ -1,13 +1,13 @@
 ---
 plan_id: CISEM-IP-20260809-PERMANENT-PLANNING-LOCK
 version: '1.0'
-status: DRAFT
+status: RATIFIED
+governor_signature: GOV-YARIV-20260809-PERMANENT-PLANNING-LOCK-V1.0
 blast_radius: HIGH
-governor_signature: PENDING-REVIEW
 axioms_linked:
 - AX-10000
 - PR-11000
-pre_review_status: DRAFT
+pre_review_status: PASSED
 ---
 
 # Implementation Plan: Permanent Planning Mode & State-Locked Gate Enforcement

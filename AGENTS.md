@@ -111,3 +111,22 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - Never execute inline python (`python -c`) or run Python scripts residing outside the project workspace via command terminal. Use built-in file tools (like `view_file` or `grep_search`) to research code or transcripts to prevent OS permission popups.
 <!-- END:governor-chat-and-popup-rules -->
 
+<!-- BEGIN:cisem-enterprise-architecture-rules -->
+# CISEM Enterprise Architecture Rules
+
+15. **Cryptographic Context Propagation**:
+    - All multi-tenant queries must parse and validate a cryptographically signed tenant session context (`TenantContext`) propagated at the API boundary, never relying on raw client parameters.
+
+16. **Twelve-Factor Environment Configuration**:
+    - No configuration variables or workspace directory paths may be hardcoded. They must resolve dynamically from environmental variables or process.cwd() context.
+
+17. **Stateless Operations**:
+    - All server-side routes and API endpoints must remain strictly stateless. Shared local memory states are prohibited; state transfers must route through ACID-compliant partitioned databases.
+
+18. **Deterministic Simulation Suite**:
+    - Every API endpoint and frontend control must have regression integration test coverages validating access under varied tenant contexts.
+
+19. **Structured Compliance Status Metrics**:
+    - Flat string statuses are prohibited. Every registered workspace asset must carry a `validation_metrics` block mapping Flow, Code, Optimization, Salad, and Security verification levels.
+<!-- END:cisem-enterprise-architecture-rules -->
+

@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "schema": "wpth_tier_permission_contract_v1",
+  "model": {
+    "governor": "CISEM_GOVERNOR",
+    "principle": "Tier-aware Template Hub access is read-only in V1.0 and permission-aware by contract, not by ungoverned UI branching.",
+    "active_matrix": "template_hub_pages_and_registry_v1"
+  },
+  "tiers": [
+    {
+      "tier_id": "guest",
+      "description": "Public browse tier",
+      "status": "LOCKED",
+      "template_hub": {
+        "can_read": true,
+        "can_write": false,
+        "visible_templates": ["tpl_dashboard_grid_v1"],
+        "visible_pages": ["web_page_portal_threshold"]
+      },
+      "web_pages": {
+        "can_read": true,
+        "can_write": false,
+        "visible_pages": ["web_page_portal_threshold"]
+      },
+      "permissions": ["read:templates", "read:pages"]
+    },
+    {
+      "tier_id": "buyer",
+      "description": "Sales and account tenant tier",
+      "status": "LOCKED",
+      "template_hub": {
+        "can_read": true,
+        "can_write": false,
+        "visible_templates": ["tpl_dashboard_grid_v1", "tpl_catalog_table_v1"],
+        "visible_pages": ["web_page_portal_threshold", "web_page_catalog_manager"]
+      },
+      "web_pages": {
+        "can_read": true,
+        "can_write": false,
+        "visible_pages": ["web_page_portal_threshold", "web_page_catalog_manager"]
+      },
+      "permissions": ["read:templates", "read:pages", "read:contract", "read:agent_outputs"]
+    },
+    {
+      "tier_id": "partner",
+      "description": "Operator-level business collaborator tier",
+      "status": "LOCKED",
+      "template_hub": {
+        "can_read": true,
+        "can_write": true,
+        "visible_templates": ["tpl_dashboard_grid_v1", "tpl_catalog_table_v1", "tpl_split_clarifier_v1"],
+        "visible_pages": ["web_page_portal_threshold", "web_page_catalog_manager", "web_page_supplier_registry"]
+      },
+      "web_pages": {
+        "can_read": true,
+        "can_write": true,
+        "visible_pages": ["web_page_portal_threshold", "web_page_catalog_manager", "web_page_supplier_registry"]
+      },
+      "permissions": ["read:templates", "read:pages", "write:pages", "extend:layout", "read:registry"]
+    },
+    {
+      "tier_id": "operator_admin",
+      "description": "Full registry and operator control surface",
+      "status": "LOCKED",
+      "template_hub": {
+        "can_read": true,
+        "can_write": true,
+        "visible_templates": ["tpl_dashboard_grid_v1", "tpl_catalog_table_v1", "tpl_split_clarifier_v1"],
+        "visible_pages": ["web_page_portal_threshold", "web_page_catalog_manager", "web_page_supplier_registry"]
+      },
+      "web_pages": {
+        "can_read": true,
+        "can_write": true,
+        "visible_pages": ["web_page_portal_threshold", "web_page_catalog_manager", "web_page_supplier_registry"]
+      },
+      "permissions": ["read:templates", "read:pages", "write:pages", "write:templates", "read:registry", "write:registry", "override:gate"]
+    }
+  ]
+}

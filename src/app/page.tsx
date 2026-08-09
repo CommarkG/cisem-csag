@@ -56,6 +56,7 @@ export default function Home() {
     | "customer_registry"
     | "library_hub"
     | "template_hub"
+    | "web_pages"
     | "crm_pipeline"
     | "design_studio"
     | "sandbox_playground"
@@ -167,6 +168,18 @@ export default function Home() {
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
 
+  const selectedPermissionTier = dashboardData?.permissions?.tiers?.find((tier: any) => tier.tier_id === activeRole) || null;
+  const visibleTemplateIds = selectedPermissionTier?.template_hub?.visible_templates || [];
+  const visiblePageIds = selectedPermissionTier?.web_pages?.visible_pages || [];
+  const visibleTemplates = (dashboardData?.templates || []).filter((template: any) => {
+    const id = template.template_id;
+    return selectedPermissionTier?.template_hub?.can_read && visibleTemplateIds.includes(id);
+  });
+  const visiblePages = (dashboardData?.pages || []).filter((page: any) => {
+    const id = page.page_id;
+    return selectedPermissionTier?.web_pages?.can_read && visiblePageIds.includes(id);
+  });
+
   const fetchDashboardMetrics = async () => {
     setIsLoadingDashboard(true);
     try {
@@ -183,7 +196,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (currentMenu === "threshold") {
+    if (currentMenu === "threshold" || currentMenu === "template_hub" || currentMenu === "web_pages") {
       fetchDashboardMetrics();
     }
   }, [currentMenu]);
@@ -1543,100 +1556,178 @@ export default function Home() {
           )}
 
           {/* TAB D: TEMPLATE HUB SANDBOX */}
-          {currentMenu === "template_hub" && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-6">
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                    Page Layout Template Hub
-                  </h1>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                    Duplicate layout configurations, tweak visual spacing sliders, and promote variants to live production.
-                  </p>
-                </div>
-
-                {/* Sandbox Visual Page Sandbox Variant Renderer */}
-                <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-6">
-                  <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
-                    <span className="text-xs font-bold text-slate-400 uppercase">Interactive Layout Sandbox Variant (`?sandbox_variant=default`)</span>
-                    <span className="rounded bg-indigo-500/10 px-2 py-0.5 text-[10px] font-bold text-indigo-500 uppercase">
-                      Live A/B Sandbox Mode
-                    </span>
-                  </div>
-
-                  {/* Render simulated template details with slider values */}
-                  <div className="p-8 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 space-y-4" style={{ padding: `${sliderMargin}px` }}>
-                    <div className="h-10 rounded bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-xs" style={{ fontSize: `${sliderFontSize}px` }}>
-                      🎒 תבנית כותרת מוצר - הרווארד (גופן: {sliderFontSize}px)
-                    </div>
-                    <div className="h-32 rounded bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center text-xs text-slate-400">
-                      📷 Mockup Logo Blend Container Widget
-                    </div>
-                    <div className="flex justify-between text-xs font-semibold">
-                      <span className="text-slate-500">Turnaround Turner:</span>
-                      <span className="text-emerald-500 font-bold">Feasible (3 days)</span>
+          {currentMenu === "template_hub" && (() => {
+            const canWriteTemplates = selectedPermissionTier?.permissions?.includes("write:templates") || false;
+            const canWriteRegistry = selectedPermissionTier?.permissions?.includes("write:registry") || false;
+            return (
+              <div className="space-y-8">
+                <div className="flex flex-wrap items-end justify-between gap-4">
+                  <div>
+                    <div className="text-xs font-black uppercase tracking-[0.14em] text-amber-500">Arch / Template Hub</div>
+                    <h1 className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                      Template Hub Dashboard
+                    </h1>
+                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                      Verified page and layout build blocks that can be instantiated by the PE and routed through the CISEM corecycles.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {(selectedPermissionTier?.permissions || []).map((perm: string) => (
+                        <span key={perm} className="rounded-md bg-amber-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-500 dark:bg-amber-500/20">
+                          {perm}
+                        </span>
+                      ))}
                     </div>
                   </div>
-
-                  <div className="flex justify-end gap-3 text-xs font-semibold">
-                    <button
-                      onClick={() => alert("Sandbox page duplicated as new variant 'variant_v2'!")}
-                      className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-850 dark:hover:bg-slate-800"
+                  <div className="flex gap-2">
+                    <button 
+                      disabled={!canWriteTemplates}
+                      className={`rounded-lg border px-4 py-2 text-xs font-black transition-colors ${canWriteTemplates ? "border-slate-200 text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-800 cursor-pointer" : "border-slate-100 text-slate-300 dark:border-slate-900 dark:text-slate-700 cursor-not-allowed"}`}
                     >
-                      Duplicate Variant
+                      {!canWriteTemplates && "🔒 "}New Template
                     </button>
-                    <button
-                      onClick={() => alert("Promoted Sandbox variant setting parameters to Production successfully!")}
-                      className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white"
+                    <button 
+                      disabled={!canWriteTemplates}
+                      className={`rounded-lg px-4 py-2 text-xs font-black transition-colors ${canWriteTemplates ? "bg-amber-500 text-white hover:bg-amber-600 cursor-pointer" : "bg-slate-100 text-slate-400 dark:bg-slate-900 dark:text-slate-700 cursor-not-allowed"}`}
                     >
-                      Promote to Live Production
+                      {!canWriteTemplates && "🔒 "}Register Template
                     </button>
                   </div>
                 </div>
+
+                <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+                  {[
+                    { label: "Verified Templates", value: String((visibleTemplates || []).filter((t: any) => String(t.status || "").toUpperCase() === "VERIFIED").length), tone: "text-emerald-600", icon: "✓" },
+                    { label: "Web Pages", value: String((visiblePages || []).length), tone: "text-sky-600", icon: "▦" },
+                    { label: "Priority Load", value: "Low", tone: "text-amber-600", icon: "⚡" },
+                    { label: "Gate Status", value: dashboardData?.atv?.verdict === "GAPS_FOUND" ? "GAP" : "OK", tone: dashboardData?.atv?.verdict === "GAPS_FOUND" ? "text-rose-600" : "text-emerald-600", icon: "◎" },
+                  ].map((m) => (
+                    <article key={m.label} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">{m.label}</span>
+                        <span className="text-sm font-black">{m.icon}</span>
+                      </div>
+                      <div className="mt-4 text-2xl font-black text-slate-950 dark:text-white">{m.value}</div>
+                      <div className="mt-2 text-[10px] font-bold text-slate-400 uppercase">CISEM Registry</div>
+                    </article>
+                  ))}
+                </section>
+
+                <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(640px,1.6fr)_minmax(300px,0.9fr)]">
+                  <article className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-sm font-black uppercase tracking-[0.12em] text-slate-900 dark:text-white">Template Inventory</h2>
+                        <div className="text-[10px] font-bold text-slate-400">Verified / draft / exported</div>
+                      </div>
+                      <button 
+                        disabled={!canWriteRegistry}
+                        className={`rounded-md border px-3 py-1 text-[10px] font-black uppercase transition-colors ${canWriteRegistry ? "border-slate-200 text-slate-900 hover:bg-slate-50 dark:border-slate-800 dark:text-white dark:hover:bg-slate-800 cursor-pointer" : "border-slate-100 text-slate-300 dark:border-slate-900 dark:text-slate-700 cursor-not-allowed"}`}
+                      >
+                        {!canWriteRegistry && "🔒 "}Export Registry
+                      </button>
+                    </div>
+
+                    <div className="overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
+                      <table className="min-w-full text-xs">
+                        <thead className="bg-slate-50 dark:bg-slate-950">
+                          <tr className="text-left text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
+                            <th className="px-4 py-3">Template</th>
+                            <th className="px-4 py-3">Type</th>
+                            <th className="px-4 py-3">Version</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">PE</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                          {(visibleTemplates || []).map((row: any) => (
+                            <tr key={row.template_id || row.canonical_name} className="bg-white dark:bg-slate-900">
+                              <td className="px-4 py-3 font-bold text-slate-900 dark:text-white">{row.canonical_name || row.template_id || "Unknown"}</td>
+                              <td className="px-4 py-3 text-slate-500">{row.page_type || "Layout"}</td>
+                              <td className="px-4 py-3 text-slate-500">V{row.version || "1.0"}</td>
+                              <td className="px-4 py-3">
+                                <span className={`rounded-full px-2 py-1 text-[9px] font-black ${String(row.status || "").toUpperCase() === "VERIFIED" ? "bg-emerald-500/10 text-emerald-500" : String(row.status || "").toUpperCase() === "DRAFT" ? "bg-amber-500/10 text-amber-500" : "bg-sky-500/10 text-sky-500"}`}>{String(row.status || "DRAFT")}</span>
+                              </td>
+                              <td className="px-4 py-3 font-black text-slate-500">{row.pe_priority_score ? `P-${Math.round(row.pe_priority_score)}` : "P-01"}</td>
+                            </tr>
+                          ))}
+                          {(visibleTemplates || []).length === 0 && (
+                            <tr className="bg-white dark:bg-slate-900">
+                              <td className="px-4 py-3 font-bold text-slate-500" colSpan={5}>No templates are available in the active registry.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </article>
+
+                  <aside className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h2 className="text-sm font-black uppercase tracking-[0.12em] text-slate-900 dark:text-white">Web Pages</h2>
+                      <button onClick={() => setCurrentMenu("web_pages" as any)} className="text-[10px] font-black text-amber-500 hover:underline">
+                        Open
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {(visiblePages || []).map((page: any) => (
+                        <div key={page.page_id || page.name} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-black text-slate-800 dark:text-white">{page.name}</span>
+                            <span className={`rounded-full px-2 py-1 text-[9px] font-black ${String(page.status || "").toUpperCase() === "VERIFIED" ? "bg-emerald-500/10 text-emerald-500" : "bg-slate-500/10 text-slate-500"}`}>{String(page.status || "DRAFT")}</span>
+                          </div>
+                          <div className="mt-2 text-[10px] text-slate-400 font-medium">{page.template_id || page.project_id || "template-hub-dashboard"}</div>
+                        </div>
+                      ))}
+                      {(visiblePages || []).length === 0 && (
+                        <div className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                          <span className="text-xs font-black text-slate-500">No web pages available.</span>
+                        </div>
+                      )}
+                    </div>
+                  </aside>
+                </section>
               </div>
+            );
+          })()}
 
-              {/* Adjustable parameters sliders */}
+          {currentMenu === "web_pages" && (() => {
+            const canWritePages = selectedPermissionTier?.permissions?.includes("write:pages") || false;
+            return (
               <div className="space-y-6">
-                <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-6">
-                  <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 pb-2 border-b border-slate-100 dark:border-slate-800">
-                    Template Sliders
-                  </h3>
-                  
-                  <div className="space-y-4 text-xs font-semibold">
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-slate-400">
-                        <span>Padding Spacing (px)</span>
-                        <span className="font-mono text-slate-800 dark:text-slate-200">{sliderMargin}px</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="8"
-                        max="32"
-                        value={sliderMargin}
-                        onChange={(e) => setSliderMargin(parseInt(e.target.value))}
-                        className="w-full accent-amber-500"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-slate-400">
-                        <span>Header Font Size (px)</span>
-                        <span className="font-mono text-slate-800 dark:text-slate-200">{sliderFontSize}px</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="12"
-                        max="24"
-                        value={sliderFontSize}
-                        onChange={(e) => setSliderFontSize(parseInt(e.target.value))}
-                        className="w-full accent-amber-500"
-                      />
-                    </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-black uppercase tracking-[0.14em] text-amber-500">Arch / Template Hub / Web Pages</div>
+                    <h1 className="mt-2 text-2xl font-black tracking-tight text-slate-900 dark:text-white">Web Pages</h1>
                   </div>
+                  <button 
+                    disabled={!canWritePages}
+                    className={`rounded-lg px-4 py-2 text-xs font-black transition-colors ${canWritePages ? "bg-amber-500 text-white hover:bg-amber-600 cursor-pointer" : "bg-slate-100 text-slate-400 dark:bg-slate-900 dark:text-slate-700 cursor-not-allowed"}`}
+                  >
+                    {!canWritePages && "🔒 "}Create Web Page
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  {(visiblePages || []).map((page: any) => (
+                    <article key={page.page_id || page.name} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black uppercase tracking-[0.14em] text-slate-900 dark:text-white">{page.name}</span>
+                        <span className={`rounded-full px-2 py-1 text-[9px] font-black ${String(page.status || "").toUpperCase() === "VERIFIED" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}`}>{String(page.status || "DRAFT")}</span>
+                      </div>
+                      <div className="mt-4 text-[10px] font-bold text-slate-400 uppercase">{page.project_id || page.template_id || "CISEM Page"}</div>
+                      <button className="mt-5 w-full rounded-lg border border-slate-200 px-3 py-2 text-[10px] font-black hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800">
+                        Open Page
+                      </button>
+                    </article>
+                  ))}
+                  {(visiblePages || []).length === 0 && (
+                    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                      <span className="text-xs font-black text-slate-500">No page records detected.</span>
+                    </article>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* TAB E: SUPPLIER SUBCONTRACTORS CONFIGURATION */}
           {currentMenu === "supplier_registry" && (
@@ -3045,9 +3136,9 @@ export default function Home() {
                   <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/40 overflow-hidden">
                     <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
                       <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">ספר רישום הקבצים הקריפטוגרפי (Workspace Cryptographic Registry Ledger)</span>
-                      <span className="text-xs font-bold bg-emerald-500/10 text-emerald-500 px-2.5 py-1 rounded-full font-mono">Registry v1.16</span>
+                      <span className="text-xs font-bold bg-amber-500/10 text-amber-500 px-2.5 py-1 rounded-full font-mono">Registry Active</span>
                     </div>
-
+ 
                     <div className="overflow-x-auto max-h-[300px]">
                       <table className="min-w-full divide-y divide-slate-150 dark:divide-slate-800 text-right text-xs">
                         <thead className="bg-slate-50 dark:bg-slate-900/80 font-bold text-slate-500 sticky top-0 z-10">
@@ -3055,6 +3146,7 @@ export default function Home() {
                             <th className="px-4 py-3">שם הקובץ ומסלול מקומי</th>
                             <th className="px-4 py-3">גרסה פעילה</th>
                             <th className="px-4 py-3">מצב אישור</th>
+                            <th className="px-4 py-3 text-center">מטריצת אימות (Validation Matrix)</th>
                             <th className="px-4 py-3">מפתח אבטחה SHA-256 Checksum</th>
                           </tr>
                         </thead>
@@ -3064,13 +3156,36 @@ export default function Home() {
                               <td className="px-4 py-3 font-semibold break-all max-w-[280px]">
                                 {file.path}
                               </td>
-                              <td className="px-4 py-3 font-mono font-bold text-slate-500">{file.version}</td>
+                              <td className="px-4 py-3 font-mono font-bold text-slate-500">V{file.version}</td>
                               <td className="px-4 py-3">
                                 <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                  file.status === "RATIFIED" ? "bg-green-500/10 text-green-500" : "bg-amber-500/10 text-amber-500"
+                                  file.status === "RATIFIED" || file.status === "VERIFIED" ? "bg-green-500/10 text-green-500" : "bg-amber-500/10 text-amber-500"
                                 }`}>
                                   {file.status}
                                 </span>
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="flex flex-wrap gap-1 justify-center">
+                                  {Object.entries(file.validation_metrics || {}).map(([key, val]: [string, any]) => {
+                                    const isOk = val === "VERIFIED" || val === "COMPLETE" || val === "OPTIMIZED" || val === "CONSOLIDATED" || val === "ENFORCED";
+                                    const isPartial = val === "PARTIAL" || val === "STUBBED" || val === "PENDING";
+                                    return (
+                                      <span 
+                                        key={key} 
+                                        className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-tight ${
+                                          isOk
+                                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" 
+                                            : isPartial
+                                            ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" 
+                                            : "bg-rose-500/10 text-rose-500 border border-rose-500/20"
+                                        }`}
+                                        title={`${key}: ${val}`}
+                                      >
+                                        {key.replace("_", " ")}: {isOk ? "✓" : isPartial ? "⚙" : "✗"}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
                               </td>
                               <td className="px-4 py-3 font-mono text-[10px] text-slate-400 break-all select-all">
                                 {file.sha256 || "PENDING_RECONCILIATION"}
@@ -3079,7 +3194,7 @@ export default function Home() {
                           ))}
                           {(dashboardData?.files || []).length === 0 && (
                             <tr>
-                              <td colSpan={4} className="px-4 py-8 text-center text-slate-400 italic">
+                              <td colSpan={5} className="px-4 py-8 text-center text-slate-400 italic">
                                 אין קבצים רשומים במפתח הנוכחי.
                               </td>
                             </tr>
