@@ -128,5 +128,9 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
 
 19. **Structured Compliance Status Metrics**:
     - Flat string statuses are prohibited. Every registered workspace asset must carry a `validation_metrics` block mapping Flow, Code, Optimization, Salad, and Security verification levels.
+
+20. **Mandatory Multi-Persona Gemini Brain Audit**:
+    - The developer agent must never submit a plan for final ratification or start implementation without first executing the 10-persona expert panel audit (`CisemAuditor.py`).
+    - The plan must contain a dedicated, addressable section documenting the verdicts, gaps, and mitigations raised by the expert personas.
 <!-- END:cisem-enterprise-architecture-rules -->
 

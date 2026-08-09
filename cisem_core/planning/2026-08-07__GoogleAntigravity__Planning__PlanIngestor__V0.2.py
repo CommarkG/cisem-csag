@@ -127,6 +127,7 @@ def validate_plan(plan_path):
         r"^##\s+User\s+Review\s+Required\s*$",
         r"^##\s+Open\s+Questions\s*$",
         r"^##\s+Proposed\s+Changes\s*$",
+        r"^##\s+Gemini\s+Brain\s+Multi-Persona\s+Audit\s*$",
         r"^##\s+Verification\s+Plan\s*$"
     ]
     
