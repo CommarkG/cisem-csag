@@ -1,13 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { verifyTenantContext } from "../../../lib/tenant_context";
 
 /**
  * CISEM Dashboard API Route
  * Bridges the local filesystem JSON files with the client-side Accountability Dashboard.
  *
- * @plan_id CISEM-IP-20260809-TEMPLATE-HUB-PERMISSION-WIRING
- * @axioms_linked AX-10000, PR-11000
+ * @plan_id CISEM-IP-20260809-TENANT-CONTEXT-VALIDATION
+ * @axioms_linked AX-10000, PR-11100, PR-11200
  */
 function findLatestRegistryPath(rootDir: string): string {
   const coreDir = path.join(rootDir, "cisem_core");
@@ -39,8 +40,13 @@ function findLatestRegistryPath(rootDir: string): string {
   return path.join(coreDir, sorted[0].file);
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const tenantContext = verifyTenantContext(req);
+    if (!tenantContext) {
+      return NextResponse.json({ error: "Unauthorized tenant session context. Cryptographic mismatch." }, { status: 401 });
+    }
+
     const rootDir = process.cwd();
     
     // 1. Read Turn Counter

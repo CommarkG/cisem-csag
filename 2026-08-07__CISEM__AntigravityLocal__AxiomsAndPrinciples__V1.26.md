@@ -1,10 +1,10 @@
 ---
 metadata:
   owner: "CISEM_GOVERNOR"
-  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-07__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.25.md"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-07__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.26.md"
   artifact_status: "DRAFT"
   maturity: "WORKING_DRAFT"
-  version: "1.25"
+  version: "1.26"
   inherited_authorities: []
   role_type: "CANONICAL_PHILOSOPHICAL_ROOT"
 ---
@@ -24,6 +24,26 @@ This document defines the canonical axioms and guiding principles of the **CISEM
 ### PR-11000: Sparse ID Allocation Policy (Anti-Inflation)
 *   **Definition**: The system enforces sparse ID spacing. Rules may only be created if an active code boundary requires them today. New rules must jump by at least +100 or +500 to leave logical spacing for future modules. Pre-allocated placeholder sub-blocks or reserves are strictly prohibited.
 *   **Derivation**: Derived from `AX-10000`.
+
+### PR-11100: Cryptographic Context Propagation
+*   **Definition**: Multi-tenant database queries must validate a cryptographically signed tenant session context (`TenantContext`) propagated at the API boundary, preventing raw ID parameter tampering.
+*   **Derivation**: Derived from `AX-10000`.
+
+### PR-11200: Twelve-Factor Environment Configuration
+*   **Definition**: No configuration variables or workspace directory paths may be hardcoded. They must resolve dynamically from environmental variables or process runtime contexts.
+*   **Derivation**: Derived from `AX-10000`.
+
+### PR-11300: Stateless Operations
+*   **Definition**: All server-side routes and API endpoints must remain strictly stateless. Shared local memory states are prohibited; state transfers must route through ACID-compliant partitioned databases.
+*   **Derivation**: Derived from `AX-10000`.
+
+### PR-11400: Deterministic Simulation Suite
+*   **Definition**: Every API endpoint and frontend control must have regression integration test coverages validating access under varied tenant contexts.
+*   **Derivation**: Derived from `AX-10000` and `AX-50000`.
+
+### PR-11500: Structured Compliance Status Metrics
+*   **Definition**: Flat string statuses are prohibited. Every registered workspace asset must carry a `validation_metrics` block mapping Flow, Code, Optimization, Salad, and Security verification levels.
+*   **Derivation**: Derived from `AX-10000` and `AX-50000`.
 
 ### PR-13500: The Consolidation Principle
 *   **Definition**: Duplicate or overlapping configurations, files, or paths must be merged into a Single Source of Truth (SSOT) that services all requirements.
