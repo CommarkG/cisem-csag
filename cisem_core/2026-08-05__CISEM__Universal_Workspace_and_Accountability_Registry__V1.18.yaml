@@ -2,10 +2,10 @@
 
 metadata:
   owner: CISEM_GOVERNOR
-  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.17.yaml
+  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.18.yaml
   artifact_status: DRAFT
   maturity: WORKING_DRAFT
-  version: '1.17'
+  version: '1.18'
   inherited_authorities:
   - CISEM Project Constitution
   related_implementation_adapter: GOOGLE_ANTIGRAVITY_ADAPTER
@@ -52,11 +52,15 @@ history:
   action: REGISTERED_ACCOUNTABILITY_DASHBOARD_API_ROUTE_AND_AXIOMS_V1.24
   actor: GOOGLE_ANTIGRAVITY_ADAPTER
   version: '1.17'
+- timestamp: '2026-08-09T10:10:00Z'
+  action: REGISTERED_CLOUD_ROUTED_OPENROUTER_API_AGENT_CHAT_INTEGRATION
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.18'
 ---
 workspace:
   root_path: .
   registry_id: CISEM_WORKSPACE_REGISTRY
-  last_reconciled_at: '2026-08-09T00:12:00Z'
+  last_reconciled_at: '2026-08-09T10:10:00Z'
   registry_status: ACTIVE
 control_plane_subsystems:
 - subsystem_id: CISEM_CXP
@@ -191,6 +195,11 @@ control_plane_subsystems:
       version: '1.2'
       status: RAW
       sha256: 28301fc272cde63aac4b816cc1adaf68fc643c874012405d97e02adb1658e2ea
+    2026_08_09__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1_3_ts:
+      path: ../src/app/api/agent/chat/route.ts
+      version: '1.3'
+      status: DRAFT
+      sha256: d1db17e5e204b64a704270757c9da0258509650bfe32354f45b31f846134e424
     2026_08_08__AntigravityLocal__YarivHuman__SaaS_RootLayoutComponent__V1_0_tsx:
       path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_RootLayoutComponent__V1.0.tsx
       version: '1.0'

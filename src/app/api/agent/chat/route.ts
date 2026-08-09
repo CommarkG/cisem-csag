@@ -1,6 +1,6 @@
-// Ratified Plan: CISEM-IP-20260808-SALES-AGENT
-// Architectural Reasoning: Next.js 15 App Router serverless API route performing direct HTTPS fetch calls to Gemini REST API and Twenty CRM.
-// Parent Principles: PR-98000 (SIPI), PR-84900 (Plan Ingestion / Naming)
+// Ratified Plan: CISEM-IP-20260809-OPENROUTER-INTEGRATION
+// Architectural Reasoning: Next.js 15 App Router serverless API route performing cloud-based routing via OpenRouter API (no local laptop dependencies) with Gemini API fallback.
+// Parent Principles: PR-99000 (Cloud Model Selection), PR-13990 (Sandbox Boundaries)
 
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
@@ -12,8 +12,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 const TWENTY_API_URL = process.env.TWENTY_API_URL || 'https://api.twenty.com'
 const TWENTY_API_KEY = process.env.TWENTY_API_KEY || ''
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || ''
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || ''
 
-// 1. Tool Declaration for Twenty CRM Operations
+// 1. Tool Declaration for Twenty CRM Operations (Gemini Format)
 const createTwentyPersonTool = {
   name: 'create_twenty_person',
   description: 'Creates or updates a prospect in Twenty CRM when name and email are disclosed.',
@@ -45,6 +46,45 @@ const createOpportunityTool = {
   },
 }
 
+// 2. Tool Declaration for OpenRouter (OpenAI Format)
+const openRouterTools = [
+  {
+    type: 'function',
+    function: {
+      name: 'create_twenty_person',
+      description: 'Creates or updates a prospect in Twenty CRM when name and email are disclosed.',
+      parameters: {
+        type: 'object',
+        properties: {
+          firstName: { type: 'string', description: 'Prospect first name' },
+          lastName: { type: 'string', description: 'Prospect last name' },
+          email: { type: 'string', description: 'Prospect email address' },
+          phone: { type: 'string', description: 'Prospect phone number (optional)' },
+          jobTitle: { type: 'string', description: 'Prospect role/title (optional)' },
+        },
+        required: ['firstName', 'lastName', 'email'],
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'create_opportunity',
+      description: 'Creates a sales opportunity deal in Twenty CRM when budget or timeline are verified.',
+      parameters: {
+        type: 'object',
+        properties: {
+          personId: { type: 'string', description: 'Twenty CRM Person ID linked to this deal' },
+          name: { type: 'string', description: 'Name of the deal (e.g. Acme Corp Web Upgrade)' },
+          amount: { type: 'number', description: 'Estimated value in USD' },
+          stage: { type: 'string', description: 'Pipeline stage: QUALIFIED, PROPOSAL, or NEW' },
+        },
+        required: ['name', 'amount'],
+      }
+    }
+  }
+]
+
 // Helper: Call Twenty CRM API with production mapping and local fallback backups
 async function executeTwentyTool(name: string, args: Record<string, any>) {
   if (name === 'create_twenty_person') {
@@ -74,7 +114,6 @@ async function executeTwentyTool(name: string, args: Record<string, any>) {
       return { success: true, personId: data?.id || 'twenty-person-id', raw: data }
     } catch (e: any) {
       console.warn('[Twenty CRM Connection Fail] Fallback to local storage registry:', e.message)
-      // Fallback: Return success signal with a local backup notice to prevent user friction
       return { 
         success: false, 
         personId: 'local-backup-id', 
@@ -126,24 +165,30 @@ export async function POST(req: NextRequest) {
   try {
     const { messages, tenantId } = await req.json()
 
-    let activeKey = GEMINI_API_KEY;
+    // Dynamically check environment variables on disk
+    let activeGeminiKey = GEMINI_API_KEY;
+    let activeOpenRouterKey = OPENROUTER_API_KEY;
     try {
       const envPath = path.join(process.cwd(), '.env');
       if (fs.existsSync(envPath)) {
         const envContent = fs.readFileSync(envPath, 'utf8');
-        const match = envContent.match(/GEMINI_API_KEY\s*=\s*([^\r\n]+)/);
-        if (match && match[1]) {
-          activeKey = match[1].trim();
+        const geminiMatch = envContent.match(/GEMINI_API_KEY\s*=\s*([^\r\n]+)/);
+        if (geminiMatch && geminiMatch[1]) {
+          activeGeminiKey = geminiMatch[1].trim();
+        }
+        const openrouterMatch = envContent.match(/OPENROUTER_API_KEY\s*=\s*([^\r\n]+)/);
+        if (openrouterMatch && openrouterMatch[1]) {
+          activeOpenRouterKey = openrouterMatch[1].trim();
         }
       }
     } catch (err) {
       console.warn('[Chat API] Failed to read .env file dynamically:', err);
     }
 
-    if (!activeKey) {
+    if (!activeGeminiKey && !activeOpenRouterKey) {
       return NextResponse.json({
         role: 'assistant',
-        content: 'שלום! המערכת פועלת כרגע ללא מפתח API פעיל. אנא הגדר את GEMINI_API_KEY.',
+        content: 'שלום! המערכת פועלת כרגע ללא מפתח API פעיל. אנא הגדר את GEMINI_API_KEY או את OPENROUTER_API_KEY.',
         toolLogs: [],
       })
     }
@@ -160,13 +205,107 @@ Rules:
 5. Always respond in the exact same language used by the user (e.g. if the user speaks Hebrew, respond in Hebrew. If they speak English, respond in English).
 `
 
-    // Convert conversation history for Gemini REST API formats
+    const executedToolLogs: string[] = []
+
+    // ROUTE A: OPENROUTER CLOUD INTEGRATION (If API key is active)
+    if (activeOpenRouterKey) {
+      const openRouterMessages = [
+        { role: 'system', content: systemInstruction },
+        ...messages.map((m: { role: string; content: string }) => ({
+          role: m.role === 'assistant' ? 'assistant' : 'user',
+          content: m.content,
+        }))
+      ]
+
+      const requestPayload = {
+        model: 'google/gemini-2.5-flash',
+        messages: openRouterMessages,
+        tools: openRouterTools,
+        temperature: 0.3,
+      }
+
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${activeOpenRouterKey}`,
+          'HTTP-Referer': 'https://commark.co.il',
+          'X-Title': 'Commark CISEM Portal',
+        },
+        body: JSON.stringify(requestPayload),
+      })
+
+      const responseData = await res.json()
+      if (!res.ok) {
+        console.error('[OpenRouter API Error Response]:', responseData)
+        throw new Error(responseData.error?.message || `HTTP error ${res.status}`)
+      }
+
+      const choiceMessage = responseData.choices?.[0]?.message
+      const toolCalls = choiceMessage?.tool_calls
+      let finalResponseText = choiceMessage?.content || ''
+
+      if (toolCalls && toolCalls.length > 0) {
+        for (const call of toolCalls) {
+          const { name, arguments: argsString } = call.function
+          const args = JSON.parse(argsString)
+          const toolResult = await executeTwentyTool(name, args)
+          executedToolLogs.push(`Executed ${name}: ${JSON.stringify(toolResult)}`)
+
+          // Second round request following function call execution
+          const followUpPayload = {
+            model: 'google/gemini-2.5-flash',
+            messages: [
+              ...openRouterMessages,
+              choiceMessage,
+              {
+                role: 'tool',
+                tool_call_id: call.id,
+                name: name,
+                content: JSON.stringify(toolResult),
+              }
+            ],
+            temperature: 0.3,
+          }
+
+          const followUpRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${activeOpenRouterKey}`,
+              'HTTP-Referer': 'https://commark.co.il',
+              'X-Title': 'Commark CISEM Portal',
+            },
+            body: JSON.stringify(followUpPayload),
+          })
+
+          const followUpData = await followUpRes.json()
+          if (!followUpRes.ok) {
+            console.error('[OpenRouter Follow-up API Error]:', followUpData)
+            throw new Error(followUpData.error?.message || `HTTP error ${followUpRes.status}`)
+          }
+          finalResponseText = followUpData.choices?.[0]?.message?.content || 'Thanks! I have recorded your details.'
+        }
+      }
+
+      if (!finalResponseText) {
+        finalResponseText = 'Thanks! Let me know if you have any questions.'
+      }
+
+      return NextResponse.json({
+        role: 'assistant',
+        content: finalResponseText,
+        toolLogs: executedToolLogs,
+      })
+    }
+
+    // ROUTE B: DIRECT GEMINI API FALLBACK
     const contents = messages.map((m: { role: string; content: string }) => ({
       role: m.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: m.content }],
     }))
 
-    const api_url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent`
+    const api_url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`
 
     const requestPayload = {
       contents,
@@ -183,7 +322,7 @@ Rules:
 
     const headers = {
       'Content-Type': 'application/json',
-      'x-goog-api-key': activeKey
+      'x-goog-api-key': activeGeminiKey
     }
 
     const res = await fetch(api_url, {
@@ -202,7 +341,6 @@ Rules:
     const functionCalls = candidate?.content?.parts?.filter((p: any) => p.functionCall)
 
     let finalResponseText = ''
-    const executedToolLogs: string[] = []
 
     // Extract message content text if present
     const textPart = candidate?.content?.parts?.find((p: any) => p.text)
@@ -218,7 +356,6 @@ Rules:
           const toolResult = await executeTwentyTool(name, args as Record<string, any>)
           executedToolLogs.push(`Executed ${name}: ${JSON.stringify(toolResult)}`)
           
-          // Re-prompt model with execution confirmation
           const followUpPayload = {
             contents: [
               ...contents,
