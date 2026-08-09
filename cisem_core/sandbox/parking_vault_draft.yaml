@@ -490,3 +490,16 @@ parked_items:
   - '[AUDIT.RIGIDITY]'
   - '[WEEKLY_SESSION_PARKING]'
   title: Naked Numbers Found -- Context/Reasoning missing for 14 numbers
+- atv_generated: false
+  description: Register the Marketing and Image Processing module as the top gradual trial run using the Y-GTP sequence once infrastructure changes are verified.
+  governor_signature: null
+  item_id: PARK-028
+  linked_plans: []
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[TRIAL.RUN]'
+  - '[MARKETING.IMAGE_PROCESSING]'
+  - '[Y-GTP]'
+  title: Marketing and Image Processing Top Trial Run

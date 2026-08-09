@@ -407,7 +407,7 @@ control_plane_subsystems:
         optimization: PENDING
         consolidation: CONSOLIDATED
         permission_compliance: PENDING
-      sha256: de73330bfb4668ce68215e22695be5e89dae0cb425ee34c3e47d73be2bbe8366
+      sha256: ffd6fc7d01573dc24a9336ec42b5acebb27cb5a28797e65fd99acef80e4011fd
     2026_08_09__AntigravityLocal__YarivHuman__SaaS_ClientMainPage__V1_1_tsx:
       path: ../src/app/page.tsx
       version: '1.1'
