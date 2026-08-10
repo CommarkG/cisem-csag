@@ -51,3 +51,6 @@ BEGIN
   LIMIT match_count;
 END;
 $$;
+
+-- 5. Create HNSW index on parent table (propagates to child partitions)
+CREATE INDEX IF NOT EXISTS product_embeddings_hnsw_idx ON product_embeddings USING hnsw (embedding vector_cosine_ops);
