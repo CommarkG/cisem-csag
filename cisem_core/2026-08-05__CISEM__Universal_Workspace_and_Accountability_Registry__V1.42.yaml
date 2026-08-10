@@ -553,6 +553,17 @@ control_plane_subsystems:
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
       sha256: 9de6e241457c17c120656e1ca7e088958422d060ccf92b273e8ecbd8617eed32
+    2026_08_10__AntigravityLocal__PGVector_Partition_Audit_and_Exporter_UI_Walkthrough__V1_0_md:
+      path: ../2026-08-10__AntigravityLocal__YarivHuman__PGVector_Partition_Audit_and_Exporter_UI_Walkthrough__V1.0.md
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: d4fce5e28fe0a092dcd0fc30c29e33febe4ace6ef6ef1ab6d7e4412b12f56592
     update_registry_v1.42_py:
       path: update_registry_v1.42.py
       version: '1.0'
@@ -563,7 +574,7 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: 504b6a6175ccfe56a7364dc84f2aed3b72f20db03d88ede1c81857abeafb4504
+      sha256: 39a10943b0c56c089cc8d042ccbaaf388523e8e9e04666ebf30b4260a03e8fd5
     2026_08_09__AntigravityLocal__YarivHuman__CisemPlanningModeLock__V1_1_json:
       path: planning/cisem_planning_mode.json
       version: '1.1'

@@ -6,7 +6,7 @@
 # version: V1.0
 # reasoning: |
 #   Upgrades the accountability registry from V1.41 to V1.42 to register the new
-#   PGVector Partition & Index Audit Verification script and update registry helper script.
+#   PGVector Partition & Index Audit Verification script, the updated walkthrough, and the registry helper.
 #   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >AX-50000.
 #   Resolves: Accountability Registry Upgrade to V1.42.
 """
@@ -88,6 +88,17 @@ new_entry = """    update_registry_v1.41_py:
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
       sha256: 0000000000000000000000000000000000000000000000000000000000000000
+    2026_08_10__AntigravityLocal__PGVector_Partition_Audit_and_Exporter_UI_Walkthrough__V1_0_md:
+      path: ../2026-08-10__AntigravityLocal__YarivHuman__PGVector_Partition_Audit_and_Exporter_UI_Walkthrough__V1.0.md
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 0000000000000000000000000000000000000000000000000000000000000000
     update_registry_v1.42_py:
       path: update_registry_v1.42.py
       version: '1.0'
@@ -109,6 +120,17 @@ else:
         end_of_line = content.find("\n", sha_idx)
         content = content[:end_of_line] + "\n" + """    2026_08_10__AntigravityLocal__PgVectorPartitionAuditVerification__V1_0_py:
       path: ../2026-08-10__AntigravityLocal__YarivHuman__PgVectorPartitionAuditVerification__V1.0.py
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 0000000000000000000000000000000000000000000000000000000000000000
+    2026_08_10__AntigravityLocal__PGVector_Partition_Audit_and_Exporter_UI_Walkthrough__V1_0_md:
+      path: ../2026-08-10__AntigravityLocal__YarivHuman__PGVector_Partition_Audit_and_Exporter_UI_Walkthrough__V1.0.md
       version: '1.0'
       status: VERIFIED
       validation_metrics:
