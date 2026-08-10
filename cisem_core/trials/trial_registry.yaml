@@ -1,0 +1,27 @@
+# CISEM TRIAL REGISTRY
+# ratified_plan: CRUEL-REVIEW-AX70000-CONSOLIDATED-V1.0
+# governor_signature: GOV-YARIV-20260809-CONSOLIDATED-APPROVED
+# version: V1.0
+
+trials:
+  - trial_id: TRIAL-001
+    topic: "Task-Adaptive Model Routing"
+    phase: 5
+    governor_sign_off: approved
+    options:
+      - Control
+      - Two-Tier
+      - Four-Tier
+      - Four-Tier-Validator
+    control: "Current single-model production pipeline"
+    success_metric: "cost_per_1k_requests"
+    checkpoints:
+      - "2026-08-12"
+      - "2026-08-16"
+      - "2026-08-23"
+    exit_condition: "min_requests >= 200"
+    failure_definition: "error_rate > 5%"
+    swift_run: true
+    swift_park_id: "PARK-029"
+    result: "Two-Tier routing strategy recommended"
+    trial_conclusion_report: "conclusions/TRIAL-001__ConclusionReport__Sonnet__YarivHuman__ModelRouting__V1.0.md"

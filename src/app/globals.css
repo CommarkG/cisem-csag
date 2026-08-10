@@ -9,8 +9,8 @@
 }
 
 :root.dark {
-  --background: #020617; /* slate-950 */
-  --foreground: #f8fafc; /* slate-50 */
+  --background: #09090b; /* zinc-950 */
+  --foreground: #f4f4f5; /* zinc-100 */
 }
 
 /* ==================================================
@@ -112,6 +112,27 @@
   --color-foreground-preview: #fef3c7;
 }
 
+/* 6. Ruby/Red Accent Theme */
+.design-studio-preview.theme-ruby {
+  --color-primary: #dc2626;
+  --color-primary-hover: #b91c1c;
+  --color-primary-bg: #fef2f2;
+  --color-border-custom: #fee2e2;
+  --color-surface: #ffffff;
+  --color-background-preview: #fff5f5;
+  --color-foreground-preview: #7f1d1d;
+}
+
+.design-studio-preview.theme-ruby.dark, .dark .design-studio-preview.theme-ruby {
+  --color-primary: #ef4444;
+  --color-primary-hover: #f87171;
+  --color-primary-bg: #7f1d1d;
+  --color-border-custom: #991b1b;
+  --color-surface: #1e0505;
+  --color-background-preview: #020617;
+  --color-foreground-preview: #fef2f2;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -131,8 +152,266 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--background) !important;
+  color: var(--foreground) !important;
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* ==================================================
+   GLOBAL HIGH-CONTRAST BLACK, GREY & DELICATE RED ACCENT OVERRIDES
+   (ONLY ACTIVATED WHEN IN DARK MODE / .dark CLASS IS PRESENT)
+   ================================================== */
+
+/* Core Layout Backgrounds */
+.dark .bg-white,
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-slate-50\/50,
+.dark .bg-slate-100\/50,
+.dark .bg-slate-200,
+.dark .dark\:bg-slate-900,
+.dark .dark\:bg-slate-900\/60,
+.dark .dark\:bg-slate-900\/40,
+.dark .dark\:bg-slate-950,
+.dark .dark\:bg-slate-955,
+.dark .dark\:bg-slate-950\/20 {
+  background-color: #121214 !important;
+}
+
+/* Main Body Background (zinc-950) */
+.dark body, 
+.dark .min-h-screen, 
+.dark .bg-slate-50\/30,
+.dark .dark\:bg-slate-955\/85,
+.dark .bg-slate-950 {
+  background-color: #09090b !important;
+}
+
+/* Global Border Colors - Delicate Slate Grey Lines */
+.dark .border,
+.dark .border-b,
+.dark .border-t,
+.dark .border-l,
+.dark .border-r,
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300,
+.dark .dark\:border-slate-700,
+.dark .dark\:border-slate-800,
+.dark .dark\:border-slate-805,
+.dark .dark\:border-slate-850 {
+  border-color: #27272a !important;
+}
+
+/* Touch of Red Delicate Accents: Selected indicators, active states, important buttons */
+.border-amber-500,
+.border-orange-500,
+.border-indigo-500,
+.border-blue-500,
+.border-blue-600,
+.border-b-amber-500,
+.border-b-indigo-500 {
+  border-color: #dc2626 !important;
+}
+
+.text-amber-500,
+.text-orange-500,
+.text-indigo-500,
+.text-blue-500,
+.text-blue-600,
+.text-blue-400,
+.dark\:text-blue-400,
+.dark\:text-amber-500,
+.dark\:text-indigo-500 {
+  color: #ef4444 !important;
+}
+
+.bg-amber-500,
+.bg-orange-500,
+.bg-indigo-500,
+.bg-blue-550,
+.bg-blue-600,
+.bg-blue-500,
+.hover\:bg-amber-600:hover,
+.hover\:bg-indigo-600:hover,
+.hover\:bg-blue-600:hover,
+.hover\:bg-blue-700:hover {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.bg-amber-500\/10,
+.bg-indigo-500\/10,
+.bg-orange-500\/10,
+.bg-blue-500\/10,
+.bg-blue-600\/20,
+.bg-blue-600\/30,
+.bg-amber-500\/5,
+.bg-indigo-500\/5,
+.bg-indigo-500\/15,
+.bg-amber-500\/15 {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+}
+
+/* High Legibility Text Colors on Black/Charcoal */
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-850,
+.dark .text-slate-800,
+.dark .dark\:text-white,
+.dark .dark\:text-slate-100,
+.dark .dark\:text-slate-200,
+.dark .text-slate-750 {
+  color: #f4f4f5 !important;
+}
+
+/* Muted / Secondary Text */
+.dark .text-slate-500,
+.dark .text-slate-400,
+.dark .dark\:text-slate-400,
+.dark .text-slate-450 {
+  color: #a1a1aa !important;
+}
+
+/* Forms & Input Overrides */
+.dark input[type="text"],
+.dark textarea,
+.dark select {
+  background-color: #09090b !important;
+  border-color: #27272a !important;
+  color: #f4f4f5 !important;
+}
+.dark input[type="text"]:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #ef4444 !important;
+  outline: none !important;
+}
+
+/* Sleek Minimalist Custom Scrollbars to Eliminate Thick White Bars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b !important;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #09090b !important;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1 !important;
+  border-radius: 4px !important;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #27272a !important;
+  border-radius: 4px !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #dc2626 !important;
+}
+
+/* Hide Firefox native scrollbar visual clutter */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f0f0f0;
+}
+.dark * {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a #09090b;
+}
+
+/* ==================================================
+   CLASSICAL RECTANGULAR EDGE & RED ACCENT LINE SYSTEM
+   ================================================== */
+
+/* Flatten all rounded borders for a classical rectangular look */
+.rounded-3xl,
+.rounded-2xl,
+.rounded-xl,
+.rounded-lg,
+.rounded-md,
+.rounded-sm,
+.rounded,
+.rounded-full,
+[class*="rounded-"],
+button,
+input,
+select,
+textarea {
+  border-radius: 0px !important;
+}
+
+/* 
+   Bespoke Accent Vertical Lines System
+   - accent-lines-1: One solid vertical line
+   - accent-lines-2: Two staggered vertical lines
+   - accent-lines-3: Three staggered vertical lines
+*/
+.accent-lines-1 {
+  position: relative;
+}
+.accent-lines-1::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 1.5px;
+  background-color: #dc2626 !important;
+}
+
+.accent-lines-2 {
+  position: relative;
+}
+.accent-lines-2::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 5%;
+  height: 90%;
+  width: 1.5px;
+  background-color: #dc2626 !important;
+}
+.accent-lines-2::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 20%;
+  height: 60%;
+  width: 1.5px;
+  background-color: #dc2626 !important;
+}
+
+.accent-lines-3 {
+  position: relative;
+  border-right: 1.5px solid #dc2626 !important;
+}
+.accent-lines-3::before {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 15%;
+  height: 70%;
+  width: 1.5px;
+  background-color: #dc2626 !important;
+}
+.accent-lines-3::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 30%;
+  height: 40%;
+  width: 1.5px;
+  background-color: #dc2626 !important;
+}
+
+/* Hide Next.js Dev overlay and warnings badge */
+#nextjs-portal,
+next-route-announcer,
+.nextjs-toast-errors-parent,
+[data-nextjs-dialog-overlay] {
+  display: none !important;
+}
+

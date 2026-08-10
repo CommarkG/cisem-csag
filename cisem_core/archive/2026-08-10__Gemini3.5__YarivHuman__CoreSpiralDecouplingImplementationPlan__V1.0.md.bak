@@ -1,0 +1,139 @@
+---
+metadata:
+  owner: "CISEM_GOVERNOR"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\2026-08-10__Gemini3.5__YarivHuman__CoreSpiralDecouplingImplementationPlan__V1.0.md"
+  artifact_status: "DRAFT"
+  maturity: "PROPOSAL"
+  version: "1.0"
+  role_type: "CORE_SPIRAL_PLAN"
+  author: "Gemini 3.5 (Antigravity)"
+  related_axioms: ["AX-10000", "AX-20000", "AX-60000", "PR-11100", "PR-11500", "PR-13990"]
+  resolves_questions_from: "2026-08-10__Gemini3.5__YarivHuman__ConsolidatedResearchQuestions__V1.0.md"
+---
+
+# CoreSpiral Decoupling & Multi-Tenant Hierarchy Plan
+
+1.1. **Introduction & Methodological Context**:
+This document establishes the **CoreSpiral plan** to decouple the **CISEM Deep Platform Core** from the **Universal Solution Core** and implement a multi-tenant user role and package system. Following Governor instructions, CSAG is treated purely as a temporary, minor sandbox use-case rather than a core implementation target.
+
+1.2. **Methodology Rationale**:
+Attempting to deploy the entire multi-tenant hierarchy, template registries, and directory separations in one massive step introduces high regression risks. This plan utilizes the **CoreSpiral Methodology** defined in [CoreSpiralMethodologySpecification](file:///c:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/planning/2026-08-10__Gemini3.5__YarivHuman__CoreSpiralMethodologySpecification__V1.0.md). 
+- CoreCycles are context-defined and non-rigid, focusing on building deep-core elements first and spiraling outwards.
+- Architectural considerations (Pillars) can begin and end in any cycle. Highly important features may only appear in later cycles (e.g. CoreCycle 3) because they depend on core primitives established in prior cycles.
+- Components exit the spiral and transition to read-only stable dependencies once they reach maturity.
+
+---
+
+## 2. The Four Pillars of Our Architectural Challenge
+
+2.1. **Pillar I: Multi-Tenant Identity & Account Graph Separation (Identity)**:
+- *Challenge*: Moving from flat system roles to a graph where users can hold separate roles across different tenants.
+- *Bedrock Rule*: A single `user` can have multiple tenant assignments, each mapped via `user_account_roles` to a registered `role_definition` (AX-10000).
+
+2.2. **Pillar II: Universal Template Registry & Customization DNA (Templates)**:
+- *Challenge*: Storing canonical, read-only template layouts while allowing tenants to fork, customize, and save pages securely.
+- *Bedrock Rule*: Customized templates must live as independent records referencing the parent template (`forked_from` UUID pointer) to prevent workspace data leaks (Option B).
+
+2.3. **Pillar III: Package Tier Gating & Enforcement Layer (Enforcement)**:
+- *Challenge*: Guaranteeing that Starter, Growth, and Enterprise accounts are restricted to their quotas and features.
+- *Bedrock Rule*: Combination of DB RLS for hard tenant isolation and API Middleware/Overlays for feature/quota restrictions. Feature codes must be registered relationally (PR-11500).
+
+2.4. **Pillar IV: Dual-Core Directory Split & Compiler Gates (Architecture)**:
+- *Challenge*: Separating platform utilities (`platform_core`) from solution specifications (`solution_core`) and enforcing verification rules automatically.
+- *Bedrock Rule*: Clear workspace directories and automated `cisem_gate.py` checks verifying file naming, path restrictions, and registry syncs.
+
+---
+
+## 3. The CoreSpiral Process: 4 CoreCycles of Maturation
+
+```mermaid
+graph TD
+    subgraph Cycle 1: Deep Core Foundation
+        A[Define Database Schemas] --> B[Seed Role & Package Definitions]
+    end
+    subgraph Cycle 2: Isolation & Middleware
+        B --> C[Validate TenantContext Tokens]
+        C --> D[Apply Postgres RLS Security Policies]
+    end
+    subgraph Cycle 3: Pipelines & Quota Gates
+        D --> E[Forking Pipelines & Quota Enforcement]
+    end
+    subgraph Cycle 4: Platform Gate Relocation
+        E --> F[Move Gate & Finalize Sandboxes]
+    end
+```
+
+### 3.1. CoreCycle 1: Deep Core Foundation (Structural Grounding)
+- 3.1.1. **Core Focus**: Establish the deep platform schemas and folder boundaries.
+- 3.1.2. **Active Pillars**:
+  - **Pillar I (Identity)**: Begins in this cycle. We define the database structure for multi-tenant accounts and roles.
+  - **Pillar II (Templates)**: Begins in this cycle. Create templates directory in `cisem_core/solution_core/`.
+  - **Pillar III (Enforcement)**: Begins in this cycle. Create `packages` and relational feature grant tables.
+  - **Pillar IV (Architecture)**: Begins in this cycle. Set up the separate platform/solution core directories.
+- 3.1.3. **Actions**:
+  - Run database migration to add `role_definitions`, `packages`, `feature_registry`, `users`, `user_account_roles`, `template_registry`, and `package_feature_grants` tables.
+  - Establish the directory boundaries under `cisem_core/`.
+- 3.1.4. **Connectivity & Dependencies**:
+  - Schema tables form the prerequisite core tables for all subsequent context routing.
+- 3.1.5. **Executable Proof**: Verify database migrations compile successfully and directories are created.
+
+### 3.2. CoreCycle 2: Isolation & Middleware (Runtime Security Bounds)
+- 3.2.1. **Core Focus**: Build tenant isolation and middleware token routing.
+- 3.2.2. **Active Pillars**:
+  - **Pillar I (Identity)**: Matures in this cycle. Wires users to multiple account contexts.
+  - **Pillar III (Enforcement)**: Wires the JWT token context to FastAPI middleware and sets up row-level security.
+  - **Pillar II & IV**: Standby.
+- 3.2.3. **Actions**:
+  - Write FastAPI middleware to validate signed `TenantContext` tokens.
+  - Apply Postgres RLS to `template_registry`, `deals`, and `contacts` based on context parameter.
+- 3.2.4. **Connectivity & Dependencies**:
+  - Relies on tables created in CoreCycle 1.
+- 3.2.5. **Executable Proof**: Run test querying templates with invalid or missing tokens, verifying it fails closed.
+
+### 3.3. CoreCycle 3: Pipelines & Quota Gates (Functional Actions)
+- 3.3.1. **Core Focus**: Implement template copying workflows and limit checking overlays.
+- 3.3.2. **Active Pillars**:
+  - **Pillar II (Templates)**: Matures in this cycle. Forking pipelines copy templates from canonical assets to tenant databases.
+  - **Pillar III (Enforcement)**: Quota evaluation middleware triggers limit checks before page creations.
+- 3.3.3. **Actions**:
+  - Implement the template duplicate Wizard and Pipeline.
+  - Write quota gating checking functions matching the tenant's current counts against packages.
+- 3.3.4. **Connectivity & Dependencies**:
+  - Inherits the user and session routing security from CoreCycle 2.
+- 3.3.5. **Executable Proof**: Create a test attempt to exceed Growth package landing page limits; verify it is blocked.
+
+### 3.4. CoreCycle 4: Platform Gate Relocation (Workspace Lock)
+- 3.4.1. **Core Focus**: Gate relocation and compiler checks.
+- 3.4.2. **Active Pillars**:
+  - **Pillar IV (Architecture)**: Matures in this cycle. We relocate the compiler gate, resetting checksums.
+  - **Pillars I, II, III**: Matured and transitioned to read-only stable dependencies.
+- 3.4.3. **Actions**:
+  - Relocate `cisem_gate.py` to `cisem_core/platform_core/`.
+  - Add promotion rules inspecting sandbox files for criteria before promotion.
+- 3.4.4. **Connectivity & Dependencies**:
+  - Reconciler checks and file checksum validation are updated to reflect the gate's new path.
+- 3.4.5. **Executable Proof**: Run `cisem_gate.py` from its new home to confirm all checks pass.
+
+---
+
+## 4. Architectural Anchors & Consensual Resolves
+
+4.1. **User Identity Resolution**:
+- Dedicated `users` table + 3-column unique `user_account_roles` join (allowing multi-role combinations inside the same tenant context during transitions).
+- Relational `role_definitions` table carrying metadata instead of bare strings.
+
+4.2. **Customization Storage**:
+- Option B (customer-owned template records in DB with `forked_from` references).
+- Filesystem copies of canonical core template blueprints.
+
+4.3. **Feature Package Relational Model**:
+- Tiers stored in `packages` table. Features stored in a relational `package_feature_grants` table mapping feature codes to a registered catalog.
+
+4.4. **Dual-Core folders**:
+- Decouple deep platform core rules (`platform_core/` housing gates, registries, token signatures) from solution frameworks (`solution_core/` housing canonical landing page designs, DNA guidelines, and CSS structures).
+
+---
+
+## 5. Verification Schedule & History
+- **2026-08-10**: CoreSpiral Decoupling Plan created by Gemini 3.5 Flash. (Version 1.0)
+- **Validation check**: This proposal aligns with AX-10000, PR-11100, and PR-13990.

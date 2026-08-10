@@ -23,17 +23,49 @@ import re
 import yaml
 from datetime import datetime, timezone
 
-SANDBOX_DIR = os.path.dirname(os.path.abspath(__file__))
-CORE_DIR    = os.path.dirname(SANDBOX_DIR)
-ROOT_DIR    = os.path.dirname(CORE_DIR)
+# Custom Exceptions
+class ATVLoadError(Exception):
+    """Raised when critical configuration or trial reports fail to load."""
+    pass
 
-VAULT_PATH              = os.path.join(SANDBOX_DIR, "parking_vault_draft.yaml")
-TRIAL_REPORT_PATH       = os.path.join(SANDBOX_DIR, "orchestration_trial_report.json")
-CAEL_STATUS_PATH        = os.path.join(CORE_DIR, "cael_status.json")
-TURN_COUNTER_PATH       = os.path.join(CORE_DIR, "cisem_turn_counter.json")
-ATV_REPORT_PATH         = os.path.join(SANDBOX_DIR, "atv_report.json")
-SCENARIO_MAP_PATH       = os.path.join(SANDBOX_DIR, "persona_scenario_map.yaml")
-ROOT_CAUSE_REGISTRY_PATH = os.path.join(SANDBOX_DIR, "root_cause_registry.json")
+class ATVExecutionError(Exception):
+    """Raised when an active check fails due to environmental errors."""
+    pass
+
+class ATVProcessBlock(Exception):
+    """Raised when ATV blocks execution due to theater or repeated root cause patterns."""
+    pass
+
+# Dynamic Config Import
+_sandbox_dir = os.path.dirname(os.path.abspath(__file__))
+_core_dir = os.path.dirname(_sandbox_dir)
+_platform_core_dir = os.path.join(_core_dir, "platform_core")
+if _platform_core_dir not in sys.path:
+    sys.path.insert(0, _platform_core_dir)
+
+try:
+    import importlib.util
+    config_module = None
+    if os.path.exists(_platform_core_dir):
+        for f in os.listdir(_platform_core_dir):
+            if "CisemConfig" in f and f.endswith(".py"):
+                spec = importlib.util.spec_from_file_location("CisemConfig", os.path.join(_platform_core_dir, f))
+                config_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(config_module)
+                break
+except Exception as e:
+    print(f"Warning: Failed to import CisemConfig dynamically: {e}")
+    config_module = None
+
+ROOT_DIR = config_module.ROOT_DIR if config_module else os.path.dirname(_core_dir)
+CORE_DIR = config_module.CORE_DIR if config_module else _core_dir
+VAULT_PATH = config_module.PARKING_VAULT_PATH if config_module else os.path.join(_sandbox_dir, "parking_vault_draft.yaml")
+TRIAL_REPORT_PATH = os.path.join(_sandbox_dir, "orchestration_trial_report.json")
+CAEL_STATUS_PATH = config_module.CAEL_STATUS_PATH if config_module else os.path.join(CORE_DIR, "cael_status.json")
+TURN_COUNTER_PATH = config_module.TURN_COUNTER_PATH if config_module else os.path.join(CORE_DIR, "cisem_turn_counter.json")
+ATV_REPORT_PATH = os.path.join(_sandbox_dir, "atv_report.json")
+SCENARIO_MAP_PATH = os.path.join(_sandbox_dir, "persona_scenario_map.yaml")
+ROOT_CAUSE_REGISTRY_PATH = os.path.join(_sandbox_dir, "root_cause_registry.json")
 
 # -----------------------------------------------------------------------
 # HELPERS
@@ -453,7 +485,15 @@ def check_naked_numbers(vault):
         except Exception:
             continue
             
+        in_code_block = False
         for i, line in enumerate(lines):
+            # Toggle in_code_block on ```
+            if line.strip().startswith("```"):
+                in_code_block = not in_code_block
+                continue
+            if in_code_block:
+                continue
+
             # Exclude lines containing file links, paths, metadata tags, dates, list markers, or log timestamps
             lower_line = line.lower()
             if any(x in lower_line for x in ["file://", "http://", "https://", ".md", ".py", ".yaml", ".json"]):
@@ -483,7 +523,8 @@ def check_naked_numbers(vault):
                     continue
                 if len(num) == 1: # Ignore single digit section markers/bullets
                     continue
-                if num in ("2026", "2025", "2024", "19", "01", "02", "03", "200", "403", "404", "500"):
+                # Exempt standard HTTP codes, ports, and common configuration defaults
+                if num in ("2026", "2025", "2024", "19", "01", "02", "03", "200", "201", "202", "204", "400", "401", "403", "404", "429", "500", "3000", "8000", "9000"):
                     continue
                 if num.endswith("0000") or len(num) >= 5:
                     continue
@@ -746,8 +787,7 @@ def run_atv():
 
     report = load_json(TRIAL_REPORT_PATH)
     if not report:
-        print("[ATV] ERROR: No trial report found. Run CisemAuditor first.")
-        sys.exit(1)
+        raise ATVLoadError("No trial report found. Run CisemAuditor first.")
 
     vault = load_yaml(VAULT_PATH)
 
@@ -806,11 +846,14 @@ def run_atv():
 
     if atv_verdict in ("PASS", "GAPS_FOUND"):
         reset_turn_counter()
-        sys.exit(0)
     else:
-        print("[ATV] HARD PROCESS BLOCK: Fix theater or repeated root cause before proceeding.")
-        sys.exit(1)
+        raise ATVProcessBlock("HARD PROCESS BLOCK: Fix theater or repeated root cause before proceeding.")
 
 
 if __name__ == "__main__":
-    run_atv()
+    try:
+        run_atv()
+        sys.exit(0)
+    except (ATVLoadError, ATVExecutionError, ATVProcessBlock) as e:
+        print(f"FATAL ATV ERROR: {e}")
+        sys.exit(1)

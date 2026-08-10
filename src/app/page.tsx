@@ -83,7 +83,7 @@ export default function Home() {
     setIsScraping(true);
     setScrapingError(null);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/prospects/scrape", {
+      const res = await fetch("/api/v1/prospects/scrape", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: prospectUrl })
@@ -379,7 +379,7 @@ export default function Home() {
 
   const fetchPersonas = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/v1/admin/personas");
+      const res = await fetch("/api/v1/admin/personas");
       if (res.ok) {
         const data = await res.json();
         setPersonas(data.personas || []);
@@ -393,7 +393,7 @@ export default function Home() {
   const fetchDeals = async () => {
     try {
       // In mock DB setup, we fetch deals fromdeals table
-      const res = await fetch("http://localhost:8000/api/v1/schemas/custom?tab=deals");
+      const res = await fetch("/api/v1/schemas/custom?tab=deals");
       // Standard fetch fallback mock deals if table empty
       setCrmDeals([
         { id: "1", client: "Acme HighTech LTD", agent: "Yariv Fink", stage: "Lead Ingestion", value: "24,000 ILS", date: "2026-08-04", logs: "Generated proposal matching brief" },
@@ -404,7 +404,7 @@ export default function Home() {
 
   const fetchTemplates = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/v1/admin/templates");
+      const res = await fetch("/api/v1/admin/templates");
       if (res.ok) {
         const data = await res.json();
         setTemplatesList(data.templates || []);
@@ -414,7 +414,7 @@ export default function Home() {
 
   const handleSwitchPersona = async (personaId: string) => {
     try {
-      const res = await fetch("http://localhost:8000/api/v1/admin/personas/activate", {
+      const res = await fetch("/api/v1/admin/personas/activate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ persona_id: personaId })
@@ -432,7 +432,7 @@ export default function Home() {
     e.preventDefault();
     setIsCreatingSub(true);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/schemas/custom?tab=branding_subcontractors", {
+      const res = await fetch("/api/v1/schemas/custom?tab=branding_subcontractors", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSubcontractor)
@@ -461,7 +461,7 @@ export default function Home() {
     e.preventDefault();
     setIsCreatingCustomer(true);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/schemas/custom?tab=customer_accounts", {
+      const res = await fetch("/api/v1/schemas/custom?tab=customer_accounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newCustomer)
@@ -483,7 +483,7 @@ export default function Home() {
     setIsUploadingExcel(true);
     try {
       const payload = JSON.parse(excelInput);
-      const res = await fetch("http://localhost:8000/api/v1/catalog/bulk-upload", {
+      const res = await fetch("/api/v1/catalog/bulk-upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -504,7 +504,7 @@ export default function Home() {
   const triggerLiveStockCheck = async () => {
     if (!proposalToken) return;
     try {
-      const res = await fetch("http://localhost:8000/api/v1/stock/live-check", {
+      const res = await fetch("/api/v1/stock/live-check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: proposalToken })
@@ -518,7 +518,7 @@ export default function Home() {
   const handleManualPDFGeneration = async (token: string) => {
     setIsGeneratingPDF(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/proposals/${token}/pdf`);
+      const res = await fetch(`/api/v1/proposals/${token}/pdf`);
       if (res.ok) {
         const blob = await res.blob();
         const link = document.createElement("a");
@@ -537,17 +537,17 @@ export default function Home() {
 
   const fetchTagsAndStatuses = async () => {
     try {
-      const tRes = await fetch("http://localhost:8000/api/v1/schemas/tags");
+      const tRes = await fetch("/api/v1/schemas/tags");
       if (tRes.ok) {
         const data = await tRes.json();
         setTagsList(data.tags || []);
       }
-      const sRes = await fetch("http://localhost:8000/api/v1/schemas/statuses");
+      const sRes = await fetch("/api/v1/schemas/statuses");
       if (sRes.ok) {
         const data = await sRes.json();
         setStatusesList(data.statuses || []);
       }
-      const cRes = await fetch("http://localhost:8000/api/v1/schemas/custom");
+      const cRes = await fetch("/api/v1/schemas/custom");
       if (cRes.ok) {
         const data = await cRes.json();
         setCustomLibraries(data.libraries || []);
@@ -559,7 +559,7 @@ export default function Home() {
 
   const fetchBacklog = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/v1/backlog");
+      const res = await fetch("/api/v1/backlog");
       if (res.ok) {
         const data = await res.json();
         setBacklogList(data.backlog || []);
@@ -571,7 +571,7 @@ export default function Home() {
 
   const fetchBriefChunks = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/documents/${id}/chunks`);
+      const res = await fetch(`/api/v1/documents/${id}/chunks`);
       if (res.ok) {
         const data = await res.json();
         setChunksList(data.chunks || []);
@@ -585,7 +585,7 @@ export default function Home() {
     e.preventDefault();
     setIsQualifying(true);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/briefs/qualify", {
+      const res = await fetch("/api/v1/briefs/qualify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -615,7 +615,7 @@ export default function Home() {
     setIsSearching(true);
     try {
       // In mock DB setup, we search catalog items using standard list route
-      const res = await fetch("http://localhost:8000/api/v1/catalog/search", {
+      const res = await fetch("/api/v1/catalog/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -640,7 +640,7 @@ export default function Home() {
     if (!briefId || selectedSkus.length === 0) return;
     setIsGenerating(true);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/proposals/generate", {
+      const res = await fetch("/api/v1/proposals/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -667,7 +667,7 @@ export default function Home() {
   const handleLoadClientProposal = async (token: string) => {
     setClientLoading(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/proposals/${token}`);
+      const res = await fetch(`/api/v1/proposals/${token}`);
       if (res.ok) {
         const data = await res.json();
         setClientProposal(data);
@@ -682,7 +682,7 @@ export default function Home() {
   const handleUpdateChunk = async (chunkId: string, payload: any) => {
     setIsUpdatingChunk(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/documents/chunks/${chunkId}`, {
+      const res = await fetch(`/api/v1/documents/chunks/${chunkId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -704,7 +704,7 @@ export default function Home() {
     e.preventDefault();
     setIsSubmittingBacklog(true);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/backlog", {
+      const res = await fetch("/api/v1/backlog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBacklog)
@@ -765,7 +765,9 @@ export default function Home() {
             "home", "sandbox_image_processor", "human_schema", "system_schema",
             "threshold", "traceability_spec", "agents_skills", "protocols_wizards",
             "api_providers", "matting_models", "storage_cdn", "data_integrations",
-            "design_studio"
+            "design_studio", "brief_clarifier", "catalog_manager", "supplier_registry",
+            "customer_registry", "library_hub", "template_hub", "web_pages",
+            "crm_pipeline", "sandbox_playground"
           ];
           if (knownMenus.includes(catId)) {
             setCurrentMenu(catId as any);
@@ -982,14 +984,14 @@ export default function Home() {
             {/* 4. WORKSPACE CONTROLS & DYNAMIC TAB GRID */}
             <div className="flex border-b border-slate-200 dark:border-slate-800 gap-6 overflow-x-auto pb-1 mb-8">
               {[
-                { id: "home", label: "🏠 שער ראשי (Home)" },
-                { id: "brief_clarifier", label: "💬 Ingest Client Brief" },
-                { id: "catalog_manager", label: "🎒 Catalog & Sheets Ingestion" },
-                { id: "crm_pipeline", label: "📊 Sales CRM & PDF Pipeline" },
-                { id: "template_hub", label: "🎨 Layout Sandbox Template Hub" },
-                { id: "supplier_registry", label: "⚙️ Subcontractors Configuration" },
-                { id: "library_hub", label: "📂 Master Library Hub" },
-                { id: "design_studio", label: "🎨 Design Studio" },
+                { id: "home", label: "שער ראשי (Home)" },
+                { id: "brief_clarifier", label: "Ingest Client Brief" },
+                { id: "catalog_manager", label: "Catalog & Sheets Ingestion" },
+                { id: "crm_pipeline", label: "Sales CRM & PDF Pipeline" },
+                { id: "template_hub", label: "Layout Sandbox Template Hub" },
+                { id: "supplier_registry", label: "Subcontractors Configuration" },
+                { id: "library_hub", label: "Master Library Hub" },
+                { id: "design_studio", label: "Design Studio" },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -1013,13 +1015,12 @@ export default function Home() {
           {currentMenu === "home" && (
             <div className="space-y-8 text-right" dir="rtl">
               {/* Core Hero Banner */}
-              <div className="rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-600/5 to-slate-900 border border-slate-200 dark:border-slate-800 p-8 shadow-xl relative overflow-hidden transition-all duration-300">
-                <div className="absolute top-0 right-0 h-40 w-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 shadow-xl relative overflow-hidden transition-all duration-300">
                 <div className="relative z-10 space-y-4">
-                  <span className="inline-flex items-center rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-500 ring-1 ring-inset ring-amber-500/20">
-                    Welcome to COMMARK UBOP v1.2
+                  <span className="inline-flex items-center bg-slate-100 dark:bg-slate-850 px-3 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-850">
+                    Welcome to Cisem CsAg v1.2
                   </span>
-                  <h1 className="text-3xl font-extrabold text-slate-950 dark:text-white leading-tight">
+                  <h1 className="text-3xl font-extrabold text-slate-950 dark:text-white leading-tight accent-lines-2 pr-4">
                     מערכת הזמנות והצעות מחיר B2B אחודה
                   </h1>
                   <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -1029,28 +1030,27 @@ export default function Home() {
                   
                   {/* Performance Indicators */}
                   <div className="flex flex-wrap gap-4 pt-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 rounded-lg px-3 py-1.5 border border-slate-200 dark:border-slate-800">
-                      🟢 חיבור בסיס נתונים פעיל
+                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 border border-slate-200 dark:border-slate-800">
+                      חיבור בסיס נתונים פעיל
                     </span>
-                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 rounded-lg px-3 py-1.5 border border-slate-200 dark:border-slate-800">
-                      ⚡ 2,500+ מוצרים בקטלוג
+                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 border border-slate-200 dark:border-slate-800">
+                      2,500+ מוצרים בקטלוג
                     </span>
-                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 rounded-lg px-3 py-1.5 border border-slate-200 dark:border-slate-800">
-                      🧠 סוכן תומך פעיל: {personas.find(p => p.id === activePersona)?.name || "עוזר פרואקטיבי"}
+                    <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 px-3 py-1.5 border border-slate-200 dark:border-slate-800">
+                      סוכן תומך פעיל: {personas.find(p => p.id === activePersona)?.name || "עוזר פרואקטיבי"}
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* Premium Brand Scraper & Sandbox Personalizer Card */}
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/50 p-6 shadow-md space-y-4">
+              <div className="border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/50 p-6 shadow-md space-y-4">
                 <div className="flex items-center gap-2 text-right">
-                  <span className="text-2xl">🎨</span>
                   <div>
-                    <h2 className="text-base font-bold text-slate-950 dark:text-white">
+                    <h2 className="text-base font-bold text-slate-955 dark:text-white accent-lines-1 pr-4">
                       סורק ומחולל מותג לקוח אינטראקטיבי (SPCS)
                     </h2>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                       הזן כתובת אתר של לקוח פוטנציאלי כדי לסרוק צבעי מותג, סלוגנים ופרטי קטלוג, ולחולל אתר הדגמה אינטראקטיבי באופן מיידי.
                     </p>
                   </div>
@@ -1949,7 +1949,7 @@ export default function Home() {
                       const form = e.target as any;
                       const label = form.label.value;
                       const parent_id = form.parent_id.value || null;
-                      const res = await fetch("http://localhost:8000/api/v1/schemas/tags", {
+                      const res = await fetch("/api/v1/schemas/tags", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({ label, parent_id })

@@ -491,7 +491,8 @@ parked_items:
   - '[WEEKLY_SESSION_PARKING]'
   title: Naked Numbers Found -- Context/Reasoning missing for 14 numbers
 - atv_generated: false
-  description: Register the Marketing and Image Processing module as the top gradual trial run using the Y-GTP sequence once infrastructure changes are verified.
+  description: Register the Marketing and Image Processing module as the top gradual
+    trial run using the Y-GTP sequence once infrastructure changes are verified.
   governor_signature: null
   item_id: PARK-028
   linked_plans: []
@@ -503,3 +504,119 @@ parked_items:
   - '[MARKETING.IMAGE_PROCESSING]'
   - '[Y-GTP]'
   title: Marketing and Image Processing Top Trial Run
+- atv_generated: false
+  description: SWIFT Trial Run 1 for Task-Adaptive Model Routing (TRIAL-001)
+  governor_signature: GOV-YARIV-20260809-CONSOLIDATED-APPROVED
+  item_id: PARK-029
+  linked_plans:
+  - CISEM-IP-20260809-PERMANENT-PLANNING-LOCK
+  measurement_timestamp: '2026-08-09T22:42:00Z'
+  minimum_required: 3
+  outcome_delta_pct: 0.0
+  outcome_measurement: Two-Tier strategy selected; latency RTT average 18.4ms; cost
+    savings 92.4%.
+  ratified_by_governor: true
+  requires_governor_approval: false
+  status: validated_impact
+  swift_trial_run: 1
+  tags:
+  - '[TRIAL.RUN]'
+  - '[SWIFT.TRIAL]'
+  - '[MODEL.ROUTING]'
+  title: Model Routing SWIFT Trial Run 1
+  trial_id: TRIAL-001
+- atv_generated: true
+  atv_timestamp: '2026-08-09T20:31:00.956519+00:00'
+  description: 'ATV Naked Number Audit detected 16 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L37
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''51''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-030
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 16 numbers
+- atv_generated: false
+  description: Allow and expect models to raise clarifying questions during the initial
+    research phase. This must be formally documented in "how researches are done in
+    CsAg" to prevent premature execution and align design intent.
+  governor_signature: null
+  item_id: PARK-031
+  linked_plans: []
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[RESEARCH.PROTOCOL]'
+  - '[INGESTION.CLARIFICATION]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Enforce Clarification Stage in Research and Audit Protocol
+- atv_generated: true
+  atv_timestamp: '2026-08-10T01:22:07.931567+00:00'
+  description: 'ATV Naked Number Audit detected 41 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L37
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''51''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-032
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 41 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-10T04:58:41.757921+00:00'
+  description: 'ATV Naked Number Audit detected 53 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L37
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''11''); 2026-08-08__AntigravityLocal__YarivHuman__Naming_Policy_Hardening_and_Component_Salad_Consolidation_Walkthrough__V1.1.md:L38
+    (''51''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-033
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 53 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-10T05:52:51.151615+00:00'
+  description: 'ATV Naked Number Audit detected 12 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md:L41
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Scope_Optimization_in_Cisem_Gate_Plan__V1.0.md:L42
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Trial_001_Validation_Telemetry_and_Exit_Validation_Plan__V1.0.md:L3
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-034
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 12 numbers

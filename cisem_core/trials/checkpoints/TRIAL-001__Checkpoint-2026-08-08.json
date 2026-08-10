@@ -1,0 +1,702 @@
+[
+  {
+    "request_id": "66cede94-92ce-498b-8cfe-2f6f9efb7485",
+    "execution_batch_date": "2026-08-09T19:38:10.155Z",
+    "latency_ms": 9.6839,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "1b8e66de-d8b9-48f2-ac20-8690e864577d",
+    "execution_batch_date": "2026-08-09T19:38:10.186Z",
+    "latency_ms": 10.2943,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "8c9add7d-b3c5-461f-87f9-c17b6c6b71bd",
+    "execution_batch_date": "2026-08-09T19:38:10.217Z",
+    "latency_ms": 10.2122,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "ffab511c-82de-436f-8b7e-e3797903880b",
+    "execution_batch_date": "2026-08-09T19:38:10.247Z",
+    "latency_ms": 9.4257,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "ac6c7dbc-0080-4a59-8855-1f10bbedff7b",
+    "execution_batch_date": "2026-08-09T19:38:10.275Z",
+    "latency_ms": 6.8946,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "c0126194-4b2e-456e-b7b9-48479ad56400",
+    "execution_batch_date": "2026-08-09T19:38:10.307Z",
+    "latency_ms": 7.4125,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "fd3d7567-11bc-4481-afdf-ff20a02f2027",
+    "execution_batch_date": "2026-08-09T19:38:10.341Z",
+    "latency_ms": 10.9758,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "3bdcef58-69fe-49f2-b608-92f49780e73f",
+    "execution_batch_date": "2026-08-09T19:38:10.384Z",
+    "latency_ms": 7.3557,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "e141993c-a802-4ef3-8973-93a63f348096",
+    "execution_batch_date": "2026-08-09T19:38:10.416Z",
+    "latency_ms": 9.061,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a62cc686-8f2a-4926-816d-7140a57b9312",
+    "execution_batch_date": "2026-08-09T19:38:10.445Z",
+    "latency_ms": 8.1082,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "580e1edd-db5d-4593-b040-53b89d8bd65f",
+    "execution_batch_date": "2026-08-09T19:38:10.477Z",
+    "latency_ms": 9.1464,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "dd17253d-4410-4640-b69e-6373605ecef4",
+    "execution_batch_date": "2026-08-09T19:38:10.508Z",
+    "latency_ms": 8.7397,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "2e69ffdb-b985-4abe-af12-816da20d2ac1",
+    "execution_batch_date": "2026-08-09T19:38:10.538Z",
+    "latency_ms": 8.7191,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "c31407da-2c68-4cbd-9938-2758cb8f2f38",
+    "execution_batch_date": "2026-08-09T19:38:10.570Z",
+    "latency_ms": 10.1796,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "b4685234-2d7c-49f0-b2b2-c6920aaaa5fc",
+    "execution_batch_date": "2026-08-09T19:38:10.599Z",
+    "latency_ms": 7.7112,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "5ac0ed99-6aa1-4044-9304-11233890a6db",
+    "execution_batch_date": "2026-08-09T19:38:10.634Z",
+    "latency_ms": 10.3323,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "9b39cf0b-1e19-45bf-8da6-b27c0d44cf4d",
+    "execution_batch_date": "2026-08-09T19:38:10.663Z",
+    "latency_ms": 8.0115,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "eac43023-4101-4c91-a935-f396cf22685c",
+    "execution_batch_date": "2026-08-09T19:38:10.694Z",
+    "latency_ms": 7.8929,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a8aa4752-4c56-4501-924c-79c393946419",
+    "execution_batch_date": "2026-08-09T19:38:10.726Z",
+    "latency_ms": 9.3365,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "c2d26858-0beb-4df9-b53a-2e89e91be4b9",
+    "execution_batch_date": "2026-08-09T19:38:10.757Z",
+    "latency_ms": 8.866,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "50c13a8f-7d78-4e54-8e08-2dea45a9fb83",
+    "execution_batch_date": "2026-08-09T19:38:10.788Z",
+    "latency_ms": 8.9448,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a3aca5c9-65e8-46b1-928d-cecf3140fd7b",
+    "execution_batch_date": "2026-08-09T19:38:10.820Z",
+    "latency_ms": 9.7201,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "6c12d44f-73e9-4bd3-b408-e14ca906691d",
+    "execution_batch_date": "2026-08-09T19:38:10.849Z",
+    "latency_ms": 7.7519,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "77e0671e-07ca-43b9-b2e9-b8855c41d96a",
+    "execution_batch_date": "2026-08-09T19:38:10.879Z",
+    "latency_ms": 6.6629,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "eb168016-05b7-4915-a9fd-f6de1bde1046",
+    "execution_batch_date": "2026-08-09T19:38:10.911Z",
+    "latency_ms": 8.4158,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "e135c7e7-5621-4a21-8f11-53100721f916",
+    "execution_batch_date": "2026-08-09T19:38:10.944Z",
+    "latency_ms": 9.9972,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "8ace0aa4-7371-42fd-b816-aa5201fa2568",
+    "execution_batch_date": "2026-08-09T19:38:10.974Z",
+    "latency_ms": 8.9665,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "9685328d-127a-45b1-8441-65e6bcd8281f",
+    "execution_batch_date": "2026-08-09T19:38:11.006Z",
+    "latency_ms": 9.7817,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "d9f39f33-74cc-450d-85f0-dec2825b54ed",
+    "execution_batch_date": "2026-08-09T19:38:11.039Z",
+    "latency_ms": 11.3953,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "44f90ba3-cf4f-415a-99f3-520b60eed0c2",
+    "execution_batch_date": "2026-08-09T19:38:11.085Z",
+    "latency_ms": 11.2826,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "e575b8ac-dcad-4e51-807b-0b957d1c4995",
+    "execution_batch_date": "2026-08-09T19:38:11.113Z",
+    "latency_ms": 8.2798,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "2556c4a0-69b5-42c7-8db0-9b32e3db5e40",
+    "execution_batch_date": "2026-08-09T19:38:11.143Z",
+    "latency_ms": 7.7005,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "43411817-84e1-45d6-8479-e594e6db8e9c",
+    "execution_batch_date": "2026-08-09T19:38:11.177Z",
+    "latency_ms": 10.1152,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "d4c3f28a-2703-4cdc-892d-085811935575",
+    "execution_batch_date": "2026-08-09T19:38:11.207Z",
+    "latency_ms": 9.7301,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "7c4691b8-9a76-491e-a101-bfe074de95c2",
+    "execution_batch_date": "2026-08-09T19:38:11.237Z",
+    "latency_ms": 8.5834,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "8d131dd2-58fc-4b07-8692-cfd0079778ac",
+    "execution_batch_date": "2026-08-09T19:38:11.266Z",
+    "latency_ms": 6.6893,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "eea0ca48-e067-4715-a9f5-7579d5e1ea8a",
+    "execution_batch_date": "2026-08-09T19:38:11.296Z",
+    "latency_ms": 6.0713,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "e1718dc7-e1d2-4600-ae83-65d9b99d7847",
+    "execution_batch_date": "2026-08-09T19:38:11.331Z",
+    "latency_ms": 9.5497,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "728f3da2-4e9e-4f0f-8a97-9d56363d0d88",
+    "execution_batch_date": "2026-08-09T19:38:11.361Z",
+    "latency_ms": 7.7931,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "1ef6af28-d7df-4037-8e9e-18eabd9fe616",
+    "execution_batch_date": "2026-08-09T19:38:11.391Z",
+    "latency_ms": 7.6724,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "99712714-ee1f-42a1-a871-573515d9080f",
+    "execution_batch_date": "2026-08-09T19:38:11.422Z",
+    "latency_ms": 8.5179,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "c92daead-7a0c-4799-85f7-b0c271b5eb89",
+    "execution_batch_date": "2026-08-09T19:38:11.451Z",
+    "latency_ms": 6.5224,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "4f74d0f1-9fee-40fb-beb8-8245135c78e6",
+    "execution_batch_date": "2026-08-09T19:38:11.484Z",
+    "latency_ms": 8.0697,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "8dab4093-2cc2-4e77-9705-a9a8daeaa803",
+    "execution_batch_date": "2026-08-09T19:38:11.516Z",
+    "latency_ms": 9.0149,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a0705b61-5f7d-498b-9803-a82ba9e7450e",
+    "execution_batch_date": "2026-08-09T19:38:11.546Z",
+    "latency_ms": 8.2375,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "b6834b9b-bc47-4af7-83f9-52eca8dd9f62",
+    "execution_batch_date": "2026-08-09T19:38:11.576Z",
+    "latency_ms": 7.6889,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "66d4bf4e-98b9-475d-ac05-57b6e8f56f45",
+    "execution_batch_date": "2026-08-09T19:38:11.610Z",
+    "latency_ms": 10.2172,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "31d24c37-24e7-434f-81c5-a0b05973bf9e",
+    "execution_batch_date": "2026-08-09T19:38:11.654Z",
+    "latency_ms": 9.1065,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "bde1083e-7046-4446-a5be-cd5f05645ed9",
+    "execution_batch_date": "2026-08-09T19:38:11.686Z",
+    "latency_ms": 9.4627,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "7b90eb3a-3eff-459b-ad56-82dc642ca416",
+    "execution_batch_date": "2026-08-09T19:38:11.717Z",
+    "latency_ms": 9.365,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "11b7200b-c3d6-459d-bd16-03eb950911ee",
+    "execution_batch_date": "2026-08-09T19:38:11.747Z",
+    "latency_ms": 8.0461,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "fab43148-14c1-415b-be2d-6f11872fce0b",
+    "execution_batch_date": "2026-08-09T19:38:11.780Z",
+    "latency_ms": 9.9834,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "3a9075fa-8663-45f9-98ac-398a9a822bc1",
+    "execution_batch_date": "2026-08-09T19:38:11.809Z",
+    "latency_ms": 8.6914,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "7bb89238-e28d-4d6c-aff7-6d5e2283a7e9",
+    "execution_batch_date": "2026-08-09T19:38:11.838Z",
+    "latency_ms": 7.5469,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "cb39fc1b-45ff-4023-a551-a2d121acb047",
+    "execution_batch_date": "2026-08-09T19:38:11.869Z",
+    "latency_ms": 7.1924,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "b6bc40bf-0312-4e05-8241-8c6e7b56784b",
+    "execution_batch_date": "2026-08-09T19:38:11.900Z",
+    "latency_ms": 7.5111,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "b55a903e-f058-4959-bf50-42738333a7e6",
+    "execution_batch_date": "2026-08-09T19:38:11.930Z",
+    "latency_ms": 6.8745,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "c4a23369-d35e-4bbd-bc3c-048d4c7b5244",
+    "execution_batch_date": "2026-08-09T19:38:11.962Z",
+    "latency_ms": 7.868,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "b0b40170-a78d-44bb-a99d-6b4098b8582b",
+    "execution_batch_date": "2026-08-09T19:38:11.992Z",
+    "latency_ms": 7.4456,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "01d8016f-32c0-469c-aa3e-372451dbd4da",
+    "execution_batch_date": "2026-08-09T19:38:12.022Z",
+    "latency_ms": 7.1486,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a6eebaf2-e503-4c7f-afa3-515193e0a46c",
+    "execution_batch_date": "2026-08-09T19:38:12.051Z",
+    "latency_ms": 6.2591,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "766ab4ff-7757-4f8b-9894-d0ea258e825e",
+    "execution_batch_date": "2026-08-09T19:38:12.085Z",
+    "latency_ms": 8.9086,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "e4901606-70ad-45f8-9b44-fad2f9caf8f7",
+    "execution_batch_date": "2026-08-09T19:38:12.114Z",
+    "latency_ms": 7.3722,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "0244ba29-fd14-4a82-ae55-1fa015c1d0f4",
+    "execution_batch_date": "2026-08-09T19:38:12.147Z",
+    "latency_ms": 8.6513,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "888f1de0-23f2-4d99-bf37-1b5a6ae60215",
+    "execution_batch_date": "2026-08-09T19:38:12.178Z",
+    "latency_ms": 8.8717,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a35fa371-9826-48eb-ba0e-f316f6845dfb",
+    "execution_batch_date": "2026-08-09T19:38:12.209Z",
+    "latency_ms": 8.1302,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "a57e5625-c297-4ae4-b0cd-b1fd788ae59f",
+    "execution_batch_date": "2026-08-09T19:38:12.240Z",
+    "latency_ms": 8.0902,
+    "success": true,
+    "model_used": "google/gemini-2.5-flash",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "be190e97-a900-415b-a81f-57a9dacb05d6",
+    "execution_batch_date": "2026-08-09T19:38:12.272Z",
+    "latency_ms": 8.4722,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "0bd6a036-e11a-49ca-b0f4-ad8563e7fda5",
+    "execution_batch_date": "2026-08-09T19:38:12.302Z",
+    "latency_ms": 7.5421,
+    "success": true,
+    "model_used": "openai/gpt-4o",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  },
+  {
+    "request_id": "98da953c-efab-4266-8d92-7b989fecff19",
+    "execution_batch_date": "2026-08-09T19:38:12.333Z",
+    "latency_ms": 7.8338,
+    "success": true,
+    "model_used": "openai/gpt-4o-mini",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "timestamp": "2026-08-08T12:00:00.000Z"
+  }
+]

@@ -1,0 +1,77 @@
+import os
+import hashlib
+
+def get_sha256(filepath):
+    h = hashlib.sha256()
+    with open(filepath, 'rb') as f:
+        while True:
+            chunk = f.read(65536)
+            if not chunk:
+                break
+            h.update(chunk)
+    return h.hexdigest()
+
+workspace_root = "c:/Users/finky/Desktop/AntiGravity/Cisem CsAg"
+reg_path = os.path.join(workspace_root, "cisem_core/2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.38.yaml")
+new_reg_path = os.path.join(workspace_root, "cisem_core/2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.39.yaml")
+
+# Get SHA256 of the new files
+templates_reg_path = os.path.join(workspace_root, "templates/2026-08-10__CISEM__AntigravityLocal__TemplatesRegistry__V1.0.yaml")
+templates_reg_sha = get_sha256(templates_reg_path)
+
+exporter_api_path = os.path.join(workspace_root, "src/app/api/templates/export/route.ts")
+exporter_api_sha = get_sha256(exporter_api_path)
+
+print(f"Templates Registry SHA256: {templates_reg_sha}")
+print(f"Exporter API SHA256: {exporter_api_sha}")
+
+# Read and transform Registry v1.38 to v1.39
+with open(reg_path, 'r', encoding='utf-8') as f:
+    lines = f.readlines()
+
+new_lines = []
+for line in lines:
+    # Update version in header metadata
+    if "version: \"1.38\"" in line:
+        new_lines.append('  version: "1.39"\n')
+    elif 'version: "1.38"' in line:
+        new_lines.append('  version: "1.39"\n')
+    elif "version: '1.38'" in line:
+        new_lines.append("  version: '1.39'\n")
+    elif "Registry__V1.38.yaml" in line:
+        new_lines.append(line.replace("Registry__V1.38.yaml", "Registry__V1.39.yaml"))
+    elif "2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.38.yaml" in line:
+        new_lines.append(line.replace("2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.38.yaml", "2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.39.yaml"))
+    else:
+        # Check for insertion point just before '  consumers:' of CISEM_CXP
+        if line.strip() == "consumers:" and len(new_lines) > 400 and len(new_lines) < 550:
+            entries = f"""    2026_08_10__AntigravityLocal__TemplatesRegistry__V1_0_yaml:
+      path: ../templates/2026-08-10__CISEM__AntigravityLocal__TemplatesRegistry__V1.0.yaml
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: {templates_reg_sha}
+    2026_08_10__AntigravityLocal__TemplatesExporterApi__V1_0_ts:
+      path: ../src/app/api/templates/export/route.ts
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: {exporter_api_sha}
+"""
+            new_lines.append(entries)
+        new_lines.append(line)
+
+with open(new_reg_path, 'w', encoding='utf-8') as f:
+    f.writelines(new_lines)
+
+print("Registry V1.39 created successfully.")

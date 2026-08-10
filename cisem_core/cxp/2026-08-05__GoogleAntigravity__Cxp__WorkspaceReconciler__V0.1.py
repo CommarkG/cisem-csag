@@ -15,12 +15,45 @@ CISEM Workspace Registry Reconciler
 Version: 0.5
 Description: Executable proof verifying the Universal Workspace and Accountability Registry.
 """
-
 import os
 import sys
 import yaml
 import hashlib
 import re
+
+# Custom Exceptions
+class RegistryLoadError(Exception):
+    """Raised when the Universal Registry fails to load."""
+    pass
+
+class ReconciliationError(Exception):
+    """Raised when registry reconciliation fails."""
+    pass
+
+# Dynamic Config Import
+_cxp_dir = os.path.dirname(os.path.abspath(__file__))
+_core_dir = os.path.dirname(_cxp_dir)
+_platform_core_dir = os.path.join(_core_dir, "platform_core")
+if _platform_core_dir not in sys.path:
+    sys.path.insert(0, _platform_core_dir)
+
+try:
+    import importlib.util
+    config_module = None
+    if os.path.exists(_platform_core_dir):
+        for f in os.listdir(_platform_core_dir):
+            if "CisemConfig" in f and f.endswith(".py"):
+                spec = importlib.util.spec_from_file_location("CisemConfig", os.path.join(_platform_core_dir, f))
+                config_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(config_module)
+                break
+except Exception as e:
+    print(f"Warning: Failed to import CisemConfig dynamically: {e}")
+    config_module = None
+
+ROOT_DIR = config_module.ROOT_DIR if config_module else os.path.dirname(_core_dir)
+CORE_DIR = config_module.CORE_DIR if config_module else _core_dir
+REGISTRY_PATH = config_module.REGISTRY_PATH if config_module else os.path.join(CORE_DIR, "2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.4.yaml")
 
 # Metadata block
 METADATA = {
@@ -28,35 +61,9 @@ METADATA = {
     "canonical_location": "C:\\Users\\finky\\Desktop\\AntiGravity\\cisem_core\\cxp\\2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0.1.py",
     "artifact_status": "DRAFT",
     "maturity": "WORKING_DRAFT",
-    "version": "0.5",
+    "version": "0.6",
     "role_type": "CANONICAL_RECONCILER_SCRIPT"
 }
-
-CXP_DIR = os.path.dirname(os.path.abspath(__file__))
-CORE_DIR = os.path.dirname(CXP_DIR)
-ROOT_DIR = os.path.dirname(CORE_DIR)
-
-def find_latest_registry_file():
-    core_dir = os.path.join(ROOT_DIR, "cisem_core")
-    candidates = []
-    if os.path.exists(core_dir):
-        for f in os.listdir(core_dir):
-            if "Universal_Workspace_and_Accountability_Registry" in f and f.endswith(".yaml"):
-                v_match = re.search(r'__V(\d+(?:\.\d+)*)\.yaml$', f)
-                if v_match:
-                    try:
-                        version = [int(x) for x in v_match.group(1).split(".")]
-                    except ValueError:
-                        version = [0]
-                    candidates.append((version, os.path.join(core_dir, f)))
-    if candidates:
-        candidates.sort(key=lambda x: x[0], reverse=True)
-        return candidates[0][1]
-    return None
-
-REGISTRY_PATH = find_latest_registry_file()
-if not REGISTRY_PATH:
-    REGISTRY_PATH = os.path.join(CORE_DIR, "2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.4.yaml")
 
 class WorkspaceReconciler:
     def __init__(self):
@@ -65,15 +72,13 @@ class WorkspaceReconciler:
     def load_registry(self):
         """Loads and parses the YAML workspace registry."""
         if not os.path.exists(REGISTRY_PATH):
-            print(f"ERROR: Registry file not found at {REGISTRY_PATH}")
-            sys.exit(1)
+            raise RegistryLoadError(f"Registry file not found at {REGISTRY_PATH}")
         with open(REGISTRY_PATH, 'r') as f:
             docs = list(yaml.safe_load_all(f))
             for doc in docs:
                 if doc and "workspace" in doc:
                     return doc
-            print("ERROR: Workspace key not found in registry yaml.")
-            sys.exit(1)
+            raise RegistryLoadError("Workspace key not found in registry yaml.")
 
     def reconcile(self):
         print("=== CISEM Workspace Registry Reconciliation ===")
@@ -172,7 +177,7 @@ class WorkspaceReconciler:
         print(f"Reconciliation Result: {'SUCCESS' if is_valid else 'FAILURE'}\n")
         
         if not is_valid:
-            sys.exit(1)
+            raise ReconciliationError("Reconciliation validation failed. Anomalies detected.")
         
         return {
             "result": "SUCCESS",
@@ -182,8 +187,7 @@ class WorkspaceReconciler:
     def load_registry_docs(self):
         """Loads all documents in the registry YAML."""
         if not os.path.exists(REGISTRY_PATH):
-            print(f"ERROR: Registry file not found at {REGISTRY_PATH}")
-            sys.exit(1)
+            raise RegistryLoadError(f"Registry file not found at {REGISTRY_PATH}")
         with open(REGISTRY_PATH, 'r') as f:
             return list(yaml.safe_load_all(f))
 
@@ -200,8 +204,7 @@ class WorkspaceReconciler:
                 break
                 
         if not workspace_doc:
-            print("ERROR: Workspace document not found in registry.")
-            sys.exit(1)
+            raise RegistryLoadError("Workspace document not found in registry.")
             
         control_plane_subsystems = workspace_doc.get("control_plane_subsystems", [])
         updated_count = 0
@@ -252,8 +255,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     reconciler = WorkspaceReconciler()
-    if args.update_hashes:
-        reconciler.update_hashes()
-    else:
-        result = reconciler.reconcile()
-    sys.exit(0)
+    try:
+        if args.update_hashes:
+            reconciler.update_hashes()
+        else:
+            result = reconciler.reconcile()
+        sys.exit(0)
+    except (RegistryLoadError, ReconciliationError) as e:
+        print(f"FATAL ERROR: {e}")
+        sys.exit(1)

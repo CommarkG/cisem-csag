@@ -1,0 +1,9 @@
+[2026-08-09T19:40:55.932194Z] [Phase 14] CISEM_GATE_BLOCKED -- Phase 14: trial registry claims trial 'TRIAL-001' is complete, but no conclusion report exists.
+[2026-08-10T06:37:11.501168Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 6c1c399d34b4d7593aa7c6717be45b93724c3b6e2cfc81e17519c5cd10cc0232
+  Registered hash: 396ca3e9805adfae9fb910dc7cdfbc01881f0b60c769d291b9b28acc48c98eb4
+[2026-08-10T06:49:18.644274Z] [Phase 18] CISEM_GATE_BLOCKED -- Phase 18: Mega task failed expert audit panel validation.
+  Blast Radius: HIGH
+  Audit Scenario: security_handshake_bypass (SECURITY)
+  Verdict: BLOCKED
+  Rule: Mega tasks require an APPROVED verdict from all triggered expert audit personas.

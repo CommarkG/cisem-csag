@@ -1,0 +1,72 @@
+# CISEM Templates Federated Registry
+<!--
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: CISEM-IP-20260810-CONSOLIDATED-MASTER-V17
+# governor_signature: GOV-YARIV-20260810-GOVERNANCE-HARDENING-RATIFIED
+# version: V1.0
+# reasoning: |
+#   Federated templates registry decoupling UI assets from the main universal workspace registry.
+#   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >AX-50000.
+-->
+
+metadata:
+  owner: "CISEM_GOVERNOR"
+  canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\templates\\2026-08-10__CISEM__AntigravityLocal__TemplatesRegistry__V1.0.yaml"
+  artifact_status: "DRAFT"
+  maturity: "WORKING_DRAFT"
+  version: "1.0"
+  role_type: "TEMPLATES_REGISTRY"
+
+templates:
+  - id: "hero-layout-balanced"
+    name: "Balanced Hero Banner"
+    category: "Hero"
+    density: "balanced"
+    component_type: "hero"
+    visual_spec:
+      padding: "py-6"
+      alignment: "center"
+      primary_button_class: "px-4 py-2 bg-[var(--color-primary)] text-[var(--color-surface)] hover:bg-[var(--color-primary-hover)]"
+  - id: "hero-layout-condensed"
+    name: "Condensed Hero Banner"
+    category: "Hero"
+    density: "condensed"
+    component_type: "hero"
+    visual_spec:
+      padding: "py-3"
+      alignment: "center"
+      primary_button_class: "px-3 py-1 bg-[var(--color-primary)] text-[var(--color-surface)] hover:bg-[var(--color-primary-hover)]"
+  - id: "features-grid-balanced"
+    name: "Balanced Features Grid"
+    category: "Features"
+    density: "balanced"
+    component_type: "features"
+    visual_spec:
+      columns: 3
+      padding: "p-6"
+      card_class: "p-3 border border-[var(--color-border-custom)] rounded-[var(--radius-base)]"
+  - id: "features-grid-condensed"
+    name: "Condensed Features Grid"
+    category: "Features"
+    density: "condensed"
+    component_type: "features"
+    visual_spec:
+      columns: 3
+      padding: "p-3"
+      card_class: "p-2 border border-[var(--color-border-custom)] rounded-[var(--radius-base)]"
+  - id: "stats-counter-balanced"
+    name: "Balanced Stats Counter"
+    category: "Stats"
+    density: "balanced"
+    component_type: "stats"
+    visual_spec:
+      padding: "py-4"
+      card_class: "p-3 bg-[var(--color-primary-bg)]"
+  - id: "stats-counter-condensed"
+    name: "Condensed Stats Counter"
+    category: "Stats"
+    density: "condensed"
+    component_type: "stats"
+    visual_spec:
+      padding: "py-2"
+      card_class: "p-2 bg-[var(--color-primary-bg)]"

@@ -10,19 +10,19 @@ function findFileOptimized(filename: string): string | null {
   // Direct check locations in workspace
   // Direct check locations in workspace
   const directLocations = [
-    path.join(workspaceRoot, filename),
-    path.join(workspaceRoot, "cisem_core", filename),
-    path.join(workspaceRoot, "cisem_core", "planning", filename),
-    path.join(workspaceRoot, "cisem_core", "sandbox", filename),
-    path.join(workspaceRoot, "sandbox", filename),
+    workspaceRoot + "/" + filename,
+    workspaceRoot + "/cisem_core/" + filename,
+    workspaceRoot + "/cisem_core/planning/" + filename,
+    workspaceRoot + "/cisem_core/sandbox/" + filename,
+    workspaceRoot + "/sandbox/" + filename,
     "C:\\Users\\finky\\Desktop\\AntiGravity\\Sandbox Csag\\" + filename,
     "C:\\Users\\finky\\Desktop\\AntiGravity\\Sandbox Csag\\Marketing & Sales\\" + filename,
     "C:\\Users\\finky\\Desktop\\AntiGravity\\Sandbox Csag\\Marketing & Sales\\Image processing\\" + filename,
-    path.join(workspaceRoot, cleanTarget),
-    path.join(workspaceRoot, "cisem_core", cleanTarget),
-    path.join(workspaceRoot, "cisem_core", "planning", cleanTarget),
-    path.join(workspaceRoot, "cisem_core", "sandbox", cleanTarget),
-    path.join(workspaceRoot, "sandbox", cleanTarget),
+    workspaceRoot + "/" + cleanTarget,
+    workspaceRoot + "/cisem_core/" + cleanTarget,
+    workspaceRoot + "/cisem_core/planning/" + cleanTarget,
+    workspaceRoot + "/cisem_core/sandbox/" + cleanTarget,
+    workspaceRoot + "/sandbox/" + cleanTarget,
   ];
   
   for (const loc of directLocations) {
@@ -97,7 +97,7 @@ function findFileOptimized(filename: string): string | null {
       try {
         const entries = fs.readdirSync(currentDir, { withFileTypes: true });
         for (const entry of entries) {
-          const fullPath = path.join(currentDir, entry.name);
+          const fullPath = currentDir + "/" + entry.name;
           if (entry.isDirectory()) {
             if (![".git", "node_modules", ".next", "out"].includes(entry.name)) {
               queue.push(fullPath);
@@ -115,8 +115,8 @@ function findFileOptimized(filename: string): string | null {
 
   // Scan workspace subfolders only
   const fallbackDirs = [
-    path.join(workspaceRoot, "cisem_core"),
-    path.join(workspaceRoot, "src")
+    workspaceRoot + "/cisem_core",
+    workspaceRoot + "/src"
   ];
   for (const dir of fallbackDirs) {
     const found = findFileRecursively(dir, cleanTarget);

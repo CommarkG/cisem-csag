@@ -25,12 +25,18 @@ export function verifyTenantContext(req: NextRequest): TenantContext | null {
   const headerVal = req.headers.get("x-tenant-context");
 
   // Fallback for development if no signature and no secret is set
-  if (!secret && !headerVal) {
+  if (process.env.NODE_ENV === "development" && !secret && !headerVal) {
+    console.warn("CISEM_SECURITY_WARNING: Falling back to dev-tenant-1 admin context in development mode.");
     return {
       tenantId: "dev-tenant-1",
       tier: "enterprise",
       roles: ["admin", "developer"]
     };
+  }
+
+  if (process.env.NODE_ENV !== "development" && !secret) {
+    console.error("CISEM_SECURITY_ALERT: TENANT_SIGNING_SECRET is missing in production environment.");
+    return null;
   }
 
   if (!headerVal) {

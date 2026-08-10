@@ -269,4 +269,124 @@ ALTER TABLE proposal_items ADD COLUMN IF NOT EXISTS selected_variations TEXT[] D
 -- 24. Alter Catalog Items for Curated Recommendations (Phase 2)
 ALTER TABLE catalog_items ADD COLUMN IF NOT EXISTS top_picks BOOLEAN DEFAULT FALSE;
 
+-- 25. Create Role Definitions Table
+CREATE TABLE IF NOT EXISTS role_definitions (
+    code VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 26. Create Packages Table
+CREATE TABLE IF NOT EXISTS packages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    max_team_members INTEGER DEFAULT 3 NOT NULL,
+    max_landing_pages INTEGER DEFAULT 5 NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 27. Create Feature Registry Table
+CREATE TABLE IF NOT EXISTS feature_registry (
+    code VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 28. Create Package Feature Grants Table
+CREATE TABLE IF NOT EXISTS package_feature_grants (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    package_id UUID REFERENCES packages(id) ON DELETE CASCADE,
+    feature_code VARCHAR(50) REFERENCES feature_registry(code) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    UNIQUE(package_id, feature_code)
+);
+
+-- 29. Alter Customer Accounts (Link to Packages)
+ALTER TABLE customer_accounts ADD COLUMN IF NOT EXISTS package_id UUID REFERENCES packages(id) ON DELETE SET NULL;
+
+-- 30. Create Authenticated Users Table
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(150) UNIQUE NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE NOT NULL,
+    last_login_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 31. Create User Account Roles Join Table (Multi-Tenant Graph)
+CREATE TABLE IF NOT EXISTS user_account_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    customer_account_id UUID REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    role_code VARCHAR(50) REFERENCES role_definitions(code) ON DELETE CASCADE,
+    granted_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    UNIQUE(user_id, customer_account_id, role_code)
+);
+
+-- 32. Create Template Registry Table (Universal Solution Core)
+CREATE TABLE IF NOT EXISTS template_registry (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    serial_code VARCHAR(50) UNIQUE NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
+    category VARCHAR(50) NOT NULL,
+    layout_spec JSONB NOT NULL,
+    tags TEXT[] DEFAULT '{}'::text[] NOT NULL,
+    is_canonical BOOLEAN DEFAULT FALSE NOT NULL,
+    customer_account_id UUID REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    forked_from UUID REFERENCES template_registry(id) ON DELETE SET NULL,
+    status VARCHAR(50) DEFAULT 'draft' NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 33. Link Internal Ownership to CRM Tables
+ALTER TABLE deals ADD COLUMN IF NOT EXISTS assigned_user_id UUID REFERENCES users(id) ON DELETE SET NULL;
+ALTER TABLE contacts ADD COLUMN IF NOT EXISTS assigned_user_id UUID REFERENCES users(id) ON DELETE SET NULL;
+
+-- 34. Enable Row-Level Security on Core SaaS Tables
+ALTER TABLE template_registry ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_account_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE deals ENABLE ROW LEVEL SECURITY;
+
+-- 35. Inject RLS Policies for Tenant Isolation
+CREATE POLICY tenant_isolation_policy ON template_registry
+    FOR ALL
+    USING (customer_account_id IS NULL OR customer_account_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+CREATE POLICY tenant_isolation_policy ON user_account_roles
+    FOR ALL
+    USING (customer_account_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+CREATE POLICY tenant_isolation_policy ON contacts
+    FOR ALL
+    USING (customer_account_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+-- 36. Inject Join-based RLS Policy for Deals Table (references contacts)
+CREATE POLICY tenant_isolation_policy ON deals
+    FOR ALL
+    USING (contact_id IN (
+        SELECT id FROM contacts 
+        WHERE customer_account_id = coalesce(
+            nullif(current_setting('app.current_tenant_id', true), ''),
+            nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+        )::uuid
+    ));
+
 

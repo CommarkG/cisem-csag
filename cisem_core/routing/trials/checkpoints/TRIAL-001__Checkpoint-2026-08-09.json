@@ -1,0 +1,1892 @@
+[
+  {
+    "timestamp": "2026-08-09T19:38:07.979Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.018Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.047Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.077Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.111Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.141Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.170Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.205Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.235Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.267Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.298Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 1,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.328Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.358Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.387Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.418Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.450Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.481Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.512Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.540Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.573Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.604Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.636Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.666Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.697Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.727Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.759Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.789Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.821Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.851Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.883Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.914Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.944Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:08.976Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 1,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.007Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.037Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.068Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.099Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.132Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.161Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.192Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.223Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 1,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.254Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.284Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.314Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.345Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.378Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.408Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.439Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 1,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.472Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 1,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.502Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.532Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.563Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.593Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 1,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.625Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.655Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.686Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.716Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.747Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.778Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.808Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.840Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.870Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.903Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 1,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.934Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.964Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:09.995Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.026Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.057Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.088Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.119Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.150Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.181Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.212Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.243Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.272Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.304Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.336Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.381Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.411Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.442Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.473Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.504Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.535Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.565Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.596Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.629Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.660Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.690Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.723Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.752Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.785Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.816Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.846Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.876Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.907Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.940Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:10.969Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.001Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.034Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.079Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.110Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.140Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.172Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.203Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.233Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.263Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.293Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.326Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.358Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.388Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.419Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.448Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.481Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.512Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.543Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.572Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.605Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.649Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.680Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.712Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.743Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.775Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.805Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.834Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.865Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.896Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.926Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.957Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:11.988Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.018Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.048Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.080Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.110Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.142Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.172Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.205Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.237Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.268Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.299Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.331Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.359Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 1,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.392Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 1,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.421Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.454Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.482Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.515Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.546Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.578Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.608Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.638Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.669Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.700Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.731Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.762Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.792Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.823Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.854Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.885Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.916Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.949Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:12.978Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.011Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.042Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.074Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.106Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.136Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.168Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.197Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.231Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.261Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.292Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.323Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.354Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.383Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.415Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.446Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.477Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.507Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.537Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.570Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.600Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.631Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.662Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.693Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 1,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.724Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.755Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.787Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.817Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.847Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.878Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.907Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.939Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 1,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:13.968Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.001Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.031Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.062Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.091Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.122Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.154Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.185Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.214Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.246Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.277Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.308Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 1,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.339Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.368Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.400Z",
+    "strategy": "Four-Tier",
+    "taskType": "reasoning",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.431Z",
+    "strategy": "Four-Tier-Validator",
+    "taskType": "trivial",
+    "model_used": "openai/gpt-4o-mini",
+    "latency_ms": 0,
+    "cost_usd": 0.00012749999999999998,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.462Z",
+    "strategy": "Control",
+    "taskType": "conversational",
+    "model_used": "google/gemini-2.5-flash",
+    "latency_ms": 0,
+    "cost_usd": 0.00004125,
+    "success": true
+  },
+  {
+    "timestamp": "2026-08-09T19:38:14.493Z",
+    "strategy": "Two-Tier",
+    "taskType": "security",
+    "model_used": "openai/gpt-4o",
+    "latency_ms": 0,
+    "cost_usd": 0.0022500000000000003,
+    "success": true
+  }
+]

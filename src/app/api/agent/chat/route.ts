@@ -161,6 +161,38 @@ async function executeTwentyTool(name: string, args: Record<string, any>) {
   return { error: 'Unknown tool' }
 }
 
+function incrementTurnCounter() {
+  try {
+    const counterPath = path.join(process.cwd(), 'cisem_core', 'cisem_turn_counter.json');
+    if (fs.existsSync(counterPath)) {
+      const counterData = fs.readFileSync(counterPath, 'utf8');
+      const counter = JSON.parse(counterData);
+      
+      counter.current_turn = (counter.current_turn || 0) + 1;
+      
+      if (!counter.turns_log) {
+        counter.turns_log = [];
+      }
+      counter.turns_log.push({
+        timestamp: new Date().toISOString(),
+        action: "chat_api_call"
+      });
+      
+      const ceiling = counter.turn_limit_ceiling || 15;
+      if (counter.current_turn >= ceiling) {
+        counter.audit_due = true;
+      }
+      
+      fs.writeFileSync(counterPath, JSON.stringify(counter, null, 2), 'utf8');
+      console.log(`[Turn Counter] Incremented to ${counter.current_turn}`);
+    } else {
+      console.warn('[Turn Counter] File not found at:', counterPath);
+    }
+  } catch (err: any) {
+    console.error('[Turn Counter] Failed to increment turn counter:', err.message);
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { messages, tenantId } = await req.json()
@@ -292,6 +324,7 @@ Rules:
         finalResponseText = 'Thanks! Let me know if you have any questions.'
       }
 
+      incrementTurnCounter();
       return NextResponse.json({
         role: 'assistant',
         content: finalResponseText,
@@ -393,6 +426,7 @@ Rules:
       finalResponseText = 'Thanks! Let me know if you have any questions.'
     }
 
+    incrementTurnCounter();
     return NextResponse.json({
       role: 'assistant',
       content: finalResponseText,

@@ -1,0 +1,1160 @@
+# CISEM Universal Workspace and Accountability Registry
+
+metadata:
+  owner: CISEM_GOVERNOR
+  canonical_location: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.40.yaml
+  artifact_status: DRAFT
+  maturity: WORKING_DRAFT
+  version: '1.40'
+  inherited_authorities:
+  - CISEM Project Constitution
+  related_implementation_adapter: GOOGLE_ANTIGRAVITY_ADAPTER
+  local_edits_allowed: true
+  role_type: UNIVERSAL_WORKSPACE_REGISTRY
+history:
+- timestamp: '2026-08-10T12:15:00Z'
+  action: COMPLETED_CORE_CYCLE_7_DEPENDENCY_MAPPER_AND_GENERATED_MERMAID_GRAPH
+  actor: Gemini 3.5 (Antigravity)
+  version: '1.40'
+- timestamp: '2026-08-10T09:50:00Z'
+  action: REGISTERED_DYNAMIC_CISEN_CONFIG_AND_AUDIT_DAEMON_MODULES
+  actor: Gemini 3.5 (Antigravity)
+  version: '1.39'
+- timestamp: '2026-08-10T08:14:00Z'
+  action: RELOCATED_CISEM_GATE_TO_PLATFORM_CORE_AND_UPGRADED_PHASES_15_17
+  actor: Gemini 3.5 (Antigravity)
+  version: '1.37'
+- timestamp: '2026-08-10T07:30:00Z'
+  action: UPDATED_PLANNING_MODE_HASH_FOR_PLANNING_RESET
+  actor: Gemini 3.5 (Antigravity)
+  version: '1.36'
+- timestamp: '2026-08-10T05:07:00Z'
+  action: UPDATED_PLANNING_MODE_HASH_FOR_EXECUTION_TRANSITION
+  actor: Gemini 3.5 (Antigravity)
+  version: '1.35'
+- timestamp: '2026-08-10T03:22:00Z'
+  action: RESOLVED_PAGE_ISSUES_GLOBAL_FLATTENING_AND_TURBOPACK_WARNINGS
+  actor: Gemini
+  version: '1.34'
+- timestamp: '2026-08-10T00:00:00Z'
+  action: REFACTORED_HOMEPAGE_TO_CLASSICAL_RECTANGULAR_THEME_WITH_RED_ACCENTS
+  actor: Gemini
+  version: '1.33'
+- timestamp: '2026-08-09T23:26:00Z'
+  action: IMPLEMENTED_THRESHOLD_INGESTION_SIMULATOR_WORKSPACE_MOCKUP
+  actor: Gemini
+  version: '1.32'
+- timestamp: '2026-08-09T22:40:00Z'
+  action: COMPLETED_TRIAL-001_VERIFICATION_AND_COMMITTED_TELEMETRY
+  actor: Sonnet
+  version: '1.31'
+- timestamp: '2026-08-09T22:20:00Z'
+  action: IMPLEMENTED_MECHANICAL_IMMUNITY_IMMUTABLE_ENFORCEMENT_PILLAR_100000
+  actor: Sonnet
+  version: '1.30'
+- timestamp: '2026-08-07T23:38:00Z'
+  action: FORMALIZED_PLATFORM_LEVEL_SANDBOX_AND_PLAYGROUND_WITH_HASHES
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.5'
+- timestamp: '2026-08-08T16:47:00Z'
+  action: ADDED_SANDBOX_AUDIT_REPORT_TO_REGISTRY_AND_FORMALIZED_PIPELINE
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.9'
+- timestamp: '2026-08-08T15:43:33Z'
+  action: RATIFIED_SAAS_AGENT_AND_VECTOR_SEARCH_SHADOW_CODE_FILES
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.10'
+- timestamp: '2026-08-08T16:01:47Z'
+  action: PRODUCTION_CRM_API_ROUTING_VERIFIED_AND_HASHED
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.11'
+- timestamp: '2026-08-08T16:07:23Z'
+  action: REGISTERED_LOOSE_SPECIFICATION_PAGES_AND_ORCHESTRATOR_ASSETS
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.12'
+- timestamp: '2026-08-08T16:23:53Z'
+  action: FINALIZED_STAGING_TEST_HASHES_RECONCILED
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.13'
+- timestamp: '2026-08-08T18:46:09.884417Z'
+  action: INTEGRATED_5_DIGIT_NAMING_SCHEMAS_HARDENED_GATE_TEETH_CONSOLIDATED_COMPONENT_SALAD
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.14'
+- timestamp: '2026-08-08T23:46:00Z'
+  action: REGISTERED_SANDBOX_AND_ACCOUNTABILITY_BLUEPRINTS_INCREMENTED_TO_V1.15
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.15'
+- timestamp: '2026-08-08T23:55:00Z'
+  action: REGISTERED_SANDBOX_THRESHOLD_PROTOCOL_SPEC_INCREMENTED_TO_V1.16
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.16'
+- timestamp: '2026-08-09T00:12:00Z'
+  action: REGISTERED_ACCOUNTABILITY_DASHBOARD_API_ROUTE_AND_AXIOMS_V1.24
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.17'
+- timestamp: '2026-08-09T10:10:00Z'
+  action: REGISTERED_CLOUD_ROUTED_OPENROUTER_API_AGENT_CHAT_INTEGRATION
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.18'
+- timestamp: '2026-08-09T10:18:00Z'
+  action: INTEGRATED_GIT_DIFF_OPTIMIZATION_IN_COMPILATION_GATE
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.19'
+- timestamp: '2026-08-09T10:53:00Z'
+  action: HARDWIRED_PERMANENT_PLANNING_MODE_LOCK_AND_GATE_HOOKS
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.20'
+- timestamp: '2026-08-09T19:24:00Z'
+  action: COMPLETED_TEMPLATE_HUB_AND_WEB_PAGES_PERMISSION_WIRING
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.21'
+- timestamp: '2026-08-09T19:37:00Z'
+  action: IMPLEMENTED_MULTI_DIMENSIONAL_VALIDATION_STATUS_TAXONOMY_PLAN
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.22'
+- timestamp: '2026-08-09T19:43:00Z'
+  action: ENRICHED_ENTERPRISE_GUIDELINES_AND_AXIOM_DONE_DEFINITION_V1.25
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.23'
+- timestamp: '2026-08-09T20:01:00Z'
+  action: REGISTERED_TENANT_CONTEXT_VALIDATION_IMPLEMENTATION_PLAN
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.25'
+- timestamp: '2026-08-09T20:03:00Z'
+  action: ENFORCED_BEDROCK_ENTERPRISE_AXIOMS_V1.26_AND_EXECUTED_TENANT_CONTEXT_PLAN
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.26'
+- timestamp: '2026-08-09T20:04:00Z'
+  action: COMPLETED_TENANT_CONTEXT_VALIDATION_WALKTHROUGH_AND_RELOCKED_PLANNING
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.27'
+- timestamp: '2026-08-09T20:12:00Z'
+  action: COMPLETED_MODEL_ROUTER_INTEGRATION_PLANNING_AND_DOCKER_MAPPING
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.28'
+- timestamp: '2026-08-09T18:08:06Z'
+  action: RATIFIED_AX-75000_DECISION_PIPELINE_AND_TRIAL_REGISTRY_WITH_CLEANUP
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.29'
+---
+workspace:
+  root_path: .
+  registry_id: CISEM_WORKSPACE_REGISTRY
+  last_reconciled_at: '2026-08-09T18:08:06Z'
+  registry_status: ACTIVE
+control_plane_subsystems:
+- subsystem_id: CISEM_CXP
+  name: CISEM Exchange Protocol
+  ownership_layer: CISEM_CORE
+  canonical_directory: ./cisem_core
+  maturity: WORKING_IMPLEMENTATION
+  status: ACTIVE
+  canonical_artifacts:
+    specification:
+      path: 2026-08-05__CISEM__CXP__Specification__V1.2.md
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 59d287721313deeadc9b1d72429d03850b3d1ac85add5c100af76a80331df57c
+    packet_schema:
+      path: 2026-08-05__CISEM__CXP__PacketSchema__V1.2.schema.json
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 49a1c7258c9022b980192a269fc5fc7625fc7e6a455dc2da2c995d3002ced025
+    state_transition_matrix:
+      path: 2026-08-05__CISEM__CXP__StateTransitionMatrix__V1.3.yaml
+      version: '1.3'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 563d59e6ff9d62199269be08b80cb072dcbc6ebc72bd4f841083e32cc601e365
+    intent_registry:
+      path: 2026-08-05__CISEM__CXP__IntentRegistry__V1.2.yaml
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 7b6d1453031555912a105002bf569d1d664e360e3c9046bbbd143471378a82d7
+    capability_registry:
+      path: 2026-08-05__CISEM__CXP__CapabilityRegistry__V1.2.yaml
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 93fcf4726bec895296fdc289544ef44acfbf11ba8846fbc1e2ed654ce292a081
+    completeness_matrix:
+      path: 2026-08-05__CISEM__CXP__CompletenessMatrix__V1.2.yaml
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 4d278e5d8b6e326ef50dc3864c23e2964d7f803899c1ce826ff5057c6902e6d8
+    saas_reference:
+      path: cxp/2026-08-08__GeminiAI__AntigravityLocal__MultiTenantSaaSArchitectureReference__V1.0.md
+      version: '1.0'
+      status: RATIFIED
+      sha256: 4e03a542792bb8835c8069130dc57bbbed36b66f94100d0f7a2043348b2092b2
+    sales_vector_reference:
+      path: cxp/2026-08-08__GeminiAI__AntigravityLocal__SaaS_AutonomousSales_And_VectorSearch_Reference__V1.0.md
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: f7d038e32f9d835676837a539d4802d4412560c5d31215c8438317691117c05c
+    saas_llm_routers_reference:
+      path: cxp/2026-08-08__GeminiAI__AntigravityLocal__SaaS_LLM_Routers_Reference__V1.0.md
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 460b1462cf5114b68f7227aeee0b64e580bdf34074072b27a961d580c47e79aa
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1_0_ts:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1.0.ts
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: c88cfb2763f16d62992c173cecf82b5d889eb51d83420efe9e39b6fc3cbc67af
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatWidgetComponent__V1_0_tsx:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatWidgetComponent__V1.0.tsx
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: e15867923dd02865a776749bd700263e27d0a75378bc432f298962c1ed34fce2
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_PayloadCatalogEnrichmentHook__V1_0_ts:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PayloadCatalogEnrichmentHook__V1.0.ts
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 2b6d3519930854dcc52305542525dc61b87edd4199fd72b8be086b0dad47e308
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_PayloadMediaCollectionSchema__V1_0_ts:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PayloadMediaCollectionSchema__V1.0.ts
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 6233b35dc22299c053d09b2c49e0bf402d07ab476fd27b117e74f15169e08763
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_GeminiMultiModalEmbeddingService__V1_0_py:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_GeminiMultiModalEmbeddingService__V1.0.py
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 31fb16a90745bddbdc6f5e52a1ee3f4cc764ceeb463c34587dba9ac24a87a5cf
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_PGVectorMultiTenantSearchService__V1_0_py:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PGVectorMultiTenantSearchService__V1.0.py
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 98bab278d37624246311af2ef20017c46eea6f018e9a322e204c31656c3f0033
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_PGVectorPartitionedSchema__V1_0_sql:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PGVectorPartitionedSchema__V1.0.sql
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 4724bad15984003fdd0b62a3023d935aa2829efced0eb520a5105791402ee964
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AI_CoreComponents__V1_0_zip:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AI_CoreComponents__V1.0.zip
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 883a234024c537ca8f8bdc1e0d67cc7764a13de6fd9aff0f5421e8d672c1f24e
+    packet_schema_html:
+      path: 2026-08-05__CISEM__CXP__PacketSchema__V1.2.html
+      version: '1.2'
+      status: RATIFIED
+      sha256: f5ca7513a8b960b334eaab3b824c5fa82ab64ae8d968c66e9249fd9b511b4209
+    gas_orchestrator_js:
+      path: cxp/2026-08-05__GoogleAntigravity__Cxp__GasOrchestrator__V0.1.js
+      version: '0.1'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 28e97223e7d9134f58f700e9bf50ce52a34d3d69df7d2dd96580903db323a22c
+    marketing_workspace_spec_txt:
+      path: cxp/specs/3100__CISEM__Google_Antigravity__Marketing_Execution_Workspace__Root_and_Index__V0.1.txt
+      version: '0.1'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: cb9428a368268805c0a78b8932ff00f9a76f36b441cfc2c11dc58a6bae2dbd86
+    human_bridge_spec_txt:
+      path: cxp/specs/3110__CISEM__Google_Antigravity__Human_Bridge_and_File_Absorption_Protocol__V0.1.txt
+      version: '0.1'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 203e89b7e3b7780487b8615f5af784dd33e4e0e29118d756bc0b75af2d0284b0
+    decision_register_spec_txt:
+      path: cxp/specs/3120__CISEM__Google_Antigravity__Clarification_and_Decision_Register__V0.1.txt
+      version: '0.1'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 74e32784c2c98b74f110db0ba33c9c92b1bfd95d289ced9dea1a399140ea21ce
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1_1_ts:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1.1.ts
+      version: '1.1'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: b10de30f8c0a1afe1f6ef7a692823414521970c28150fffcbe40632aabc5f843
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AI_CoreComponents__V1_1_zip:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AI_CoreComponents__V1.1.zip
+      version: '1.1'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 46f406a3075ff29db1375999ffdc29747449ad81f0f7d4075a18b748f43b3cf6
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1_2_ts:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1.2.ts
+      version: '1.2'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 28301fc272cde63aac4b816cc1adaf68fc643c874012405d97e02adb1658e2ea
+    2026_08_09__AntigravityLocal__YarivHuman__SaaS_AutonomousSales_ChatApiRoute__V1_3_ts:
+      path: ../src/app/api/agent/chat/route.ts
+      version: '1.3'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 8aee93652efe0493a029d528f2e19049bb0538da17e169e12f66b8d4d56f1a9b
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_RootLayoutComponent__V1_0_tsx:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_RootLayoutComponent__V1.0.tsx
+      version: '1.0'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 4d0718a7ada3f6253fe4bd58708d026bfe502a254f7e9990a100d911089404ec
+    2026_08_08__AntigravityLocal__YarivHuman__SaaS_AI_CoreComponents__V1_2_zip:
+      path: code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_AI_CoreComponents__V1.2.zip
+      version: '1.2'
+      status: RAW
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: c89357915804e4ac9a54376f93e10c9b1c8da230dffe463cba167b26b190f9e7
+    2026_08_10__AntigravityLocal__CisemGateScript__V2_9_py:
+      path: platform_core/cisem_gate.py
+      version: '2.9'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 02bc057b2c5011a84074c2bc138f6a6d2909ccca514324a28df4db38285fd2b6
+    2026_08_10__AntigravityLocal__CisemConfig__V1_0_py:
+      path: platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 0e4d3d9d869ed7427abc2eb72ca881729833fea9ac3866270c0ab0e725e9ebc9
+    2026_08_10__AntigravityLocal__ContinuousAuditorDaemon__V1_0_py:
+      path: platform_core/2026-08-10__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.0.py
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 5506670ee0fc1c824f1d75072efad895c22ef933fe961b356b49a5305da74349
+    2026_08_10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1_0_py:
+      path: platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 7f998606ae4332b0505c9b8befe25527dd304d866761674f6f724741d848a88e
+    2026_08_10__CISEM__AntigravityLocal__SystemDependenciesMap__V1_0_md:
+      path: ../2026-08-10__CISEM__AntigravityLocal__SystemDependenciesMap__V1.0.md
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: a1f70f76561ceaac45219e23de4c2e13bad10a8d400927b1235e7078b79390a1
+    2026_08_09__AntigravityLocal__YarivHuman__CisemPlanningModeLock__V1_1_json:
+      path: planning/cisem_planning_mode.json
+      version: '1.1'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: d4993a1e68dbf4969c3cb0d44d9663d133e6afa1b2afca0bb6c9131f91ced250
+    2026_08_09__AntigravityLocal__YarivHuman__SaaS_ClientMainPage__V1_1_tsx:
+      path: ../src/app/page.tsx
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: e24f4bc23bcae5cd2d2e3b4682d57054626964234b15bbeb5df990de79398be7
+    2026_08_10__AntigravityLocal__TemplatesRegistry__V1_0_yaml:
+      path: ../templates/2026-08-10__CISEM__AntigravityLocal__TemplatesRegistry__V1.0.yaml
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 5bb561a1c65c8f87245297eb6c9096e00d1ab31ed9f6c976b2aa1cb219583af1
+    2026_08_10__AntigravityLocal__TemplatesExporterApi__V1_0_ts:
+      path: ../src/app/api/templates/export/route.ts
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 9c7321e2e57855e1c82aa668f1a06958a9d19b13843d420d8c429e9329075bb5
+  consumers:
+  - SUPPLIER_SCRAPER
+  validation:
+    bootstrap_status: PASSED
+    integration_status: VERIFIED
+    latest_evidence: RESTORED_WORKSPACE_CORE_SPINE_ALIGNED_CXP
+- subsystem_id: CISEM_PLANNING
+  name: CISEM Planning Control Plane
+  ownership_layer: CISEM_CORE
+  canonical_directory: ./cisem_core/planning
+  maturity: WORKING_IMPLEMENTATION
+  status: ACTIVE
+  canonical_artifacts:
+    specification:
+      path: 2026-08-07__CISEM__Planning__Specification__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 8800cfd76233550f8c5797f46f307ab4dc825bc4c47c7932639261b2401ac108
+    plan_ingestor:
+      path: 2026-08-07__GoogleAntigravity__Planning__PlanIngestor__V0.2.py
+      version: '0.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 8ae49d774163f9f44f7ea3dc7bb66a79e34a501594b6e2f54c49804274227ed6
+    enterprise_scale_architecture_blueprint:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__EnterpriseScaleArchitectureBlueprint__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: d818e4b5cb8b30f2ba728707eb6da7855aba8faaa859057cfbc0f6d2dbfc56d2
+    sandbox_system_schema_and_structure:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__SandboxSystemSchemaAndStructure__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 8b5f0f37bae544b43be811c6a1b54d0b36097f30dff12fd66c869407795a3b0a
+    project_management_and_accountability_framework:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__ProjectManagementAndAccountabilityFramework__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 7514182f5a3a61a890bf1388657422e577c2b3c49700ac8a75c1a8034b691c4b
+    knowledge_management_and_platform_dna_enforcement_specification:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__KnowledgeManagementAndPlatformDnaEnforcement__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: d33efeda944ae45964edaa9ed703be662ffd879bf02105814289e2196529e8b1
+    persona_audit_report_on_sandbox_positioning:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__PersonaAuditSandboxPositioning__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 7c5227037663d3e3b7529da631e735bfa2ef48f8daa0c17e2ba05cac72b7642a
+    sandbox_threshold_protocol:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__SandboxThresholdProtocol__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 4374aa84de8546336ec36f6dbd10bd4ce8260abfe38da84854b12b917559bdec
+    unique_mechanisms_usage_report:
+      path: 2026-08-08__AntigravityLocal__YarivHuman__UniquePlatformMechanismsUsageReport__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: bc69bd9d5f6bbba7913fefbd81d0f48c1fc53514c348cc2ff8db8a2ee3c04465
+    2026_08_09__AntigravityLocal__YarivHuman__AccountabilityDashboardApiRoute__V1_1_ts:
+      path: ../../src/app/api/dashboard/route.ts
+      version: '1.1'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 80009c6b671ae6f471c2b251a92a4ac0af245168fecf5c5ae6589323d28837a8
+    2026_08_09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1_0_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 8ec12b25679c0e7ea51be9b2dc1f07d8de497fc478f2137186f25a81d8e24f62
+    2026_08_09__AntigravityLocal__YarivHuman__Permanent_Planning_Mode_and_State_Locked_Gate_Plan__V1_0_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__Permanent_Planning_Mode_and_State_Locked_Gate_Plan__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 07175bb31c41acf506bfa0d51094c7a79972c3a4af9a334f157208aa25934824
+    2026_08_09__AntigravityLocal__YarivHuman__TemplateHub_WebPages_Permission_Wiring_Plan__V1_2_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__TemplateHub_WebPages_Permission_Wiring_Plan__V1.2.md
+      version: '1.2'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 9e379a3fd2ced6a430790ce6020401f90a5ce139fcb47d0d2fc91effd84d8155
+    2026_08_09__AntigravityLocal__YarivHuman__TemplateHub_WebPages_Permission_Wiring_Walkthrough__V1_0_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__TemplateHub_WebPages_Permission_Wiring_Walkthrough__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 9ffe9a3a84502f155ce851150e634270d280dccf39e36d126a56a2ef4628295f
+    2026_08_09__AntigravityLocal__YarivHuman__Tenant_Context_Validation_Implementation_Plan__V1_0_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__Tenant_Context_Validation_Implementation_Plan__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 0a2f250ad39460fe7bf56c344f2844b1975b0ee6c20d231925975732e2043ece
+    2026_08_09__AntigravityLocal__YarivHuman__TenantContextValidationHelper__V1_0_ts:
+      path: ../../src/lib/tenant_context.ts
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: bd5f736aef52f46c3db55d02c2a1eb87b81af746534a1ac6fcfdbeb6637f2256
+    2026_08_09__AntigravityLocal__YarivHuman__TenantContextValidationVerificationScript__V1_0_py:
+      path: ../sandbox/2026-08-09__AntigravityLocal__YarivHuman__TenantContextValidationVerificationScript__V1.0.py
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 1f023003e22588a3b1e78f6472bff2b3abd7a4c834264c91351852110832c835
+    2026_08_09__AntigravityLocal__YarivHuman__TenantContextValidationWalkthrough__V1_0_md:
+      path: ../../2026-08-09__AntigravityLocal__YarivHuman__TenantContextValidationWalkthrough__V1.0.md
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 907cb0b2b75c031acbc33e327a471704db2e8e5182531d0db3c48909abcf03c8
+    2026_08_09__AntigravityLocal__YarivHuman__ModelRouterArchitectureBlueprint__V1_0_md:
+      path: 2026-08-09__AntigravityLocal__YarivHuman__ModelRouterArchitectureBlueprint__V1.0.md
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 635417e5cf197e698cc0d3e4c1864c1959666d123ae9276fc63b43abc4ecc918
+    2026_08_09__AntigravityLocal__YarivHuman__ModelRouterDockerfile__V1_0:
+      path: ../routing/Dockerfile
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 494487770bbaa9dea915e80971640796d162458d20f8e5e98e71bdc0578f03b3
+    2026_08_09__AntigravityLocal__YarivHuman__ModelRouterDockerCompose__V1_0:
+      path: ../routing/docker-compose.yml
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: a35f04f1c14812521b013c0cdf0c4f5e01243ac2010ea889c8c480af4de7ff98
+    axioms_and_principles_md:
+      path: ../../2026-08-10__Gemini3.5__YarivHuman__AxiomsAndPrinciples__V1.30.md
+      version: '1.30'
+      status: RATIFIED
+      sha256: b2337312a76a4e1befe2eeea816dec570575eb34a36d15a15fbee8ffa2fd738d
+    vocabulary_md:
+      path: ../../2026-08-07__CISEM__AntigravityLocal__Vocabulary__V1.13.md
+      version: '1.13'
+      status: RATIFIED
+      sha256: dc1d7d9822c328c356bc800c7662b7ebfd6988df5ed1312270c5ae9e040ced9e
+    trial_registry_yaml:
+      path: ../trials/trial_registry.yaml
+      version: '1.0'
+      status: DRAFT
+      sha256: 00d38b39b8ea14d93540d18c9626a5be838afbcf721e51ee3ea94c90cab0acd8
+    2026_08_09__Sonnet__YarivHuman__Trial001Runner__V1_0:
+      path: ../trials/2026-08-09__Sonnet__YarivHuman__Trial001Runner__V1.0.ts
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: f5997dae767de671e0a47145672b0b85e9b1e7a9aa6f6711b297db0c45b439ce
+    2026_08_09__Sonnet__YarivHuman__TRIAL_001_ConclusionReport__V1_0_md:
+      path: ../trials/conclusions/TRIAL-001__ConclusionReport__Sonnet__YarivHuman__ModelRouting__V1.0.md
+      version: '1.0'
+      status: RATIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: 92b8168de07a029aa50aea6dfb704148eedc1d91dd6cafe35a255776e9fb87bc
+    decision_maturity_pipeline_md:
+      path: ../protocols/2026-08-09__CISEM__DecisionMaturityPipeline__V1.0.md
+      version: '1.0'
+      status: RATIFIED
+      sha256: 4b6478869d90b2c4ac5b32d11d64bf7e08af31eb514aa8ae8e3c6fbe4fedf605
+  consumers:
+  - SUPPLIER_SCRAPER
+  validation:
+    bootstrap_status: PASSED
+    integration_status: VERIFIED
+    latest_evidence: PLANNING_CONTROL_PLANE_BOOTSTRAPPED
+- subsystem_id: CISEM_COMMUNICATION
+  name: CISEM Communication Control Spine
+  ownership_layer: CISEM_CORE
+  canonical_directory: ./
+  maturity: WORKING_IMPLEMENTATION
+  status: ACTIVE
+  canonical_artifacts:
+    specification:
+      path: 2026-08-07__CISEM__AntigravityLocal__CommunicationSpecification__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: fec41e6ca26f4a826558fad56f49294577953f4c1f30fe3c6eb58c3e63c3d14f
+    cleanup_evidence_log_md:
+      path: cisem_core/2026-08-07__CISEM__AntigravityLocal__CleanupEvidenceLog__V1.5.md
+      version: '1.5'
+      status: RATIFIED
+      sha256: 5d70c8fb28efbe879159c95216e8edf0ed539e1507ed3d04ba15815b0a2b7a31
+    cleanup_evidence_log_v16_md:
+      path: cisem_core/2026-08-10__CISEM__AntigravityLocal__CleanupEvidenceLog__V1.6.md
+      version: '1.6'
+      status: RATIFIED
+      sha256: b51265221b121911cd2cf3d73e0d298fe0fc2141d7d77e7375216757799d719b
+  consumers:
+  - SUPPLIER_SCRAPER
+  validation:
+    bootstrap_status: PASSED
+    integration_status: VERIFIED
+    latest_evidence: COMMUNICATION_SPINE_RATIFIED
+- subsystem_id: CISEM_TRACEABILITY
+  name: CISEM Traceability Overlay
+  ownership_layer: CISEM_CORE
+  canonical_directory: ./
+  maturity: WORKING_IMPLEMENTATION
+  status: ACTIVE
+  canonical_artifacts:
+    specification:
+      path: 2026-08-07__CISEM__AntigravityLocal__TraceabilitySpecification__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: f51ebc57b21875d89e6be266f21e35191493e7e46070b4ac0087af67830bdb34
+  consumers:
+  - SUPPLIER_SCRAPER
+  validation:
+    bootstrap_status: PASSED
+    integration_status: VERIFIED
+    latest_evidence: TRACEABILITY_OVERLAY_RATIFIED
+- subsystem_id: CISEM_PLAN_PROTOCOL
+  name: CISEM Plan Creation Protocol
+  ownership_layer: CISEM_CORE
+  canonical_directory: ./
+  maturity: WORKING_IMPLEMENTATION
+  status: ACTIVE
+  canonical_artifacts:
+    specification:
+      path: 2026-08-07__CISEM__AntigravityLocal__PlanProtocolSpecification__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: c114f1ae07e9a88ccd95321ec76ec220fffbeff0f4522f9ff41c9a7bdce002a4
+  consumers:
+  - SUPPLIER_SCRAPER
+  validation:
+    bootstrap_status: PASSED
+    integration_status: VERIFIED
+    latest_evidence: PLAN_PROTOCOL_RATIFIED
+platform_adapters:
+- adapter_id: GOOGLE_ANTIGRAVITY_ADAPTER
+  platform: WINDOWS_POWERSHELL
+  ownership_layer: PLATFORM_ADAPTER
+  canonical_directory: ./cisem_core
+  bootstrap_instruction: python cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpAdapter__V0.1.py
+    --generate-bootstrap
+  capability_profile: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__CXP__CapabilityRegistry__V1.2.yaml
+  current_version: '0.1'
+  status: ACTIVE
+  supported_transports:
+  - TRANSPORT_MARKETING_DRIVE
+  active_projects:
+  - SUPPLIER_SCRAPER
+  last_verified_at: '2026-08-07T01:42:00Z'
+- adapter_id: CLAUDE_CODE_ADAPTER
+  platform: POSIX_BASH
+  ownership_layer: PLATFORM_ADAPTER
+  canonical_directory: ./cisem_core
+  bootstrap_instruction: UNVERIFIED
+  capability_profile: UNVERIFIED
+  current_version: none
+  status: UNVERIFIED
+  validation_metrics:
+    flow_completion: VERIFIED
+    code_implementation: COMPLETE
+    optimization: OPTIMIZED
+    consolidation: CONSOLIDATED
+    permission_compliance: ENFORCED
+  supported_transports: []
+  active_projects: []
+  last_verified_at: UNVERIFIED
+projects:
+- project_id: SUPPLIER_SCRAPER
+  alignment_approved: true
+  name: Supplier Scraper
+  ownership_layer: PROJECT
+  directory: Supplier Scraper CsAg
+  maturity: DEVELOPMENT
+  status: ACTIVE
+  goal: Perform automated supply and vendor listings crawling and parsing.
+  active_finish_line: UNVERIFIED
+  active_mission_id: null
+  active_corecycle: CC01
+  inherits:
+    control_plane_subsystems:
+    - CISEM_CXP
+    - CISEM_PLANNING
+    governance:
+    - CISEM_PROJECT_INSTRUCTIONS
+    platform_adapters:
+    - GOOGLE_ANTIGRAVITY_ADAPTER
+  project_artifacts:
+    root_index: Supplier Scraper CsAg/ARCHITECTURE.md
+    implementation_adapter: null
+    corecycle_specification: Supplier Scraper CsAg/PRD.md
+    marketing_pipeline: null
+    project_decision_register: null
+    project_evidence_register: Supplier Scraper CsAg/CONTRACTS.md
+  transport_id: null
+  current_execution:
+    executor: GOOGLE_ANTIGRAVITY_ADAPTER
+    validator: CISEM_CLOUD
+    auditor: CISEM_CLOUD
+    governor_required: false
+    next_permitted_action: null
+  blockers: []
+  pending_issue_ids: []
+- project_id: SANDBOX_PLAYGROUND
+  alignment_approved: true
+  name: Platform-Level Sandbox & Playground
+  ownership_layer: PROJECT
+  directory: sandbox
+  maturity: EXPERIMENTAL
+  status: ACTIVE
+  rules_applied:
+  - Y-GTP-V1.0
+  - SANDBOX-PROTOCOL-V1.0
+  project_artifacts:
+    ? 2026_08_07__AntigravityLocal__YarivHuman__Cosmic_World_Image_Processing_and_Metadata_Pipeline_CW_IPMP_Draft_Implementation_Plan__V1_0_md
+    : path: sandbox/2026-08-07__AntigravityLocal__YarivHuman__Cosmic_World_Image_Processing_and_Metadata_Pipeline_CW_IPMP_Draft_Implementation_Plan__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: cb66934e950ba7db34b968c3ffe50befe82957556888fe48e7e02e2f6d3f4e1e
+    ? 2026_08_07__AntigravityLocal__YarivHuman__Marketing_and_Sales_Hub_CsAg_Finalized_Image_Processing_and_SWIFT_Trial_Plan__V1_0_md
+    : path: sandbox/2026-08-07__AntigravityLocal__YarivHuman__Marketing_and_Sales_Hub_CsAg_Finalized_Image_Processing_and_SWIFT_Trial_Plan__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 9ff755748a17a8559a20e76afaa7affb7312c74ecee9c83d1ee4309237af7e8f
+    2026_08_07__AntigravityLocal__YarivHuman__Marketing_and_Sales_Hub_CsAg_Verification_and_Walkthrough__V1_0_md:
+      path: sandbox/2026-08-07__AntigravityLocal__YarivHuman__Marketing_and_Sales_Hub_CsAg_Verification_and_Walkthrough__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 9617f8f3ce74428891b4f11655d908c8df51efacc723fb80371f08bf0f959cf6
+    2026_08_08__AntigravityLocal__YarivHuman__Cisem_CsAg_Core_Audit_Report__V1_0_md:
+      path: sandbox/2026-08-08__AntigravityLocal__YarivHuman__Cisem_CsAg_Core_Audit_Report__V1.0.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 2f38d3568603eb152be220f8c5797f46f307ab4dc825bc4c47c7932639261b24
+    README_md:
+      path: sandbox/README.md
+      version: '1.0'
+      status: DRAFT
+      validation_metrics:
+        flow_completion: PARTIAL
+        code_implementation: PARTIAL
+        optimization: PENDING
+        consolidation: CONSOLIDATED
+        permission_compliance: PENDING
+      sha256: 145537038ea09699b649507be215a6cd80d30c77028ec42a7f09c8951b98de0d
+active_missions: []
+transports:
+- transport_id: TRANSPORT_MARKETING_DRIVE
+  type: GOOGLE_DRIVE
+  ownership_layer: EXECUTION_EXCHANGE
+  folder_id: 1wC4qBSbl3YZymvdM9wc1H2RpleYdyrSS
+  local_sync_path: ./9000__INTERSYSTEM_EXECUTION_EXCHANGE
+  cloud_status: ACTIVE
+  local_status: VERIFIED
+  last_verified_at: '2026-08-08T15:43:33Z'
+pending_register:
+  registry_id: CISEM_PENDING_REGISTER
+  canonical_reference: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.5.yaml
+  review_frequency: DAILY
+  autonomous_progress_allowed: true
+  notify_governor_only_on_gates:
+  - G1
+  - G2
+  - G3
+  - G4
+  - G5
+governor_gates:
+- gate_id: G1
+  name: RATIFICATION
+- gate_id: G2
+  name: MISSING_INTENT
+- gate_id: G3
+  name: IRRECOVERABLE_CONFLICT
+- gate_id: G4
+  name: EXTERNAL_DEPENDENCY
+- gate_id: G5
+  name: SAFETY_BOUNDARY
+reconciliation:
+  last_run_at: '2026-08-09T00:12:00Z'
+  checked:
+  - canonical_paths
+  - duplicate_owners
+  - missing_files
+  - stale_versions
+  - broken_references
+  - project_owned_universal_artifacts
+  - unverified_completion_claims
+  findings: []
+  result: SUCCESS
+history:
+- timestamp: '2026-08-05T14:41:00Z'
+  action: CREATED_INITIAL_WORKSPACE_REGISTRY_DRAFT
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.0'
+- timestamp: '2026-08-05T14:50:00Z'
+  action: CORRECTED_OWNERSHIP_HIERARCHY_AND_LAYER_DECOUPLING
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.1'
+- timestamp: '2026-08-06T18:20:00Z'
+  action: RECONCILED_PATHS_TO_NEW_WORKSPACE_ROOT_CISEM_CSAG
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.2'
+- timestamp: '2026-08-06T23:55:00Z'
+  action: RESTRUCTURED_WORKSPACE_CONSOLIDATED_CORE_SPINES_TO_CISEM_CORE
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.2'
+- timestamp: '2026-08-07T00:43:00Z'
+  action: UPDATED_STATE_TRANSITION_MATRIX_TO_V1.3_SUPPORTED_FAILURE
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.3'
+- timestamp: '2026-08-07T01:42:00Z'
+  action: ADDED_CISEM_PLANNING_CORE_SPINE_SUBSYSTEM
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.4'
+- timestamp: '2026-08-08T15:43:33Z'
+  action: RATIFIED_SAAS_AGENT_AND_VECTOR_SEARCH_SHADOW_CODE_FILES
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.10'
+- timestamp: '2026-08-08T16:01:47Z'
+  action: PRODUCTION_CRM_API_ROUTING_VERIFIED_AND_HASHED
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.11'
+- timestamp: '2026-08-08T16:07:23Z'
+  action: REGISTERED_LOOSE_SPECIFICATION_PAGES_AND_ORCHESTRATOR_ASSETS
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.12'
+- timestamp: '2026-08-08T16:23:53Z'
+  action: FINALIZED_STAGING_TEST_HASHES_RECONCILED
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.13'
+- timestamp: '2026-08-08T18:46:09.884417Z'
+  action: INTEGRATED_5_DIGIT_NAMING_SCHEMAS_HARDENED_GATE_TEETH_CONSOLIDATED_COMPONENT_SALAD
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.14'
+- timestamp: '2026-08-08T23:46:00Z'
+  action: REGISTERED_SANDBOX_AND_ACCOUNTABILITY_BLUEPRINTS_INCREMENTED_TO_V1.15
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.15'
+- timestamp: '2026-08-08T23:55:00Z'
+  action: REGISTERED_SANDBOX_THRESHOLD_PROTOCOL_SPEC_INCREMENTED_TO_V1.16
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.16'
+- timestamp: '2026-08-09T00:12:00Z'
+  action: REGISTERED_ACCOUNTABILITY_DASHBOARD_API_ROUTE_AND_AXIOMS_V1.24
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.17'
+- timestamp: '2026-08-09T18:08:06Z'
+  action: RATIFIED_AX-75000_DECISION_PIPELINE_AND_TRIAL_REGISTRY_WITH_CLEANUP
+  actor: GOOGLE_ANTIGRAVITY_ADAPTER
+  version: '1.29'

@@ -30,8 +30,37 @@ import shutil
 import json
 from datetime import datetime, timezone
 
-BRAIN_ROOT = r"C:\Users\finky\.gemini\antigravity\brain"
-ROOT_DIR = r"C:\Users\finky\Desktop\AntiGravity\Cisem CsAg"
+# Custom Exceptions
+class NamingPolicyViolation(Exception):
+    """Raised when a filename violates the strict CISEM naming policy."""
+    pass
+
+class SyncError(Exception):
+    """Raised when a document synchronization error occurs."""
+    pass
+
+# Dynamic Config Import
+_sync_dir = os.path.dirname(os.path.abspath(__file__))
+_platform_core_dir = os.path.join(_sync_dir, "platform_core")
+if _platform_core_dir not in sys.path:
+    sys.path.insert(0, _platform_core_dir)
+
+try:
+    import importlib.util
+    config_module = None
+    if os.path.exists(_platform_core_dir):
+        for f in os.listdir(_platform_core_dir):
+            if "CisemConfig" in f and f.endswith(".py"):
+                spec = importlib.util.spec_from_file_location("CisemConfig", os.path.join(_platform_core_dir, f))
+                config_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(config_module)
+                break
+except Exception as e:
+    print(f"Warning: Failed to import CisemConfig dynamically: {e}")
+    config_module = None
+
+ROOT_DIR = config_module.ROOT_DIR if config_module else _sync_dir
+BRAIN_ROOT = config_module.BRAIN_ROOT if config_module else os.path.abspath(os.path.join(ROOT_DIR, ".gemini", "antigravity", "brain"))
 
 # Strict CISEM naming pattern: [Date]__[From]__[To]__[Description]__[Version].[ext]
 NAMING_PATTERN = re.compile(
@@ -71,15 +100,17 @@ def validate_naming(filename):
     """
     Enforce strict CISEM naming policy before any document is written.
     Only validates files that start with a date prefix — config files are exempt.
-    Exits 1 with a clear, actionable error if naming is violated.
+    Raises NamingPolicyViolation if naming is violated.
     """
     if re.match(r'^\d{4}-\d{2}-\d{2}', filename):
         if not NAMING_PATTERN.match(filename):
-            print("CISEM_SYNC_ERROR: Naming policy violation detected.")
-            print(f"  File     : '{filename}'")
-            print("  Required : [YYYY-MM-DD]__[From]__[To]__[Description]__[Version].[ext]")
-            print("  Example  : 2026-08-06__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.12.md")
-            sys.exit(1)
+            error_msg = (
+                f"CISEM_SYNC_ERROR: Naming policy violation detected.\n"
+                f"  File     : '{filename}'\n"
+                f"  Required : [YYYY-MM-DD]__[From]__[To]__[Description]__[Version].[ext]\n"
+                f"  Example  : 2026-08-06__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.12.md"
+            )
+            raise NamingPolicyViolation(error_msg)
     return True
 
 
@@ -163,14 +194,16 @@ def sync_document(src_filename, doc_type="Plan"):
 
 def run_sync():
     print("=== CISEM Document Auto-Sync Process (V1.2) ===")
-    # @swift_placeholder: PARK-004
-    # @swift_placeholder: PARK-008
-    plan_ok = sync_document("implementation_plan.md", "Plan")
-    walk_ok = sync_document("walkthrough.md", "Walkthrough")
-    if not plan_ok or not walk_ok:
+    try:
+        plan_ok = sync_document("implementation_plan.md", "Plan")
+        walk_ok = sync_document("walkthrough.md", "Walkthrough")
+        if not plan_ok or not walk_ok:
+            raise SyncError("Document sync returned False status.")
+        increment_mechanism_trigger("CISEM-SYNC-V1.1")
+        print("=== Sync Completed Successfully ===")
+    except (NamingPolicyViolation, SyncError) as e:
+        print(f"FATAL SYNC ERROR:\n{e}")
         sys.exit(1)
-    increment_mechanism_trigger("CISEM-SYNC-V1.1")
-    print("=== Sync Completed Successfully ===")
     sys.exit(0)
 
 if __name__ == "__main__":

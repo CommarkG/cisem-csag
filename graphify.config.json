@@ -1,0 +1,18 @@
+{
+  "knowledge_graph": {
+    "indexing_depth": "deep",
+    "vector_dimensions": 1536,
+    "semantic_cache": true
+  },
+  "ai_agents": {
+    "permissions": {
+      "code_generation": "restricted",
+      "file_system_write": false,
+      "network_access": true,
+      "non_workspace_file_access": false
+    },
+    "autonomy_mode": "review_driven",
+    "skills_scope": "global",
+    "max_tokens_per_run": 4096
+  }
+}

@@ -6,13 +6,14 @@ import base64
 from decimal import Decimal
 from datetime import date, timedelta, datetime
 from typing import List, Optional, Dict, Any
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Header
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Header, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
 import httpx
+import contextvars
 from supabase import create_client, Client
 from supabase.lib.client_options import SyncClientOptions
 
@@ -29,6 +30,19 @@ from .scraper_engine import scrape_and_extract_brand
 from .embedding_service import EmbeddingService
 from .vector_search_service import VectorSearchService
 
+# Context variable to hold request-scoped supabase client
+_db_client_context: contextvars.ContextVar[Client] = contextvars.ContextVar("db_client")
+
+def get_db_client() -> Client:
+    try:
+        return _db_client_context.get()
+    except LookupError:
+        return _global_supabase
+
+class SupabaseProxy:
+    def __getattr__(self, name):
+        return getattr(get_db_client(), name)
+
 # Load env variables from backend/.env or parent
 load_dotenv()
 
@@ -39,8 +53,10 @@ SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 if SUPABASE_URL and SUPABASE_KEY:
     http_client = httpx.Client(verify=False)
     options = SyncClientOptions(httpx_client=http_client)
-    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
+    _global_supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
+    supabase = SupabaseProxy()
 else:
+    _global_supabase = None
     supabase = None
     print("Warning: Supabase credentials not found. API running in offline/mock mode.")
 
@@ -71,6 +87,112 @@ def rfc_7807_error(type_url: str, title: str, status: int, detail: str, instance
             "instance": instance
         }
     )
+
+# Tenant context and JWT validation middleware
+@app.middleware("http")
+async def tenant_context_middleware(request: Request, call_next):
+    path = request.url.path
+    
+    # Sunset check: Reject X-User-Role header in production
+    x_user_role = request.headers.get("x-user-role")
+    is_prod = os.environ.get("ENV") == "production" or os.environ.get("NODE_ENV") == "production"
+    if x_user_role and is_prod:
+        return rfc_7807_error(
+            type_url="about:blank",
+            title="Bad Request",
+            status=400,
+            detail="Header 'X-User-Role' is deprecated and rejected in production environments.",
+            instance=path
+        )
+        
+    # Skip auth for public endpoints or if supabase client is offline (offline/mock mode)
+    is_public = (
+        path == "/" or
+        path.startswith("/docs") or
+        path.startswith("/redoc") or
+        path.startswith("/openapi.json") or
+        (path.startswith("/api/v1/proposals/") and not path.endswith("generate") and "admin" not in path)
+    )
+    
+    if is_public or not _global_supabase:
+        return await call_next(request)
+        
+    # Extract Bearer token
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return rfc_7807_error(
+            type_url="about:blank",
+            title="Unauthorized",
+            status=401,
+            detail="Authentication token is missing or invalid.",
+            instance=path
+        )
+        
+    token = auth_header.split("Bearer ")[1]
+    try:
+        # Verify JWT with Supabase GoTrue Auth
+        user_res = _global_supabase.auth.get_user(token)
+        if not user_res or not user_res.user:
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Unauthorized",
+                status=401,
+                detail="Invalid or expired authentication token.",
+                instance=path
+            )
+        user = user_res.user
+        user_id = user.id
+        
+        # Query user tenant and role
+        role_res = _global_supabase.table("user_account_roles").select("customer_account_id, role_code").eq("user_id", user_id).limit(1).execute()
+        if not role_res.data:
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Forbidden",
+                status=403,
+                detail="Authenticated user is not assigned to any tenant customer account.",
+                instance=path
+            )
+        
+        tenant_id = role_res.data[0]["customer_account_id"]
+        role_code = role_res.data[0]["role_code"]
+        
+        # Store context in request state for downstream endpoints
+        request.state.user_id = user_id
+        request.state.tenant_id = tenant_id
+        request.state.role = role_code
+        
+        # Instantiate request-scoped client options with tenant headers
+        headers = {
+            "x-current-tenant-id": tenant_id,
+            "x-current-user-id": user_id,
+            "Authorization": f"Bearer {token}"
+        }
+        
+        # Re-create scoped client options
+        opt = SyncClientOptions(
+            httpx_client=http_client,
+            headers=headers
+        )
+        scoped_client = create_client(SUPABASE_URL, SUPABASE_KEY, options=opt)
+        
+        # Set request-scoped context variable
+        token_var = _db_client_context.set(scoped_client)
+        try:
+            response = await call_next(request)
+            return response
+        finally:
+            _db_client_context.reset(token_var)
+            
+    except Exception as e:
+        print(f"Auth middleware exception: {e}")
+        return rfc_7807_error(
+            type_url="about:blank",
+            title="Unauthorized",
+            status=401,
+            detail=f"Authentication validation failed: {str(e)}",
+            instance=path
+        )
 
 # Form payload DTOs
 class CatalogItemCreate(BaseModel):
@@ -966,7 +1088,7 @@ def get_dynamic_menu():
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/v1/catalog/items/{sku}/detail")
-def get_catalog_item_detail(sku: str, user_role: Optional[str] = Header(None, alias="X-User-Role")):
+def get_catalog_item_detail(sku: str, request: Request):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not connected.")
     try:
@@ -976,7 +1098,8 @@ def get_catalog_item_detail(sku: str, user_role: Optional[str] = Header(None, al
             raise HTTPException(status_code=404, detail="Catalog product not found")
         product = prod_res.data[0]
         
-        # Determine whether to show costs based on mock role switcher context
+        # Determine whether to show costs based on role context
+        user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
         is_admin = (user_role == "operator_admin")
         
         # Build variations
@@ -1078,7 +1201,8 @@ def submit_proposal_draft(token: str, payload: ProposalClientDraftSubmit):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/v1/admin/proposals/drafts")
-def list_pending_drafts(user_role: Optional[str] = Header(None, alias="X-User-Role")):
+def list_pending_drafts(request: Request):
+    user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
     if user_role != "operator_admin":
         raise HTTPException(status_code=403, detail="Forbidden: Operator credentials required.")
     if not supabase:
@@ -1091,7 +1215,8 @@ def list_pending_drafts(user_role: Optional[str] = Header(None, alias="X-User-Ro
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.put("/api/v1/admin/proposals/drafts/{draft_id}")
-def update_approve_draft(draft_id: str, payload: dict, user_role: Optional[str] = Header(None, alias="X-User-Role")):
+def update_approve_draft(draft_id: str, payload: dict, request: Request):
+    user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
     if user_role != "operator_admin":
         raise HTTPException(status_code=403, detail="Forbidden: Operator credentials required.")
     if not supabase:
@@ -1345,27 +1470,140 @@ def activate_persona(payload: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/v1/admin/templates")
-def list_page_templates():
+# Pydantic models for template duplicate
+class WizardDuplicatePayload(BaseModel):
+    title: Optional[str] = None
+    layout_spec: Optional[dict] = None
+    description: Optional[str] = None
+
+@app.get("/api/v1/templates")
+def list_templates(request: Request):
     if not supabase:
         return {"templates": []}
-    res = supabase.table("lookup_registry").select("*").eq("registry_type", "page_templates").execute()
-    return {"templates": res.data or []}
+    try:
+        # Since RLS is enabled, querying template_registry will automatically enforce tenant boundary
+        res = supabase.table("template_registry").select("*").execute()
+        return {"templates": res.data or []}
+    except Exception as e:
+        print(f"Error fetching templates: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/v1/admin/templates/duplicate")
-def duplicate_template(payload: dict):
+@app.post("/api/v1/templates/{template_id}/duplicate/pipeline")
+def duplicate_template_pipeline(template_id: str, request: Request):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not connected.")
+    
+    tenant_id = getattr(request.state, "tenant_id", None)
+    if not tenant_id:
+        raise HTTPException(status_code=401, detail="Authentication token or tenant context missing.")
+        
     try:
-        name = payload.get("name")
-        data = payload.get("value_data")
-        res = supabase.table("lookup_registry").insert({
-            "registry_type": "page_templates",
-            "key_name": name,
-            "value_data": data
-        }).execute()
-        return {"status": "duplicated", "template": res.data}
+        # 1. Fetch canonical template
+        canonical_res = supabase.table("template_registry").select("*").eq("id", template_id).execute()
+        if not canonical_res.data:
+            raise HTTPException(status_code=404, detail="Canonical template not found")
+        canonical = canonical_res.data[0]
+        
+        # 2. Quota Check
+        count_res = supabase.table("template_registry").select("id", count="exact").eq("customer_account_id", tenant_id).eq("is_canonical", False).execute()
+        current_count = count_res.count if count_res.count is not None else len(count_res.data)
+        
+        max_landing_pages = 5 # Default limit
+        acc_res = _global_supabase.table("customer_accounts").select("package_id").eq("id", tenant_id).execute()
+        
+        print(f"[DEBUG QUOTA] tenant_id={tenant_id}")
+        print(f"[DEBUG QUOTA] count_res data: {count_res.data}, count: {count_res.count}")
+        print(f"[DEBUG QUOTA] acc_res data: {acc_res.data}")
+        
+        if acc_res.data and acc_res.data[0].get("package_id"):
+            pkg_res = _global_supabase.table("packages").select("max_landing_pages").eq("id", acc_res.data[0]["package_id"]).execute()
+            print(f"[DEBUG QUOTA] pkg_res data: {pkg_res.data}")
+            if pkg_res.data:
+                max_landing_pages = pkg_res.data[0]["max_landing_pages"]
+                
+        print(f"[DEBUG QUOTA] final check: current_count={current_count}, max_landing_pages={max_landing_pages}")
+        if current_count >= max_landing_pages:
+            raise HTTPException(status_code=403, detail="QUOTA_EXCEEDED")
+            
+        # 3. Create duplicate record
+        new_serial = f"TPL-FORK-{uuid.uuid4().hex[:8]}"
+        new_tpl = {
+            "serial_code": new_serial,
+            "title": f"{canonical['title']} (Copy)",
+            "description": canonical.get("description"),
+            "category": canonical["category"],
+            "layout_spec": canonical["layout_spec"],
+            "is_canonical": False,
+            "customer_account_id": tenant_id,
+            "forked_from": template_id,
+            "status": "draft"
+        }
+        res = supabase.table("template_registry").insert(new_tpl).execute()
+        return {"status": "duplicated", "template": res.data[0]}
+        
+    except HTTPException as he:
+        raise he
     except Exception as e:
+        print(f"Error duplicating template pipeline: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/templates/{template_id}/duplicate/wizard")
+def duplicate_template_wizard(template_id: str, payload: WizardDuplicatePayload, request: Request):
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase not connected.")
+    
+    tenant_id = getattr(request.state, "tenant_id", None)
+    if not tenant_id:
+        raise HTTPException(status_code=401, detail="Authentication token or tenant context missing.")
+        
+    try:
+        # 1. Fetch canonical template
+        canonical_res = supabase.table("template_registry").select("*").eq("id", template_id).execute()
+        if not canonical_res.data:
+            raise HTTPException(status_code=404, detail="Canonical template not found")
+        canonical = canonical_res.data[0]
+        
+        # 2. Quota Check
+        count_res = supabase.table("template_registry").select("id", count="exact").eq("customer_account_id", tenant_id).eq("is_canonical", False).execute()
+        current_count = count_res.count if count_res.count is not None else len(count_res.data)
+        
+        max_landing_pages = 5
+        acc_res = _global_supabase.table("customer_accounts").select("package_id").eq("id", tenant_id).execute()
+        
+        print(f"[DEBUG QUOTA WIZ] tenant_id={tenant_id}")
+        print(f"[DEBUG QUOTA WIZ] count_res data: {count_res.data}, count: {count_res.count}")
+        print(f"[DEBUG QUOTA WIZ] acc_res data: {acc_res.data}")
+        
+        if acc_res.data and acc_res.data[0].get("package_id"):
+            pkg_res = _global_supabase.table("packages").select("max_landing_pages").eq("id", acc_res.data[0]["package_id"]).execute()
+            print(f"[DEBUG QUOTA WIZ] pkg_res data: {pkg_res.data}")
+            if pkg_res.data:
+                max_landing_pages = pkg_res.data[0]["max_landing_pages"]
+                
+        print(f"[DEBUG QUOTA WIZ] final check: current_count={current_count}, max_landing_pages={max_landing_pages}")
+        if current_count >= max_landing_pages:
+            raise HTTPException(status_code=403, detail="QUOTA_EXCEEDED")
+            
+        # 3. Create duplicate record with customized fields
+        new_serial = f"TPL-FORK-{uuid.uuid4().hex[:8]}"
+        new_tpl = {
+            "serial_code": new_serial,
+            "title": payload.title if payload.title is not None else f"{canonical['title']} (Copy)",
+            "description": payload.description if payload.description is not None else canonical.get("description"),
+            "category": canonical["category"],
+            "layout_spec": payload.layout_spec if payload.layout_spec is not None else canonical["layout_spec"],
+            "is_canonical": False,
+            "customer_account_id": tenant_id,
+            "forked_from": template_id,
+            "status": "draft"
+        }
+        res = supabase.table("template_registry").insert(new_tpl).execute()
+        return {"status": "duplicated", "template": res.data[0]}
+        
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        print(f"Error duplicating template wizard: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.on_event("startup")

@@ -155,6 +155,18 @@ def validate_plan(plan_path):
             f"an explicit HIGH blast_radius in metadata (currently: {blast_radius})."
         )
 
+    # 2.6 CoreSpiral Methodology Mechanical Enforcement
+    # [MANDATORY GOVERNOR RULE]: Non-trivial plans must implement the CoreSpiral context-adaptive process
+    if blast_radius in ("MEDIUM", "HIGH"):
+        content_lower = content.lower()
+        if "corespiral" not in content_lower and "corecycle" not in content_lower:
+            return False, (
+                f"Validation Error: Plan '{plan_id}' has a {blast_radius} blast_radius but "
+                f"does not reference the CoreSpiral methodology or define CoreCycles. "
+                f"Non-trivial plans must utilize CoreSpiral context-adaptive cycle sequences."
+            )
+        print(f"[+] Verified CoreSpiral compliance for non-trivial plan '{plan_id}'.")
+
     # 3. Verify Linked Axioms Exist in AxiomsAndPrinciples file
     axioms_linked = metadata.get("axioms_linked", [])
     if not isinstance(axioms_linked, list):
