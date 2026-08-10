@@ -39,6 +39,10 @@ Example format:
 3.1. **Mandatory Planning Mode Default**:
    - The agent is permanently restricted to planning/design mode until a plan is signed off or approved by the Governor.
    - Once implementation is finished and verified, the agent must immediately and automatically return to planning mode.
+
+3.2. **Consolidated One-Shot Execution (Consolidating Tasks in One Shot)**:
+   - Once a plan is signed off or approved by the Governor, the agent is strictly prohibited from splitting task implementation across multiple conversational turns when they can be executed in a single consolidated turn.
+   - All proposed actions, file edits, creations, and reconciliations must be executed together in one shot, maximizing productivity and preventing unnecessary conversational turn overhead.
 <!-- END:cisem-collaborative-reasoning-rules -->
 
 <!-- BEGIN:cisem-senior-builder-attitude -->
