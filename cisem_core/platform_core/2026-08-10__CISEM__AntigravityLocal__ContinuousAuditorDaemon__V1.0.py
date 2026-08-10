@@ -3,11 +3,17 @@
 # CISEM CODE HEADER — MANDATORY
 # ratified_plan: CISEM-IP-20260810-CONSOLIDATED-MASTER-V17
 # governor_signature: GOV-YARIV-20260810-GOVERNANCE-HARDENING-RATIFIED
-# version: V1.0
+# version: V1.1
 # reasoning: |
 #   Background daemon that polls workspace files for modifications and automatically
 #   runs reconciler, sync, auditor, and ATV validation loops to ensure constant alignment.
+#   Excluded status/report JSON files to break infinite cascade trigger loop.
 #   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >AX-50000.
+# history:
+#   - timestamp: "2026-08-10T13:05:00Z"
+#     action: "EXCLUDED_JSON_STATE_FILES_TO_STOP_CASCADE_LOOP"
+#     actor: "Gemini 3.5 Flash"
+#     version: "1.1"
 """
 
 import os
@@ -39,6 +45,7 @@ CORE_DIR = config_module.CORE_DIR if config_module else os.path.dirname(_current
 CAEL_STATUS_PATH = config_module.CAEL_STATUS_PATH if config_module else os.path.join(CORE_DIR, "cael_status.json")
 
 # Log paths
+# Exclude log dir from walk entirely
 LOG_DIR = os.path.join(CORE_DIR, "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 DAEMON_LOG_PATH = os.path.join(LOG_DIR, "continuous_auditor.log")
@@ -56,10 +63,19 @@ def log_message(msg):
 def get_file_modification_states():
     """Scan root directory and collect last modified times for tracked files."""
     states = {}
+    ignore_files = {
+        "cael_status.json",
+        "cisem_turn_counter.json",
+        "atv_report.json",
+        "orchestration_trial_report.json",
+        "root_cause_registry.json"
+    }
     for root, dirs, files in os.walk(ROOT_DIR):
         if any(x in root for x in [".git", ".next", "node_modules", "cisem_core/logs", ".gemini"]):
             continue
         for f in files:
+            if f in ignore_files:
+                continue
             if f.endswith((".py", ".ts", ".tsx", ".md", ".json", ".yaml", ".sql")):
                 full_path = os.path.join(root, f)
                 try:

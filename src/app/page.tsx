@@ -60,6 +60,7 @@ export default function Home() {
     | "crm_pipeline"
     | "design_studio"
     | "sandbox_playground"
+    | "whitelabel"
     | "human_schema"
     | "system_schema"
     | "threshold"
@@ -71,6 +72,18 @@ export default function Home() {
     | "storage_cdn"
     | "data_integrations"
   >("home");
+
+  // --- Whitelabel States ---
+  const [whitelabelDomain, setWhitelabelDomain] = useState("shop.company.com");
+  const [whitelabelGitUrl, setWhitelabelGitUrl] = useState("git@github.com:enterprise/storefront.git");
+  const [whitelabelSecret, setWhitelabelSecret] = useState("wh_sec_example_12345");
+  const [whitelabelSyncStatus, setWhitelabelSyncStatus] = useState("synced");
+  const [whitelabelLogs, setWhitelabelLogs] = useState<string[]>([]);
+  const [isSyncingWhitelabel, setIsSyncingWhitelabel] = useState(false);
+  const [whitelabelLicenseTier, setWhitelabelLicenseTier] = useState<"free" | "pro" | "enterprise">("enterprise");
+  const [whitelabelError, setWhitelabelError] = useState<string | null>(null);
+
+
 
   // --- Scraper & Personalization states ---
   const [prospectUrl, setProspectUrl] = useState("");
@@ -200,6 +213,99 @@ export default function Home() {
       fetchDashboardMetrics();
     }
   }, [currentMenu]);
+
+  // --- Whitelabel Helper Handlers ---
+  const fetchWhitelabelConfig = async () => {
+    setWhitelabelError(null);
+    try {
+      const res = await fetch("/api/v1/tenant/whitelabel", {
+        headers: {
+          "x-mock-tier": whitelabelLicenseTier
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setWhitelabelDomain(data.custom_domain || "");
+        setWhitelabelGitUrl(data.git_url || "");
+        setWhitelabelSecret(data.webhook_secret || "");
+        setWhitelabelSyncStatus(data.sync_status || "synced");
+      } else {
+        const errData = await res.json();
+        setWhitelabelError(errData.error || errData.detail || "Failed to load whitelabel configuration.");
+      }
+    } catch (e: any) {
+      setWhitelabelError(e.message || "Failed to fetch whitelabel configurations.");
+    }
+  };
+
+  const handleSaveWhitelabel = async () => {
+    setWhitelabelError(null);
+    try {
+      const res = await fetch("/api/v1/tenant/whitelabel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-mock-tier": whitelabelLicenseTier
+        },
+        body: JSON.stringify({
+          custom_domain: whitelabelDomain,
+          git_url: whitelabelGitUrl,
+          webhook_secret: whitelabelSecret
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setWhitelabelSyncStatus(data.config.sync_status);
+        alert("Whitelabel configurations updated successfully!");
+      } else {
+        const errData = await res.json();
+        setWhitelabelError(errData.error || errData.detail || "Failed to save configuration.");
+      }
+    } catch (e: any) {
+      setWhitelabelError(e.message || "Failed to save configurations.");
+    }
+  };
+
+  const handleSyncWhitelabel = async () => {
+    setIsSyncingWhitelabel(true);
+    setWhitelabelLogs(["Initializing sync process..."]);
+    setWhitelabelError(null);
+    try {
+      const res = await fetch("/api/v1/tenant/whitelabel/sync", {
+        method: "POST",
+        headers: {
+          "x-mock-tier": whitelabelLicenseTier
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setWhitelabelSyncStatus("synced");
+        let i = 0;
+        const interval = setInterval(() => {
+          if (i < data.logs.length) {
+            setWhitelabelLogs(prev => [...prev, data.logs[i]]);
+            i++;
+          } else {
+            clearInterval(interval);
+            setIsSyncingWhitelabel(false);
+          }
+        }, 500);
+      } else {
+        const errData = await res.json();
+        setWhitelabelError(errData.error || errData.detail || "Sync failed.");
+        setIsSyncingWhitelabel(false);
+      }
+    } catch (e: any) {
+      setWhitelabelError(e.message || "Sync failed.");
+      setIsSyncingWhitelabel(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentMenu === "whitelabel") {
+      fetchWhitelabelConfig();
+    }
+  }, [currentMenu, whitelabelLicenseTier]);
 
   // --- Dynamic Chunks & Backlog states ---
   const [chunksList, setChunksList] = useState<any[]>([]);
@@ -992,6 +1098,7 @@ export default function Home() {
                 { id: "supplier_registry", label: "Subcontractors Configuration" },
                 { id: "library_hub", label: "Master Library Hub" },
                 { id: "design_studio", label: "Design Studio" },
+                { id: "whitelabel", label: "Enterprise Whitelabel" },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -2416,6 +2523,197 @@ export default function Home() {
                         2
                       )}
                     </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: ENTERPRISE WHITELABEL DASHBOARD & GIT-SYNC */}
+          {currentMenu === "whitelabel" && (
+            <div className="space-y-8 text-right" dir="rtl">
+              <div className="flex justify-between items-center text-right">
+                <div>
+                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    שער מיתוג לבן וצינור סנכרון מאגרים (Enterprise Whitelabel & Git-Sync)
+                  </h1>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    הגדרת דומיינים מותאמים אישית וסנכרון אוטומטי של קוד המקור של החנות ישירות ל-GitHub/GitLab של הלקוח.
+                  </p>
+                </div>
+                {/* Mock License Tier Selector */}
+                <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 p-2 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <span className="text-xs font-bold text-slate-500">דרגת רישיון לסימולציה:</span>
+                  <div className="flex gap-1">
+                    {(["free", "pro", "enterprise"] as const).map((tier) => (
+                      <button
+                        key={tier}
+                        onClick={() => setWhitelabelLicenseTier(tier)}
+                        className={`px-3 py-1 rounded-lg text-xs font-bold uppercase transition-all ${
+                          whitelabelLicenseTier === tier
+                            ? "bg-amber-500 text-white shadow-sm"
+                            : "hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-600 dark:text-slate-400"
+                        }`}
+                      >
+                        {tier}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Panel Content with relative wrapper for lock overlay */}
+              <div className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-lg overflow-hidden min-h-[500px]">
+                
+                {/* LOCK OVERLAY FOR FREE & PRO TIERS */}
+                {whitelabelLicenseTier !== "enterprise" && (
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm text-center p-8 transition-all duration-300">
+                    <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-3xl mb-4 animate-bounce">
+                      🔒
+                    </div>
+                    <h3 className="text-xl font-bold text-white">רכיב נעול - נדרש רישיון Enterprise (Tier 3)</h3>
+                    <p className="max-w-md text-sm text-slate-400 mt-2 leading-relaxed">
+                      הגדרת דומיין מותאם אישית (Custom Domain) וסנכרון מאגרי קוד ל-Git מוגבלים לחשבונות ארגוניים בלבד.
+                      אנא שדרג את החשבון לקבלת גישה לצינור הסנכרון והמותג הלבן.
+                    </p>
+                    <button
+                      onClick={() => setWhitelabelLicenseTier("enterprise")}
+                      className="mt-6 px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-lg transition-all"
+                    >
+                      שדרג ל-Enterprise לצרכי הדגמה
+                    </button>
+                  </div>
+                )}
+
+                {/* ACTIVE SETTINGS SCREEN (Only editable if Enterprise) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Left Column: Form Settings */}
+                  <div className="space-y-6 text-right">
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
+                      הגדרות מותג לבן
+                    </h2>
+
+                    {whitelabelError && (
+                      <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/5 text-red-500 text-xs text-right leading-relaxed">
+                        ⚠️ <strong>שגיאת אבטחה/קלט:</strong> {whitelabelError}
+                      </div>
+                    )}
+
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 mb-2">דומיין מותאם אישית (Custom Domain)</label>
+                        <input
+                          type="text"
+                          value={whitelabelDomain}
+                          onChange={(e) => setWhitelabelDomain(e.target.value)}
+                          placeholder="e.g. shop.mycompany.com"
+                          className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3 text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all font-mono text-left"
+                          dir="ltr"
+                        />
+                        <p className="text-[10px] text-slate-400 mt-1">הגדר רשומת CNAME בדומיין שלך המצביעה על cname.cisem.io</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 mb-2">כתובת מאגר Git יעד (Git Repository URL)</label>
+                        <input
+                          type="text"
+                          value={whitelabelGitUrl}
+                          onChange={(e) => setWhitelabelGitUrl(e.target.value)}
+                          placeholder="e.g. git@github.com:mycompany/storefront.git"
+                          className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3 text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all font-mono text-left"
+                          dir="ltr"
+                        />
+                        <p className="text-[10px] text-slate-400 mt-1">תמיכה בכתובות SSH (git@...) או HTTPS (https://...)</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 mb-2">מפתח סודי ל-Webhook (Webhook Deploy Secret)</label>
+                        <input
+                          type="password"
+                          value={whitelabelSecret}
+                          onChange={(e) => setWhitelabelSecret(e.target.value)}
+                          placeholder="••••••••••••••••••••••••••••••••"
+                          className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3 text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 transition-all font-mono text-left"
+                          dir="ltr"
+                        />
+                        <p className="text-[10px] text-slate-400 mt-1">סנכרון הקוד יקרא לכתובת זו עם החתימה המוצפנת לאחר כל בניה מוצלחת</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        onClick={handleSaveWhitelabel}
+                        className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-all shadow-md"
+                      >
+                        💾 שמור הגדרות
+                      </button>
+                      <button
+                        onClick={handleSyncWhitelabel}
+                        disabled={isSyncingWhitelabel}
+                        className={`px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-md flex items-center gap-2 ${
+                          isSyncingWhitelabel ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                      >
+                        {isSyncingWhitelabel ? "🔄 מסנכרן..." : "🚀 סנכרן מאגר כעת"}
+                      </button>
+                    </div>
+
+                    {/* Sync Status Badge */}
+                    <div className="flex items-center gap-2 mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/50 w-fit">
+                      <span className="text-xs text-slate-400">סטטוס סנכרון אחרון:</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${
+                        whitelabelSyncStatus === "synced"
+                          ? "bg-emerald-500/10 text-emerald-500"
+                          : "bg-amber-500/10 text-amber-500 animate-pulse"
+                      }`}>
+                        {whitelabelSyncStatus === "synced" ? "Synced" : "Out of Sync"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Simulated Git Console Terminal */}
+                  <div className="flex flex-col h-full space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-amber-400 font-mono">
+                        bash-terminal-session
+                      </span>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        פלט תהליך סנכרון (Git Push Console)
+                      </h3>
+                    </div>
+
+                    <div className="flex-1 min-h-[320px] rounded-2xl bg-slate-950 p-5 font-mono text-[11px] text-slate-300 border border-slate-800 overflow-y-auto space-y-2 text-left" dir="ltr">
+                      {whitelabelLogs.length === 0 ? (
+                        <div className="text-slate-600 italic h-full flex items-center justify-center">
+                          Waiting for repository sync activation...
+                        </div>
+                      ) : (
+                        whitelabelLogs.map((log, index) => {
+                          let color = "text-emerald-400";
+                          if (log.startsWith("Error") || log.startsWith("Failed")) {
+                            color = "text-red-500";
+                          } else if (log.includes("Warning") || log.includes("Binding")) {
+                            color = "text-amber-400";
+                          }
+                          return (
+                            <div key={index} className={`${color} leading-relaxed animate-fade-in`}>
+                              {log.startsWith("[") ? "" : "$ "}
+                              {log}
+                            </div>
+                          );
+                        })
+                      )}
+                      {isSyncingWhitelabel && (
+                        <div className="text-indigo-400 animate-pulse">$ writing repository packets...</div>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() => setWhitelabelLogs([])}
+                      className="px-3 py-1 text-[10px] font-bold text-slate-500 hover:text-slate-300 self-end transition-all"
+                    >
+                      Clear Logs
+                    </button>
                   </div>
                 </div>
               </div>

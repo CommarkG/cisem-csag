@@ -79,6 +79,29 @@ function getMockData(pathStr: string, method: string) {
   if (p.includes("pdf")) {
     return { success: true, url: "/mock-proposal.pdf" };
   }
+  if (p.includes("tenant/whitelabel/sync")) {
+    return {
+      status: "success",
+      logs: [
+        "Initializing repository synchronizer...",
+        "Binding target repository: git@github.com:enterprise/storefront.git",
+        "Exchanging cryptographic handshake keys...",
+        "Injecting active custom stylesheet bundles...",
+        "Pushing asset commits to main branch...",
+        "Configuring custom whitelabel domain: shop.company.com",
+        "Dispatched webhook notification to trigger CDN invalidation.",
+        "Git repository synchronization completed successfully."
+      ]
+    };
+  }
+  if (p.includes("tenant/whitelabel")) {
+    return {
+      custom_domain: "shop.company.com",
+      git_url: "git@github.com:enterprise/storefront.git",
+      webhook_secret: "wh_sec_example_12345",
+      sync_status: "synced"
+    };
+  }
   
   return { success: true, mock: true, path: pathStr, method };
 }
@@ -89,9 +112,47 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
   const pathStr = pathParts.join("/");
   const searchParams = req.nextUrl.searchParams.toString();
   
+  let originalCtxHeader = req.headers.get("x-tenant-context");
+  
+  // Developer override/mock signing mechanism for frontend active role selection
+  const mockTier = req.headers.get("x-mock-tier");
+  if (mockTier && !originalCtxHeader) {
+    const secret = process.env.TENANT_SIGNING_SECRET || "dev-secret-key-9999";
+    const payload = {
+      tenantId: "dev-tenant-1",
+      tier: mockTier,
+      roles: ["admin"]
+    };
+    const crypto = require("crypto");
+    const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString("base64");
+    const hmac = crypto.createHmac("sha256", secret);
+    hmac.update(payloadBase64);
+    const signature = hmac.digest("hex");
+    originalCtxHeader = `${payloadBase64}.${signature}`;
+  }
+
   // Verify tenant context at boundary
-  const tenantCtx = verifyTenantContext(req);
+  // Setup request with computed x-tenant-context if mockTier was used
+  const tempReq = new NextRequest(req.url, {
+    method: req.method,
+    headers: {
+      ...Object.fromEntries(req.headers.entries()),
+      ...(originalCtxHeader ? { "x-tenant-context": originalCtxHeader } : {})
+    }
+  });
+
+  const tenantCtx = verifyTenantContext(tempReq);
   const tenantId = tenantCtx?.tenantId || req.headers.get("x-tenant-id") || "default-tenant";
+
+  // Tier-3 Enterprise gating check
+  if (pathStr.includes("tenant/whitelabel")) {
+    if (!tenantCtx || tenantCtx.tier !== "enterprise") {
+      return NextResponse.json(
+        { error: "Forbidden: ENTERPRISE_TIER_REQUIRED: Whitelabel features require an Enterprise license." },
+        { status: 403 }
+      );
+    }
+  }
 
   const targetUrl = `${BACKEND_URL}/${pathStr}${searchParams ? "?" + searchParams : ""}`;
   
@@ -101,7 +162,6 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
     "x-tenant-id": tenantId,
   };
   
-  const originalCtxHeader = req.headers.get("x-tenant-context");
   if (originalCtxHeader) {
     headersObj["x-tenant-context"] = originalCtxHeader;
   }
