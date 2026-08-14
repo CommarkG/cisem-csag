@@ -167,6 +167,57 @@ def validate_plan(plan_path):
             )
         print(f"[+] Verified CoreSpiral compliance for non-trivial plan '{plan_id}'.")
 
+    # 2.7 Proposed Changes Invariant Verification (Wiring, Triggering, Availability, User Journey)
+    # [MANDATORY GOVERNOR RULE]: Every proposed file element must specify its integration playbook details.
+    in_proposed_changes = False
+    current_element = None
+    element_content = []
+    element_blocks = {}
+    
+    for line in content.splitlines():
+        trimmed = line.strip()
+        if trimmed.startswith("## Proposed Changes"):
+            in_proposed_changes = True
+            continue
+        elif in_proposed_changes and trimmed.startswith("## "):
+            in_proposed_changes = False
+            if current_element:
+                element_blocks[current_element] = "\n".join(element_content)
+            current_element = None
+            element_content = []
+        elif in_proposed_changes:
+            if trimmed.startswith("####"):
+                if current_element:
+                    element_blocks[current_element] = "\n".join(element_content)
+                current_element = trimmed
+                element_content = []
+            elif current_element:
+                element_content.append(line)
+                
+    if current_element:
+        element_blocks[current_element] = "\n".join(element_content)
+        
+    for elem, elem_text in element_blocks.items():
+        missing = []
+        elem_text_lower = elem_text.lower()
+        if "wiring" not in elem_text_lower:
+            missing.append("Wiring")
+        if "trigger" not in elem_text_lower:
+            missing.append("Triggering")
+        if "availability" not in elem_text_lower and "available" not in elem_text_lower:
+            missing.append("Availability")
+        if "journey" not in elem_text_lower:
+            missing.append("User Journey")
+            
+        if missing:
+            clean_elem = re.sub(r'\[.*?\]', '', elem).replace('#', '').strip()
+            return False, (
+                f"Proposed change '{clean_elem}' is missing mandatory Playbook integration specs: "
+                f"{', '.join(missing)}. Every proposed element must explicitly define its "
+                f"Wiring, Triggering, Availability, and User Journey integration."
+            )
+    print(f"[+] Verified Playbook Invariant compliance for {len(element_blocks)} proposed elements.")
+
     # 3. Verify Linked Axioms Exist in AxiomsAndPrinciples file
     axioms_linked = metadata.get("axioms_linked", [])
     if not isinstance(axioms_linked, list):
@@ -205,7 +256,10 @@ def inject_pre_review_status(plan_path, status, error_details=None):
             return
         header_text = parts[1]
         metadata = yaml.safe_load(header_text) or {}
-        
+        if metadata.get("pre_review_status") == status and metadata.get("pre_reviewed_at"):
+            print(f"[+] Plan metadata already has pre_review_status: {status}. Skipping write to preserve checksum.")
+            return
+            
         metadata["pre_review_status"] = status
         metadata["pre_reviewed_at"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         if error_details:

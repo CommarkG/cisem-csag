@@ -18,6 +18,7 @@ This document contains the visual dependency mapping for the CISEM platform code
 ```mermaid
 graph TD
     subgraph Python Scripts & Modules
+        2026-08-10__AntigravityLocal__YarivHuman__PgVectorPartitionAuditVerification__V1.0["2026-08-10__AntigravityLocal__YarivHuman__PgVectorPartitionAuditVerification__V1.0.py"]
         Cisem CsAG Core Councils\Cisem AntiGravity & Gemini Brain\2026-08-08__AntigravityLocal__YarivHuman__SaaS_GeminiMultiModalEmbeddingService__V1.0["Cisem CsAG Core Councils\Cisem AntiGravity & Gemini Brain\2026-08-08__AntigravityLocal__YarivHuman__SaaS_GeminiMultiModalEmbeddingService__V1.0.py"]
         Cisem CsAG Core Councils\Cisem AntiGravity & Gemini Brain\2026-08-08__AntigravityLocal__YarivHuman__SaaS_PGVectorMultiTenantSearchService__V1.0["Cisem CsAG Core Councils\Cisem AntiGravity & Gemini Brain\2026-08-08__AntigravityLocal__YarivHuman__SaaS_PGVectorMultiTenantSearchService__V1.0.py"]
         backend\src\backend\__init__["backend\src\backend\__init__.py"]
@@ -25,6 +26,7 @@ graph TD
         backend\src\backend\embedding_service["backend\src\backend\embedding_service.py"]
         backend\src\backend\main["backend\src\backend\main.py"]
         backend\src\backend\mock_fixtures["backend\src\backend\mock_fixtures.py"]
+        backend\src\backend\parking_vault_router["backend\src\backend\parking_vault_router.py"]
         backend\src\backend\pricing_engine["backend\src\backend\pricing_engine.py"]
         backend\src\backend\scraper_engine["backend\src\backend\scraper_engine.py"]
         backend\src\backend\seed_db["backend\src\backend\seed_db.py"]
@@ -52,6 +54,7 @@ graph TD
         cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0["cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py"]
         cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.0["cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.0.py"]
         cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0["cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py"]
+        cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__UserJourneySimulator__V1.0["cisem_core\platform_core\2026-08-10__CISEM__AntigravityLocal__UserJourneySimulator__V1.0.py"]
         cisem_core\platform_core\cisem_gate["cisem_core\platform_core\cisem_gate.py"]
         cisem_core\sandbox\2026-08-09__AntigravityLocal__YarivHuman__TenantContextValidationVerificationScript__V1.0["cisem_core\sandbox\2026-08-09__AntigravityLocal__YarivHuman__TenantContextValidationVerificationScript__V1.0.py"]
         cisem_core\sandbox\CisemATV["cisem_core\sandbox\CisemATV.py"]
@@ -65,10 +68,21 @@ graph TD
         cisem_core\update_axioms["cisem_core\update_axioms.py"]
         cisem_core\update_registry_v1.29["cisem_core\update_registry_v1.29.py"]
         cisem_core\update_registry_v1.31["cisem_core\update_registry_v1.31.py"]
+        cisem_core\update_registry_v1.40["cisem_core\update_registry_v1.40.py"]
+        cisem_core\update_registry_v1.41["cisem_core\update_registry_v1.41.py"]
+        cisem_core\update_registry_v1.42["cisem_core\update_registry_v1.42.py"]
+        cisem_core\update_registry_v1.43["cisem_core\update_registry_v1.43.py"]
         cisem_core\update_registry_v1.8["cisem_core\update_registry_v1.8.py"]
         cisem_core\upload_to_drive["cisem_core\upload_to_drive.py"]
         sandbox_code_review\sandbox_runner["sandbox_code_review\sandbox_runner.py"]
         scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0["scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0.py"]
+        scratch\check_schema["scratch\check_schema.py"]
+        scratch\check_walkthrough["scratch\check_walkthrough.py"]
+        scratch\find_offending_file["scratch\find_offending_file.py"]
+        scratch\fix_walkthrough["scratch\fix_walkthrough.py"]
+        scratch\print_atv_results["scratch\print_atv_results.py"]
+        scratch\print_registry_end["scratch\print_registry_end.py"]
+        scratch\promote_walkthrough["scratch\promote_walkthrough.py"]
     end
 
     subgraph Import Channels
@@ -78,6 +92,7 @@ graph TD
         main --> scraper_engine
         main --> embedding_service
         main --> vector_search_service
+        parking_vault_router --> main
         vector_search_service --> embedding_service
         2026-08-08__AntigravityLocal__YarivHuman__SaaS_PGVectorMultiTenantSearchService__V1.0 --> embedding_service
         2026-08-05__GoogleAntigravity__Cxp__CxpWatcher__V0.1 --> CisemSanitizer

@@ -7,3 +7,57 @@
   Audit Scenario: security_handshake_bypass (SECURITY)
   Verdict: BLOCKED
   Rule: Mega tasks require an APPROVED verdict from all triggered expert audit personas.
+[2026-08-10T13:44:04.236816Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 6528365d12ee630cbe93e6e3cf9dbd32e9dca007ec0461cd8a4cdcee355d5d1f
+  Registered hash: 02bc057b2c5011a84074c2bc138f6a6d2909ccca514324a28df4db38285fd2b6
+[2026-08-10T19:02:23.826332Z] [Phase 20] CISEM_GATE_BLOCKED -- Phase 20: Monolithic File Guard check failed.
+  Target file : src\app\page.tsx
+  Line count  : 3882 (strictly capped at 1,500 lines)
+  Rule        : Large monolithic files lead to high token costs and compilation failures. Modularize this file into separate sub-components before proceeding.
+[2026-08-11T06:24:44.884517Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violating files:
+  src\components\views\AdminView.jsx
+  src\components\views\B2bHubView.tsx
+  src\components\views\CalendarView.jsx
+  src\components\views\CollaborationHub.jsx
+  src\components\views\DashboardView.jsx
+  src\components\views\GanttView.jsx
+  src\components\views\HomeView.tsx
+  src\components\views\KanbanView.jsx
+  src\components\views\ListView.jsx
+  src\components\views\SettingsView.jsx
+  src\components\views\SystemSchemaView.tsx
+  src\components\views\WhitelabelView.tsx
+  src\app\api\agent\chat\route.ts
+  src\app\api\dashboard\route.ts
+  src\app\api\download\route.ts
+  src\app\api\v1\whatsapp\send\route.ts
+  src\app\api\v1\[...path]\route.ts
+  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.
+  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.
+[2026-08-11T06:25:51.263921Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violating files:
+  src\app\api\agent\chat\route.ts
+  src\app\api\v1\[...path]\route.ts
+  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.
+  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.
+[2026-08-11T07:49:06.339334Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\app\layout.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-11T07:49:15.386653Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: Bento Page Layout Recipe validation failed in 'src\app\layout.tsx'.
+  Rule: Bento Page Layout Recipe components must define grid container elements (e.g. className='grid').
+[2026-08-11T07:49:44.002762Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\app\page.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-11T07:50:03.316832Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: Bento Page Layout Recipe validation failed in 'src\app\page.tsx'.
+  Rule: Bento Page Layout Recipe components must define grid container elements (e.g. className='grid').
+[2026-08-11T07:50:16.300305Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\dynamic_menu.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-11T07:50:28.098347Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\DimaAppWrapper.jsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe

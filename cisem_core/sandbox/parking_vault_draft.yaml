@@ -1,16 +1,23 @@
 parked_items:
-- description: Switching themes in the dashboard portal has a latency lag on Vercel
+- blast_radius: 6
+  completion_needed: Complete testing coverage
+  complexity: 7
+  description: Switching themes in the dashboard portal has a latency lag on Vercel
     Edge. Needs client hydration bypass.
   governor_signature: null
   item_id: PARK-001
   linked_plans: []
+  priority_score: 7.8
   ratified_by_governor: false
   requires_governor_approval: true
+  scope: 8
+  significance: 8
   status: parked
   tags:
   - '[PERFORMANCE.CACHE]'
   - '[UI.THEME]'
   title: Edge Cache Caching Lag for UI theme swaps
+  urgency: 9
 - description: Prevent watcher daemon from syncing unapproved file changes to Drive
     using temporary state files.
   governor_signature: GOV-YARIV-20260806-GATE-HARDENING-V1.0
@@ -620,3 +627,119 @@ parked_items:
   - '[AUDIT.RIGIDITY]'
   - '[WEEKLY_SESSION_PARKING]'
   title: Naked Numbers Found -- Context/Reasoning missing for 12 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-10T10:44:52.356696+00:00'
+  description: 'ATV Naked Number Audit detected 13 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md:L41
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Scope_Optimization_in_Cisem_Gate_Plan__V1.0.md:L42
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Trial_001_Validation_Telemetry_and_Exit_Validation_Plan__V1.0.md:L3
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-035
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 13 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-10T13:49:51.065688+00:00'
+  description: 'Native AST & SQL Dependency Graph Generator has 0/4 trigger activations.
+    Gap: 4.'
+  governor_signature: null
+  item_id: PARK-036
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[ACTIVATION.UNDERACTIVATED]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: 'Underactivated Mechanism: CISEM-GRAPHIFY'
+- atv_generated: true
+  atv_timestamp: '2026-08-10T15:55:03.232250+00:00'
+  description: 'ATV Naked Number Audit detected 23 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md:L41
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Scope_Optimization_in_Cisem_Gate_Plan__V1.0.md:L42
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Trial_001_Validation_Telemetry_and_Exit_Validation_Plan__V1.0.md:L3
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-037
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 23 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-10T19:41:01.239254+00:00'
+  description: 'ATV Naked Number Audit detected 26 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md:L41
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Scope_Optimization_in_Cisem_Gate_Plan__V1.0.md:L42
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Trial_001_Validation_Telemetry_and_Exit_Validation_Plan__V1.0.md:L3
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-038
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 26 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-11T05:14:37.117122+00:00'
+  description: 'ATV Naked Number Audit detected 27 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md:L41
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Scope_Optimization_in_Cisem_Gate_Plan__V1.0.md:L42
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Trial_001_Validation_Telemetry_and_Exit_Validation_Plan__V1.0.md:L3
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-039
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 27 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-11T07:49:37.145860+00:00'
+  description: 'ATV Naked Number Audit detected 30 occurrences of raw numbers without
+    surrounding context keywords. Examples: 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Gate_Scope_Optimization_Plan__V1.0.md:L41
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Git_Diff_Scope_Optimization_in_Cisem_Gate_Plan__V1.0.md:L42
+    (''11''); 2026-08-09__AntigravityLocal__YarivHuman__Trial_001_Validation_Telemetry_and_Exit_Validation_Plan__V1.0.md:L3
+    (''001''). All numbers in documentation must have context (e.g. marked as ''example''
+    or ''estimate'').'
+  governor_signature: null
+  item_id: PARK-040
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: false
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.RIGIDITY]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Naked Numbers Found -- Context/Reasoning missing for 30 numbers

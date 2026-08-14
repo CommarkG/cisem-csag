@@ -24,18 +24,9 @@ export function verifyTenantContext(req: NextRequest): TenantContext | null {
   const secret = process.env.TENANT_SIGNING_SECRET;
   const headerVal = req.headers.get("x-tenant-context");
 
-  // Fallback for development if no signature and no secret is set
-  if (process.env.NODE_ENV === "development" && !secret && !headerVal) {
-    console.warn("CISEM_SECURITY_WARNING: Falling back to dev-tenant-1 admin context in development mode.");
-    return {
-      tenantId: "dev-tenant-1",
-      tier: "enterprise",
-      roles: ["admin", "developer"]
-    };
-  }
-
-  if (process.env.NODE_ENV !== "development" && !secret) {
-    console.error("CISEM_SECURITY_ALERT: TENANT_SIGNING_SECRET is missing in production environment.");
+  // Fail-closed: absent secret is a misconfiguration in all environments
+  if (!secret) {
+    console.error("CISEM_SECURITY_ALERT: TENANT_SIGNING_SECRET is not set. Cannot verify tenant context.");
     return null;
   }
 
@@ -52,7 +43,7 @@ export function verifyTenantContext(req: NextRequest): TenantContext | null {
     const payloadBase64 = parts[0];
     const signature = parts[1];
 
-    const hmac = crypto.createHmac("sha256", secret || "dev-fallback-secret-key-9999");
+    const hmac = crypto.createHmac("sha256", secret);
     hmac.update(payloadBase64);
     const expectedSignature = hmac.digest("hex");
 

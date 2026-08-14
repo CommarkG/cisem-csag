@@ -1,6 +1,6 @@
-# Ratified Plan: CISEM-IP-20260808-SALES-AGENT
-# Architectural Reasoning: Multi-modal embedding coordinator ensuring image visual descriptions are projected back into 768-dim text-embedding-004 space.
-# Parent Principles: PR-98000 (SIPI), PR-84900 (Naming Conventions)
+# Ratified Plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
+# Architectural Reasoning: Multi-modal embedding coordinator updated to align deprecated models to gemini-1.5-flash.
+# Parent Principles: PR-98000 (SIPI), PR-84900 (Naming Conventions), AX-50000.
 
 import os
 import requests
@@ -51,7 +51,7 @@ class EmbeddingService:
         if not gemini_key:
             return [0.1] * 768
 
-        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_key}"
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
         
         prompt = "Describe the visual features, style, color, pattern, material, and category of this product in dense key phrases for semantic indexing."
         

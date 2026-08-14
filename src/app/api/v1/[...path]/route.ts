@@ -1,7 +1,12 @@
-// Ratified Plan: CRUEL-REVIEW-AX70000-CONSOLIDATED-V1.0
-// Architectural Reasoning: Catch-all proxy and mock handler for all /api/v1/ endpoints to ensure anti-theater resilience when backend is offline, verifying cryptographically signed tenant context.
-// Parent Principles: PR-11100 (Cryptographic context), PR-13990 (Sandbox Boundaries).
-
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: CRUEL-REVIEW-AX70000-CONSOLIDATED-V1.0
+# governor_signature: GOV-YARIV-20260810-CRUEL-REVIEW-V1.0
+# version: V1.0
+# reasoning: |
+#   Catch-all proxy and mock handler for all /api/v1/ endpoints to ensure anti-theater resilience when backend is offline.
+#   Parent Principles: PR-11100 (Cryptographic context), PR-13990 (Sandbox Boundaries).
+*/
 import { NextRequest, NextResponse } from "next/server";
 import { verifyTenantContext } from "@/lib/tenant_context";
 
@@ -102,6 +107,46 @@ function getMockData(pathStr: string, method: string) {
       sync_status: "synced"
     };
   }
+  if (p.includes("medusa/products")) {
+    return {
+      success: true,
+      products: [
+        {
+          id: "prod_mock_01",
+          title: "Enterprise Scraping Module",
+          handle: "enterprise-scraping-module",
+          sku: "MOCK-SKU-01",
+          price: 1250,
+          inventoryQuantity: 42,
+          description: "Visual scraping and ingestion script."
+        },
+        {
+          id: "prod_mock_02",
+          title: "SaaS Vector Search Adapter",
+          handle: "saas-vector-search-adapter",
+          sku: "MOCK-SKU-02",
+          price: 890,
+          inventoryQuantity: 15,
+          description: "PGVector partitioned HNSW indexer."
+        }
+      ]
+    };
+  }
+  if (p.includes("medusa/quotes")) {
+    return {
+      success: true,
+      quotes: [
+        {
+          id: "quote_mock_01",
+          customerId: "client_mock_01",
+          items: [{ title: "Enterprise Scraping Module", quantity: 1, unitPrice: 1250 }],
+          taxRate: 0.17,
+          total: 1462.5,
+          status: "draft"
+        }
+      ]
+    };
+  }
   
   return { success: true, mock: true, path: pathStr, method };
 }
@@ -114,23 +159,6 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
   
   let originalCtxHeader = req.headers.get("x-tenant-context");
   
-  // Developer override/mock signing mechanism for frontend active role selection
-  const mockTier = req.headers.get("x-mock-tier");
-  if (mockTier && !originalCtxHeader) {
-    const secret = process.env.TENANT_SIGNING_SECRET || "dev-secret-key-9999";
-    const payload = {
-      tenantId: "dev-tenant-1",
-      tier: mockTier,
-      roles: ["admin"]
-    };
-    const crypto = require("crypto");
-    const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString("base64");
-    const hmac = crypto.createHmac("sha256", secret);
-    hmac.update(payloadBase64);
-    const signature = hmac.digest("hex");
-    originalCtxHeader = `${payloadBase64}.${signature}`;
-  }
-
   // Verify tenant context at boundary
   // Setup request with computed x-tenant-context if mockTier was used
   const tempReq = new NextRequest(req.url, {

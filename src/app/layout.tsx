@@ -1,5 +1,11 @@
+// Ratified Plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
+// Architectural Reasoning: Root layout component for B2B Portal. Updated inline script to use next/script to resolve console script warnings in React hydration.
+// Parent Principles: PR-13990 (Sandbox Boundaries), AX-50000.
+// @playbook_category: Design Token
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,7 +35,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               try {

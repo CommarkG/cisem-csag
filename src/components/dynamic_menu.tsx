@@ -1,4 +1,17 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: CISEM-IP-20260811-HEADER-UNIFICATION
+# governor_signature: GOV-YARIV-20260811-HEADER-UNIFICATION-V1.0
+# version: V1.3
+# reasoning: |
+#   Integrate back/forward chevrons, language toggle, and crumbnail breadcrumbs into
+#   the dynamic header of the old-b2b layout, ensuring strict single-row uniformity.
+#   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >PR-13500.
+# */
+// @playbook_category: Micro-interaction Module
+
 import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface MenuItem {
   id: string;
@@ -16,6 +29,16 @@ interface DynamicMenuProps {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
   mounted: boolean;
+
+  // Navigation extension props:
+  locale?: "en" | "he";
+  onLocaleChange?: (locale: "en" | "he") => void;
+  historyIndex?: number;
+  historyLength?: number;
+  onGoBack?: () => void;
+  onGoForward?: () => void;
+  breadcrumbsList?: string[];
+  getBreadcrumbIcon?: (node: string) => React.ReactNode;
 }
 
 export default function DynamicMenu({
@@ -27,7 +50,16 @@ export default function DynamicMenu({
   onSelectCategory,
   isDarkMode,
   toggleDarkMode,
-  mounted
+  mounted,
+
+  locale = "he",
+  onLocaleChange,
+  historyIndex = 0,
+  historyLength = 1,
+  onGoBack,
+  onGoForward,
+  breadcrumbsList = [],
+  getBreadcrumbIcon,
 }: DynamicMenuProps) {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
@@ -44,20 +76,63 @@ export default function DynamicMenu({
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/85 backdrop-blur-md transition-colors duration-300">
+    <header className="sticky top-0 z-[200] w-full border-b border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/85 backdrop-blur-md transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Left branding */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <span
               onClick={() => onSelectCategory("home")}
-              className="text-xl font-extrabold text-slate-900 dark:text-white hover:text-red-500 dark:hover:text-red-500 transition-colors duration-300 cursor-pointer"
+              className="text-xl font-extrabold text-slate-900 dark:text-white hover:text-amber-500 dark:hover:text-amber-500 transition-colors duration-300 cursor-pointer flex-shrink-0"
             >
               Cisem CsAg
             </span>
-            <span className="hidden md:inline-flex items-center rounded-md bg-red-500/10 px-2 py-1 text-xs font-medium text-red-500 ring-1 ring-inset ring-red-500/20">
-              B2B Portal
-            </span>
+
+            {/* Breadcrumbs with mandatory Crumbnails */}
+            {breadcrumbsList && breadcrumbsList.length > 0 && (
+              <div className="flex items-center gap-2 overflow-hidden text-xs font-semibold" dir={locale === "he" ? "rtl" : "ltr"}>
+                <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-1 flex-shrink-0" />
+                
+                {/* Unified History buttons styled like Crumbnails */}
+                <div className="inline-flex gap-1 flex-shrink-0">
+                  <button
+                    onClick={onGoBack}
+                    disabled={historyIndex === 0}
+                    className="h-5 w-5 p-0 inline-flex items-center justify-center rounded bg-indigo-500/15 dark:bg-violet-500/12 border border-slate-200/50 dark:border-slate-800/50 text-indigo-600 dark:text-violet-400 hover:bg-indigo-500/25 dark:hover:bg-violet-500/20 disabled:opacity-30 transition-all cursor-pointer"
+                    title={locale === "he" ? "אחורה" : "Back"}
+                  >
+                    {locale === "he" ? <ChevronRight size={14} style={{ color: 'var(--accent)' }} /> : <ChevronLeft size={14} style={{ color: 'var(--accent)' }} />}
+                  </button>
+                  <button
+                    onClick={onGoForward}
+                    disabled={historyLength !== undefined && historyIndex !== undefined && historyIndex >= historyLength - 1}
+                    className="h-5 w-5 p-0 inline-flex items-center justify-center rounded bg-indigo-500/15 dark:bg-violet-500/12 border border-slate-200/50 dark:border-slate-800/50 text-indigo-600 dark:text-violet-400 hover:bg-indigo-500/25 dark:hover:bg-violet-500/20 disabled:opacity-30 transition-all cursor-pointer"
+                    title={locale === "he" ? "קדימה" : "Forward"}
+                  >
+                    {locale === "he" ? <ChevronLeft size={14} style={{ color: 'var(--accent)' }} /> : <ChevronRight size={14} style={{ color: 'var(--accent)' }} />}
+                  </button>
+                </div>
+
+                <div className="h-4 w-px bg-slate-300 dark:bg-slate-800 mx-1 flex-shrink-0" />
+
+                {/* Breadcrumbs trail */}
+                <nav className="flex items-center gap-1.5 overflow-hidden text-slate-500 dark:text-slate-400">
+                  {breadcrumbsList.map((node, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <span className="text-[10px] text-slate-400 flex-shrink-0">/</span>}
+                      <span className="inline-flex items-center gap-1.5 flex-shrink-0">
+                        <span className="crumbnail-icon-wrapper inline-flex items-center justify-center p-0.5 rounded bg-indigo-500/15 dark:bg-violet-500/12 border border-slate-200/50 dark:border-slate-800/50 flex-shrink-0">
+                          {getBreadcrumbIcon ? getBreadcrumbIcon(node) : null}
+                        </span>
+                        <span className={index === breadcrumbsList.length - 1 ? "text-slate-900 dark:text-white font-bold" : ""}>
+                          {node}
+                        </span>
+                      </span>
+                    </React.Fragment>
+                  ))}
+                </nav>
+              </div>
+            )}
           </div>
 
           {/* Center Category navigation links */}
@@ -67,7 +142,7 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-red-500 dark:hover:text-red-500 transition-colors py-5 gap-1"
+                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
               >
                 <span>Sandbox</span>
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,54 +150,48 @@ export default function DynamicMenu({
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[240px] rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-4 flex flex-col gap-2 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-50">
-                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1 text-right">
+              <div className="absolute right-0 top-full w-[240px] glass-card-static p-4 flex flex-col gap-2 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1 text-right">
                   ארגז חול (Sandbox)
                 </span>
                 <button
                   onClick={() => onSelectCategory("sandbox_playground")}
-                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                 >
                   Website Prototype
                 </button>
                 <button
                   onClick={() => onSelectCategory("sandbox_playground")}
-                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                 >
                   Landing Page
                 </button>
                 <button
                   onClick={() => onSelectCategory("sandbox_playground")}
-                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                 >
                   CRM Stacker
                 </button>
                 <button
                   onClick={() => onSelectCategory("sandbox_playground")}
-                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                 >
                   Social Banner Studio
                 </button>
                 <button
                   onClick={() => onSelectCategory("sandbox_playground")}
-                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                 >
                   Knowledge Hub
                 </button>
-                <button
-                  onClick={() => onSelectCategory("sandbox_playground")}
-                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                >
-                  Vocabulary & Axioms
-                </button>
               </div>
             </div>
-            
+
             {/* Tools Dropdown */}
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-red-500 dark:hover:text-red-500 transition-colors py-5 gap-1"
+                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
               >
                 <span>Tools</span>
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -130,68 +199,46 @@ export default function DynamicMenu({
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[540px] rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-50">
-                {/* Column 1: Image Processing Suite */}
-                <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
-                    Marketing ➔ Studio ➔ Image
-                  </span>
-                  <button
-                    onClick={() => onSelectCategory("sandbox_playground")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Normalizer
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("sandbox_playground")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Batch Auditor
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("sandbox_playground")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Shape Library
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("sandbox_playground")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Folder Manager
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("sandbox_playground")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Learning Lab
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("sandbox_playground")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Diagnostics
-                  </button>
-                </div>
-
-                {/* Column 2: B2B Catalog (Supabase Dynamic) */}
-                <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
-                    B2B Catalog Groups
-                  </span>
-                  {menuItems.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => onSelectCategory(item.id)}
-                      className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                    >
-                      {item.name}
-                    </button>
-                  ))}
-                  {menuItems.length === 0 && (
-                    <span className="text-xs text-slate-400 italic">No groups loaded.</span>
-                  )}
-                </div>
+              <div className="absolute right-0 top-full w-[280px] glass-card-static p-6 flex flex-col gap-2 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1 text-right">
+                  Marketing ➔ Studio ➔ Image
+                </span>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  Normalizer
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  Batch Auditor
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  Shape Library
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  Folder Manager
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  Learning Lab
+                </button>
+                <button
+                  onClick={() => onSelectCategory("sandbox_playground")}
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                >
+                  Diagnostics
+                </button>
               </div>
             </div>
 
@@ -199,7 +246,7 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-red-500 dark:hover:text-red-500 transition-colors py-5 gap-1"
+                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
               >
                 <span>Gov</span>
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -207,27 +254,27 @@ export default function DynamicMenu({
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[480px] rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-50">
+              <div className="absolute right-0 top-full w-[480px] glass-card-static p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
                 {/* Column 1: Schema & Rules */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
                     Schemas & Audits
                   </span>
                   <button
                     onClick={() => onSelectCategory("human_schema")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Schema (Human Logic)
                   </button>
                   <button
                     onClick={() => onSelectCategory("system_schema")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Schema (System Logic)
                   </button>
                   <button
                     onClick={onHelpClick}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     AI Behavior & Personas
                   </button>
@@ -235,24 +282,24 @@ export default function DynamicMenu({
 
                 {/* Column 2: Accountability & Guides */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
                     Loops & Safety
                   </span>
                   <button
                     onClick={onBacklogClick}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Learning Loops (Backlog)
                   </button>
                   <button
                     onClick={() => onSelectCategory("threshold")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Threshold Input Gate
                   </button>
                   <button
                     onClick={onHelpClick}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Help & Tutorials
                   </button>
@@ -264,7 +311,7 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-red-500 dark:hover:text-red-500 transition-colors py-5 gap-1"
+                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
               >
                 <span>Arch</span>
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -272,33 +319,33 @@ export default function DynamicMenu({
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[400px] rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-50">
+              <div className="absolute right-0 top-full w-[400px] glass-card-static p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
                 {/* Column 1: UI & Flow */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
                     Design & Diffs
                   </span>
                   <button
                     onClick={() => onSelectCategory("template_hub")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Template Hub
                   </button>
                   <button
                     onClick={() => onSelectCategory("web_pages")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Web Pages
                   </button>
                   <button
                     onClick={() => onSelectCategory("design_studio")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     UX UI Studio
                   </button>
                   <button
                     onClick={() => onSelectCategory("traceability_spec")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Pipelines & Trace
                   </button>
@@ -306,18 +353,18 @@ export default function DynamicMenu({
 
                 {/* Column 2: Capabilities */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
                     Trunks & Adapt
                   </span>
                   <button
                     onClick={() => onSelectCategory("agents_skills")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Agents & Skills
                   </button>
                   <button
                     onClick={() => onSelectCategory("protocols_wizards")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Protocols & specs
                   </button>
@@ -329,7 +376,7 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-red-500 dark:hover:text-red-500 transition-colors py-5 gap-1"
+                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
               >
                 <span>Ext</span>
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -337,40 +384,53 @@ export default function DynamicMenu({
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[400px] rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-50">
-                {/* Column 1: Models */}
+              <div className="absolute right-0 top-full w-[540px] glass-card-static p-6 grid grid-cols-3 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
+                {/* Column 1: Business */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
+                    Business
+                  </span>
+                  <button
+                    onClick={() => onSelectCategory("purchasing_quotes_hub")}
+                    className="text-xs font-semibold text-slate-900 dark:text-amber-400 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] font-bold"
+                  >
+                    Pricing and Purchasing
+                  </button>
+                </div>
+
+                {/* Column 2: Models */}
+                <div className="flex flex-col gap-2 text-right">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
                     AI Solutions
                   </span>
                   <button
                     onClick={() => onSelectCategory("api_providers")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     AI Providers
                   </button>
                   <button
                     onClick={() => onSelectCategory("matting_models")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Matting Models
                   </button>
                 </div>
 
-                {/* Column 2: Storage & Sync */}
+                {/* Column 3: Storage & Sync */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-850 pb-1">
+                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
                     Infrastructure
                   </span>
                   <button
                     onClick={() => onSelectCategory("storage_cdn")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Storage & CDNs
                   </button>
                   <button
                     onClick={() => onSelectCategory("data_integrations")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-500 text-right py-1 transition-all hover:translate-x-[-4px]"
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
                     Data Integrations
                   </button>
@@ -385,7 +445,7 @@ export default function DynamicMenu({
             {/* Help Button */}
             <button
               onClick={onHelpClick}
-              className="text-slate-600 dark:text-slate-300 hover:text-red-500 transition-colors"
+              className="text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors"
               title="Help & Onboarding Guides"
             >
               <span className="text-xs font-semibold flex items-center gap-1">
@@ -396,7 +456,7 @@ export default function DynamicMenu({
             {/* Backlog Button */}
             <button
               onClick={onBacklogClick}
-              className="text-slate-600 dark:text-slate-300 hover:text-red-500 transition-colors"
+              className="text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors"
               title="Backlog Feedback Hub"
             >
               <span className="text-xs font-semibold flex items-center gap-1">
@@ -406,11 +466,11 @@ export default function DynamicMenu({
 
             {/* Wishlist Button */}
             <div className="relative">
-              <span className="text-xs font-semibold cursor-pointer hover:text-red-500 transition-colors block">
+              <span className="text-xs font-semibold cursor-pointer hover:text-amber-500 transition-colors block">
                 מועדפים
               </span>
               {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center bg-red-500 text-[9px] font-bold text-white">
+                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center bg-amber-500 text-[9px] font-bold text-white rounded-full">
                   {wishlistCount}
                 </span>
               )}
@@ -419,15 +479,23 @@ export default function DynamicMenu({
             {/* Theme switcher */}
             <button
               onClick={toggleDarkMode}
-              className="text-slate-600 dark:text-slate-300 hover:text-red-500 transition-colors text-xs font-semibold"
+              className="text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors text-xs font-semibold"
             >
               {!mounted ? "" : (isDarkMode ? "Light Mode" : "Dark Mode")}
             </button>
 
+            {/* Bilingual language switcher */}
+            <button
+              onClick={() => onLocaleChange?.(locale === "he" ? "en" : "he")}
+              className="text-slate-650 dark:text-slate-300 hover:text-amber-500 transition-colors text-xs font-semibold"
+            >
+              {locale === "he" ? "English" : "עברית"}
+            </button>
+
             {/* Dynamic Role Switcher Dropdown */}
             <div className="relative group">
-              <button className="flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 p-1 bg-slate-50 dark:bg-slate-900 hover:ring-2 hover:ring-red-500/30 transition-all duration-300">
-                <span className="h-7 w-7 rounded-full bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-850 dark:text-slate-200 uppercase">
+              <button className="flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 p-1 bg-slate-50 dark:bg-slate-900 hover:ring-2 hover:ring-amber-500/30 transition-all duration-300">
+                <span className="h-7 w-7 rounded-full bg-slate-250 dark:bg-slate-800 border border-slate-350 dark:border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-850 dark:text-slate-200 uppercase">
                   {activeRole.substring(0, 2)}
                 </span>
                 <span className="hidden md:inline text-xs font-semibold text-slate-700 dark:text-slate-300 px-1 capitalize">
@@ -435,7 +503,7 @@ export default function DynamicMenu({
                 </span>
               </button>
 
-              <div className="absolute left-0 mt-2 w-48 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-2 hidden group-hover:block z-50">
+              <div className="absolute left-0 mt-2 w-48 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-2 hidden group-hover:block z-[300]">
                 {[
                   { id: "guest", label: "Anonymous Guest" },
                   { id: "buyer", label: "Standard Client" },
@@ -447,7 +515,7 @@ export default function DynamicMenu({
                     onClick={() => onRoleChange(role.id as any)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
                       activeRole === role.id
-                        ? "bg-red-500/10 text-red-500 dark:bg-red-500/10 dark:text-red-500"
+                        ? "bg-amber-500/10 text-amber-500 dark:bg-amber-500/10 dark:text-amber-500"
                         : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                     }`}
                   >

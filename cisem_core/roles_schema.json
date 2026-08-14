@@ -1,0 +1,9 @@
+{
+  "roles": {
+    "owner": { "permissions": ["*"] },
+    "admin": { "permissions": ["read", "write", "delete", "settings"] },
+    "finance_manager": { "permissions": ["read", "write", "finance"] },
+    "sales_rep": { "permissions": ["read", "write", "crm"] },
+    "viewer": { "permissions": ["read"] }
+  }
+}

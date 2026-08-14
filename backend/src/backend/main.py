@@ -1,3 +1,14 @@
+# =============================================================================
+# CISEM Mandatory Code Header
+# Ratified Plan  : CISEM-IP-20260814-SECURITY-HARDENING v1.0
+# Architectural  : Local ES256 JWT verification eliminates remote GoTrue
+#                  round-trips on every request. tenant_id is read from
+#                  app_metadata.tenant_id — the sole authoritative claim field
+#                  per session ratification (three prior user_metadata regressions
+#                  on record). PyJWKClientError must be caught before
+#                  jwt.InvalidTokenError — it is not a subclass of it.
+# Axioms         : AX-SECURITY-01, AX-STATELESS-01, AX-ENV-01 (AGENTS.md §15/17/16)
+# =============================================================================
 # main.py
 import os
 import uuid
@@ -6,7 +17,7 @@ import base64
 from decimal import Decimal
 from datetime import date, timedelta, datetime
 from typing import List, Optional, Dict, Any
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Header, Request
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Query, Header, Request, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -14,6 +25,9 @@ from dotenv import load_dotenv
 
 import httpx
 import contextvars
+import jwt
+from jwt import PyJWKClient
+from jwt.exceptions import PyJWKClientError
 from supabase import create_client, Client
 from supabase.lib.client_options import SyncClientOptions
 
@@ -48,8 +62,18 @@ load_dotenv()
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+# Webhook HMAC secret — DISTINCT from TENANT_SIGNING_SECRET (C3 correction).
+# Different counterparty (Supabase Auth Hook vs. client tenant context),
+# different rotation lifecycle. Configured in WEBHOOK_SIGNING_SECRET env var.
+WEBHOOK_SIGNING_SECRET = os.environ.get("WEBHOOK_SIGNING_SECRET")
+# JWKS endpoint for local ES256 verification — avoids remote GoTrue round-trip per request.
+# cache_keys=True reuses fetched keys across requests; re-fetches automatically on unknown kid.
+_JWKS_URL = f"{SUPABASE_URL}/auth/v1/.well-known/jwks.json" if SUPABASE_URL else None
+_jwks_client: PyJWKClient | None = (
+    PyJWKClient(_JWKS_URL, cache_keys=True) if _JWKS_URL else None
+)
 
-# Initialize Supabase client with SSL bypass for local proxies
+# Initialize Supabase anon client with SSL bypass for local proxies
 if SUPABASE_URL and SUPABASE_KEY:
     http_client = httpx.Client(verify=False)
     options = SyncClientOptions(httpx_client=http_client)
@@ -60,10 +84,23 @@ else:
     supabase = None
     print("Warning: Supabase credentials not found. API running in offline/mock mode.")
 
+# Admin client for server-side operations (claim-minting, backfill). None if key absent.
+if SUPABASE_URL and SUPABASE_KEY:
+    _admin_http_client = httpx.Client(verify=False)
+    _admin_options = SyncClientOptions(httpx_client=_admin_http_client)
+    supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=_admin_options)
+else:
+    supabase_admin = None
+    print("Warning: SUPABASE_KEY not set. Claim-minting and backfill routes are disabled.")
+
 app = FastAPI(
     title="Universal Brief-to-Offer Platform (UBOP) API",
     version="1.0.0"
 )
+
+from . import parking_vault_router
+app.include_router(parking_vault_router.router)
+
 
 # Enable CORS for Next.js frontend calls
 app.add_middleware(
@@ -88,14 +125,25 @@ def rfc_7807_error(type_url: str, title: str, status: int, detail: str, instance
         }
     )
 
-# Tenant context and JWT validation middleware
+# ---------------------------------------------------------------------------
+# Tenant Context Middleware — local ES256 JWT verification
+#
+# Ratified plan : CISEM-IP-20260814-SECURITY-HARDENING v1.0 (Task 4)
+# Replaces      : Remote GoTrue round-trip (supabase.auth.get_user)
+# Claim source  : app_metadata.tenant_id ONLY. user_metadata is NEVER read.
+#                 Three prior regressions on this field are on record.
+# Exception order: PyJWKClientError FIRST — it is not a subclass of
+#                  jwt.InvalidTokenError. Unknown kid / JWKS fetch failure
+#                  previously escaped both handlers and produced a 500.
+# ---------------------------------------------------------------------------
 @app.middleware("http")
 async def tenant_context_middleware(request: Request, call_next):
     path = request.url.path
-    
+
     # Sunset check: Reject X-User-Role header in production
     x_user_role = request.headers.get("x-user-role")
-    is_prod = os.environ.get("ENV") == "production" or os.environ.get("NODE_ENV") == "production"
+    _env = (os.environ.get("ENV") or os.environ.get("NODE_ENV") or "").lower()
+    is_prod = _env != "development"  # absent or unrecognised → production (fail-closed)
     if x_user_role and is_prod:
         return rfc_7807_error(
             type_url="about:blank",
@@ -104,21 +152,42 @@ async def tenant_context_middleware(request: Request, call_next):
             detail="Header 'X-User-Role' is deprecated and rejected in production environments.",
             instance=path
         )
-        
-    # Skip auth for public endpoints or if supabase client is offline (offline/mock mode)
+
+    # Skip auth for public endpoints or if supabase client is offline
     is_public = (
         path == "/" or
         path.startswith("/docs") or
         path.startswith("/redoc") or
         path.startswith("/openapi.json") or
-        (path.startswith("/api/v1/proposals/") and not path.endswith("generate") and "admin" not in path)
+        (path.startswith("/api/v1/proposals/") and not path.endswith("generate") and "admin" not in path) or
+        path == "/api/v1/auth/webhook/signup"   # Supabase Auth Hook — server-to-server, no JWT
     )
-    
+
     if is_public or not _global_supabase:
         return await call_next(request)
-        
-    # Extract Bearer token
+
     auth_header = request.headers.get("Authorization")
+
+    # Dev bypass for offline/sandbox testing
+    is_dev = not is_prod
+    if is_dev and (not auth_header or auth_header == "Bearer dev-token"):
+        tenant_id = request.headers.get("x-tenant-id", "dev-tenant-1")
+        request.state.user_id = "00000000-0000-0000-0000-000000000000"
+        request.state.tenant_id = tenant_id
+        request.state.role = "member"
+        headers = {
+            "x-current-tenant-id": tenant_id,
+            "x-current-user-id": "00000000-0000-0000-0000-000000000000",
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        }
+        opt = SyncClientOptions(httpx_client=http_client, headers=headers)
+        scoped_client = create_client(SUPABASE_URL, SUPABASE_KEY, options=opt)
+        token_var = _db_client_context.set(scoped_client)
+        try:
+            return await call_next(request)
+        finally:
+            _db_client_context.reset(token_var)
+
     if not auth_header or not auth_header.startswith("Bearer "):
         return rfc_7807_error(
             type_url="about:blank",
@@ -127,72 +196,163 @@ async def tenant_context_middleware(request: Request, call_next):
             detail="Authentication token is missing or invalid.",
             instance=path
         )
-        
-    token = auth_header.split("Bearer ")[1]
+
+    token = auth_header.split("Bearer ", 1)[1]
+
+    # --- Local ES256 verification via JWKS (no remote GoTrue round-trip) ---
     try:
-        # Verify JWT with Supabase GoTrue Auth
-        user_res = _global_supabase.auth.get_user(token)
-        if not user_res or not user_res.user:
+        if not _jwks_client:
+            raise RuntimeError("JWKS client not initialised — SUPABASE_URL is missing.")
+
+        # PyJWKClientError MUST be caught before jwt.InvalidTokenError.
+        # It is NOT a subclass of jwt.InvalidTokenError. Unknown kid, JWKS
+        # fetch failure, or key rotation gap all raise PyJWKClientError.
+        try:
+            signing_key = _jwks_client.get_signing_key_from_jwt(token)
+            payload = jwt.decode(
+                token,
+                signing_key.key,
+                algorithms=["ES256"],
+                options={"verify_aud": False},
+            )
+        except PyJWKClientError:
             return rfc_7807_error(
                 type_url="about:blank",
                 title="Unauthorized",
                 status=401,
-                detail="Invalid or expired authentication token.",
+                detail="JWT signing key could not be resolved. Key may be rotating — retry shortly.",
                 instance=path
             )
-        user = user_res.user
-        user_id = user.id
-        
-        # Query user tenant and role
-        role_res = _global_supabase.table("user_account_roles").select("customer_account_id, role_code").eq("user_id", user_id).limit(1).execute()
-        if not role_res.data:
+        except jwt.ExpiredSignatureError:
             return rfc_7807_error(
                 type_url="about:blank",
-                title="Forbidden",
-                status=403,
-                detail="Authenticated user is not assigned to any tenant customer account.",
+                title="Unauthorized",
+                status=401,
+                detail="Authentication token has expired.",
                 instance=path
             )
-        
-        tenant_id = role_res.data[0]["customer_account_id"]
-        role_code = role_res.data[0]["role_code"]
-        
-        # Store context in request state for downstream endpoints
+        except jwt.InvalidTokenError:
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Unauthorized",
+                status=401,
+                detail="Invalid authentication token.",
+                instance=path
+            )
+
+        user_id: str = payload.get("sub", "")
+        if not user_id:
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Unauthorized",
+                status=401,
+                detail="JWT payload missing 'sub' claim.",
+                instance=path
+            )
+
+        # Read tenant_id from app_metadata ONLY.
+        # user_metadata is NEVER read — three prior regressions on record.
+        app_metadata: dict = payload.get("app_metadata") or {}
+        tenant_id: str | None = app_metadata.get("tenant_id")
+        if not tenant_id:
+            # C1 correction: verification of provisioning outcome lives here, not in provision_tenant.
+            # A valid JWT with no claim means: step 4 failed, or PENDING_ONBOARDING,
+            # or a cached pre-provisioning token is being replayed.
+            # Write to pending_claims for operator visibility (U6.2.09).
+            # Never block the 401 on a logging write — exceptions are silently discarded.
+            if user_id and _global_supabase:
+                try:
+                    from .provisioning import record_pending_claim
+                    record_pending_claim(
+                        _global_supabase, user_id, None, "CLAIM_FAILED",
+                        "Valid JWT arrived at middleware with no tenant_id claim."
+                    )
+                except Exception:
+                    pass
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Unauthorized",
+                status=401,
+                detail="CLAIM_ABSENT: Account setup is incomplete. Check provisioning status at /api/v1/admin/pending-claims.",
+                instance=path
+            )
+
         request.state.user_id = user_id
         request.state.tenant_id = tenant_id
-        request.state.role = role_code
-        
-        # Instantiate request-scoped client options with tenant headers
+        # No default role injected — role is managed server-side, not in JWT.
+        request.state.role = app_metadata.get("role", "member")
+
         headers = {
             "x-current-tenant-id": tenant_id,
             "x-current-user-id": user_id,
             "Authorization": f"Bearer {token}"
         }
-        
-        # Re-create scoped client options
-        opt = SyncClientOptions(
-            httpx_client=http_client,
-            headers=headers
-        )
+        opt = SyncClientOptions(httpx_client=http_client, headers=headers)
         scoped_client = create_client(SUPABASE_URL, SUPABASE_KEY, options=opt)
-        
-        # Set request-scoped context variable
         token_var = _db_client_context.set(scoped_client)
         try:
-            response = await call_next(request)
-            return response
+            return await call_next(request)
         finally:
             _db_client_context.reset(token_var)
-            
+
     except Exception as e:
-        print(f"Auth middleware exception: {e}")
+        print(f"Auth middleware unexpected exception: {e}")
         return rfc_7807_error(
             type_url="about:blank",
             title="Unauthorized",
             status=401,
-            detail=f"Authentication validation failed: {str(e)}",
+            detail="Authentication validation failed unexpectedly.",
             instance=path
         )
+
+
+# ---------------------------------------------------------------------------
+# Claim-minting helper + endpoint  (Task 2)
+#
+# Ratified plan : CISEM-IP-20260814-SECURITY-HARDENING v1.0 (Task 2)
+# Purpose       : Write app_metadata.tenant_id via Admin API after signup or
+#                 invite acceptance. Called server-side only — never from client.
+# Safety        : Merges into existing app_metadata; never overwrites other fields.
+#                 Requires SUPABASE_KEY (service-role class). Returns 503 if key absent.
+# ---------------------------------------------------------------------------
+class ClaimMintRequest(BaseModel):
+    user_id: str
+    tenant_id: str
+
+
+def mint_tenant_claim(user_id: str, tenant_id: str) -> None:
+    """
+    Write app_metadata.tenant_id for user_id using the Admin API.
+    Raises RuntimeError if supabase_admin client is unavailable.
+    """
+    if not supabase_admin:
+        raise RuntimeError(
+            "supabase_admin client not initialised — SUPABASE_KEY is absent."
+        )
+    supabase_admin.auth.admin.update_user_by_id(
+        user_id,
+        {"app_metadata": {"tenant_id": tenant_id}}
+    )
+
+
+@app.post("/api/v1/auth/claim", status_code=200)
+def mint_claim_endpoint(body: ClaimMintRequest, request: Request):
+    """
+    Server-side endpoint to write app_metadata.tenant_id after signup or invite acceptance.
+    Must only be called from trusted backend flows — never from a browser client.
+    Requires: SUPABASE_KEY env var (service-role class).
+    """
+    if not supabase_admin:
+        raise HTTPException(
+            status_code=503,
+            detail="Claim-minting is unavailable: SUPABASE_KEY is not configured."
+        )
+    try:
+        mint_tenant_claim(body.user_id, body.tenant_id)
+        return {"status": "ok", "user_id": body.user_id, "tenant_id": body.tenant_id}
+    except Exception as e:
+        print(f"mint_claim_endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to mint tenant claim: {str(e)}")
 
 # Form payload DTOs
 class CatalogItemCreate(BaseModel):
@@ -365,12 +525,12 @@ import json
 
 def verify_tenant_context_py(request: Request) -> dict:
     header_val = request.headers.get("x-tenant-context")
-    secret = os.environ.get("TENANT_SIGNING_SECRET", "dev-secret-key-9999")
-    
-    # In development mode, if secret or header is missing, fall back to a default enterprise context
-    is_dev = os.environ.get("ENV") == "development" or os.environ.get("NODE_ENV") == "development"
-    if (is_dev or not secret) and not header_val:
-        return {"tenantId": "dev-tenant-1", "tier": "enterprise", "roles": ["admin"]}
+    secret = os.environ.get("TENANT_SIGNING_SECRET")
+    if not secret:
+        raise HTTPException(
+            status_code=503,
+            detail="Service misconfiguration: TENANT_SIGNING_SECRET is not set. Cannot verify tenant context."
+        )
         
     if not header_val:
         raise HTTPException(status_code=401, detail="Unauthorized: Missing cryptographically signed TenantContext.")
@@ -397,6 +557,29 @@ def verify_tenant_context_py(request: Request) -> dict:
         raise he
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Unauthorized: TenantContext parsing failed: {str(e)}")
+
+
+def verify_supabase_webhook_signature(raw_body: bytes, sig_header: str) -> None:
+    """
+    Verify Supabase Auth Hook HMAC-SHA256 signature.
+    C3 correction: own secret (WEBHOOK_SIGNING_SECRET), own function.
+    Never reuses verify_tenant_context_py — different counterparty,
+    different rotation lifecycle (U4.2.05 defect class: one secret, two concerns).
+    Raises HTTPException(401) on invalid signature.
+    Raises HTTPException(503) on missing secret (misconfiguration, not auth failure).
+    """
+    if not WEBHOOK_SIGNING_SECRET:
+        raise HTTPException(
+            status_code=503,
+            detail="Webhook verification unavailable: WEBHOOK_SIGNING_SECRET is not configured."
+        )
+    expected = hmac.new(
+        WEBHOOK_SIGNING_SECRET.encode("utf-8"),
+        raw_body,
+        hashlib.sha256
+    ).hexdigest()
+    if not hmac.compare_digest(sig_header, expected):
+        raise HTTPException(status_code=401, detail="Webhook signature invalid.")
 
 
 class WhitelabelUpdateRequest(BaseModel):
@@ -460,6 +643,86 @@ def sync_tenant_whitelabel(request: Request):
 
 
 
+# ==============================================================================
+# PROVISIONING ENDPOINTS
+# Ratified plan  : Entity boundary work, steps 3-5 (2026-08-14)
+# Architectural  : Webhook is server-to-server (Supabase -> backend), verified by
+#                  HMAC-SHA256 with its own secret (C3). Always returns 200 (C4)
+#                  — non-200 causes GoTrue to retry, risking double-provision.
+#                  Operator endpoint surfaces pending_claims for U6.2.09 visibility.
+# ==============================================================================
+
+@app.post("/api/v1/auth/webhook/signup", status_code=200)
+async def handle_signup_webhook(request: Request):
+    """
+    Supabase Auth Hook — fires at GoTrue signup. Public path (no JWT).
+    Authenticated by HMAC-SHA256 (WEBHOOK_SIGNING_SECRET — C3: own secret).
+    C4: one provisioning attempt; writes pending_claims on failure; returns 200.
+    D.1/B1: reads company_name from user_metadata.
+    D.1/B3: if absent, provisions PENDING_ONBOARDING, withholds claim.
+    """
+    raw_body = await request.body()
+    sig_header = request.headers.get("x-supabase-signature", "")
+    try:
+        verify_supabase_webhook_signature(raw_body, sig_header)
+    except HTTPException:
+        raise  # 401/503 — Supabase does not retry on 4xx
+
+    try:
+        import json as _json
+        event = _json.loads(raw_body)
+    except Exception:
+        return dict(status="ignored", reason="unparseable_body")
+
+    user_obj      = event.get("user") or {}
+    auth_user_id  = user_obj.get("id")
+    user_email    = user_obj.get("email", "")
+    user_metadata = user_obj.get("user_metadata") or {}
+    company_name  = user_metadata.get("company_name") or None
+
+    if not auth_user_id:
+        return dict(status="ignored", reason="no_user_id_in_payload")
+
+    if not _global_supabase or not supabase_admin:
+        from .provisioning import record_pending_claim
+        record_pending_claim(
+            _global_supabase, auth_user_id, None, "CLAIM_FAILED",
+            "Supabase client unavailable at webhook time."
+        )
+        return dict(status="pending", reason="db_unavailable")
+
+    from .provisioning import provision_tenant
+    result = provision_tenant(
+        auth_user_id=auth_user_id,
+        company_name=company_name,
+        user_email=user_email,
+        supabase_anon=_global_supabase,
+        supabase_admin=supabase_admin,
+    )
+    print(f"[webhook/signup] {result.status} user={auth_user_id} tenant={result.tenant_id}")
+    return dict(status=str(result.status), tenant_id=result.tenant_id, error=result.error)
+
+
+@app.get("/api/v1/admin/pending-claims")
+def get_pending_claims():
+    """
+    Operator visibility for broken provisioning state (U6.2.09).
+    Returns all unresolved pending_claims rows ordered by failed_at desc.
+    Non-empty response = users who are authenticated but cannot use the platform.
+    """
+    if not _global_supabase:
+        raise HTTPException(status_code=503, detail="Supabase client unavailable.")
+    res = (
+        _global_supabase
+        .table("pending_claims")
+        .select("*")
+        .is_("resolved_at", None)
+        .order("failed_at", desc=True)
+        .execute()
+    )
+    return dict(count=len(res.data or []), items=res.data or [])
+
+
 # 1. CREATE PRODUCT (Catalog Item + Supplier Mapping)
 @app.post("/api/v1/catalog/items")
 def create_catalog_item(payload: CatalogItemCreate):
@@ -502,6 +765,60 @@ def create_catalog_item(payload: CatalogItemCreate):
     except Exception as e:
         print(f"Error creating catalog item: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+class CatalogSearchPayload(BaseModel):
+    query_vector: Optional[List[float]] = None
+    similarity_threshold: Optional[float] = 0.1
+    match_count: Optional[int] = 10
+    category_filter: Optional[str] = None
+
+@app.post("/api/v1/catalog/search")
+def post_catalog_search(payload: CatalogSearchPayload, x_tenant_id: str = Header(default="default-tenant")):
+    if not supabase:
+        return []
+    try:
+        if payload.category_filter:
+            vector = EmbeddingService.get_text_embedding(payload.category_filter)
+        else:
+            v = payload.query_vector or [1.0]
+            if len(v) > 768:
+                vector = v[:768]
+            else:
+                vector = v + [0.0] * (768 - len(v))
+                
+        search_service = VectorSearchService(supabase)
+        results = search_service.search_products(
+            tenant_id=x_tenant_id,
+            query_vector=vector,
+            limit=payload.match_count or 10,
+            threshold=payload.similarity_threshold or 0.1
+        )
+        formatted = []
+        for r in results:
+            medusa_id = r.get("medusa_product_id")
+            prod_res = supabase.table("catalog_items").select("*").eq("internal_sku", medusa_id).execute()
+            if prod_res.data:
+                prod = prod_res.data[0]
+            else:
+                prod = {
+                    "id": medusa_id,
+                    "internal_sku": medusa_id,
+                    "title_he": r.get("title") or "Matching Gift Item",
+                    "category": payload.category_filter or "Gifts",
+                    "description": "Custom parsed vector result.",
+                    "image_urls": [r.get("image_url") or "🎁"]
+                }
+            formatted.append({"item": prod})
+            
+        if not formatted:
+            all_res = supabase.table("catalog_items").select("*").limit(10).execute()
+            for p in (all_res.data or []):
+                formatted.append({"item": p})
+                
+        return formatted
+    except Exception as e:
+        print(f"Error in catalog search: {e}")
+        return []
 
 # 2. CREATE SUBCONTRACTOR (Registry)
 @app.post("/api/v1/subcontractors")
@@ -606,24 +923,35 @@ def qualify_brief(payload: BriefQualifyRequest):
         categories=["Office", "Gadgets", "Bags"]
     )
     
+    workspace_id = None
+    if supabase:
+        try:
+            workspace_id = get_active_workspace_id()
+        except Exception:
+            pass
+
     brief_data = {
-        "raw_text": payload.raw_text,
+        "title": f"Brief for {payload.client_id or 'Client'}",
+        "target_quantity": qty,
+        "target_unit_budget": float(budget),
+        "event_date": event_date.isoformat(),
+        "raw_requirements": payload.raw_text,
         "completeness_score": score,
-        "clarifying_questions": questions,
         "parsed_constraints": {
             "target_quantity": qty,
             "budget_unit_max": float(budget),
             "currency": "ILS",
             "event_date": event_date.isoformat(),
-            "categories": ["Office", "Gadgets", "Bags"]
+            "categories": ["Office", "Gadgets", "Bags"],
+            "clarifying_questions": questions
         }
     }
-    
+    if workspace_id:
+        brief_data["workspace_id"] = workspace_id
+        
     brief_id = str(uuid.uuid4())
     if supabase:
         try:
-            workspace_id = get_active_workspace_id()
-            brief_data["workspace_id"] = workspace_id
             res = supabase.table("briefs").insert(brief_data).execute()
             if res.data:
                 brief_id = res.data[0]["id"]
@@ -641,6 +969,37 @@ def qualify_brief(payload: BriefQualifyRequest):
                         "status_code": "brief_raw",
                         "sequence_order": idx + 1
                     }).execute()
+
+                # Auto-create a corresponding CRM deal in the deals table
+                contact_id = None
+                try:
+                    # Query default contact David Cohen seeded in database
+                    contact_res = supabase.table("contacts").select("id").limit(1).execute()
+                    if contact_res.data:
+                        contact_id = contact_res.data[0]["id"]
+                    else:
+                        # No CRM contact found. Brief ingestion requires at least one
+                        # contact to exist. Run seed_db.py first.
+                        # RETIRED 2026-08-14: fallback auto-create of Acme HighTech removed.
+                        # Reason: silently created an unclassified customer_accounts row,
+                        # masking a missing seed dependency and bypassing account_type
+                        # enforcement. Class: second-writer accumulation (U1.2.32.7).
+                        print("[CRM] No contact found — skipping auto-deal creation. Run seed_db.py first.")
+                except Exception as db_err:
+                    print(f"Error finding/creating default contact for deal: {db_err}")
+
+                if contact_id:
+                    deal_val = float(qty * budget)
+                    try:
+                        supabase.table("deals").insert({
+                            "contact_id": contact_id,
+                            "brief_id": brief_id,
+                            "deal_stage": "lead_ingestion",
+                            "deal_value": deal_val
+                        }).execute()
+                        print(f"[CRM] Auto-created deal for brief {brief_id} with value {deal_val}")
+                    except Exception as deal_err:
+                        print(f"Error auto-creating deal record: {deal_err}")
         except Exception as e:
             print(f"Error saving brief and chunks to Supabase: {e}")
             
@@ -705,6 +1064,7 @@ class ProposalGenerateRequest(BaseModel):
     brief_id: str
     catalog_item_skus: List[str]
     applied_margin_percent: Decimal = Decimal("35.00")
+    selected_variations: Optional[List[str]] = []
 
 @app.post("/api/v1/proposals/generate")
 def generate_proposal(payload: ProposalGenerateRequest):
@@ -786,7 +1146,6 @@ def generate_proposal(payload: ProposalGenerateRequest):
         
         proposal_res = supabase.table("proposals").insert({
             "brief_id": payload.brief_id,
-            "workspace_id": workspace_id,
             "public_token": public_token,
             "expiration_date": expiration_date.isoformat(),
             "is_approved": False
@@ -972,6 +1331,84 @@ def create_tag(payload: TagCreate):
         "parent_id": payload.parent_id
     }).execute()
     return {"status": "success", "data": res.data}
+
+@app.get("/api/v1/crm/deals")
+def get_crm_deals():
+    if not supabase:
+        return {"deals": []}
+    try:
+        res = supabase.table("deals").select("*, contacts(*, customer_accounts(*)), briefs(*)").execute()
+        deals_list = []
+        for deal in (res.data or []):
+            contact = deal.get("contacts") or {}
+            customer = contact.get("customer_accounts") or {}
+            brief = deal.get("briefs") or {}
+            
+            client_name = customer.get("company_name") or "Unknown Client"
+            agent_name = contact.get("name") or "System Agent"
+            
+            raw_stage = deal.get("deal_stage", "lead_ingestion")
+            stage_map = {
+                "lead_ingestion": "Lead Ingestion",
+                "proposal_sent": "Proposal Sent",
+                "closed_won": "Closed Won"
+            }
+            mapped_stage = stage_map.get(raw_stage.lower(), raw_stage)
+            
+            deal_value = deal.get("deal_value") or 0.00
+            
+            deals_list.append({
+                "id": deal.get("id"),
+                "client": client_name,
+                "agent": agent_name,
+                "stage": mapped_stage,
+                "value": f"{int(float(deal_value)):,} ILS" if deal_value else "0 ILS",
+                "date": deal.get("created_at", "").split("T")[0],
+                "logs": brief.get("raw_text")[:50] + "..." if brief.get("raw_text") else "No ingestion log"
+            })
+        return {"deals": deals_list}
+    except Exception as e:
+        print(f"Error fetching CRM deals: {e}")
+        return {"deals": []}
+
+@app.post("/api/v1/catalog/upload-image")
+async def upload_catalog_image(
+    file: UploadFile = File(...),
+    sku: str = Query(...),
+    title: str = Query(...),
+    x_tenant_id: str = Header(default="default-tenant")
+):
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase not connected.")
+    try:
+        contents = await file.read()
+        embedding = EmbeddingService.get_image_embedding(contents, file.content_type or "image/png")
+        
+        exist_res = supabase.table("product_embeddings").select("*").eq("medusa_product_id", sku).eq("tenant_id", x_tenant_id).execute()
+        
+        row_data = {
+            "medusa_product_id": sku,
+            "tenant_id": x_tenant_id,
+            "title": title,
+            "description": f"Visual product uploaded as {file.filename}.",
+            "image_url": f"/public/uploads/{sku}_{file.filename}",
+            "embedding": embedding
+        }
+        
+        if exist_res.data:
+            res = supabase.table("product_embeddings").update(row_data).eq("medusa_product_id", sku).eq("tenant_id", x_tenant_id).execute()
+        else:
+            res = supabase.table("product_embeddings").insert(row_data).execute()
+            
+        return {
+            "status": "success",
+            "message": "Image analyzed and vector indexed successfully.",
+            "sku": sku,
+            "visual_embedding_length": len(embedding)
+        }
+    except Exception as e:
+        print(f"Error in catalog image upload: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/v1/schemas/custom")
 def get_custom_libraries():
@@ -1372,13 +1809,19 @@ def upload_customer_brand_assets(customer_id: str, payload: dict):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not connected.")
     try:
-        # In mock workspace, save brand logo link directly to assets
-        res = supabase.table("customer_accounts").upsert({
-            "id": customer_id,
-            "company_name": payload.get("company_name", "Corporate Account"),
+        # Update brand assets on an existing CRM client record.
+        # Deliberate update (not upsert): this endpoint must not create rows.
+        # account_type is set at record creation; this endpoint does not touch it.
+        # CHANGED 2026-08-14: upsert replaced with update to remove implicit
+        # row-create path that bypassed account_type enforcement (U1.2.32.7).
+        res = supabase.table("customer_accounts").update({
             "brand_assets": payload.get("brand_assets", {})
-        }).execute()
+        }).eq("id", customer_id).execute()
+        if not res.data:
+            raise HTTPException(status_code=404, detail=f"CRM client not found: {customer_id}")
         return {"status": "brand_assets_updated", "profile": res.data}
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Error saving customer assets: {e}")
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,6 +1,6 @@
-# Ratified Plan: CISEM-IP-20260808-SPCS
-# Architectural Reasoning: python-native website scraper using requests, bs4, and Gemini REST API to avoid package overhead.
-# Parent Principles: PR-98000 (SIPI), PR-84900 (Plan Creation Protocol)
+# Ratified Plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
+# Architectural Reasoning: python-native website scraper using requests, bs4, and Gemini REST API. Updated to align model paths to gemini-1.5-flash.
+# Parent Principles: PR-98000 (SIPI), PR-84900 (Plan Creation Protocol), AX-50000.
 
 import os
 import re
@@ -85,7 +85,7 @@ def scrape_and_extract_brand(target_url: str) -> dict:
             ]
         }
         
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_key}"
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
     
     prompt = f"""
 You are an expert design systems architect. Analyze the scraped raw DOM data from a prospect's website and transform it into a normalized JSON payload for a website preview sandbox.

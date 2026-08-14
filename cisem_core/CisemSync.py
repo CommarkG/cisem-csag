@@ -118,8 +118,18 @@ def get_latest_brain_dir():
     if not os.path.exists(BRAIN_ROOT):
         print(f"Error: Brain root path does not exist: {BRAIN_ROOT}")
         return None
-    subdirs = [os.path.join(BRAIN_ROOT, d) for d in os.listdir(BRAIN_ROOT)
-               if os.path.isdir(os.path.join(BRAIN_ROOT, d)) and not d.startswith("temp") and not d.startswith(".")]
+    active_d = os.path.join(BRAIN_ROOT, "f9d83031-b7e1-42a3-adc3-5130cf5cb069")
+    if os.path.isdir(active_d) and os.path.exists(os.path.join(active_d, "implementation_plan.md")):
+        return active_d
+    subdirs = []
+    for d in os.listdir(BRAIN_ROOT):
+        full_d = os.path.join(BRAIN_ROOT, d)
+        if os.path.isdir(full_d) and not d.startswith("temp") and not d.startswith("."):
+            if os.path.exists(os.path.join(full_d, "implementation_plan.md")):
+                subdirs.append(full_d)
+    if not subdirs:
+        subdirs = [os.path.join(BRAIN_ROOT, d) for d in os.listdir(BRAIN_ROOT)
+                   if os.path.isdir(os.path.join(BRAIN_ROOT, d)) and not d.startswith("temp") and not d.startswith(".")]
     if not subdirs:
         return None
     subdirs.sort(key=os.path.getmtime, reverse=True)

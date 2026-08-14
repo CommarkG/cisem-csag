@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "contract": "wpth_template_registry",
   "templates": [
     {
@@ -12,9 +12,31 @@
       "status": "VERIFIED",
       "review_gate_status": "PASSED",
       "layout_contract": {
-        "direction_support": ["LTR", "RTL"],
-        "density_modes": ["condensed", "balanced", "expansive"],
-        "component_blocks": ["HeaderHero", "MetricRow", "Table", "ActionRail"]
+        "direction_support": [
+          "LTR",
+          "RTL"
+        ],
+        "density_modes": [
+          "condensed",
+          "balanced",
+          "expansive"
+        ],
+        "component_blocks": [
+          "HeaderHero",
+          "MetricRow",
+          "Table",
+          "ActionRail"
+        ]
+      },
+      "compatibility_contract": {
+        "required_blocks": [
+          "HeaderHero",
+          "Table"
+        ],
+        "optional_blocks": [
+          "MetricRow",
+          "ActionRail"
+        ]
       },
       "evidence_trace": {
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -31,9 +53,27 @@
       "status": "DRAFT",
       "review_gate_status": "PASSED",
       "layout_contract": {
-        "direction_support": ["LTR", "RTL"],
-        "density_modes": ["balanced"],
-        "component_blocks": ["Sidebar", "ContentPanel", "Actions"]
+        "direction_support": [
+          "LTR",
+          "RTL"
+        ],
+        "density_modes": [
+          "balanced"
+        ],
+        "component_blocks": [
+          "Sidebar",
+          "ContentPanel",
+          "Actions"
+        ]
+      },
+      "compatibility_contract": {
+        "required_blocks": [
+          "Sidebar",
+          "ContentPanel"
+        ],
+        "optional_blocks": [
+          "Actions"
+        ]
       },
       "evidence_trace": {
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -50,9 +90,28 @@
       "status": "VERIFIED",
       "review_gate_status": "PASSED",
       "layout_contract": {
-        "direction_support": ["LTR", "RTL"],
-        "density_modes": ["condensed", "balanced"],
-        "component_blocks": ["FilterBar", "Search", "Table"]
+        "direction_support": [
+          "LTR",
+          "RTL"
+        ],
+        "density_modes": [
+          "condensed",
+          "balanced"
+        ],
+        "component_blocks": [
+          "FilterBar",
+          "Search",
+          "Table"
+        ]
+      },
+      "compatibility_contract": {
+        "required_blocks": [
+          "Table"
+        ],
+        "optional_blocks": [
+          "FilterBar",
+          "Search"
+        ]
       },
       "evidence_trace": {
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -69,13 +128,82 @@
       "status": "VERIFIED",
       "review_gate_status": "PASSED",
       "layout_contract": {
-        "direction_support": ["LTR", "RTL"],
-        "density_modes": ["condensed", "balanced", "expansive"],
-        "component_blocks": ["HeaderHero", "HierarchicalBOM", "DigitalSignatureCTA"]
+        "direction_support": [
+          "LTR",
+          "RTL"
+        ],
+        "density_modes": [
+          "condensed",
+          "balanced",
+          "expansive"
+        ],
+        "component_blocks": [
+          "HeaderHero",
+          "HierarchicalBOM",
+          "DigitalSignatureCTA"
+        ]
+      },
+      "compatibility_contract": {
+        "required_blocks": [
+          "HeaderHero",
+          "HierarchicalBOM"
+        ],
+        "optional_blocks": [
+          "DigitalSignatureCTA"
+        ]
       },
       "evidence_trace": {
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "last_gate_pass": "2026-08-09T12:00:00Z"
+      }
+    }
+  ],
+  "instantiated_pages": [
+    {
+      "id": "page-global-electronics-supplier",
+      "name": "Global Electronics \u2014 Supplier View",
+      "template_id": "tpl_catalog_table_v1",
+      "template_version_locked": "1.1.0",
+      "template_version_pending": null,
+      "client_id": "client-global-electronics",
+      "client_name": "Global Electronics Ltd",
+      "status": "active",
+      "custom_coding_allowed": false,
+      "governor_lock": true,
+      "created_at": "2026-08-11T00:00:00Z",
+      "created_by": "operator_admin",
+      "sync_receipt": "SYN-20260811082755",
+      "update_policy": {
+        "channel": "patch_only",
+        "timezone": "Asia/Jerusalem",
+        "scheduled_window": "02:00"
+      },
+      "validation_metrics": {
+        "flow": "PASSED",
+        "code": "PASSED",
+        "optimization": "PASSED",
+        "salad": "PASSED",
+        "security": "PASSED"
+      }
+    },
+    {
+      "id": "page-israel-metalworks-client",
+      "name": "Israel Metalworks \u2014 Client Portal",
+      "template_id": "tpl_dashboard_grid_v1",
+      "template_version_locked": "1.0.0",
+      "template_version_pending": null,
+      "client_id": "client-israel-metalworks",
+      "client_name": "Israel Metalworks",
+      "status": "active",
+      "custom_coding_allowed": false,
+      "governor_lock": true,
+      "created_at": "2026-08-11T00:00:00Z",
+      "created_by": "operator_admin",
+      "sync_receipt": "SYN-20260811-002",
+      "update_policy": {
+        "channel": "minor_and_patch",
+        "timezone": "Asia/Jerusalem",
+        "scheduled_window": "02:00"
       }
     }
   ],

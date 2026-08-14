@@ -115,6 +115,16 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - Never execute inline python (`python -c`) or run Python scripts residing outside the project workspace via command terminal. Use built-in file tools (like `view_file` or `grep_search`) to research code or transcripts to prevent OS permission popups.
 <!-- END:governor-chat-and-popup-rules -->
 
+<!-- BEGIN:cisem-ux-ui-rules -->
+# CISEM UX/UI Layout Rules
+
+21. **Single-Line Placement Rule**:
+    - The leading UX/UI design principle is not to place short related titles and related content in more than one row if not essential. Combine titles, user indicators, greetings, and status info on a single row to conserve vertical space and maintain text density.
+
+22. **Sibling Representation Consistency Rule**:
+    - Elements and buttons inside the same horizontal row or structural group must remain consistent in their text and graphic representation. If any item has an icon and text, all siblings in that row must also carry an icon and text. Audits and implementations must mechanically enforce this to ensure uniform visual rhythm.
+<!-- END:cisem-ux-ui-rules -->
+
 <!-- BEGIN:cisem-enterprise-architecture-rules -->
 # CISEM Enterprise Architecture Rules
 
@@ -138,3 +148,43 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - The plan must contain a dedicated, addressable section documenting the verdicts, gaps, and mitigations raised by the expert personas.
 <!-- END:cisem-enterprise-architecture-rules -->
 
+<!-- BEGIN:cisem-prevention-protocol -->
+## Prevention Protocol — mandatory, no exceptions
+
+**P1.** A defect is not closed by its fix. **It is closed when a mechanism prevents its class.** State which of the three you produced: *fix* · *fix + record* · *fix + mechanism*. Only the third is complete.
+
+**P2.** When you fix one instance, **sweep for the class in the same turn.** Report every occurrence found across the whole tree. *"Fixed the one that was reported"* is an incomplete report, not a complete fix.
+
+**P3.** **Name the enforcement before writing the fix.** Knowing the mechanism changes the fix — the shape that admits a mechanism is chosen over the shape that merely works. If no mechanism is possible, say so then, with the reason.
+
+**P4.** A turn that touched a defect may not close without one of:
+- mechanism **built** and proven to fail on a known-bad input
+- mechanism **specified** with an owner and a named deliverable
+- **debt recorded** with the reason no mechanism is possible
+
+**P5.** *"Recorded"* is not *"prevented."* State which. Never let the first stand in for the second.
+
+**P6.** **Assign debt to yourself where you can build it.** Assigning everything to the Governor is not ownership — it is a transfer disguised as a record. Test: could you build this? Then it is yours.
+
+**P7.** **State the debt register count at the close of every turn that touched it.** If it grew, say so. **Growth across two consecutive turns is a finding about the process**, and you raise it rather than waiting to be asked.
+
+**P8.** A mechanism counts only after it has **failed on an input known to be bad.** A check that has only ever passed is untested and is reported as untested.
+
+**P9.** A turn may not close with: a partial sweep · an unproven mechanism · a debt with no owner · an unstated register count · *"recorded"* offered as completion.
+
+---
+
+**Note on this section's own status:** it is a written rule, and written rules are the tier that fails. It holds until a gate on the commit path enforces it. **It is recorded as debt, not assumed effective.**
+
+---
+
+## Why this changes the default
+
+The reason prevention wasn't the default isn't that the rule was missing — `U1.2.40` already required it. **It's that nothing made it due at any particular moment.** "Enforce the lesson" with no deadline is a lesson enforced never.
+
+**P4 supplies the deadline: the close of the turn that incurred it.**
+
+**P2 is the one that pays most immediately.** Four secret-literal fallbacks were found across four separate passes, at full cost each. One sweep on the first would have found all four in one act — which is precisely what the linter did once it existed.
+
+**P6 is the one Antigravity will resist**, because assigning debt outward feels like appropriate deference. It isn't. Three of five debts were correctly reassigned to it only after being challenged.
+<!-- END:cisem-prevention-protocol -->

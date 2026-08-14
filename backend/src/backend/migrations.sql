@@ -390,3 +390,82 @@ CREATE POLICY tenant_isolation_policy ON deals
     ));
 
 
+-- 37. Add account_type to customer_accounts (entity boundary classification)
+-- Ratified decision 2026-08-14: customer_accounts.id is the canonical tenant_id.
+-- TENANT     = a platform user's company (has membership rows, package, auth user)
+-- CRM_CLIENT = a company the tenant sells to (has contacts/deals, no membership)
+-- No default is intentional: every row must be classified deliberately.
+-- Enforcement: NOT NULL + CHECK prevents unclassified rows at the DB level.
+
+-- Phase 1: Add column nullable (required before existing rows can be updated)
+ALTER TABLE customer_accounts
+    ADD COLUMN IF NOT EXISTS account_type VARCHAR(20);
+
+-- Phase 2: Classify all existing rows as CRM_CLIENT
+-- Evidence: zero user_account_roles entries, zero package_id values,
+-- zero auth users match any customer_accounts row (T3 dry-run: Written=0).
+-- All existing rows are CRM fixtures created for pipeline testing.
+UPDATE customer_accounts
+    SET account_type = 'CRM_CLIENT'
+    WHERE account_type IS NULL;
+
+-- Phase 3: Enforce NOT NULL (after all rows are classified)
+ALTER TABLE customer_accounts
+    ALTER COLUMN account_type SET NOT NULL;
+
+
+-- Phase 4: Constrain to the two declared types only
+ALTER TABLE customer_accounts
+    ADD CONSTRAINT customer_accounts_account_type_valid
+    CHECK (account_type IN ('TENANT', 'CRM_CLIENT'));
+
+-- =============================================================================
+-- 38. pending_claims + seed role_definitions + seed starter package
+-- =============================================================================
+-- pending_claims: records users whose tenant_id claim could not be written.
+-- Makes broken provisioning state visible to operators (U6.2.09).
+-- Two status values:
+--   CLAIM_FAILED       — step 4 admin API call failed after DB steps committed
+--   PENDING_ONBOARDING — user signed up without company_name (D.1/B3 safety net)
+-- Repair path: backfill script processes CLAIM_FAILED rows.
+--              Onboarding endpoint resolves PENDING_ONBOARDING on first login.
+
+CREATE TABLE IF NOT EXISTS pending_claims (
+    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    auth_user_id UUID NOT NULL,
+    tenant_id    UUID REFERENCES customer_accounts(id) ON DELETE SET NULL,
+    status       VARCHAR(30) NOT NULL DEFAULT 'CLAIM_FAILED'
+                     CHECK (status IN ('CLAIM_FAILED', 'PENDING_ONBOARDING')),
+    failed_at    TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+    attempts     INTEGER DEFAULT 1 NOT NULL,
+    last_error   TEXT,
+    resolved_at  TIMESTAMP WITH TIME ZONE,
+    created_at   TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+);
+
+-- Partial index: backfill queries only unresolved rows
+CREATE INDEX IF NOT EXISTS pending_claims_unresolved_idx
+    ON pending_claims(auth_user_id)
+    WHERE resolved_at IS NULL;
+
+-- role_definitions seed
+-- Recorded debt: taxonomy is two test rows. Must be formally defined before
+-- provisioning goes to production. Owner: Governor.
+-- ON CONFLICT DO NOTHING: safe against existing rows on live DB.
+INSERT INTO role_definitions (code, name, description)
+VALUES
+    ('account_owner',
+     'Account Owner',
+     'First user of a tenant; full administrative rights within the account.'),
+    ('operator_admin',
+     'Operator Admin',
+     'Platform-level operator with cross-tenant administrative access.')
+ON CONFLICT (code) DO NOTHING;
+
+-- Starter package seed
+-- Required: provisioning.py defaults to package_code='starter'.
+-- A missing starter package causes FK failure at provision_tenant step 1.
+-- ON CONFLICT DO NOTHING: safe against existing rows.
+INSERT INTO packages (code, name, max_team_members, max_landing_pages)
+VALUES ('starter', 'Starter', 3, 5)
+ON CONFLICT (code) DO NOTHING;

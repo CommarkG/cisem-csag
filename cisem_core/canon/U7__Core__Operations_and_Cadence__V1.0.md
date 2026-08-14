@@ -127,6 +127,42 @@ Checks run per change. **Audits run on a schedule, because the defects they find
 
 **An audit that never fails is not running.** A clean audit on its first execution means it is checking something that cannot vary.
 
+
+### U7.2.11 — A mechanism is not running unless its absence is reported
+`PROPOSED · REVIEWER-AUTHORED · see R00.29`
+
+> **An enforcement mechanism with no supervision stops the first time its environment is interrupted, and nothing reports the silence. Its last recorded state says "running" indefinitely.**
+
+### U7.2.11.1 — Liveness is a separate property from correctness
+A mechanism can be correct, tested, proven against known-bad input — **and not running.** No amount of correctness detects absence.
+
+**The most common cause is not failure. It is interruption:** a terminal closed, a session ended, a machine restarted. **A mechanism whose lifetime is bound to a window is bound to that window's accidents.**
+
+### U7.2.11.2 — The three obligations
+| | |
+|---|---|
+| **Heartbeat** | The mechanism records that it is alive, on a cadence |
+| **Watcher** | Something independent checks the heartbeat is recent |
+| **Restart** | Absence produces a restart or an alert, never silence |
+
+**A heartbeat with no watcher is a record nobody reads.** The state file will say *running* for as long as it exists — the last thing a dead process wrote.
+
+### U7.2.11.3 — Self-reported state is the least reliable state
+A process cannot report its own death. **Whatever it wrote last is what it will appear to be, forever.** This is `U1.2.42` at the operational layer: the artifact asserts a property it no longer has, and the assertion outlives the fact.
+
+**Liveness is therefore established from outside** — process existence, heartbeat age, an external probe — never from what the thing says about itself.
+
+### U7.2.11.4 — A component's failure is the loop's failure
+An orchestrator that runs several components and continues past a failure reports success for a partially-executed loop.
+
+**Three conditions, all required:**
+1. A component's non-zero exit **fails the loop**, or is explicitly permitted with a recorded reason
+2. The error output is **captured and retained** — an empty error message is worse than no message, because it looks like a handled case
+3. **Repeated identical failures escalate.** The same component failing every run is not a flaky step; it is a dead one, and its deadness is invisible while the loop reports success
+
+### U7.2.11.5 — Bind lifetime to the system, not to a session
+A mechanism intended to run continuously is started by something that outlives a person's terminal — a service, a scheduled task, a supervisor. **Where that is not possible, its liveness check is the compensating control**, and the check is mandatory rather than optional.
+
 ### U7.2.08 — Cadence
 `RATIFIED`
 

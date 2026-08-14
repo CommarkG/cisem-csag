@@ -6,7 +6,7 @@ metadata:
   canonical_location: "C:\\Users\\finky\\Desktop\\AntiGravity\\GEMINI.md"
   artifact_status: "DRAFT"
   maturity: "WORKING_DRAFT"
-  version: "1.4"
+  version: "1.5"
   inherited_authorities: []
   related_implementation_adapter: "GOOGLE_ANTIGRAVITY_ADAPTER"
   local_edits_allowed: false
@@ -56,8 +56,16 @@ Every destructive operation (such as deletion, renaming, or file movement) must 
 4. Actual Execution Action.
 5. Post-Operation Verification Report.
 
+## 7. UX/UI Layout and Consistency Law
+- **7.1. Single-Row Placement Rule**: Avoid placing short related titles and related content in more than one row if not essential. Combine titles, indicators, and controls into a single row to maximize vertical space and text density.
+- **7.2. Sibling Representation Consistency Rule**: Elements and buttons inside the same horizontal row or structural group must remain consistent in their text and graphic representation. If any item has an icon and text, all siblings in that row must also carry an icon and text.
+
 ---
 history:
+  - timestamp: "2026-08-11T00:28:00Z"
+    action: "ADDED_UX_UI_CONSISTENCY_AND_SINGLE_ROW_ENFORCEMENT_LAWS"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.5"
   - timestamp: "2026-08-05T13:53:00Z"
     action: "CREATED_INITIAL_ROOT_RULES"
     actor: "GOOGLE_ANTIGRAVITY_ADAPTER"

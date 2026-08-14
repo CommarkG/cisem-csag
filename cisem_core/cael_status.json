@@ -45,9 +45,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 5,
       "validation_target": 20,
-      "actual_triggers": 223,
+      "actual_triggers": 299,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-10T09:17:49.456623Z",
+      "last_triggered": "2026-08-11T10:51:48.239307Z",
       "notes": "Tested manually 20+ times. Gate correctly blocks on all phases."
     },
     {
@@ -57,9 +57,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 4,
       "validation_target": 16,
-      "actual_triggers": 1500,
+      "actual_triggers": 2038,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-10T09:17:48.603017Z",
+      "last_triggered": "2026-08-11T10:51:46.943666Z",
       "notes": "Called on every gate Phase 2 run. 16+ confirmed runs."
     },
     {
@@ -81,9 +81,9 @@
       "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 1208,
+      "actual_triggers": 1612,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-10T08:28:28.126383Z",
+      "last_triggered": "2026-08-11T07:49:37.220394Z",
       "notes": "Verified through 4 run cycles in Sandbox environment."
     },
     {
@@ -93,9 +93,9 @@
       "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 355,
+      "actual_triggers": 485,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-10T09:17:48.013515Z",
+      "last_triggered": "2026-08-11T10:51:46.271900Z",
       "notes": "Turn counter increments logged and verified through 4 cycle resets."
     },
     {
@@ -105,10 +105,22 @@
       "ratified_plan": "CISEM-IP-20260806-ACCUMULATED-DESIGN",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 1182,
+      "actual_triggers": 1589,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-10T08:28:32.250519Z",
+      "last_triggered": "2026-08-11T07:49:31.651898Z",
       "notes": "Orchestrated across 4 simulation test runs."
+    },
+    {
+      "mechanism_id": "CISEM-GRAPHIFY",
+      "description": "Native AST & SQL Dependency Graph Generator",
+      "created_date": "2026-08-10",
+      "ratified_plan": "CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR",
+      "estimated_triggers_per_cycle": 1,
+      "validation_target": 4,
+      "actual_triggers": 5,
+      "status": "VALIDATED",
+      "last_triggered": "2026-08-10T18:32:36.514038Z",
+      "notes": "Triggers tracked via Phase 20 gate mapper execution."
     }
   ]
 }

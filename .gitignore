@@ -48,3 +48,11 @@ venv/
 
 # gate temporary files
 .gate_lock
+
+# Graphify Outputs - Protect Prompt Cache
+2026-08-10__CISEM__AntigravityLocal__SystemDependenciesMap__V1.0.md
+graphify-out/
+.graphify/
+*.graphify.meta
+
+scratch/

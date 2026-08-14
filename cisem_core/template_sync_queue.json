@@ -1,0 +1,15 @@
+[
+  {
+    "page_id": "page-global-electronics-supplier",
+    "template_id": "tpl_catalog_table_v1",
+    "from_version": "1.0.0",
+    "to_version": "1.1.0",
+    "change_type": "PATCH",
+    "scheduled_utc": "2026-08-11T00:00:00Z",
+    "timezone": "Asia/Jerusalem",
+    "status": "done",
+    "queued_at": "2026-08-11T00:00:00Z",
+    "processed_at": "2026-08-11T08:27:55.940293Z",
+    "sync_receipt": "SYN-20260811082755"
+  }
+]

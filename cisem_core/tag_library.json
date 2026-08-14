@@ -1,0 +1,9 @@
+{
+  "tags": {
+    "devops": { "label": "תשתית", "color": "#3B82F6" },
+    "navigation": { "label": "ניווט", "color": "#10B981" },
+    "components": { "label": "רכיבים", "color": "#F59E0B" },
+    "design": { "label": "עיצוב", "color": "#8B5CF6" },
+    "meeting": { "label": "פגישה", "color": "#EC4899" }
+  }
+}

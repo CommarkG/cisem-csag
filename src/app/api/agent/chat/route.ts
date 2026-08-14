@@ -1,7 +1,12 @@
-// Ratified Plan: CISEM-IP-20260809-OPENROUTER-INTEGRATION
-// Architectural Reasoning: Next.js 15 App Router serverless API route performing cloud-based routing via OpenRouter API (no local laptop dependencies) with Gemini API fallback.
-// Parent Principles: PR-99000 (Cloud Model Selection), PR-13990 (Sandbox Boundaries)
-
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
+# governor_signature: GOV-YARIV-20260810-FRONTEND-PLAYBOOK-REFACTOR-V1.0
+# version: V1.0
+# reasoning: |
+#   Next.js 15 App Router serverless API route using OpenRouter/Gemini REST API.
+#   Parent principles: PR-99000 (Cloud Model Selection), PR-13990 (Sandbox Boundaries), AX-50000.
+*/
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
@@ -250,7 +255,7 @@ Rules:
       ]
 
       const requestPayload = {
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-1.5-flash',
         messages: openRouterMessages,
         tools: openRouterTools,
         temperature: 0.3,
@@ -286,7 +291,7 @@ Rules:
 
           // Second round request following function call execution
           const followUpPayload = {
-            model: 'google/gemini-2.5-flash',
+            model: 'google/gemini-1.5-flash',
             messages: [
               ...openRouterMessages,
               choiceMessage,
@@ -338,7 +343,7 @@ Rules:
       parts: [{ text: m.content }],
     }))
 
-    const api_url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`
+    const api_url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`
 
     const requestPayload = {
       contents,

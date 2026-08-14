@@ -1,0 +1,10 @@
+{
+  "statuses": {
+    "backlog": { "label": "בקלוג", "color": "#6B7280" },
+    "todo": { "label": "לביצוע", "color": "#3B82F6" },
+    "in_progress": { "label": "בתהליך", "color": "#F59E0B" },
+    "review": { "label": "בסקירה", "color": "#8B5CF6" },
+    "done": { "label": "הושלם", "color": "#10B981" },
+    "blocked": { "label": "חסום", "color": "#EF4444" }
+  }
+}

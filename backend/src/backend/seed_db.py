@@ -50,7 +50,8 @@ def seed_database():
             "logo_url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
             "hex_colors": ["#4F46E5", "#06B6D4"]
         },
-        "credit_terms": "Net-30"
+        "credit_terms": "Net-30",
+        "account_type": "CRM_CLIENT"   # explicit: this is a CRM fixture, not a tenant
     }).execute()
     customer_id = customer_res.data[0]["id"]
     

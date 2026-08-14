@@ -737,3 +737,22 @@ Derived from `I1.3.50`, a full audit of the building actor's 28 defects.
 | `R00.28.05` | **Two triggers: change and calendar.** Calendar misses nothing that code observed; change misses everything out of band. | The out-of-band change — the one nothing watched — goes unseen |
 | `R00.28.06` | **Disagreement is reported, never auto-resolved** | The evidence of how it arose is destroyed, and an unratified decision is made silently |
 | `R00.28.07` | **A reconciliation that has never disagreed is unverified** | It is indistinguishable from comparing a thing to itself |
+
+---
+
+## R00.29 — Mechanism liveness · `U7.2.11`
+
+**Motivating evidence.** A continuous enforcement daemon orchestrating four components stopped via keyboard interrupt — a closed terminal. **Nothing reported it for four days.** Its state file continued to read `"status": "running"` with a process id that no longer existed.
+
+**And within it:** one of the four components had been exiting non-zero on **every** run, with an **empty error message**, for the entire visible log history. The orchestrator logged the failure and continued. Every loop reported success.
+
+| # | Decision | If rejected |
+|---|---|---|
+| `R00.29.01` | **Liveness is separate from correctness.** A proven mechanism that is not running enforces nothing. | Correctness is mistaken for operation |
+| `R00.29.02` | **The common cause is interruption, not failure** — a closed window, an ended session | Supervision is designed against crashes and misses the ordinary case |
+| `R00.29.03` | **Three obligations: heartbeat · watcher · restart.** A heartbeat with no watcher is a record nobody reads. | The state file says *running* indefinitely |
+| `R00.29.04` | **A process cannot report its own death.** Liveness is established from outside. | The last thing written is believed forever |
+| `R00.29.05` | **A component's non-zero exit fails the loop**, or is explicitly permitted with a recorded reason | Partial execution is reported as success |
+| `R00.29.06` | **An empty error message is worse than none** — it reads as a handled case | The failure is invisible even to someone reading the log |
+| `R00.29.07` | **Repeated identical failures escalate.** The same component failing every run is dead, not flaky. | A dead component runs indefinitely inside a loop reporting success |
+| `R00.29.08` | **Lifetime is bound to the system, not a session.** Where impossible, the liveness check is mandatory. | Enforcement inherits the accidents of a terminal window |

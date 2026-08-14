@@ -498,17 +498,7 @@ control_plane_subsystems:
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
       sha256: 7f998606ae4332b0505c9b8befe25527dd304d866761674f6f724741d848a88e
-    2026_08_10__CISEM__AntigravityLocal__SystemDependenciesMap__V1_0_md:
-      path: ../2026-08-10__CISEM__AntigravityLocal__SystemDependenciesMap__V1.0.md
-      version: '1.0'
-      status: VERIFIED
-      validation_metrics:
-        flow_completion: VERIFIED
-        code_implementation: COMPLETE
-        optimization: OPTIMIZED
-        consolidation: CONSOLIDATED
-        permission_compliance: ENFORCED
-      sha256: a1f70f76561ceaac45219e23de4c2e13bad10a8d400927b1235e7078b79390a1
+
     2026_08_10__AntigravityLocal__Storefront_Whitelabel_Exporter_UI_and_Git_Sync_Plan__V1_0_md:
       path: ../2026-08-10__AntigravityLocal__YarivHuman__Storefront_Whitelabel_Exporter_UI_and_Git_Sync_Plan__V1.0.md
       version: '1.0'
