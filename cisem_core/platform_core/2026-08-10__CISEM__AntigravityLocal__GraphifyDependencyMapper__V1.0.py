@@ -193,11 +193,42 @@ metadata:
         print(f"Success: System dependencies map generated at {output_path}")
         return output_path
 
+def increment_mechanism_trigger(mechanism_id):
+    import json
+    from datetime import datetime, timezone
+    cael_path = os.path.join(CORE_DIR, "cael_status.json")
+    if not os.path.exists(cael_path):
+        return
+    try:
+        with open(cael_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return
+        
+    registry = data.get("activation_registry", [])
+    updated = False
+    for mech in registry:
+        if mech.get("mechanism_id") == mechanism_id:
+            mech["actual_triggers"] = mech.get("actual_triggers", 0) + 1
+            mech["last_triggered"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+            if mech["actual_triggers"] >= mech.get("validation_target", 0):
+                mech["status"] = "VALIDATED"
+            updated = True
+            break
+            
+    if updated:
+        try:
+            with open(cael_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+        except Exception:
+            pass
+
 def main():
     mapper = DependencyMapper()
     mapper.scan_python_files()
     mapper.scan_database_schema()
     mapper.write_output()
+    increment_mechanism_trigger("CISEM-GRAPHIFY")
 
 if __name__ == "__main__":
     main()

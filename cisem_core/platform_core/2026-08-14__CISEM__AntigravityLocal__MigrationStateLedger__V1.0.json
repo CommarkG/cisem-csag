@@ -1,0 +1,309 @@
+{
+  "_metadata": {
+    "filename": "2026-08-14__CISEM__AntigravityLocal__MigrationStateLedger__V1.0.json",
+    "version": "1.0",
+    "generated_at": "2026-08-14T15:00:00Z",
+    "ledger_type": "INFERRED_STATUS_RECORD",
+    "note": "Status is INFERRED_APPLIED unless contradicted by live evidence from Governor query results (2026-08-14). INFERRED means the table or column exists live AND no conflict found — NOT that a ledger row was confirmed. NOT_APPLIED means live evidence directly contradicts the migration's intended effect. The E-2 _migration_ledger DB table does not yet exist; this is the pre-bootstrap status record.",
+    "source_authority": "Governor query results + E-1 snapshot (2026-08-14)"
+  },
+  "migrations": [
+    {
+      "number": 1,
+      "label": "Create status_library",
+      "status": "INFERRED_APPLIED",
+      "evidence": "table exists live (referenced by later migrations that appear to work)",
+      "ledger_row": "ABSENT — _migration_ledger not yet bootstrapped"
+    },
+    {
+      "number": 2,
+      "label": "Populate status_library (INSERT ... ON CONFLICT)",
+      "status": "INFERRED_APPLIED",
+      "evidence": "status_library exists; seed data assumed present, not verified",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 3,
+      "label": "Create state_transitions",
+      "status": "INFERRED_APPLIED",
+      "evidence": "table exists live (referenced by trigger in migration 10)",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 4,
+      "label": "Populate state_transitions (INSERT ... ON CONFLICT)",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — transition data not directly verified",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 5,
+      "label": "Create tag_library",
+      "status": "INFERRED_APPLIED",
+      "evidence": "referenced by document_chunks FK and code reads",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 6,
+      "label": "Insert default tags (ON CONFLICT DO NOTHING)",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — seed not directly verified",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 7,
+      "label": "Create custom_libraries + seed",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 8,
+      "label": "Create lookup_registry + seed",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 9,
+      "label": "Create document_chunks",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('document_chunks'); ingest_wisdom.py inserts into it",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 10,
+      "label": "Create enforce_state_transition trigger on document_chunks",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — function and trigger not directly verified",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 11,
+      "label": "Create cascade_document_seal trigger on briefs",
+      "status": "INFERRED_UNCERTAIN",
+      "evidence": "WARNING: trigger is on 'briefs' table. briefs has no CREATE TABLE in migrations.sql and is UNTRACKED live. Trigger may have failed silently or been skipped.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 12,
+      "label": "Create pdf_queue",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('pdf_queue'); main.py L1560 updates it",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 13,
+      "label": "Create backlog_registry",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 14,
+      "label": "Create product_groups",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('product_groups'); FK from product_variations would fail if absent",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 15,
+      "label": "ALTER catalog_items ADD COLUMN product_group_id",
+      "status": "INFERRED_UNCERTAIN",
+      "evidence": "WARNING: catalog_items is UNTRACKED (no CREATE TABLE in migrations.sql). IF catalog_items existed before this migration ran, the ALTER succeeded. If not, it failed with 'table does not exist'. Not verifiable without E-1 snapshot confirming product_group_id is live.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 16,
+      "label": "Create product_variations",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('product_variations')",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 17,
+      "label": "Create catalog_item_sandbox_variants",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 18,
+      "label": "Create proposal_client_drafts",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('proposal_client_drafts'); main.py L1735 inserts",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 19,
+      "label": "Create customer_accounts",
+      "status": "INFERRED_APPLIED",
+      "evidence": "live columns confirmed by Governor: id, company_name, tax_id, industry, brand_assets, credit_terms, created_at, package_id",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 20,
+      "label": "Create contacts",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('contacts'); FK from deals would fail if absent",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 21,
+      "label": "Create deals",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('deals')",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 22,
+      "label": "ALTER supplier_mappings ADD COLUMN country/currency/status",
+      "status": "INFERRED_UNCERTAIN",
+      "evidence": "WARNING: supplier_mappings is UNTRACKED (no CREATE TABLE in migrations.sql). Same condition as migration 15 — depends on prior existence. Not verifiable without E-1 snapshot.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 23,
+      "label": "ALTER proposal_items ADD COLUMN selected_supplier_mapping_id/selected_variations",
+      "status": "INFERRED_UNCERTAIN",
+      "evidence": "WARNING: proposal_items is UNTRACKED. Same condition as migrations 15 and 22.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 24,
+      "label": "ALTER catalog_items ADD COLUMN top_picks",
+      "status": "INFERRED_UNCERTAIN",
+      "evidence": "WARNING: catalog_items is UNTRACKED. Same condition as migration 15.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 25,
+      "label": "Create role_definitions",
+      "status": "INFERRED_APPLIED",
+      "evidence": "user_account_roles FK references role_definitions; if role_definitions were absent, migration 31 (user_account_roles) would have failed",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 26,
+      "label": "Create packages",
+      "status": "INFERRED_APPLIED",
+      "evidence": "customer_accounts.package_id column exists live (Governor query: package_id in live columns)",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 27,
+      "label": "Create feature_registry",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — package_feature_grants FK depends on it",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 28,
+      "label": "Create package_feature_grants",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 29,
+      "label": "ALTER customer_accounts ADD COLUMN package_id",
+      "status": "INFERRED_APPLIED",
+      "evidence": "CONFIRMED by Governor query: customer_accounts live columns include package_id",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 30,
+      "label": "Create users",
+      "status": "INFERRED_APPLIED_DIVERGENT",
+      "evidence": "users table exists live. BUT live schema diverges significantly from migrations.sql declaration: (1) workspace_id — live, NOT in migration. (2) role (user_role_enum) — live, NOT in migration. (3) full_name — live as NULLABLE, migration says NOT NULL. (4) password_hash — in migration NOT NULL, ABSENT live. (5) is_active — in migration NOT NULL, ABSENT live. (6) last_login_at — in migration, ABSENT live. SIX divergences. The table was created from a DIFFERENT schema than migrations.sql describes, or was significantly altered post-creation.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 31,
+      "label": "Create user_account_roles",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — table referenced by provisioning logic",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 32,
+      "label": "Create template_registry",
+      "status": "INFERRED_APPLIED",
+      "evidence": "code references .table('template_registry'); main.py L2041 selects from it",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 33,
+      "label": "ALTER deals/contacts ADD COLUMN assigned_user_id",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — needs E-1 snapshot confirmation",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 34,
+      "label": "Enable RLS on template_registry, user_account_roles, contacts, deals",
+      "status": "INFERRED_APPLIED",
+      "evidence": "main.py L2040 comment relies on RLS being active on template_registry",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 35,
+      "label": "CREATE POLICY tenant_isolation_policy on template_registry, user_account_roles, contacts",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED — conditional on migration 34. Governor confirmed is_canonical uses customer_account_id IS NULL in RLS, consistent with migration 35 policy.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 36,
+      "label": "CREATE POLICY tenant_isolation_policy on deals (join-based)",
+      "status": "INFERRED_APPLIED",
+      "evidence": "INFERRED",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 37,
+      "label": "ADD account_type to customer_accounts (4-phase: ADD, UPDATE, NOT NULL, CHECK)",
+      "status": "NOT_APPLIED",
+      "evidence": "CONFIRMED by Governor query: customer_accounts live columns are [id, company_name, tax_id, industry, brand_assets, credit_terms, created_at, package_id]. account_type is ABSENT. The entity boundary (TENANT vs CRM_CLIENT) was ratified and reported as 'landed' in this session. It landed in the FILE, not the database. Every subsequent reference to TENANT/CRM_CLIENT classification has no mechanism at all.",
+      "consequence": "The account_type NOT NULL + CHECK constraint does not exist. customer_accounts rows are unclassified at the DB level. provisioning.py and any code that distinguishes TENANT from CRM_CLIENT is acting on a phantom column.",
+      "previous_incorrect_report": "Antigravity reported Migration 37 landed. That report was wrong. The file changed; the database did not.",
+      "ledger_row": "ABSENT"
+    },
+    {
+      "number": 38,
+      "label": "Create pending_claims + seed role_definitions + seed starter package",
+      "status": "NOT_APPLIED",
+      "evidence": "CONFIRMED by Governor query: pending_claims table does not exist in live database. role_definitions seed and packages seed status unverified independently (role_definitions may exist from a different path; packages seed depends on packages table existing from migration 26). The pending_claims table itself is confirmed absent.",
+      "consequence": "D3/D4/D5 were authored as ALTER TABLE on a table that does not exist. Migration 39's cause column has no table. The backfill repair path for broken provisioning state is untracked. E-2's assertion gate would have blocked this: LEDGER_ABSENT: Migration 38 has no ledger row.",
+      "ledger_row": "ABSENT"
+    }
+  ],
+  "summary": {
+    "total_migrations": 38,
+    "confirmed_applied": 1,
+    "inferred_applied": 25,
+    "inferred_applied_divergent": 1,
+    "inferred_uncertain": 5,
+    "not_applied": 2,
+    "confirmed_applied_list": [29],
+    "not_applied_list": [37, 38],
+    "inferred_uncertain_list": [11, 15, 22, 23, 24],
+    "inferred_applied_divergent_list": [30],
+    "note_on_uncertain": "Migrations 11, 15, 22, 23, 24 operate on UNTRACKED tables (briefs, catalog_items, supplier_mappings, proposal_items). Their success depends on those tables pre-existing via an untracked path. E-1 snapshot will resolve this."
+  },
+  "untracked_tables_from_source_sweep": {
+    "count": 10,
+    "tables": [
+      {"name": "briefs", "found_by": "source_sweep", "references": "FK in deals (migration 21), trigger in migration 11, code in main.py and ingest_wisdom.py"},
+      {"name": "catalog_items", "found_by": "source_sweep", "references": "ALTER in migrations 15, 24; FK in product_variations; code in main.py"},
+      {"name": "supplier_mappings", "found_by": "source_sweep", "references": "ALTER in migration 22; FK in proposal_items; code in main.py"},
+      {"name": "proposals", "found_by": "source_sweep", "references": "FK in proposal_client_drafts (migration 18), deals (migration 21); code in main.py"},
+      {"name": "proposal_items", "found_by": "source_sweep", "references": "ALTER in migration 23; code in main.py"},
+      {"name": "workspaces", "found_by": "source_sweep", "references": "code in main.py and ingest_wisdom.py only — zero migration references"},
+      {"name": "branding_subcontractors", "found_by": "source_sweep", "references": "code in main.py only"},
+      {"name": "branding_rate_cards", "found_by": "source_sweep", "references": "code in main.py only"},
+      {"name": "product_embeddings", "found_by": "source_sweep", "references": "code in main.py; separate schema.sql file (untracked)"},
+      {"name": "navigation_menu_items", "found_by": "E1_snapshot_Governor_data", "references": "ZERO code references — completely invisible to source sweep. Live table with allowed_roles user_role_enum[] DEFAULT '{client}'. First found by E-1 via information_schema."}
+    ]
+  }
+}

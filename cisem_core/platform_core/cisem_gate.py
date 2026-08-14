@@ -1453,6 +1453,310 @@ def check_3tier_scope():
         print(f"  Phase 18: Warning. 3-Tier Scope Gate verification skipped: {e}")
 
 
+def check_ui_playbook_compliance():
+    """Phase 19: UI Playbook Compliance Scanner. Enforces taxonomy labeling on modified tsx/jsx components."""
+    print("Phase 19: Scanning UI components for Playbook compliance...")
+    
+    modified_files = []
+    git_files = get_git_modified_files()
+    if git_files is not None:
+        modified_files = [os.path.relpath(f, ROOT_DIR) for f in git_files]
+    else:
+        # Fallback to scan last 1 hour modified files
+        for root, dirs, files in os.walk(ROOT_DIR):
+            if any(x in root for x in [".git", ".next", "node_modules", "cisem_core/logs", ".gemini"]):
+                continue
+            for f in files:
+                full_p = os.path.join(root, f)
+                try:
+                    mtime = os.path.getmtime(full_p)
+                    if (datetime.now().timestamp() - mtime) < 3600:
+                        modified_files.append(os.path.relpath(full_p, ROOT_DIR))
+                except Exception:
+                    pass
+
+    ui_files = []
+    for f in modified_files:
+        f_norm = f.replace("\\", "/")
+        if f_norm.endswith((".tsx", ".jsx")) and ("src/components" in f_norm or "src/app" in f_norm):
+            ui_files.append(f)
+    if not ui_files:
+        print("  Phase 19: PASS (No UI component changes to scan).")
+        return
+
+    for ui_file in ui_files:
+        full_path = os.path.join(ROOT_DIR, ui_file)
+        if not os.path.exists(full_path):
+            continue
+        try:
+            with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
+                content = f.read()
+                
+            # Search for @playbook_category tag
+            match = re.search(r'@playbook_category:\s*(?P<category>Design Token|Micro-interaction Module|Bento Page Layout Recipe)', content, re.IGNORECASE)
+            if not match:
+                gate_block(
+                    f"CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in '{ui_file}'.\n"
+                    "  Rule: Every modified or new UI component must declare a valid category comment header.\n"
+                    "  Example: // @playbook_category: Design Token\n"
+                    "  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe",
+                    phase=19
+                )
+            category = match.group("category").strip().title()
+            print(f"  Verified UI component '{os.path.basename(ui_file)}' as Playbook category: {category}")
+            
+            # Syntax validation based on category
+            content_lower = content.lower()
+            if "design token" in category.lower():
+                # Enforce that no raw inline hex colors are used (PR-58950 styling isolation)
+                hex_matches = re.findall(r'#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})', content)
+                # Allow standard theme hex values if they are comments or metadata, but warn if hardcoded inside JSX classes
+                if hex_matches and ("style=" in content_lower or "classname=" in content_lower):
+                    print(f"  [UI Token Warning]: Design Token component '{ui_file}' contains inline hex colors: {hex_matches}. Use Tailwind or CSS variables instead.")
+                    
+            elif "micro-interaction module" in category.lower():
+                # Enforce that interactive components specify a transition or hover handler
+                if "hover" not in content_lower and "motion" not in content_lower and "transition" not in content_lower:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 19: Micro-interaction Module validation failed in '{ui_file}'.\n"
+                        "  Rule: Components labeled as Micro-interaction Modules must utilize micro-animations (e.g. framer-motion, hover states, transitions).",
+                        phase=19
+                    )
+            elif "bento page layout recipe" in category.lower():
+                # Enforce bento grid layouts
+                if "grid" not in content_lower:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 19: Bento Page Layout Recipe validation failed in '{ui_file}'.\n"
+                        "  Rule: Bento Page Layout Recipe components must define grid container elements (e.g. className='grid').",
+                        phase=19
+                    )
+        except Exception as e:
+            if "GateViolationError" in str(type(e)) or "gate_block" in str(e) or "SystemExit" in str(type(e)):
+                raise
+            print(f"  Phase 19: Warning. Failed parsing UI playbook category for {ui_file}: {e}")
+
+    print("  Phase 19: PASS (All modified UI components comply with the Playbook Vocabulary).")
+
+
+def check_monolithic_file_limits():
+    print("Phase 20: Running Monolithic File Guard Check...")
+    src_dir = os.path.join(ROOT_DIR, "src")
+    if not os.path.exists(src_dir):
+        print("  Phase 20: PASS (src/ directory does not exist).")
+        return
+        
+    for root, dirs, files in os.walk(src_dir):
+        if any(x in root for x in [".next", "node_modules", "dist", "__pycache__"]):
+            continue
+        for f in files:
+            if f.endswith((".tsx", ".ts", ".jsx", ".js")):
+                fpath = os.path.join(root, f)
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
+                        line_count = sum(1 for _ in file_obj)
+                    if line_count > 1500:
+                        gate_block(
+                            f"CISEM_GATE_BLOCKED -- Phase 20: Monolithic File Guard check failed.\n"
+                            f"  Target file : {os.path.relpath(fpath, ROOT_DIR)}\n"
+                            f"  Line count  : {line_count} (strictly capped at 1,500 lines)\n"
+                            f"  Rule        : Large monolithic files lead to high token costs and compilation failures. "
+                            f"Modularize this file into separate sub-components before proceeding.",
+                            phase=20
+                        )
+                except Exception as e:
+                    print(f"  Warning Phase 20: Could not read {f}: {e}")
+                    
+    print("  Phase 20: PASS. All workspace files conform to the 1,500-line modularity ceiling.")
+
+
+# -----------------------------------------------------------------------------
+# PHASE 21: External Page Coding Lock
+# Scans cisem_core/templates_registry.json for instantiated_pages where
+# governor_lock=True AND custom_coding_allowed=True.
+# Such pages may not have custom code without a governor-ratification file.
+# Blocks builds as hard-stop to prevent unauthorized page modifications.
+# Ref: CISEM-IP-20260811-TEMPLATE-HUB-PERMISSIONS
+# -----------------------------------------------------------------------------
+def check_external_page_coding_lock():
+    """Phase 21: Verify no governor-locked client pages have custom_coding_allowed=True."""
+    print("Phase 21: External Page Coding Lock check...")
+    registry_path = os.path.join(ROOT_DIR, "cisem_core", "templates_registry.json")
+    if not os.path.exists(registry_path):
+        print("  Phase 21: PASS (no templates_registry.json found).")
+        return
+
+    try:
+        with open(registry_path, "r", encoding="utf-8") as f:
+            registry = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"  Phase 21: Warning. Could not read templates_registry.json: {e}")
+        return
+
+    instantiated_pages = registry.get("instantiated_pages", [])
+    violations = []
+    for page in instantiated_pages:
+        if page.get("governor_lock") is True and page.get("custom_coding_allowed") is True:
+            # Check for governor ratification override file
+            ratification_file = os.path.join(
+                ROOT_DIR, "cisem_core", "planning",
+                f"{page['id']}__governor_ratification.json"
+            )
+            if not os.path.exists(ratification_file):
+                violations.append(page["id"])
+
+    if violations:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 21: External Page Coding Lock violation.\n"
+            f"  Violated pages: {violations}\n"
+            "  Rule: Governor-locked client pages may not have custom_coding_allowed=True\n"
+            "  without a governor ratification file in cisem_core/planning/<page_id>__governor_ratification.json.\n"
+            "  Resolution: Set custom_coding_allowed=false, or obtain Governor ratification.",
+            phase=21
+        )
+
+    print(f"  Phase 21: PASS. {len(instantiated_pages)} instantiated page(s) verified. No coding lock violations.")
+
+
+# -----------------------------------------------------------------------------
+# PHASE 22: Template Version Contract Gate
+# Scans template_sync_queue.json for any pending updates of type MAJOR
+# and verifies that their respective governor_ratification.json file exists.
+# Blocks build if a MAJOR propagation is queued without active ratification.
+# -----------------------------------------------------------------------------
+def check_template_version_contract():
+    print("Phase 22: Template Version Contract Gate check...")
+    queue_path = os.path.join(ROOT_DIR, "cisem_core", "template_sync_queue.json")
+    if not os.path.exists(queue_path):
+        print("  Phase 22: PASS (no template_sync_queue.json found).")
+        return
+
+    try:
+        with open(queue_path, "r", encoding="utf-8") as f:
+            queue = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"  Phase 22: Warning. Could not read template_sync_queue.json: {e}")
+        return
+
+    violations = []
+    for job in queue:
+        if job.get("status") == "pending" and job.get("change_type") == "MAJOR":
+            page_id = job.get("page_id")
+            ratification_file = os.path.join(
+                ROOT_DIR, "cisem_core", "planning",
+                f"{page_id}__governor_ratification.json"
+            )
+            if not os.path.exists(ratification_file):
+                violations.append(page_id)
+
+    if violations:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 22: Template Version Contract Gate violation.\n"
+            f"  Violated pages: {violations}\n"
+            "  Rule: MAJOR template syncs in queue require governor ratification file on disk.\n"
+            "  Fix: Obtain Governor ratification, or clear the queue entry.",
+            phase=22
+        )
+
+    print("  Phase 22: PASS. Template version contracts verified.")
+
+
+# -----------------------------------------------------------------------------
+# PHASE 22.5: TypeScript/JSX Code Header Audit
+# Scans components/views and app/api directories for TSX/TS/JSX/JS files,
+# mandating they carry a valid CISEM code header block.
+# Prevents other models from building unauthorized components.
+# -----------------------------------------------------------------------------
+def check_typescript_jsx_headers():
+    print("Phase 22.5: TypeScript/JSX Code Header Audit check...")
+    
+    git_files = get_git_modified_files()
+    if git_files is None:
+        print("  Phase 22.5: Git unavailable. Skipping code header scan.")
+        return
+
+    violations = []
+    for fpath in git_files:
+        fpath_norm = fpath.replace("\\", "/")
+        if fpath.endswith((".tsx", ".ts", ".jsx", ".js")):
+            # Check if inside target folders: components/views or app/api
+            if "src/components/views/" in fpath_norm or "src/app/api/" in fpath_norm:
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
+                        # Read first 40 lines
+                        header_block = "".join(file_obj.readline() for _ in range(40))
+                    
+                    # Match pattern
+                    match = HEADER_PATTERN.search(header_block)
+                    if not match:
+                        violations.append(os.path.relpath(fpath, ROOT_DIR))
+                except Exception as e:
+                    print(f"  Warning Phase 22.5: Could not read {fpath}: {e}")
+
+    if violations:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.\n"
+            f"  Violating files:\n  " + "\n  ".join(violations) + "\n"
+            "  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.\n"
+            "  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.",
+            phase=22
+        )
+
+    print("  Phase 22.5: PASS. All modified/new frontend views and APIs contain ratified headers.")
+
+
+def check_hebrew_rtl_and_fixed_tables():
+    """Phase 23: RTL Alignment and Table Layout Sizing Scanner.
+    Enforces that:
+    1. Table elements don't hardcode 'text-left' (forces left alignment in RTL).
+    2. Data grid tables use fixed-layout (table-layout: fixed) to ensure column widths work.
+    3. UI files don't use 'text-left' on table headers/cells without direction checks.
+    """
+    print("Phase 23: Scanning for RTL Alignment & Table Layout Sizing compliance...")
+    
+    git_files = get_git_modified_files()
+    if git_files is None:
+        print("  Phase 23: Git unavailable. Skipping scanner.")
+        return
+
+    violations = []
+    for fpath in git_files:
+        fpath_norm = fpath.replace("\\", "/")
+        if fpath.endswith((".tsx", ".jsx", ".js", ".ts")):
+            if "src/components/" in fpath_norm or "src/app/" in fpath_norm:
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                        content = f.read()
+                    
+                    # 1. Check for <table containing text-left
+                    # Match <table ... className="... text-left ..."
+                    table_matches = re.findall(r'<table[^>]+className=["\'][^"\']*text-left[^"\']*["\']', content)
+                    if table_matches:
+                        violations.append(
+                            f"{os.path.relpath(fpath, ROOT_DIR)}: Table element hardcodes 'text-left'. Use 'text-start' or dynamic alignment."
+                        )
+                        
+                    # 2. Check that grid tables have table-fixed / table-layout: fixed
+                    # Focus on components containing 'Table' in filename
+                    if "Table" in os.path.basename(fpath):
+                        if "<table" in content and "table-fixed" not in content and "table-layout: fixed" not in content and "table-layout: 'fixed'" not in content:
+                            violations.append(
+                                f"{os.path.relpath(fpath, ROOT_DIR)}: Data grid table components must specify 'table-fixed' (table-layout: fixed) to respect column width configurations."
+                            )
+                except Exception as e:
+                    print(f"  Warning Phase 23: Could not read {fpath}: {e}")
+                    
+    if violations:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 23: RTL Alignment & Table Layout Sizing violation.\n"
+            f"  Violations:\n  " + "\n  ".join(violations) + "\n"
+            "  Rules:\n"
+            "  - Tables must never hardcode 'text-left' as it overrides RTL alignment in Hebrew.\n"
+            "  - Data grid table components must use 'table-fixed' to prevent browser overriding column widths.",
+            phase=23
+        )
+    print("  Phase 23: PASS. RTL Alignment and Table layouts verified.")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -1460,8 +1764,8 @@ def enforce_gate():
         sys.exit(0)
 
     print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v2.9 > HARDENED + PHASES 15-17")
-    print("Ratified: GOV-YARIV-20260810-CORE-SPIRAL-V1.0")
+    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-22.5")
+    print("Ratified: GOV-YARIV-20260811-TEMPLATE-SYNC-ENGINE-V1.0")
     print("=" * 60)
 
     # Determine target file for header check
@@ -1494,6 +1798,12 @@ def enforce_gate():
     check_ddl_integrity()          # Phase 16
     check_corecycle_exit_telemetry() # Phase 17
     check_3tier_scope()             # Phase 18
+    check_ui_playbook_compliance()  # Phase 19
+    check_monolithic_file_limits()  # Phase 20
+    check_external_page_coding_lock()  # Phase 21
+    check_template_version_contract() # Phase 22
+    check_typescript_jsx_headers()     # Phase 22.5
+    check_hebrew_rtl_and_fixed_tables()  # Phase 23
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()

@@ -1,0 +1,149 @@
+{
+  "policies": [
+    {
+      "cmd": "SELECT",
+      "policyname": "Admins and Sales Agents Only on Subcontractors",
+      "qual": "(auth.uid() IN ( SELECT users.id\n   FROM users\n  WHERE (users.role = ANY (ARRAY['super_admin'::user_role_enum, 'workspace_admin'::user_role_enum, 'sales_agent'::user_role_enum]))))",
+      "roles": "public",
+      "tablename": "branding_subcontractors",
+      "with_check": ""
+    },
+    {
+      "cmd": "DELETE",
+      "policyname": "contact_delete",
+      "qual": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)",
+      "roles": "authenticated",
+      "tablename": "contacts",
+      "with_check": ""
+    },
+    {
+      "cmd": "INSERT",
+      "policyname": "contact_insert",
+      "qual": "",
+      "roles": "authenticated",
+      "tablename": "contacts",
+      "with_check": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)"
+    },
+    {
+      "cmd": "SELECT",
+      "policyname": "contact_select",
+      "qual": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)",
+      "roles": "authenticated",
+      "tablename": "contacts",
+      "with_check": ""
+    },
+    {
+      "cmd": "UPDATE",
+      "policyname": "contact_update",
+      "qual": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)",
+      "roles": "authenticated",
+      "tablename": "contacts",
+      "with_check": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)"
+    },
+    {
+      "cmd": "DELETE",
+      "policyname": "deal_delete",
+      "qual": "(contact_id IN ( SELECT contacts.id\n   FROM contacts\n  WHERE (contacts.customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)))",
+      "roles": "authenticated",
+      "tablename": "deals",
+      "with_check": ""
+    },
+    {
+      "cmd": "INSERT",
+      "policyname": "deal_insert",
+      "qual": "",
+      "roles": "authenticated",
+      "tablename": "deals",
+      "with_check": "(contact_id IN ( SELECT contacts.id\n   FROM contacts\n  WHERE (contacts.customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)))"
+    },
+    {
+      "cmd": "SELECT",
+      "policyname": "deal_select",
+      "qual": "(contact_id IN ( SELECT contacts.id\n   FROM contacts\n  WHERE (contacts.customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)))",
+      "roles": "authenticated",
+      "tablename": "deals",
+      "with_check": ""
+    },
+    {
+      "cmd": "UPDATE",
+      "policyname": "deal_update",
+      "qual": "(contact_id IN ( SELECT contacts.id\n   FROM contacts\n  WHERE (contacts.customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)))",
+      "roles": "authenticated",
+      "tablename": "deals",
+      "with_check": "(contact_id IN ( SELECT contacts.id\n   FROM contacts\n  WHERE (contacts.customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)))"
+    },
+    {
+      "cmd": "SELECT",
+      "policyname": "Admins and Sales Agents Only on Supplier Mappings",
+      "qual": "(auth.uid() IN ( SELECT users.id\n   FROM users\n  WHERE (users.role = ANY (ARRAY['super_admin'::user_role_enum, 'workspace_admin'::user_role_enum, 'sales_agent'::user_role_enum]))))",
+      "roles": "public",
+      "tablename": "supplier_mappings",
+      "with_check": ""
+    },
+    {
+      "cmd": "DELETE",
+      "policyname": "tmpl_delete",
+      "qual": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)",
+      "roles": "authenticated",
+      "tablename": "template_registry",
+      "with_check": ""
+    },
+    {
+      "cmd": "INSERT",
+      "policyname": "tmpl_insert",
+      "qual": "",
+      "roles": "authenticated",
+      "tablename": "template_registry",
+      "with_check": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)"
+    },
+    {
+      "cmd": "SELECT",
+      "policyname": "tmpl_select",
+      "qual": "((customer_account_id IS NULL) OR (customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid))",
+      "roles": "authenticated",
+      "tablename": "template_registry",
+      "with_check": ""
+    },
+    {
+      "cmd": "UPDATE",
+      "policyname": "tmpl_update",
+      "qual": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)",
+      "roles": "authenticated",
+      "tablename": "template_registry",
+      "with_check": "(customer_account_id = (( SELECT ((auth.jwt() -> 'app_metadata'::text) ->> 'tenant_id'::text)))::uuid)"
+    }
+  ],
+  "rls_enabled": [
+    "backlog_registry",
+    "branding_rate_cards",
+    "branding_subcontractors",
+    "briefs",
+    "catalog_item_sandbox_variants",
+    "catalog_items",
+    "contacts",
+    "custom_libraries",
+    "customer_accounts",
+    "deals",
+    "document_chunks",
+    "feature_registry",
+    "lookup_registry",
+    "navigation_menu_items",
+    "package_feature_grants",
+    "packages",
+    "pdf_queue",
+    "product_groups",
+    "product_variations",
+    "proposal_client_drafts",
+    "proposal_items",
+    "proposals",
+    "role_definitions",
+    "state_transitions",
+    "status_library",
+    "supplier_mappings",
+    "tag_library",
+    "template_registry",
+    "user_account_roles",
+    "users",
+    "workspaces"
+  ]
+}
