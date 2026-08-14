@@ -1,0 +1,96 @@
+{
+  "$comment": "Zone manifest. Read by A.4.14 (E14) import-direction linter. Imports flow DOWNWARD ONLY: Z3 -> Z2 -> Z1. Z0 is imported by nothing.",
+  "version": "0.1-skeleton",
+  "updated": "2026-08-12",
+  "status": "INCOMPLETE - see _needs_antigravity",
+  "canon_ref": "A.2.01",
+
+  "zones": {
+    "Z0": {
+      "name": "Governance",
+      "may_import_from": [],
+      "imported_by": []
+    },
+    "Z1": {
+      "name": "Platform core",
+      "may_import_from": ["Z1"],
+      "imported_by": ["Z2", "Z3"]
+    },
+    "Z2": {
+      "name": "Vertical",
+      "may_import_from": ["Z1", "Z2"],
+      "imported_by": ["Z3"]
+    },
+    "Z3": {
+      "name": "Surface",
+      "may_import_from": ["Z1", "Z2", "Z3"],
+      "imported_by": []
+    },
+    "ZX": {
+      "name": "Unzoned",
+      "$comment": "Orphan. Maps to no backend. Fate decided by F.5.10. Linter WARNS, does not fail.",
+      "may_import_from": ["Z1", "Z2", "Z3", "ZX"],
+      "imported_by": []
+    }
+  },
+
+  "paths": {
+    "cisem_core/**": "Z0",
+    "backend/src/backend/main.py": "Z1",
+    "backend/src/backend/schema.sql": "Z1",
+    "backend/src/backend/migrations.sql": "Z1",
+    "backend/src/backend/seed_db.py": "Z1",
+    "backend/src/backend/dto_models.py": "Z1",
+    "backend/src/backend/embedding_service.py": "Z2",
+    "backend/src/backend/vector_search_service.py": "Z2",
+    "backend/src/backend/pricing_engine.py": "Z2",
+    "backend/src/backend/scraper_engine.py": "Z2",
+    "backend/src/backend/stock_verifier.py": "Z2",
+    "backend/src/backend/parking_vault_router.py": "Z0",
+    "backend/src/backend/mock_fixtures.py": "ZX",
+
+    "src/lib/tenant_context.ts": "Z1",
+    "src/app/api/v1/**": "Z3",
+    "src/app/api/dashboard/**": "Z0",
+    "src/app/api/download/**": "Z0",
+    "src/app/api/templates/**": "Z1",
+    "src/app/api/agent/**": "Z0",
+    "src/app/**": "Z3",
+
+    "src/components/views/TemplateHubView.tsx": "Z1",
+    "src/components/views/WhitelabelView.tsx": "Z1",
+    "src/components/views/AdminView.jsx": "Z0",
+    "src/components/views/SystemSchemaView.jsx": "Z0",
+    "src/components/views/B2bHubView.tsx": "Z2",
+    "src/components/views/KanbanView.jsx": "ZX",
+    "src/components/views/GanttView.jsx": "ZX",
+    "src/components/views/CalendarView.jsx": "ZX",
+    "src/components/views/ListView.jsx": "ZX",
+    "src/components/views/CollaborationHub.jsx": "ZX",
+    "src/components/views/DashboardView.jsx": "ZX",
+    "src/components/views/HomeView.tsx": "Z3",
+
+    "src/stores/useUIStore.js": "Z1",
+    "src/stores/useCollabStore.js": "ZX",
+    "src/stores/useTaskStore.js": "ZX",
+    "src/stores/useAdminStore.js": "Z2",
+    "src/stores/useNotificationStore.js": "Z1"
+  },
+
+  "rules": {
+    "upward_import": "FAIL",
+    "z0_imported_by_application_code": "FAIL",
+    "unzoned_path": "WARN",
+    "zx_involvement": "WARN",
+    "header_mismatch": {
+      "$comment": "A module's declared Depends header (A.2.03) must match its actual imports.",
+      "action": "FAIL"
+    }
+  },
+
+  "_needs_antigravity": {
+    "$comment": "GOVERNOR: paste the block below to ANTIGRAVITY. It has the real tree; this skeleton only covers files confirmed during the 2026-08-12 audit. Do NOT let it guess a zone - unknown files get 'UNZONED' and a WARN, which is the correct honest state.",
+    "prompt": "Read zones.json in the repo root. Then enumerate every file under src/, backend/src/, and cisem_core/ that is not already listed in the 'paths' object. For each, output one line: <relative/path> | <proposed zone Z0|Z1|Z2|Z3|ZX|UNKNOWN> | <the one import or usage that justifies it>. Rules: Z0 = cisem_core, gate, registries, operator-only surfaces. Z1 = identity, tenancy, entitlement, templates, shared UI primitives, shared data access. Z2 = catalog, proposals, briefs, branding, suppliers - the gifting vertical. Z3 = routes and thin page composition. ZX = generic project management with no backend counterpart. UNKNOWN = you cannot justify a zone from the file's actual imports. Do NOT guess: UNKNOWN is a correct answer and is preferred over a confident wrong one. Output the list only. Do not modify zones.json. Do not run any other command.",
+    "then": "CLAUDE reviews the proposals before any path is added. E14 is not built until this file is complete."
+  }
+}
