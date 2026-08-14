@@ -1,0 +1,22 @@
+{
+  "hooks": [
+    {
+      "event": "file_modified",
+      "pattern": "backend/src/backend/schema.sql",
+      "action": "execute_skill",
+      "skill": "pgvector-partition-auditor"
+    },
+    {
+      "event": "file_created",
+      "pattern": "cisem_core/**/*.py",
+      "action": "execute_skill",
+      "skill": "dependency-graph-visualizer"
+    },
+    {
+      "event": "post_compile",
+      "pattern": "**/*",
+      "action": "execute_skill",
+      "skill": "gate-keeper"
+    }
+  ]
+}
