@@ -32,6 +32,7 @@ import re
 import sys
 import json
 import yaml
+import hashlib
 import subprocess
 from datetime import datetime, timezone
 
@@ -612,7 +613,7 @@ def check_walkthrough_next_steps():
 
 def check_registry_checksums():
     print("Phase 9: Running Registry Checksum Verification...")
-    reconciler_script = os.path.join(CORE_DIR, "cxp", "2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0.1.py")
+    reconciler_script = os.path.join(CORE_DIR, "cxp", "2026-08-14__GoogleAntigravity__Cxp__WorkspaceReconciler__V0.7.py")
     if not os.path.exists(reconciler_script):
         print(f"CISEM_GATE_BLOCKED -- Phase 9: Reconciler script not found at {reconciler_script}")
         sys.exit(1)
@@ -1754,7 +1755,96 @@ def check_hebrew_rtl_and_fixed_tables():
             "  - Data grid table components must use 'table-fixed' to prevent browser overriding column widths.",
             phase=23
         )
-    print("  Phase 23: PASS. RTL Alignment and Table layouts verified.")
+def check_zero_fabrication_gate():
+    """
+    Phase 24: ZeroFabricationGate (Gate 19)
+    Invokes SecretLiteralLinter__V1.1.py for Check C (secret literals).
+    Rule 1: Rejects zero-UUID literals ('00000000-0000-0000-0000-000000000000').
+    Rule 2: Rejects swallowed DB exceptions ('except Exception: return [] / {}').
+    Rule 3: Rejects synthetic entity schema dictionary returns in else/except branches.
+    """
+    print("  Phase 24: Checking ZeroFabricationGate (Gate 19)...")
+    
+    # 1. Invoke SecretLiteralLinter V1.1
+    linter_script = os.path.join(CORE_DIR, "security", "2026-08-14__CisemCsAg__Security__SecretLiteralLinter__V1.1.py")
+    if os.path.exists(linter_script):
+        res = subprocess.run([sys.executable, linter_script, ROOT_DIR], capture_output=True, text=True)
+        if res.returncode != 0:
+            gate_block(f"CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.\n{res.stdout}", phase=24)
+            
+    # 2. Rule Scans
+    zero_uuid_pattern = re.compile(r'["\']00000000-0000-0000-0000-000000000000["\']')
+    swallowed_db_pattern = re.compile(r'except\s+Exception.*:\s*(?:print\([^)]*\)\s*)?return\s*(?:\[\]|\{\})')
+    synthetic_entity_pattern = re.compile(r'(?:else:|except.*:)\s*\n\s*\w+\s*=\s*\{\s*["\'](?:title_he|description|name|price)["\']\s*:')
+    
+    violations = []
+    
+    for root, dirs, files in os.walk(ROOT_DIR):
+        dirs[:] = [d for d in dirs if d not in {".git", "node_modules", ".venv", ".next", "dist", "build", "scratch"}]
+        for f in files:
+            if f.endswith((".py", ".ts", ".tsx", ".js", ".jsx")) and f != "cisem_gate.py":
+                fpath = os.path.join(root, f)
+                try:
+                    with open(fpath, "r", encoding="utf-8") as file_obj:
+                        content = file_obj.read()
+                        if zero_uuid_pattern.search(content):
+                            violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Contains forbidden Zero-UUID stub literal '00000000-0000-0000-0000-000000000000'")
+                        if swallowed_db_pattern.search(content):
+                            violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Contains swallowed DB exception returning silent empty list/dict")
+                        if synthetic_entity_pattern.search(content):
+                            violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Contains synthetic entity dictionary fabrication in fallback branch")
+                except Exception:
+                    pass
+                    
+    if violations:
+        gate_block("CISEM_GATE_BLOCKED -- Phase 24: ZeroFabricationGate violation.\n  " + "\n  ".join(violations), phase=24)
+        
+    print("  Phase 24: PASS. ZeroFabricationGate (Gate 19) verified.")
+
+
+def check_context_pack_drift():
+    """Phase 25: Context Pack Drift Check. Verifies directory tree hashes against GENERATION_METADATA.json."""
+    meta_path = os.path.join(ROOT_DIR, ".agents", "reviewer", "GENERATION_METADATA.json")
+    if not os.path.exists(meta_path):
+        gate_block("CISEM_GATE_BLOCKED -- Context pack metadata (.agents/reviewer/GENERATION_METADATA.json) is missing. Run python cisem_core/tools/generate_reviewer_pack.py")
+    try:
+        with open(meta_path, "r", encoding="utf-8") as f:
+            meta = json.load(f)
+    except Exception as e:
+        gate_block(f"CISEM_GATE_BLOCKED -- Invalid context pack metadata: {e}")
+
+    stored_hashes = meta.get("git_tree_hashes", {})
+    
+    def calc_dir_hash(dir_path):
+        if not os.path.exists(dir_path):
+            return "DIR_NOT_FOUND"
+        hasher = hashlib.sha256()
+        for root, dirs, files in os.walk(dir_path):
+            dirs[:] = sorted([d for d in dirs if d not in {".git", "node_modules", ".venv", "__pycache__", "dist", "build", ".next", "reviewer"}])
+            for f in sorted(files):
+                if f in {"cisem_turn_counter.json", "cael_status.json", "GENERATION_METADATA.json"}:
+                    continue
+                if f.endswith((".py", ".ts", ".tsx", ".js", ".jsx", ".yaml", ".json", ".md")):
+                    fpath = os.path.join(root, f)
+                    relpath = os.path.relpath(fpath, dir_path)
+                    hasher.update(relpath.encode("utf-8"))
+                    try:
+                        with open(fpath, "rb") as file_obj:
+                            hasher.update(file_obj.read())
+                    except Exception:
+                        pass
+        return hasher.hexdigest()
+
+    live_core_hash = calc_dir_hash(os.path.join(ROOT_DIR, "cisem_core"))
+    live_backend_hash = calc_dir_hash(os.path.join(ROOT_DIR, "backend"))
+
+    if stored_hashes.get("cisem_core") != live_core_hash or stored_hashes.get("backend") != live_backend_hash:
+        print("  Phase 25: DRIFT DETECTED in .agents/reviewer/ context pack.")
+        print(f"  cisem_core: stored={stored_hashes.get('cisem_core')} vs live={live_core_hash}")
+        print(f"  backend: stored={stored_hashes.get('backend')} vs live={live_backend_hash}")
+        gate_block("CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.")
+
+    print("  Phase 25: PASS. ContextPackDriftGate verified.")
 
 
 def enforce_gate():
@@ -1764,8 +1854,8 @@ def enforce_gate():
         sys.exit(0)
 
     print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-22.5")
-    print("Ratified: GOV-YARIV-20260811-TEMPLATE-SYNC-ENGINE-V1.0")
+    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-25")
+    print("Ratified: GOV-2026-08-15-CTXPACK-02")
     print("=" * 60)
 
     # Determine target file for header check
@@ -1804,6 +1894,8 @@ def enforce_gate():
     check_template_version_contract() # Phase 22
     check_typescript_jsx_headers()     # Phase 22.5
     check_hebrew_rtl_and_fixed_tables()  # Phase 23
+    check_zero_fabrication_gate()         # Phase 24 (Gate 19)
+    check_context_pack_drift()            # Phase 25 (Context Pack Drift Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()
@@ -1813,3 +1905,4 @@ def enforce_gate():
 
 if __name__ == "__main__":
     enforce_gate()
+

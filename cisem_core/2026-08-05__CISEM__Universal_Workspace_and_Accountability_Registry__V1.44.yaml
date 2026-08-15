@@ -212,7 +212,7 @@ control_plane_subsystems:
         optimization: PENDING
         consolidation: CONSOLIDATED
         permission_compliance: PENDING
-      sha256: 93fcf4726bec895296fdc289544ef44acfbf11ba8846fbc1e2ed654ce292a081
+      sha256: 9a92b03423f96b1c7fad6cf179729f0c55a9509abd321aa7af9e0f07e84afd4f
     completeness_matrix:
       path: 2026-08-05__CISEM__CXP__CompletenessMatrix__V1.2.yaml
       version: '1.2'
@@ -464,7 +464,7 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: 196c83da1523ebeb0d9fb961c71d0935870d9f0816375aaa4879471e45cd33a4
+      sha256: f715b382567b0978b760f4c58714ccb5e6856e9faa45d3f4033e5ab0eeacbc5f
     2026_08_10__AntigravityLocal__CisemConfig__V1_0_py:
       path: platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py
       version: '1.0'
@@ -476,9 +476,9 @@ control_plane_subsystems:
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
       sha256: 0e4d3d9d869ed7427abc2eb72ca881729833fea9ac3866270c0ab0e725e9ebc9
-    2026_08_10__AntigravityLocal__ContinuousAuditorDaemon__V1_0_py:
-      path: platform_core/2026-08-10__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.0.py
-      version: '1.0'
+    2026_08_14__AntigravityLocal__ContinuousAuditorDaemon__V1_3_py:
+      path: platform_core/2026-08-14__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.3.py
+      version: '1.3'
       status: VERIFIED
       validation_metrics:
         flow_completion: VERIFIED
@@ -486,7 +486,29 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: e209b6e2467ac1de3af8096c0b2bc28af1d4acaef2d833212e64098604acab5d
+      sha256: 2557a3f3c8785f1b194f0c288b63bba241907aa9eafd97a38036dd791ca54c2d
+    2026_08_14__CISEM__AntigravityLocal__BehavioralProfileRegistry__V1_0_yaml:
+      path: 2026-08-14__CISEM__AntigravityLocal__BehavioralProfileRegistry__V1.0.yaml
+      version: '1.0'
+      status: ACTIVE
+      validation_metrics:
+        flow_completion: INFERRED
+        code_implementation: INFERRED
+        optimization: PENDING
+        consolidation: PENDING
+        permission_compliance: ENFORCED
+      sha256: f3c20401bcf11171facfe874b7203734fe764bf660582a39dc4ccc970092f06a
+    2026_08_14__CISEM__AntigravityLocal__MBCSVerifierSkill__V1_0_md:
+      path: ../.agents/skills/mbcs-verifier/SKILL.md
+      version: '1.0'
+      status: ACTIVE
+      validation_metrics:
+        flow_completion: INFERRED
+        code_implementation: INFERRED
+        optimization: PENDING
+        consolidation: PENDING
+        permission_compliance: ENFORCED
+      sha256: ebe1567aaa370967abb6ae498d68a10a81ffb99e10c110f4311bd34af1dcdbbd
     2026_08_10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1_0_py:
       path: platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py
       version: '1.0'
@@ -498,7 +520,6 @@ control_plane_subsystems:
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
       sha256: 62db8deb0c686de696da3314a14adff466ad8f9eaa3a7c0c934637572b9f94af
-
     2026_08_10__AntigravityLocal__Storefront_Whitelabel_Exporter_UI_and_Git_Sync_Plan__V1_0_md:
       path: ../2026-08-10__AntigravityLocal__YarivHuman__Storefront_Whitelabel_Exporter_UI_and_Git_Sync_Plan__V1.0.md
       version: '1.0'
@@ -852,7 +873,7 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: bd5f736aef52f46c3db55d02c2a1eb87b81af746534a1ac6fcfdbeb6637f2256
+      sha256: 1da803fede94d9b283ce40aba410c44b89c10211f5959d8ee7659ea909001858
     2026_08_09__AntigravityLocal__YarivHuman__TenantContextValidationVerificationScript__V1_0_py:
       path: ../sandbox/2026-08-09__AntigravityLocal__YarivHuman__TenantContextValidationVerificationScript__V1.0.py
       version: '1.0'
