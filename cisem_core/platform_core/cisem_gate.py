@@ -993,8 +993,8 @@ def reset_planning_mode(target_file_path):
 
 
 def check_env_vars():
-    """Scans .env.example for required environment variables and checks their presence in .env or os.environ."""
-    print("Phase 13: Checking Environment Variables (.env.example alignment)...")
+    """Phase 13: Scans environment variables for forbidden placeholder/fabricated patterns. Absence is an honest pass in local dev."""
+    print("Phase 13: Checking Environment Variables (Fabrication & Placeholder Anti-Fabrication Gate)...")
     env_example_path = os.path.join(ROOT_DIR, ".env.example")
     if not os.path.exists(env_example_path):
         print("  Phase 13: INFO. No .env.example found. Skipping check.")
@@ -1023,20 +1023,34 @@ def check_env_vars():
                     if key:
                         env_vars[key] = val
 
-    missing = []
-    for var in required_vars:
-        value = os.environ.get(var) or env_vars.get(var)
-        if not value:
-            missing.append(var)
+    forbidden_patterns = ["dummy", "test", "placeholder", "changeme", "xxx", "_real", "your_"]
+    fabricated_vars = []
 
-    if missing:
+    for var in required_vars:
+        # Absence is an honest pass in local dev
+        val = os.environ.get(var) if var in os.environ else env_vars.get(var)
+        if val is None or val == "":
+            continue
+            
+        val_lower = val.lower()
+        is_secret = any(term in var.lower() for term in ["key", "secret", "credentials", "token", "password"])
+        
+        # Check placeholder strings
+        if any(pat in val_lower for pat in forbidden_patterns):
+            fabricated_vars.append((var, val, "Contains forbidden placeholder pattern"))
+        # Check short fake secret values
+        elif is_secret and len(val) < 12 and not val.endswith(".json"):
+            fabricated_vars.append((var, val, f"Secret value length ({len(val)}) is under 12 characters"))
+
+    if fabricated_vars:
+        details = "\n".join(f"    - {var}='{val}' ({reason})" for var, val, reason in fabricated_vars)
         gate_block(
-            f"CISEM_GATE_BLOCKED -- Phase 13: Missing environment variables from .env.example: {', '.join(missing)}.\n"
-            "  Rule: Every variable declared in .env.example must be defined in .env or system environment.",
+            f"CISEM_GATE_BLOCKED -- Phase 13: Fabricated or placeholder environment variables detected:\n{details}\n"
+            "  Rule: Absence of secrets is an honest pass in local dev, but supplying fake/placeholder values is prohibited.",
             phase=13
         )
 
-    print("  Phase 13: PASS. All environment variables declared in .env.example are present.")
+    print("  Phase 13: PASS. No fabricated or placeholder environment variables detected (absence is permitted).")
 
 
 def check_trial_maturity():

@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       custom_coding_allowed: false,
       governor_lock: true,
       created_at: new Date().toISOString(),
-      created_by: 'operator_admin',
+      created_by: 'platform_admin',
       sync_receipt: syncReceipt,
     };
 

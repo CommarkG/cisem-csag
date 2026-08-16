@@ -27,20 +27,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
 def seed_database():
     print("Connecting to Supabase...")
     
-    # 1. Insert Workspace
-    print("Seeding workspace...")
-    ws_res = supabase.table("workspaces").upsert({
-        "name": "Israel Gifting Workspace",
-        "domain_type": "corporate_gifts"
-    }).execute()
-    
-    if not ws_res.data:
-        print("Failed to insert workspace.")
-        return
-    workspace_id = ws_res.data[0]["id"]
-    print(f"Workspace created: {workspace_id}")
-    
-    # 2. Seed CRM customer accounts, contacts, and deals for pipeline testing
+    # 1. Seed CRM customer accounts and contacts for pipeline testing
     print("Seeding CRM Customer accounts...")
     customer_res = supabase.table("customer_accounts").upsert({
         "company_name": "Acme HighTech LTD",
@@ -82,7 +69,6 @@ def seed_database():
     # 4. Insert Subcontractors
     print("Seeding subcontractors...")
     sub_res = supabase.table("branding_subcontractors").upsert({
-        "workspace_id": workspace_id,
         "company_name": "Gal Laser Netanya",
         "contact_name": "Gal",
         "specialties": ["laser_engraving", "uv_print"]
@@ -111,7 +97,6 @@ def seed_database():
     
     catalog_items = [
         {
-            "workspace_id": workspace_id,
             "internal_sku": "BTI-BAG-1042",
             "title_he": "תיק גב למחשב - הרווארד",
             "category": "Bags",
@@ -124,7 +109,6 @@ def seed_database():
             "embedding": mock_vector
         },
         {
-            "workspace_id": workspace_id,
             "internal_sku": "BTI-TECH-2050",
             "title_he": "רמקול בלוטוס POLO WOOPER",
             "category": "Gadgets",
@@ -162,15 +146,7 @@ def seed_database():
     supabase.table("product_variations").upsert(variations).execute()
     print("Product variations seeded.")
     
-    # 8. Seed CRM Deals
-    print("Seeding CRM deal pipelines...")
-    supabase.table("deals").upsert({
-        "contact_id": contact_id,
-        "deal_stage": "lead_ingestion",
-        "deal_value": 0.00
-    }).execute()
-    
-    # 9. Insert Supplier mappings (pointers)
+    # 8. Insert Supplier mappings (pointers)
     print("Seeding supplier mappings...")
     mappings = [
         {

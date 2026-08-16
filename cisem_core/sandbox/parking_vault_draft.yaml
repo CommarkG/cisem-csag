@@ -743,3 +743,33 @@ parked_items:
   - '[AUDIT.RIGIDITY]'
   - '[WEEKLY_SESSION_PARKING]'
   title: Naked Numbers Found -- Context/Reasoning missing for 30 numbers
+- atv_generated: true
+  atv_timestamp: '2026-08-14T23:20:00+03:00'
+  description: The workspace reconciler duplicate version detector flagged eleven coexisting
+    versions of the Universal Registry (V1.25 through V1.44) residing in cisem_core/.
+  governor_signature: null
+  item_id: PARK-041
+  linked_plans: []
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[REGISTRY.DUPLICATION]'
+  title: Registry Version Duplication -- Eleven coexisting registry versions in cisem_core/
+- atv_generated: true
+  atv_timestamp: '2026-08-14T23:20:00+03:00'
+  description: ATV verdict mapping calls reset_turn_counter() when GAPS_FOUND is returned,
+    clearing the turn counter and resetting maturity signals. This allows open gaps to bypass
+    the turn limit ceiling (15) that would otherwise force a Governor-level audit.
+  governor_signature: null
+  item_id: PARK-042
+  linked_plans: []
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[PROCESS.RESET_LOOP]'
+  title: ATV Verdict Self-Reset Loop -- GAPS_FOUND verdict calls reset_turn_counter()
+

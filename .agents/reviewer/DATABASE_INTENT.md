@@ -3,25 +3,51 @@
 > [!WARNING]
 > THIS FILE RECORDS WHAT THE APPLICATION CODE BELIEVES ABOUT THE DATABASE. IT IS NOT LIVE STATE. LIVE STATE COMES ONLY FROM A GOVERNOR QUERY. A DISAGREEMENT BETWEEN THIS FILE AND THE GOVERNOR'S SCHEMA FILE IS A DEFECT, NOT A DISCREPANCY.
 
-## Inferred Application Table Dependencies & Queries (from backend/src/backend/main.py)
+## Inferred Table Names (parsed dynamically from `.table(...)` calls in `main.py`)
 
-| Table Name | Query Usage / Route Context | Code Status |
-| :--- | :--- | :--- |
-| `catalog_items` | Search & CRUD endpoints (`POST /api/v1/catalog/items`, `POST /catalog/search`) | ACTIVE |
-| `supplier_mappings` | Multi-criteria supplier prioritization (`get_prioritized_suppliers`) | ACTIVE |
-| `branding_subcontractors` | Subcontractor management (`POST /api/v1/subcontractors`) | ACTIVE |
-| `branding_rate_cards` | Subcontractor rate card mapping | ACTIVE |
-| `customer_accounts` | Tenant boundary context (`request.state.tenant_id`) | ACTIVE |
-| `users` | User identity fallback seed (`ingest_wisdom.py`) | ACTIVE |
-| `contacts` | CRM default contact query (`seed_db.py`) | ACTIVE |
-| `lookup_registry` | Currency conversion registry lookup (`registry_type = currency_conversion`) | ACTIVE |
-| `template_registry` | Pipeline duplication (`POST /api/v1/templates/{id}/duplicate`) | ACTIVE |
-| `document_chunks` | Brief chunk vector indexing | DEPRECATED (501) |
-| `briefs` | Legacy brief persistence | RETIRED (501) |
-| `deals` | Legacy deal persistence | RETIRED (410) |
+| Table Name | Code Query Status |
+| :--- | :--- |
+| `backlog_registry` | ACTIVE QUERY TARGET |
+| `branding_rate_cards` | ACTIVE QUERY TARGET |
+| `branding_subcontractors` | ACTIVE QUERY TARGET |
+| `briefs` | ACTIVE QUERY TARGET |
+| `catalog_items` | ACTIVE QUERY TARGET |
+| `custom_libraries` | ACTIVE QUERY TARGET |
+| `customer_accounts` | ACTIVE QUERY TARGET |
+| `deals` | ACTIVE QUERY TARGET |
+| `document_chunks` | ACTIVE QUERY TARGET |
+| `lookup_registry` | ACTIVE QUERY TARGET |
+| `packages` | ACTIVE QUERY TARGET |
+| `pdf_queue` | ACTIVE QUERY TARGET |
+| `pending_claims` | ACTIVE QUERY TARGET |
+| `product_embeddings` | ACTIVE QUERY TARGET |
+| `product_groups` | ACTIVE QUERY TARGET |
+| `product_variations` | ACTIVE QUERY TARGET |
+| `proposal_client_drafts` | ACTIVE QUERY TARGET |
+| `proposal_items` | ACTIVE QUERY TARGET |
+| `proposals` | ACTIVE QUERY TARGET |
+| `status_library` | ACTIVE QUERY TARGET |
+| `supplier_mappings` | ACTIVE QUERY TARGET |
+| `tag_library` | ACTIVE QUERY TARGET |
+| `template_registry` | ACTIVE QUERY TARGET |
 
-## Backend Pydantic Data Models
-- `CatalogItemCreate`: `internal_sku`, `title_he`, `category`, `wholesale_cost`, `currency`
-- `SubcontractorCreate`: `company_name`, `contact_name`, `specialties`, `brackets`
-- `BriefQualifyRequest`: `raw_text`, `client_id`
-- `WizardDuplicatePayload`: `new_title`, `target_tenant_id`
+## Backend Data Models (parsed dynamically from AST in `main.py`)
+
+- `ClaimMintRequest`: `user_id`, `tenant_id`
+- `CatalogItemCreate`: `internal_sku`, `title_he`, `category`, `description`, `supplier_lead_time_days`, `wholesale_cost`, `supplier_name`, `supplier_sku`, `supplier_product_url`
+- `SubcontractorCreate`: `company_name`, `contact_name`, `specialties`, `setup_fee`, `brackets`
+- `CustomerCreate`: `name`, `domain_type`
+- `StatusCreate`: `code`, `label`, `description`
+- `TagCreate`: `label`, `description`, `parent_id`
+- `CustomLibraryCreate`: `tab_id`, `label`, `description`
+- `LookupRegistryCreate`: `registry_type`, `key_name`, `value_data`, `metadata`
+- `BacklogCreate`: `title`, `context`, `tags`, `impact_level`
+- `DocumentChunkUpdate`: `tag_id`, `status_code`, `chunk_text`
+- `ProspectScrapePayload`: `url`
+- `SearchTextPayload`: `textQuery`
+- `CaelRatifyPayload`: `taskId`, `intent`, `ratified_by_user`
+- `WhitelabelUpdateRequest`: `custom_domain`, `git_url`, `webhook_secret`
+- `ClaimResolveRequest`: `user_id`, `tenant_id`
+- `CatalogSearchPayload`: `query_vector`, `similarity_threshold`, `match_count`, `category_filter`
+- `ProposalGenerateRequest`: `brief_id`, `catalog_item_skus`, `applied_margin_percent`, `selected_variations`
+- `WizardDuplicatePayload`: `title`, `layout_spec`, `description`

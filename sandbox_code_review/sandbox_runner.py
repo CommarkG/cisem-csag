@@ -180,8 +180,8 @@ index d920c88..e938cd4 100644
                 findings = [findings]
             return findings
         except Exception as e:
-            print(f"[!] Failed to call OpenAI API: {e}. Falling back to simulation.")
-            return []
+            print(f"[!] Failed to call OpenAI API: {e}.")
+            raise RuntimeError(f"OpenAI API call failed: {e}")
 
     def run_trial_audit(self, change_type="backdoor"):
         print(f"\n=== Running Sandbox Code Review Task: [{change_type.upper()}] ===")

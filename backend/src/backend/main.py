@@ -172,12 +172,12 @@ async def tenant_context_middleware(request: Request, call_next):
     is_dev = not is_prod
     if is_dev and (not auth_header or auth_header == "Bearer dev-token"):
         tenant_id = request.headers.get("x-tenant-id", "dev-tenant-1")
-        request.state.user_id = "00000000-0000-0000-0000-000000000000"
+        request.state.user_id = "dev-user-001"
         request.state.tenant_id = tenant_id
         request.state.role = "member"
         headers = {
             "x-current-tenant-id": tenant_id,
-            "x-current-user-id": "00000000-0000-0000-0000-000000000000",
+            "x-current-user-id": "dev-user-001",
             "Authorization": f"Bearer {SUPABASE_KEY}"
         }
         opt = SyncClientOptions(httpx_client=http_client, headers=headers)
@@ -277,10 +277,20 @@ async def tenant_context_middleware(request: Request, call_next):
                 instance=path
             )
 
-        request.state.user_id = user_id
-        request.state.tenant_id = tenant_id
-        # No default role injected — role is managed server-side, not in JWT.
-        request.state.role = app_metadata.get("role", "member")
+        # Option B: Server-side role resolution from user_account_roles via admin client.
+        # Default is None if no membership or client unavailable — never a role string fallback.
+        if supabase_admin and user_id and tenant_id:
+            try:
+                role_res = supabase_admin.rpc(
+                    "get_user_role",
+                    {"p_user_id": user_id, "p_tenant_id": tenant_id}
+                ).execute()
+                request.state.role = role_res.data if role_res.data else None
+            except Exception as exc:
+                print(f"[middleware] get_user_role failed for user={user_id}: {exc}")
+                request.state.role = None
+        else:
+            request.state.role = None
 
         headers = {
             "x-current-tenant-id": tenant_id,
@@ -307,7 +317,7 @@ async def tenant_context_middleware(request: Request, call_next):
 
 
 # ---------------------------------------------------------------------------
-# Claim-minting helper + endpoint  (Task 2)
+# Claim-minting helper  (Task 2)
 #
 # Ratified plan : CISEM-IP-20260814-SECURITY-HARDENING v1.0 (Task 2)
 # Purpose       : Write app_metadata.tenant_id via Admin API after signup or
@@ -334,25 +344,6 @@ def mint_tenant_claim(user_id: str, tenant_id: str) -> None:
         {"app_metadata": {"tenant_id": tenant_id}}
     )
 
-
-@app.post("/api/v1/auth/claim", status_code=200)
-def mint_claim_endpoint(body: ClaimMintRequest, request: Request):
-    """
-    Server-side endpoint to write app_metadata.tenant_id after signup or invite acceptance.
-    Must only be called from trusted backend flows — never from a browser client.
-    Requires: SUPABASE_KEY env var (service-role class).
-    """
-    if not supabase_admin:
-        raise HTTPException(
-            status_code=503,
-            detail="Claim-minting is unavailable: SUPABASE_KEY is not configured."
-        )
-    try:
-        mint_tenant_claim(body.user_id, body.tenant_id)
-        return {"status": "ok", "user_id": body.user_id, "tenant_id": body.tenant_id}
-    except Exception as e:
-        print(f"mint_claim_endpoint error: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to mint tenant claim: {str(e)}")
 
 # Form payload DTOs
 class CatalogItemCreate(BaseModel):
@@ -409,17 +400,7 @@ class DocumentChunkUpdate(BaseModel):
     status_code: Optional[str] = None
     chunk_text: Optional[str] = None
 
-def get_active_workspace_id() -> str:
-    """
-    Utility function to retrieve the active workspace.
-    Refactored to resolve tenant context dynamically, satisfying Vulnerability 1.
-    """
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase not connected.")
-    ws_res = supabase.table("workspaces").select("id").limit(1).execute()
-    if not ws_res.data:
-        raise HTTPException(status_code=400, detail="No active workspace found. Please seed the database first.")
-    return ws_res.data[0]["id"]
+
 
 
 @app.get("/")
@@ -723,20 +704,79 @@ def get_pending_claims():
     return dict(count=len(res.data or []), items=res.data or [])
 
 
+class ClaimResolveRequest(BaseModel):
+    user_id: str
+    tenant_id: str
+
+
+@app.post("/api/v1/admin/pending-claims/resolve")
+def resolve_pending_claim_endpoint(body: ClaimResolveRequest, request: Request):
+    """
+    Operator endpoint to repair a recorded failed provisioning claim (U6.2.09).
+    Guarded by platform_admin role. Verifies matching unresolved claim row before minting.
+    """
+    user_role = getattr(request.state, "role", None)
+    if user_role != "platform_admin":
+        raise HTTPException(status_code=403, detail="Forbidden: Platform Admin authority required.")
+
+    if not supabase_admin:
+        raise HTTPException(status_code=503, detail="Admin client unavailable: SUPABASE_KEY is not configured.")
+
+    # 1. Verify a matching unresolved pending_claims row exists
+    claim_check = (
+        supabase_admin
+        .table("pending_claims")
+        .select("id")
+        .eq("auth_user_id", body.user_id)
+        .eq("tenant_id", body.tenant_id)
+        .is_("resolved_at", None)
+        .limit(1)
+        .execute()
+    )
+    if not claim_check.data:
+        raise HTTPException(
+            status_code=404,
+            detail="No unresolved pending claim found for specified user and tenant."
+        )
+
+    # 2. Mint claim (wrapped in try/except; 502 on failure, claim left unresolved)
+    try:
+        mint_tenant_claim(body.user_id, body.tenant_id)
+    except Exception as exc:
+        print(f"[admin/pending-claims/resolve] Mint failed for user={body.user_id}: {exc}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to mint tenant claim during repair: {str(exc)}"
+        )
+
+    # 3. Resolve pending_claims row via admin client RPC
+    current_user_id = getattr(request.state, "user_id", None)
+    try:
+        res = supabase_admin.rpc("resolve_pending_claim", {
+            "p_auth_user_id": body.user_id,
+            "p_tenant_id": body.tenant_id,
+            "p_resolved_by": current_user_id,
+        }).execute()
+        resolved_count = res.data if isinstance(res.data, int) else 0
+    except Exception as exc:
+        print(f"[admin/pending-claims/resolve] RPC failed for user={body.user_id}: {exc}")
+        resolved_count = 0
+
+    return {"status": "resolved", "resolved_count": resolved_count, "user_id": body.user_id, "tenant_id": body.tenant_id}
+
+
+
 # 1. CREATE PRODUCT (Catalog Item + Supplier Mapping)
 @app.post("/api/v1/catalog/items")
 def create_catalog_item(payload: CatalogItemCreate):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not connected.")
     try:
-        workspace_id = get_active_workspace_id()
-
         # Insert into catalog_items
         mock_vector = [0.0] * 1536
         mock_vector[0] = 1.0
         
         cat_res = supabase.table("catalog_items").insert({
-            "workspace_id": workspace_id,
             "internal_sku": payload.internal_sku,
             "title_he": payload.title_he,
             "category": payload.category,
@@ -758,7 +798,7 @@ def create_catalog_item(payload: CatalogItemCreate):
             "supplier_name": payload.supplier_name,
             "supplier_sku": payload.supplier_sku,
             "supplier_product_url": payload.supplier_product_url,
-            "wholesale_cost": float(payload.wholesale_cost)
+            "wholesale_cost": str(payload.wholesale_cost)
         }).execute()
 
         return {"status": "success", "catalog_item_id": catalog_item_id}
@@ -775,7 +815,9 @@ class CatalogSearchPayload(BaseModel):
 @app.post("/api/v1/catalog/search")
 def post_catalog_search(payload: CatalogSearchPayload, x_tenant_id: str = Header(default="default-tenant")):
     if not supabase:
-        return []
+        ref_id = uuid.uuid4().hex[:8]
+        print(f"[ERROR {ref_id}] Supabase connection uninitialized in catalog search.")
+        raise HTTPException(status_code=503, detail=f"Database connection unavailable. Reference ID: {ref_id}")
     try:
         if payload.category_filter:
             vector = EmbeddingService.get_text_embedding(payload.category_filter)
@@ -798,27 +840,13 @@ def post_catalog_search(payload: CatalogSearchPayload, x_tenant_id: str = Header
             medusa_id = r.get("medusa_product_id")
             prod_res = supabase.table("catalog_items").select("*").eq("internal_sku", medusa_id).execute()
             if prod_res.data:
-                prod = prod_res.data[0]
-            else:
-                prod = {
-                    "id": medusa_id,
-                    "internal_sku": medusa_id,
-                    "title_he": r.get("title") or "Matching Gift Item",
-                    "category": payload.category_filter or "Gifts",
-                    "description": "Custom parsed vector result.",
-                    "image_urls": [r.get("image_url") or "🎁"]
-                }
-            formatted.append({"item": prod})
-            
-        if not formatted:
-            all_res = supabase.table("catalog_items").select("*").limit(10).execute()
-            for p in (all_res.data or []):
-                formatted.append({"item": p})
+                formatted.append({"item": prod_res.data[0]})
                 
         return formatted
     except Exception as e:
-        print(f"Error in catalog search: {e}")
-        return []
+        ref_id = uuid.uuid4().hex[:8]
+        print(f"[ERROR {ref_id}] Error in catalog search: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal catalog search error. Reference ID: {ref_id}")
 
 # 2. CREATE SUBCONTRACTOR (Registry)
 @app.post("/api/v1/subcontractors")
@@ -826,10 +854,7 @@ def create_subcontractor(payload: SubcontractorCreate):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not connected.")
     try:
-        workspace_id = get_active_workspace_id()
-
         sub_res = supabase.table("branding_subcontractors").insert({
-            "workspace_id": workspace_id,
             "company_name": payload.company_name,
             "contact_name": payload.contact_name,
             "specialties": payload.specialties
@@ -844,10 +869,10 @@ def create_subcontractor(payload: SubcontractorCreate):
             supabase.table("branding_rate_cards").insert({
                 "subcontractor_id": sub_id,
                 "technique": payload.specialties[0] if payload.specialties else "laser_engraving",
-                "setup_fee": float(payload.setup_fee),
+                "setup_fee": str(payload.setup_fee),
                 "min_quantity": bracket["min_quantity"],
                 "max_quantity": bracket["max_quantity"],
-                "unit_cost": float(bracket["unit_cost"]),
+                "unit_cost": str(bracket["unit_cost"]),
                 "turnaround_days": bracket["turnaround_days"]
             }).execute()
 
@@ -856,158 +881,22 @@ def create_subcontractor(payload: SubcontractorCreate):
         print(f"Error creating subcontractor: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# 3. CREATE CUSTOMER (Workspace / Tenant)
 @app.post("/api/v1/workspaces")
 def create_workspace(payload: CustomerCreate):
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase not connected.")
-    try:
-        ws_res = supabase.table("workspaces").insert({
-            "name": payload.name,
-            "domain_type": payload.domain_type
-        }).execute()
-        if not ws_res.data:
-            raise HTTPException(status_code=500, detail="Failed to create workspace")
-        return {"status": "success", "workspace_id": ws_res.data[0]["id"]}
-    except Exception as e:
-        print(f"Error creating customer workspace: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """
+    Deprecated endpoint. Workspace architecture retired in favor of multi-tenant accounts.
+    """
+    raise HTTPException(status_code=410, detail="The /api/v1/workspaces endpoint is deprecated. Use customer_accounts or tenant provisioning.")
 
-@app.post("/api/v1/briefs/qualify", response_model=BriefQualifyResponse)
+@app.post("/api/v1/briefs/qualify")
 def qualify_brief(payload: BriefQualifyRequest):
-    raw_text = payload.raw_text.lower()
-    
-    qty = 100
-    if "200" in raw_text:
-        qty = 200
-    elif "500" in raw_text:
-        qty = 500
-    elif "100" in raw_text:
-        qty = 100
-    
-    budget = Decimal("50.00")
-    if "30" in raw_text:
-        budget = Decimal("30.00")
-    elif "100" in raw_text:
-        budget = Decimal("100.00")
-        
-    event_date = date.today() + timedelta(days=30)
-    score = 0
-    questions = []
-    
-    if any(q in raw_text for q in ["qty", "units", "quantity", "Need"]):
-        score += 25
-    else:
-        questions.append("What is your target quantity for this order?")
-        
-    if any(b in raw_text for b in ["budget", "cost", "shekels", "price", "budget around"]):
-        score += 25
-    else:
-        questions.append("What is your target budget range per unit?")
-        
-    if any(d in raw_text for d in ["date", "event", "conference", "september"]):
-        score += 30
-    else:
-        questions.append("What is the date of the event or required delivery date?")
-        
-    if any(t in raw_text for t in ["engraving", "laser", "print", "embroidery"]):
-        score += 20
-    else:
-        questions.append("Do you have any specific branding or customization requests (e.g. laser, print)?")
-
-    parsed = ParsedConstraints(
-        target_quantity=qty,
-        budget_unit_max=budget,
-        currency="ILS",
-        event_date=event_date,
-        categories=["Office", "Gadgets", "Bags"]
-    )
-    
-    workspace_id = None
-    if supabase:
-        try:
-            workspace_id = get_active_workspace_id()
-        except Exception:
-            pass
-
-    brief_data = {
-        "title": f"Brief for {payload.client_id or 'Client'}",
-        "target_quantity": qty,
-        "target_unit_budget": float(budget),
-        "event_date": event_date.isoformat(),
-        "raw_requirements": payload.raw_text,
-        "completeness_score": score,
-        "parsed_constraints": {
-            "target_quantity": qty,
-            "budget_unit_max": float(budget),
-            "currency": "ILS",
-            "event_date": event_date.isoformat(),
-            "categories": ["Office", "Gadgets", "Bags"],
-            "clarifying_questions": questions
-        }
-    }
-    if workspace_id:
-        brief_data["workspace_id"] = workspace_id
-        
-    brief_id = str(uuid.uuid4())
-    if supabase:
-        try:
-            res = supabase.table("briefs").insert(brief_data).execute()
-            if res.data:
-                brief_id = res.data[0]["id"]
-                
-                # Slices brief into individual serial-coded chunks (satisfying Chunk-First Brief logic)
-                import re
-                segments = [s.strip() for s in re.split(r'(?<=[.!?])\s+|\n+', payload.raw_text) if s.strip()]
-                for idx, segment in enumerate(segments):
-                    serial_code = f"BC-{brief_id[:8]}-{idx+1:02d}"
-                    supabase.table("document_chunks").insert({
-                        "serial_code": serial_code,
-                        "parent_type": "brief",
-                        "parent_id": brief_id,
-                        "chunk_text": segment,
-                        "status_code": "brief_raw",
-                        "sequence_order": idx + 1
-                    }).execute()
-
-                # Auto-create a corresponding CRM deal in the deals table
-                contact_id = None
-                try:
-                    # Query default contact David Cohen seeded in database
-                    contact_res = supabase.table("contacts").select("id").limit(1).execute()
-                    if contact_res.data:
-                        contact_id = contact_res.data[0]["id"]
-                    else:
-                        # No CRM contact found. Brief ingestion requires at least one
-                        # contact to exist. Run seed_db.py first.
-                        # RETIRED 2026-08-14: fallback auto-create of Acme HighTech removed.
-                        # Reason: silently created an unclassified customer_accounts row,
-                        # masking a missing seed dependency and bypassing account_type
-                        # enforcement. Class: second-writer accumulation (U1.2.32.7).
-                        print("[CRM] No contact found — skipping auto-deal creation. Run seed_db.py first.")
-                except Exception as db_err:
-                    print(f"Error finding/creating default contact for deal: {db_err}")
-
-                if contact_id:
-                    deal_val = float(qty * budget)
-                    try:
-                        supabase.table("deals").insert({
-                            "contact_id": contact_id,
-                            "brief_id": brief_id,
-                            "deal_stage": "lead_ingestion",
-                            "deal_value": deal_val
-                        }).execute()
-                        print(f"[CRM] Auto-created deal for brief {brief_id} with value {deal_val}")
-                    except Exception as deal_err:
-                        print(f"Error auto-creating deal record: {deal_err}")
-        except Exception as e:
-            print(f"Error saving brief and chunks to Supabase: {e}")
-            
-    return BriefQualifyResponse(
-        brief_id=brief_id,
-        completeness_score=score,
-        parsed_constraints=parsed,
-        clarifying_questions=questions
+    """
+    Deprecated endpoint. Persistence to briefs/deals tables retired.
+    Inquiry management will be handled by universal core candidates.
+    """
+    raise HTTPException(
+        status_code=501, 
+        detail="Inquiry persistence is not yet implemented for the universal core. Inquiries table schema is pending migration."
     )
 
 @app.get("/api/v1/search/hybrid")
@@ -1034,7 +923,7 @@ def hybrid_search(
             if similarity < similarity_cutoff:
                 continue
             supplier_map = item.get("supplier_mappings")
-            wholesale_cost = float(supplier_map.get("wholesale_cost", 0)) if supplier_map else 0.0
+            wholesale_cost = Decimal(str(supplier_map.get("wholesale_cost", "0.00"))) if supplier_map else Decimal("0.00")
             if budget_max and Decimal(str(wholesale_cost)) > budget_max:
                 continue
             results.append({
@@ -1134,7 +1023,7 @@ def generate_proposal(payload: ProposalGenerateRequest):
             
             items_out.append({
                 "catalog_item_id": product["id"],
-                "client_unit_price": float(p_output.client_unit_price),
+                "client_unit_price": str(p_output.client_unit_price),
                 "stock_status": "unverified",
                 "feasibility_status": feasibility,
                 "client_selection_status": "pending",
@@ -1166,7 +1055,7 @@ def generate_proposal(payload: ProposalGenerateRequest):
             supabase.table("deals").update({
                 "proposal_id": proposal_id,
                 "deal_stage": "proposal_sent",
-                "deal_value": float(sum(i["client_unit_price"] for i in items_out) * quantity)
+                "deal_value": str(sum(Decimal(str(i["client_unit_price"])) for i in items_out) * Decimal(str(quantity)))
             }).eq("id", deal_id).execute()
             
         return {
@@ -1334,42 +1223,10 @@ def create_tag(payload: TagCreate):
 
 @app.get("/api/v1/crm/deals")
 def get_crm_deals():
-    if not supabase:
-        return {"deals": []}
-    try:
-        res = supabase.table("deals").select("*, contacts(*, customer_accounts(*)), briefs(*)").execute()
-        deals_list = []
-        for deal in (res.data or []):
-            contact = deal.get("contacts") or {}
-            customer = contact.get("customer_accounts") or {}
-            brief = deal.get("briefs") or {}
-            
-            client_name = customer.get("company_name") or "Unknown Client"
-            agent_name = contact.get("name") or "System Agent"
-            
-            raw_stage = deal.get("deal_stage", "lead_ingestion")
-            stage_map = {
-                "lead_ingestion": "Lead Ingestion",
-                "proposal_sent": "Proposal Sent",
-                "closed_won": "Closed Won"
-            }
-            mapped_stage = stage_map.get(raw_stage.lower(), raw_stage)
-            
-            deal_value = deal.get("deal_value") or 0.00
-            
-            deals_list.append({
-                "id": deal.get("id"),
-                "client": client_name,
-                "agent": agent_name,
-                "stage": mapped_stage,
-                "value": f"{int(float(deal_value)):,} ILS" if deal_value else "0 ILS",
-                "date": deal.get("created_at", "").split("T")[0],
-                "logs": brief.get("raw_text")[:50] + "..." if brief.get("raw_text") else "No ingestion log"
-            })
-        return {"deals": deals_list}
-    except Exception as e:
-        print(f"Error fetching CRM deals: {e}")
-        return {"deals": []}
+    """
+    Deprecated endpoint. Deals table dropped in favor of direct candidate attachments.
+    """
+    return {"deals": []}
 
 @app.post("/api/v1/catalog/upload-image")
 async def upload_catalog_image(
@@ -1650,7 +1507,7 @@ def get_catalog_item_detail(sku: str, request: Request):
         
         # Determine whether to show costs based on role context
         user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
-        is_admin = (user_role == "operator_admin")
+        is_admin = (user_role == "platform_admin")
         
         # Build variations
         vars_list = []
@@ -1660,7 +1517,7 @@ def get_catalog_item_detail(sku: str, request: Request):
                     "id": v["id"],
                     "variation_type": v["variation_type"],
                     "value": v["value"],
-                    "cost_modifier": float(v["cost_modifier"])
+                    "cost_modifier": str(v["cost_modifier"])
                 })
             else:
                 vars_list.append({
@@ -1696,8 +1553,8 @@ def get_catalog_item_detail(sku: str, request: Request):
                 "supplier_name": supplier_map[0]["supplier_name"] if supplier_map else None,
                 "supplier_sku": supplier_map[0]["supplier_sku"] if supplier_map else None,
                 "supplier_product_url": supplier_map[0]["supplier_product_url"] if supplier_map else None,
-                "wholesale_cost": float(wholesale_cost),
-                "calculated_client_price": float(pricing_out.client_unit_price),
+                "wholesale_cost": str(wholesale_cost),
+                "calculated_client_price": str(pricing_out.client_unit_price),
                 "profit_margin_percent": 35.0,
                 "currency_code": "ILS",
                 "supplier_lead_time_days": product["supplier_lead_time_days"],
@@ -1712,7 +1569,7 @@ def get_catalog_item_detail(sku: str, request: Request):
                 "product_group_id": product.get("product_group_id"),
                 "description": product.get("description"),
                 "image_urls": product.get("image_urls") or [],
-                "client_unit_price": float(pricing_out.client_unit_price),
+                "client_unit_price": str(pricing_out.client_unit_price),
                 "currency_code": "ILS",
                 "variations": vars_list
             }
@@ -1753,7 +1610,7 @@ def submit_proposal_draft(token: str, payload: ProposalClientDraftSubmit):
 @app.get("/api/v1/admin/proposals/drafts")
 def list_pending_drafts(request: Request):
     user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
-    if user_role != "operator_admin":
+    if user_role != "platform_admin":
         raise HTTPException(status_code=403, detail="Forbidden: Operator credentials required.")
     if not supabase:
         return {"drafts": []}
@@ -1767,7 +1624,7 @@ def list_pending_drafts(request: Request):
 @app.put("/api/v1/admin/proposals/drafts/{draft_id}")
 def update_approve_draft(draft_id: str, payload: dict, request: Request):
     user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
-    if user_role != "operator_admin":
+    if user_role != "platform_admin":
         raise HTTPException(status_code=403, detail="Forbidden: Operator credentials required.")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not connected.")
@@ -1845,7 +1702,7 @@ def bulk_upload_catalog(payload: List[dict]):
             sku = item.get("internal_sku")
             title = item.get("title_he", "מוצר חדש")
             category = item.get("category", "General")
-            wholesale_cost = float(item.get("wholesale_cost", 0.00))
+            wholesale_cost = str(Decimal(str(item.get("wholesale_cost", "0.00"))))
             supplier_name = item.get("supplier_name", "International")
             supplier_sku = item.get("supplier_sku", "SKU-MOCK")
             supplier_url = item.get("supplier_product_url", "http://example.com")
@@ -1897,21 +1754,26 @@ def get_prioritized_suppliers(sku: str):
         product = prod_res.data[0]
         mappings = product.get("supplier_mappings", [])
         
-        # Load exchange rates from registry
-        rates = {"USD": 3.65, "EUR": 3.95, "ILS": 1.0}
+        # TEMPORARY CONSTANT: Static exchange rate fallback.
+        # To be replaced by dated exchange rate series table (offering_exchange_rates).
+        rates = {"USD": Decimal("3.65"), "EUR": Decimal("3.95"), "ILS": Decimal("1.00")}
         rate_res = supabase.table("lookup_registry").select("key_name, value_data").eq("registry_type", "currency_conversion").execute()
         if rate_res.data:
             for r in rate_res.data:
-                rates[r["key_name"]] = float(r["value_data"])
+                rates[r["key_name"]] = Decimal(str(r["value_data"]))
                 
         evaluated = []
         for m in mappings:
             if m["status"] == "discontinued":
                 continue # Disqualified
                 
-            raw_cost = float(m["wholesale_cost"])
+            raw_cost = Decimal(str(m["wholesale_cost"]))
             currency = m.get("currency", "ILS")
-            rate = rates.get(currency, 1.0)
+            rate = rates.get(currency)
+            if rate is None:
+                if currency != "ILS":
+                    raise HTTPException(status_code=422, detail=f"Missing exchange rate series for currency: {currency}")
+                rate = Decimal("1.00")
             ils_cost = raw_cost * rate
             
             # Weighted Scoring Algorithm

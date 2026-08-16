@@ -8,6 +8,7 @@
 #   for readability and high contrast, supporting both RTL and LTR locales.
 #   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >PR-13500.
 */
+// @playbook_category: Micro-interaction Module
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -512,7 +513,7 @@ export default function Header() {
               <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: 5, letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 5 }}>
                 <ShieldCheck size={10} /> Simulate Role
               </div>
-              {['operator_admin', 'manager', 'buyer', 'partner', 'guest'].map((r) => (
+              {['platform_admin', 'manager', 'buyer', 'partner', 'guest'].map((r) => (
                 <div key={r}
                   className="admin-dropdown-item"
                   onClick={() => setSimulatedRole(r)}

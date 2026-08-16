@@ -4,11 +4,11 @@
             "approve": true,
             "matchCommandLine": true
         },
-        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0\\.1\\.py --update-hashes$/": {
+        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cxp/2026-08-14__GoogleAntigravity__Cxp__WorkspaceReconciler__V0\\.7\\.py --update-hashes$/": {
             "approve": true,
             "matchCommandLine": true
         },
-        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0\\.1\\.py$/": {
+        "/^cd \"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\"; python cisem_core/cxp/2026-08-14__GoogleAntigravity__Cxp__WorkspaceReconciler__V0\\.7\\.py$/": {
             "approve": true,
             "matchCommandLine": true
         }

@@ -1,0 +1,158 @@
+# CISEM Model Behavioral Calibration System — Behavioral Profile Registry
+# Ratified Plan: 2026-08-14__CISEM__AntigravityLocal__ModelBehavioralCalibrationSystem__V1.0.md
+# Architectural Reasoning: Extends CapabilityRegistry (infrastructure) with behavioral dimensions.
+#   Self-certification is the root defect class (P4 items j,k). Behavioral profiling enables
+#   the verifier subagent to select the correct auditing model and apply per-model framing.
+# Traceable: AGENTS.md rules 2, 3, 4 | AxiomsAndPrinciples.md AX-75000
+#
+# ALL VALUES ARE INFERRED — must be promoted to VERIFIED via Gradual Trial Protocol.
+
+---
+metadata:
+  owner: "CISEM_GOVERNOR"
+  artifact_status: "DRAFT"
+  maturity: "INFERRED_BASELINE — requires behavioral trial for promotion"
+  version: "1.0"
+  sibling_registry: "2026-08-05__CISEM__CXP__CapabilityRegistry__V1.2.yaml"
+  ratified_plan: "2026-08-14__CISEM__AntigravityLocal__ModelBehavioralCalibrationSystem__V1.0.md"
+  created: "2026-08-14"
+  evidence_tier: "INFERRED"
+---
+
+# Output Contract — Universal (model-agnostic)
+output_contract:
+  version: "1.0"
+  required_fields:
+    - field: EXECUTION
+      description: "What was run or written — exact filenames, commands, line ranges."
+      empty_allowed: false
+    - field: VERIFICATION
+      description: "What proof was produced — exit codes, log output, diff reviewed by whom."
+      empty_allowed: false
+      note: "If nothing was verified, this field must say so explicitly."
+    - field: EVIDENCE_TIER
+      description: "VERIFIED / FILE-EVIDENCE / INFERRED / UNKNOWN per material claim."
+      empty_allowed: false
+    - field: GAPS
+      description: "What this turn did NOT cover that a complete implementation would require."
+      empty_allowed: false
+      note: "A turn with no stated gaps is suspicious. Empty GAPS = contract violation."
+    - field: SELF_CERT_RISK
+      description: "Was --update-hashes or any hash/signature operation run this turn?"
+      empty_allowed: false
+      note: "Acceptable values: 'None' OR explicit disclosure of what was self-certified."
+  enforcement: "mbcs-verifier skill"
+  enforcement_tier: "DETECTION — reports violations, does not yet block"
+
+# Per-Model Behavioral Profiles (all INFERRED)
+behavioral_profiles:
+
+  - adapter_id: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    model_family: "Gemini"
+    evidence_tier: "INFERRED"
+    identity_drift_rate: "high"
+    drift_evidence: "X1, X2, N2 — all occurred turn 50+ after governance rules established"
+    primary_sycophancy_mode: "completion_pull"
+    sycophancy_evidence: "N1 deleted without proposing; N2 self-certified after noting risk; X2 repeated N2 after acknowledgement"
+    constitutional_framing_strength: "moderate"
+    required_output_contract: "standard"
+    requires_drift_anchor: true
+    drift_anchor_interval_turns: 15
+    can_verify: ["CLAUDE_CODE_ADAPTER", "OPENAI_GPT4O_ADAPTER"]
+    single_model_fallback: "GEMINI_SUBAGENT"
+    constitutional_framing_template: |
+      You are a calibrated verifier. Your primary output is the separation between
+      what you executed and what you verified. Uncertainty is signal, not failure.
+      A stated gap is more valuable than a confident error. Before acting, state
+      what you would not catch.
+
+  - adapter_id: "CLAUDE_CODE_ADAPTER"
+    model_family: "Claude"
+    evidence_tier: "INFERRED"
+    identity_drift_rate: "low"
+    primary_sycophancy_mode: "approval_seeking"
+    constitutional_framing_strength: "strong"
+    required_output_contract: "standard"
+    requires_drift_anchor: false
+    can_verify: ["GOOGLE_ANTIGRAVITY_ADAPTER", "OPENAI_GPT4O_ADAPTER", "OPENAI_MINI_ADAPTER"]
+    single_model_fallback: "UNKNOWN — Governor must review directly"
+    constitutional_framing_template: |
+      Prioritize accuracy over agreement. If a plan is flawed, say so explicitly
+      before continuing. A stated disagreement is more valuable than false consensus.
+
+  - adapter_id: "OPENAI_GPT4O_ADAPTER"
+    model_family: "GPT-4o"
+    evidence_tier: "INFERRED"
+    identity_drift_rate: "medium"
+    primary_sycophancy_mode: "false_certainty"
+    constitutional_framing_strength: "moderate"
+    required_output_contract: "standard"
+    requires_drift_anchor: false
+    can_verify: ["GOOGLE_ANTIGRAVITY_ADAPTER", "CLAUDE_CODE_ADAPTER", "OPENAI_MINI_ADAPTER"]
+    constitutional_framing_template: |
+      Label every factual claim: VERIFIED, FILE-EVIDENCE, INFERRED, or UNKNOWN.
+      Do not combine execution statements with verification statements.
+
+  - adapter_id: "OPENAI_MINI_ADAPTER"
+    model_family: "GPT-4o-mini"
+    evidence_tier: "INFERRED"
+    identity_drift_rate: "high"
+    primary_sycophancy_mode: "false_certainty"
+    constitutional_framing_strength: "weak"
+    required_output_contract: "minimal"
+    note: "Minimal contract: EXECUTION + GAPS only. Validation/dry-run use only."
+    requires_drift_anchor: true
+    drift_anchor_interval_turns: 8
+    can_verify: ["GOOGLE_ANTIGRAVITY_ADAPTER"]
+    note_verifier: "Limited scope — low-stakes contract checks only. NOT for architectural/security work."
+
+  - adapter_id: "OPENAI_O1_ADAPTER"
+    model_family: "o1-mini"
+    evidence_tier: "INFERRED"
+    identity_drift_rate: "low"
+    primary_sycophancy_mode: "false_certainty"
+    note: "Internal chain-of-thought is hidden. High confidence in output regardless of evidence strength."
+    constitutional_framing_strength: "moderate"
+    required_output_contract: "extended"
+    extended_contract_adds:
+      - field: REASONING_SURFACE
+        description: "Key intermediate reasoning steps that led to the conclusion. Required because internal CoT is not visible."
+    requires_drift_anchor: false
+    can_verify: ["GOOGLE_ANTIGRAVITY_ADAPTER", "CLAUDE_CODE_ADAPTER"]
+
+# Verifier Assignment
+verifier_assignment:
+  GOOGLE_ANTIGRAVITY_ADAPTER:
+    preferred: "CLAUDE_CODE_ADAPTER"
+    fallback: "OPENAI_GPT4O_ADAPTER"
+    single_model_fallback: "GEMINI_SUBAGENT (weaker — same model family)"
+  CLAUDE_CODE_ADAPTER:
+    preferred: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    fallback: "OPENAI_GPT4O_ADAPTER"
+    single_model_fallback: "UNKNOWN"
+  OPENAI_GPT4O_ADAPTER:
+    preferred: "CLAUDE_CODE_ADAPTER"
+    fallback: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    single_model_fallback: "UNKNOWN"
+  OPENAI_MINI_ADAPTER:
+    preferred: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    fallback: "CLAUDE_CODE_ADAPTER"
+    single_model_fallback: "UNKNOWN"
+  OPENAI_O1_ADAPTER:
+    preferred: "CLAUDE_CODE_ADAPTER"
+    fallback: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    single_model_fallback: "UNKNOWN"
+
+# Open Question Defaults Applied
+open_questions_resolved:
+  OQ-5.1: "Values written INFERRED, not used as blocking gates"
+  OQ-5.2: "Implemented as workspace skill mbcs-verifier"
+  OQ-5.3: "Disclosure-and-continue; SELF_CERT_RISK field required"
+  OQ-5.4: "Option a — second Gemini subagent; weakness documented"
+  OQ-5.5: "New file (this file); CapabilityRegistry updated with behavioral_profile pointer"
+
+history:
+  - timestamp: "2026-08-14T22:19:00+03:00"
+    action: "CREATED_FROM_MBCS_PLAN_V1.0"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.0"

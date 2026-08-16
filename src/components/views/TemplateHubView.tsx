@@ -1,4 +1,5 @@
 'use client';
+// @playbook_category: Bento Page Layout Recipe
 /*
 # CISEM CODE HEADER > MANDATORY
 # ratified_plan: CISEM-IP-20260811-TEMPLATE-HUB-PERMISSIONS
@@ -129,7 +130,7 @@ const MOCK_REGISTRY: Registry = {
       custom_coding_allowed: false,
       governor_lock: true,
       created_at: '2026-08-11T00:00:00Z',
-      created_by: 'operator_admin',
+      created_by: 'platform_admin',
       sync_receipt: 'SYN-20260811-001',
     },
     {
@@ -143,7 +144,7 @@ const MOCK_REGISTRY: Registry = {
       custom_coding_allowed: false,
       governor_lock: true,
       created_at: '2026-08-11T00:00:00Z',
-      created_by: 'operator_admin',
+      created_by: 'platform_admin',
       sync_receipt: 'SYN-20260811-002',
     },
   ],
@@ -184,7 +185,7 @@ const GovernorLockBadge = ({ locked }: { locked: boolean }) => (
 
 /* ========== MAIN COMPONENT ========== */
 export default function TemplateHubView() {
-  const simulatedRole = useUIStore((s) => s.simulatedRole ?? 'operator_admin');
+  const simulatedRole = useUIStore((s) => s.simulatedRole ?? 'platform_admin');
   const [activeTab, setActiveTab] = useState<'templates' | 'pages'>('templates');
   const [registry] = useState<Registry>(MOCK_REGISTRY);
   const [duplicateTarget, setDuplicateTarget] = useState<Template | null>(null);
@@ -194,7 +195,7 @@ export default function TemplateHubView() {
   const [dupResult, setDupResult] = useState<{ ok: boolean; msg: string } | null>(null);
   const [pages, setPages] = useState<InstantiatedPage[]>(registry.instantiated_pages ?? []);
 
-  const canDuplicate = simulatedRole === 'operator_admin';
+  const canDuplicate = simulatedRole === 'platform_admin';
 
   const handleDuplicate = async () => {
     if (!duplicateTarget || !selectedClient || !pageName) return;

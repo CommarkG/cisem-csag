@@ -1,6 +1,13 @@
-// Ratified Plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
-// Architectural Reasoning: Consolidated B2B quotes and purchasing hub view with segregated right column glassmorphic sidebar and clean sub-tabs.
-// Parent Principles: PR-13990 (Sandbox Boundaries), AX-50000
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
+# governor_signature: GOV-YARIV-20260810-FRONTEND-PLAYBOOK-V1.0
+# version: V1.4
+# reasoning: |
+#   Consolidated B2B quotes and purchasing hub view with segregated right column glassmorphic sidebar and clean sub-tabs.
+#   Parent principles: PR-13990, AX-50000.
+*/
+// @playbook_category: Bento Page Layout Recipe
 
 "use client";
 
@@ -149,7 +156,6 @@ export default function B2bHubView({ isDarkMode, locale, dict, initialTab = "bri
   const sidebarMenu = [
     { id: "brief", label: isRTL ? "קליטת בריף לקוח" : "Brief Clarifier", icon: "📝" },
     { id: "catalog", label: isRTL ? "ניהול קטלוג וחיפוש" : "Catalog Manager", icon: "📦" },
-    { id: "crm", label: isRTL ? "צינור מכירות CRM" : "CRM & PDF Pipeline", icon: "💼" },
     { id: "suppliers", label: isRTL ? "קבלני משנה לעיצוב" : "Subcontractor Registry", icon: "🛠️" },
     { id: "design", label: isRTL ? "סטודיו לעיצוב מותג" : "Custom Design Studio", icon: "🎨" }
   ];
@@ -494,7 +500,7 @@ export default function B2bHubView({ isDarkMode, locale, dict, initialTab = "bri
                         type="number"
                         required
                         value={newSubcontractor.setup_fee}
-                        onChange={(e) => setNewSubcontractor(prev => ({ ...prev, setup_fee: parseFloat(e.target.value) || 0 }))}
+                        onChange={(e) => setNewSubcontractor(prev => ({ ...prev, setup_fee: e.target.value }))}
                         className="w-full rounded border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-2.5 outline-none font-mono"
                       />
                     </div>

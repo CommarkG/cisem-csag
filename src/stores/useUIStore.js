@@ -24,7 +24,7 @@ export const useUIStore = create((set, get) => ({
   },
 
   // Role Impersonation (sandbox only — does not affect real auth)
-  simulatedRole: localStorage.getItem('dima-simulated-role') || 'operator_admin',
+  simulatedRole: localStorage.getItem('dima-simulated-role') || 'platform_admin',
   setSimulatedRole: (role) => {
     localStorage.setItem('dima-simulated-role', role);
     set({ simulatedRole: role });

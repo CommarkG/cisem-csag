@@ -89,7 +89,10 @@ export const useTaskStore = create((set, get) => ({
     };
     // Calculate total if sum and vat are present
     if (newItem.sum !== undefined && newItem.vat !== undefined) {
-      newItem.total = Number((newItem.sum * (1 + newItem.vat / 100)).toFixed(2));
+      const sumCents = Math.round((Number(newItem.sum) || 0) * 100);
+      const vatPct = Math.round(Number(newItem.vat) || 0);
+      const totalCents = Math.round((sumCents * (100 + vatPct)) / 100);
+      newItem.total = (totalCents / 100).toFixed(2);
     }
     set((state) => {
       const items = [...state.items, newItem];

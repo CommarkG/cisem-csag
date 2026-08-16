@@ -454,12 +454,13 @@ CREATE INDEX IF NOT EXISTS pending_claims_unresolved_idx
 -- ON CONFLICT DO NOTHING: safe against existing rows on live DB.
 INSERT INTO role_definitions (code, name, description)
 VALUES
-    ('account_owner',
-     'Account Owner',
-     'First user of a tenant; full administrative rights within the account.'),
-    ('operator_admin',
-     'Operator Admin',
-     'Platform-level operator with cross-tenant administrative access.')
+    ('platform_admin', 'Platform Admin', 'Platform-level operator with cross-tenant administrative access.'),
+    ('account_owner', 'Account Owner', 'First user of a tenant; full administrative rights within the account.'),
+    ('account_admin', 'Account Admin', 'Administrative user with full tenant configuration management rights.'),
+    ('team_manager', 'Team Manager', 'Manager responsible for workspace teams and member management.'),
+    ('member', 'Member', 'Standard tenant member with full resource creation and editing access.'),
+    ('viewer', 'Viewer', 'Read-only access to tenant resources and analytics.'),
+    ('client', 'Client', 'External client or guest access scoped to shared proposals and drafts.')
 ON CONFLICT (code) DO NOTHING;
 
 -- Starter package seed

@@ -1,0 +1,58 @@
+# CISEM Destructive Operation Evidence Log
+# Pattern: GEMINI.md §6 — Deletion Governance
+
+date: 2026-08-14T17:48:00Z
+actor: GOOGLE_ANTIGRAVITY_ADAPTER
+reason: >
+  WorkspaceReconciler__V0.1.py and ContinuousAuditorDaemon__V1.0.py were
+  renamed to V0.7 and V1.2 (per W2.1). Both old files remained on disk
+  alongside their replacements. Because execute_continuous_auditing() uses
+  os.listdir() and picks the first matching filename, it launched V0.1
+  (2026-08-05 < 2026-08-14 alphabetically) instead of V0.7. Old files
+  must be deleted to complete the rename.
+
+## 1. Deletion Candidate List
+
+candidates:
+  - path: cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0.1.py
+    reason: Replaced by V0.7 (2026-08-14). Runtime references updated in W2.2.
+  - path: cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.0.py
+    reason: Replaced by V1.2 (2026-08-14). Registry entry updated in W2.2.
+
+## 2. Dependency Check
+
+V0.1 remaining references:
+  - Naming_Policy_Hardening...Walkthrough__V1.0.md L69   — HISTORY (.md, do not edit)
+  - Consolidated_Master_Plan__V1.7.md L70                — HISTORY (.md, do not edit)
+  - Session_Continuation_Walkthrough__V1.2.2.md L9       — HISTORY (.md, do not edit)
+  - GovernanceHardeningPlan__V1.6.md L23, L68            — HISTORY (.md, do not edit)
+  All runtime references (.vscode/settings.json, cisem_gate.py,
+  continuous-auditor/SKILL.md) were updated in W2.2.
+  VERDICT: No runtime-breaking dependencies remain. Safe to delete.
+
+V1.0 remaining references:
+  - Registry V1.38–V1.43 (archived, do not edit per Governor rule)
+  - update_registry_v1.40.py (historical migration script, do not edit)
+  All runtime references (.agents SKILL.md, vscode settings, V1.44.yaml)
+  were updated in W2.2.
+  VERDICT: No runtime-breaking dependencies remain. Safe to delete.
+
+## 3. Archive Proof
+
+V0.1 file content is preserved in Git history. Current on-disk content
+reproduced verbatim in the conversation transcript (session summary §5,
+"Viewed Files" + the file was read in full in this session).
+
+V1.0 file content is preserved in Git history (it was the predecessor to V1.2,
+which carries a full history block in its header).
+
+## 4. Actual Execution Action
+
+Files deleted via Remove-Item (explicit absolute paths, no wildcards).
+
+## 5. Post-Operation Verification Report
+
+After deletion:
+  - os.listdir(cxp_dir) returns only V0.7 for WorkspaceReconciler.
+  - os.listdir(platform_core_dir) returns only V1.2 for ContinuousAuditorDaemon.
+  - Run reconciler V0.7 normally → exit 0 (verified above as W3.2).

@@ -128,9 +128,10 @@ const EditItemModal = ({ item, onClose, t, language }) => {
   const handleChange = (key, val) => {
     const updated = { ...formData, [key]: val };
     if (key === 'sum' || key === 'vat') {
-      const sum = Number(key === 'sum' ? val : updated.sum) || 0;
-      const vat = Number(key === 'vat' ? val : updated.vat) || 0;
-      updated.total = Number((sum * (1 + vat / 100)).toFixed(2));
+      const sumCents = Math.round((Number(key === 'sum' ? val : updated.sum) || 0) * 100);
+      const vatPct = Math.round(Number(key === 'vat' ? val : updated.vat) || 0);
+      const totalCents = Math.round((sumCents * (100 + vatPct)) / 100);
+      updated.total = (totalCents / 100).toFixed(2);
     }
     setFormData(updated);
   };
@@ -213,7 +214,7 @@ const EditItemModal = ({ item, onClose, t, language }) => {
             <input 
               type="number" 
               value={formData.sum || 0} 
-              onChange={e => handleChange('sum', parseFloat(e.target.value) || 0)} 
+              onChange={e => handleChange('sum', e.target.value)} 
               className="w-full p-2 border rounded-lg bg-transparent" 
               style={{ borderColor: 'var(--border)' }}
             />
@@ -224,7 +225,7 @@ const EditItemModal = ({ item, onClose, t, language }) => {
             <input 
               type="number" 
               value={formData.vat || 17} 
-              onChange={e => handleChange('vat', parseFloat(e.target.value) || 0)} 
+              onChange={e => handleChange('vat', e.target.value)} 
               className="w-full p-2 border rounded-lg bg-transparent" 
               style={{ borderColor: 'var(--border)' }}
             />

@@ -188,3 +188,76 @@ The reason prevention wasn't the default isn't that the rule was missing — `U1
 
 **P6 is the one Antigravity will resist**, because assigning debt outward feels like appropriate deference. It isn't. Three of five debts were correctly reassigned to it only after being challenged.
 <!-- END:cisem-prevention-protocol -->
+
+<!-- BEGIN:cisem-evidence-labels -->
+# EVIDENCE LABELS — Mandatory on Every Factual Claim
+
+Every claim about the state of this system carries one of four labels.
+A claim without a label is incomplete and must not be relied on.
+
+**VERIFIED** — a command was run this session and produced this result.
+  The claim MUST name the command and the date. "VERIFIED" without an
+  adjacent command string is not verified.
+
+**FILE-EVIDENCE** — read from a file in the repo. Name the file and line.
+  A file records intent. It is not proof of live state.
+  backend/src/backend/migrations.sql in particular records intent only.
+
+**INFERRED** — reasoned from names, patterns, or partial evidence.
+  State what it was inferred from.
+
+**UNKNOWN** — not established. This is a complete and acceptable answer.
+
+## Two Standing Rules
+
+1. You have no database access. Any claim about LIVE database state is
+   UNVERIFIABLE-BY-ME. Name the query the Governor would run to settle
+   it. Never upgrade a file reading to a live-state claim.
+
+2. A VERIFIED claim is only verified on its date. When restating a
+   claim from an earlier turn, carry its original label and date, or
+   re-run the command. Confidence does not carry forward on its own.
+<!-- END:cisem-evidence-labels -->
+
+<!-- BEGIN:cisem-discovery-loop-rule -->
+# THE DISCOVERY LOOP — RECOGNITION AND EXIT
+
+A discovery loop is work that generates more open items than it closes.
+It feels productive because every finding is real. It is still a loop.
+
+THE COUNT. At the end of every turn, state two numbers:
+  OPENED: findings, gaps, or parked items this turn created
+  CLOSED: items applied, proved, and now verifiably done
+If OPENED > CLOSED for three turns running, the loop is confirmed.
+Say so, name it, and stop expanding.
+
+THE FOUR SIGNS, any two of which mean stop:
+  1. The subject is the instruments, not what they measure. Auditing the
+     auditor, checking the checker, versioning the version-checker.
+  2. Every fix reveals two more findings, and each is genuinely true.
+  3. Nothing has been APPLIED — no migration run, no user created, no
+     feature working — for three or more turns.
+  4. The findings are about the repository's own governance rather than
+     about the product a user would touch.
+
+THE EXIT. Not "finish the investigation." The exit is:
+  a. Park every open finding with today's date and its unblocking
+     condition. Parked is not lost.
+  b. Name the nearest thing a USER would notice if it worked.
+  c. Do only that, until it is proved by a query or a running feature.
+
+THE ASYMMETRY THAT CAUSES THIS. Finding is cheap and always succeeds.
+Applying is expensive and can fail. Under completion pressure, an actor
+drifts toward finding because finding always produces output. A turn
+that produced findings and applied nothing is not a productive turn,
+however true the findings were.
+
+THE ONE EXCEPTION. Discovery continues past the count when a finding
+would make the current APPLY step wrong — not merely incomplete, wrong.
+Name the apply step it would break. If you cannot name one, it is not
+an exception.
+
+WHAT IS NOT A LOOP. Investigation that ends in an applied change is not
+a loop even if it takes four turns. The measure is APPLIED, not turns.
+<!-- END:cisem-discovery-loop-rule -->
+

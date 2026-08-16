@@ -20,8 +20,8 @@ interface MenuItem {
 }
 
 interface DynamicMenuProps {
-  activeRole: "guest" | "buyer" | "partner" | "operator_admin";
-  onRoleChange: (role: "guest" | "buyer" | "partner" | "operator_admin") => void;
+  activeRole: "guest" | "buyer" | "partner" | "platform_admin";
+  onRoleChange: (role: "guest" | "buyer" | "partner" | "platform_admin") => void;
   wishlistCount: number;
   onHelpClick: () => void;
   onBacklogClick: () => void;
@@ -508,7 +508,7 @@ export default function DynamicMenu({
                   { id: "guest", label: "Anonymous Guest" },
                   { id: "buyer", label: "Standard Client" },
                   { id: "partner", label: "Partner Tenant" },
-                  { id: "operator_admin", label: "Operator Admin" }
+                  { id: "platform_admin", label: "Platform Admin" }
                 ].map((role) => (
                   <button
                     key={role.id}

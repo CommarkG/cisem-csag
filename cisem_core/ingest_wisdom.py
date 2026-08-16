@@ -34,15 +34,7 @@ http_client = httpx.Client(verify=False)
 options = SyncClientOptions(httpx_client=http_client)
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
 
-def get_active_workspace_id():
-    """Queries workspace ID from DB or returns a fallback."""
-    try:
-        res = supabase.table("workspaces").select("id").limit(1).execute()
-        if res.data:
-            return res.data[0]["id"]
-    except Exception as e:
-        print(f"Warning: could not query workspace ID: {e}")
-    return str(uuid.uuid4())
+
 
 def get_any_client_id(workspace_id):
     """Queries a valid user ID from the users table, or creates a default user if empty."""
@@ -54,8 +46,7 @@ def get_any_client_id(workspace_id):
         # Insert a default user profile to satisfy the foreign key constraint
         dummy_user = {
             "email": "governor@cisem.local",
-            "full_name": "Yariv Governor",
-            "workspace_id": workspace_id
+            "full_name": "Yariv Governor"
         }
         print("[*] No user found in 'users' table. Creating default user...")
         res_insert = supabase.table("users").insert(dummy_user).execute()
@@ -109,9 +100,7 @@ def run_ingestion():
     with open(master_file, "r", encoding="utf-8") as f:
         raw_content = f.read()
         
-    workspace_id = get_active_workspace_id()
-    client_id = get_any_client_id(workspace_id)
-    print(f"[*] Active Workspace ID resolved to: {workspace_id}")
+    client_id = get_any_client_id(None)
     print(f"[*] Active Client ID (User ID) resolved to: {client_id}")
     
     # Insert into briefs table matching the database schema

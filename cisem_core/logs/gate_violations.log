@@ -61,3 +61,94 @@
   Rule: Every modified or new UI component must declare a valid category comment header.
   Example: // @playbook_category: Design Token
   Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-14T19:38:52.779546Z] [Phase 13] CISEM_GATE_BLOCKED -- Phase 13: Missing environment variables from .env.example: GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_DRIVE_FOLDER_ID, GEMINI_API_KEY, OPENROUTER_API_KEY, TENANT_SIGNING_SECRET, PARKING_VAULT_PATH.
+  Rule: Every variable declared in .env.example must be defined in .env or system environment.
+[2026-08-14T19:39:19.814813Z] [Phase 13] CISEM_GATE_BLOCKED -- Phase 13: Missing environment variables from .env.example: GOOGLE_APPLICATION_CREDENTIALS.
+  Rule: Every variable declared in .env.example must be defined in .env or system environment.
+[2026-08-15T09:35:46.530498Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 35cae9f583b0cfd8124e489df891600c47ff8687b47bd3117d7e65245e3c76b8
+  Registered hash: ed6819ef80b3a94cb5ef76fef29757dad80df15369ef19737790324e2a897618
+[2026-08-15T09:35:47.232311Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 35cae9f583b0cfd8124e489df891600c47ff8687b47bd3117d7e65245e3c76b8
+  Registered hash: ed6819ef80b3a94cb5ef76fef29757dad80df15369ef19737790324e2a897618
+[2026-08-15T09:35:47.948884Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 35cae9f583b0cfd8124e489df891600c47ff8687b47bd3117d7e65245e3c76b8
+  Registered hash: ed6819ef80b3a94cb5ef76fef29757dad80df15369ef19737790324e2a897618
+[2026-08-15T09:36:14.976179Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\.gemini\antigravity\brain\f9d83031-b7e1-42a3-adc3-5130cf5cb069\scratch\defect_test_dir
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  test_target.py: isolated
+
+[FINDINGS]
+
+  CHECK C - Secret literal fallback (var-name classified) (1 finding(s))
+    test_target.py:2
+      code:   TENANT_SIGNING_SECRET = os.environ.get("TENANT_SIGNING_SECRET", "dummy_tenant_secret")
+      detail: os.environ.get('TENANT_SIGNING_SECRET') with hardcoded fallback: 'dummy_tenant_secret'
+
+[SUMMARY]  1 finding(s) across 1 files scanned
+[2026-08-15T09:36:15.596221Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: ZeroFabricationGate violation.
+  test_target.py: Contains forbidden Zero-UUID stub literal '00000000-0000-0000-0000-000000000000'
+[2026-08-15T09:36:46.771182Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\.gemini\antigravity\brain\f9d83031-b7e1-42a3-adc3-5130cf5cb069\scratch\defect_test_dir
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  test_target.py: isolated
+
+[FINDINGS]
+
+  CHECK C - Secret literal fallback (var-name classified) (1 finding(s))
+    test_target.py:2
+      code:   TENANT_SIGNING_SECRET = os.environ.get("TENANT_SIGNING_SECRET", "dummy_tenant_secret")
+      detail: os.environ.get('TENANT_SIGNING_SECRET') with hardcoded fallback: 'dummy_tenant_secret'
+
+[SUMMARY]  1 finding(s) across 1 files scanned
+[2026-08-15T09:36:47.409061Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: ZeroFabricationGate violation.
+  test_target.py: Contains forbidden Zero-UUID stub literal '00000000-0000-0000-0000-000000000000'
+[2026-08-15T09:36:48.054607Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: ZeroFabricationGate violation.
+  test_target.py: Contains swallowed DB exception returning silent empty list/dict
+[2026-08-15T09:37:07.670538Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 1cd7e41910ef93c958566dbf88cb11510a88ec3c0c60eb5cbe67bd979fc5810e
+  Registered hash: ed6819ef80b3a94cb5ef76fef29757dad80df15369ef19737790324e2a897618
+[2026-08-15T09:38:09.325192Z] [Phase 13] CISEM_GATE_BLOCKED -- Phase 13: Missing environment variables from .env.example: GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_DRIVE_FOLDER_ID, GEMINI_API_KEY, OPENROUTER_API_KEY, TENANT_SIGNING_SECRET, PARKING_VAULT_PATH.
+  Rule: Every variable declared in .env.example must be defined in .env or system environment.
+[2026-08-15T09:38:55.422571Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\layout\Header.jsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-15T09:39:23.169084Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\views\B2bHubView.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-15T09:40:12.324535Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\views\TemplateHubView.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-15T09:40:37.250670Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violating files:
+  src\components\views\B2bHubView.tsx
+  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.
+  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.
+[2026-08-15T09:41:11.015441Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: ZeroFabricationGate violation.
+  backend\src\backend\main.py: Contains forbidden Zero-UUID stub literal '00000000-0000-0000-0000-000000000000'
+  cisem_core\platform_core\cisem_gate.py: Contains forbidden Zero-UUID stub literal '00000000-0000-0000-0000-000000000000'
+  cisem_core\platform_core\cisem_gate.py: Contains swallowed DB exception returning silent empty list/dict
+  sandbox_code_review\sandbox_runner.py: Contains swallowed DB exception returning silent empty list/dict
+[2026-08-15T09:42:42.984503Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: ce2facbdd689d0c9bc5926dc8ed66773c51ea931206ed2fb6bb226b6b675c634
+  Registered hash: 1cd7e41910ef93c958566dbf88cb11510a88ec3c0c60eb5cbe67bd979fc5810e
+[2026-08-15T11:49:26.604070Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: a96cc71d5e876a9bcc63290df4a6af7d25cceb4e91cf908318f2bf88111e0bb3
+  Registered hash: ce2facbdd689d0c9bc5926dc8ed66773c51ea931206ed2fb6bb226b6b675c634
+[2026-08-15T11:49:49.704883Z] [Phase 13] CISEM_GATE_BLOCKED -- Phase 13: Missing environment variables from .env.example: GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_DRIVE_FOLDER_ID, GEMINI_API_KEY, OPENROUTER_API_KEY, TENANT_SIGNING_SECRET, PARKING_VAULT_PATH.
+  Rule: Every variable declared in .env.example must be defined in .env or system environment.
+[2026-08-15T11:50:43.591676Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-15T11:50:59.387668Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-15T12:02:53.163205Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: fd8f68b76024bc258f26b8d16fa8f9e73240e766204409cd82f63b6d121bd248
+  Registered hash: f715b382567b0978b760f4c58714ccb5e6856e9faa45d3f4033e5ab0eeacbc5f
