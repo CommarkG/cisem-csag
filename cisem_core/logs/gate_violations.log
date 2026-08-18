@@ -208,3 +208,4 @@ Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust
 [SUMMARY]  1 finding(s) across 183 files scanned
 [2026-08-18T06:45:01.601216Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-08-18T21:22:34.303181Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-18T21:55:18.592126Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

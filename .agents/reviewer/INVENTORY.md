@@ -128,8 +128,6 @@
 | `cisem_core/code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PayloadCatalogEnrichmentHook__V1.0.ts` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PayloadMediaCollectionSchema__V1.0.ts` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_RootLayoutComponent__V1.0.tsx` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
-| `cisem_core/cron/quota_warning_notifier.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/cron/reset_tenant_quotas.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpAdapter__V0.1.py` | `0.1` | `0.1` | MATCH |
 | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpWatcher__V0.1.py` | `0.4` | `0.1` | MISMATCH (0.4 vs 0.1) |
 | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__GasOrchestrator__V0.1.js` | `0.1` | `0.1` | MATCH |
@@ -191,12 +189,10 @@
 | `cisem_core/solution_core/2026-08-10__Gemini3.5__YarivHuman__SolutionCoreReadme__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/tools/generate_reviewer_pack.py` | `1.2` | `UNVERSIONED` | MISMATCH (1.2 vs UNVERSIONED) |
 | `cisem_core/tools/package_reviewer_export.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/tools/replay_webhook_event.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/trials/2026-08-09__Sonnet__YarivHuman__Trial001Runner__V1.0.ts` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/trials/trial_registry.yaml` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
 | `cisem_core/trials/conclusions/TRIAL-001__ConclusionReport__Sonnet__YarivHuman__ModelRouting__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/trials/research/2026-08-09__Sonnet__YarivHuman__TRIAL-001_ModelRoutingResearchBrief__V1.0.md` | `1.0` | `1.0` | MATCH |
-| `cisem_core/workers/webhook_retry_worker.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `backend/README.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `backend/src/backend/2026-08-14__CisemCsAg__Backend__UserTenantClaimBackfill__V1.0.py` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `backend/src/backend/2026-08-14__CisemCsAg__Backend__UserTenantClaimBackfill__V1.1.py` | `UNSTATED` | `1.1` | MISMATCH (UNSTATED vs 1.1) |

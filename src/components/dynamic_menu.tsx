@@ -273,16 +273,6 @@ export default function DynamicMenu({
                     Schema (System Logic)
                   </button>
                   <button
-                    onClick={() => {
-                      if (typeof window !== "undefined") {
-                        window.location.href = "/saas-hub";
-                      }
-                    }}
-                    className="text-xs font-semibold text-cyan-500 hover:text-cyan-400 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-end gap-1"
-                  >
-                    <span>🚀</span> SaaS App Store & Hub
-                  </button>
-                  <button
                     onClick={onHelpClick}
                     className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
                   >
