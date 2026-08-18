@@ -25,6 +25,19 @@ options = SyncClientOptions(httpx_client=http_client)
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
 
 def seed_database():
+    # GUARD added 2026-08-19 by Governor ratification.
+    # This seeder creates a CRM_CLIENT row in customer_accounts and then uses that
+    # row's id as customer_account_id on contacts and everything downstream. In the
+    # live schema customer_account_id means THE OWNING TENANT, so this script
+    # reintroduces the tenant/customer conflation that was removed on 2026-08-19.
+    # Its upsert() calls also carry no conflict target, so every run inserts a
+    # duplicate rather than updating. Two identical "Acme HighTech LTD" rows existed
+    # because of that. Redesign it to anchor on a TENANT row before re-enabling.
+    if os.environ.get("CISEM_ALLOW_LEGACY_SEED") != "I_UNDERSTAND_THIS_REINTRODUCES_THE_CONFLATION":
+        raise RuntimeError(
+            "seed_db.py is disabled. It recreates the tenant/customer conflation "
+            "and inserts duplicates on every run. See the comment above this check."
+        )
     print("Connecting to Supabase...")
     
     # 1. Seed CRM customer accounts and contacts for pipeline testing
