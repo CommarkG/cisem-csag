@@ -51,7 +51,9 @@ def get_db_client() -> Client:
     try:
         return _db_client_context.get()
     except LookupError:
-        return _global_supabase
+        raise RuntimeError(
+            "get_db_client() called outside a request context. Server-side and startup code must use supabase_admin explicitly. Falling back to the service-role client would disable tenant isolation without reporting it."
+        )
 
 class SupabaseProxy:
     def __getattr__(self, name):
@@ -2032,14 +2034,14 @@ def duplicate_template_pipeline(template_id: str, request: Request):
         current_count = count_res.count if count_res.count is not None else len(count_res.data)
         
         max_landing_pages = 5 # Default limit
-        acc_res = _global_supabase.table("customer_accounts").select("package_id").eq("id", tenant_id).execute()
+        acc_res = get_db_client().table("customer_accounts").select("package_id").eq("id", tenant_id).execute()
         
         print(f"[DEBUG QUOTA] tenant_id={tenant_id}")
         print(f"[DEBUG QUOTA] count_res data: {count_res.data}, count: {count_res.count}")
         print(f"[DEBUG QUOTA] acc_res data: {acc_res.data}")
         
         if acc_res.data and acc_res.data[0].get("package_id"):
-            pkg_res = _global_supabase.table("packages").select("max_landing_pages").eq("id", acc_res.data[0]["package_id"]).execute()
+            pkg_res = get_db_client().table("packages").select("max_landing_pages").eq("id", acc_res.data[0]["package_id"]).execute()
             print(f"[DEBUG QUOTA] pkg_res data: {pkg_res.data}")
             if pkg_res.data:
                 max_landing_pages = pkg_res.data[0]["max_landing_pages"]
@@ -2091,14 +2093,14 @@ def duplicate_template_wizard(template_id: str, payload: WizardDuplicatePayload,
         current_count = count_res.count if count_res.count is not None else len(count_res.data)
         
         max_landing_pages = 5
-        acc_res = _global_supabase.table("customer_accounts").select("package_id").eq("id", tenant_id).execute()
+        acc_res = get_db_client().table("customer_accounts").select("package_id").eq("id", tenant_id).execute()
         
         print(f"[DEBUG QUOTA WIZ] tenant_id={tenant_id}")
         print(f"[DEBUG QUOTA WIZ] count_res data: {count_res.data}, count: {count_res.count}")
         print(f"[DEBUG QUOTA WIZ] acc_res data: {acc_res.data}")
         
         if acc_res.data and acc_res.data[0].get("package_id"):
-            pkg_res = _global_supabase.table("packages").select("max_landing_pages").eq("id", acc_res.data[0]["package_id"]).execute()
+            pkg_res = get_db_client().table("packages").select("max_landing_pages").eq("id", acc_res.data[0]["package_id"]).execute()
             print(f"[DEBUG QUOTA WIZ] pkg_res data: {pkg_res.data}")
             if pkg_res.data:
                 max_landing_pages = pkg_res.data[0]["max_landing_pages"]
