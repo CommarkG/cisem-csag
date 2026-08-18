@@ -152,3 +152,59 @@ Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust
 [2026-08-15T12:02:53.163205Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
   Current hash: fd8f68b76024bc258f26b8d16fa8f9e73240e766204409cd82f63b6d121bd248
   Registered hash: f715b382567b0978b760f4c58714ccb5e6856e9faa45d3f4033e5ab0eeacbc5f
+[2026-08-17T14:48:54.965286Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: fd8f68b76024bc258f26b8d16fa8f9e73240e766204409cd82f63b6d121bd248
+  Registered hash: f715b382567b0978b760f4c58714ccb5e6856e9faa45d3f4033e5ab0eeacbc5f
+[2026-08-18T00:01:31.756782Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-18T00:16:46.738016Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\SaaSWebhookLogs.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-18T00:16:59.942703Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\SaaSWebhookLogs.tsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-18T00:17:13.829407Z] [Phase 23] CISEM_GATE_BLOCKED -- Phase 23: RTL Alignment & Table Layout Sizing violation.
+  Violations:
+  src\components\SaaSWebhookLogs.tsx: Table element hardcodes 'text-left'. Use 'text-start' or dynamic alignment.
+  Rules:
+  - Tables must never hardcode 'text-left' as it overrides RTL alignment in Hebrew.
+  - Data grid table components must use 'table-fixed' to prevent browser overriding column widths.
+[2026-08-18T06:35:35.435061Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violating files:
+  src\app\api\download\route.ts
+  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.
+  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.
+[2026-08-18T06:43:04.989676Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0.py: isolated
+  scratch\check_content.py: isolated
+  scratch\check_schema.py: isolated
+  scratch\check_walkthrough.py: isolated
+  scratch\debug_gate_phase8.py: isolated
+  scratch\find_offending_file.py: isolated
+  scratch\fix_and_gate.py: isolated
+  scratch\fix_and_test.py: isolated
+  scratch\fix_walkthrough.py: isolated
+  scratch\list_walkthroughs.py: isolated
+  scratch\print_atv_results.py: isolated
+  scratch\print_registry_end.py: isolated
+  scratch\promote_walkthrough.py: isolated
+  scratch\test_api.py: isolated
+  scratch\test_gate_regex.py: isolated
+  scratch\test_git_modified.py: isolated
+
+[FINDINGS]
+
+  CHECK A - Fail-open guard (1 finding(s))
+    src\app\api\download\route.ts:66
+      code:   if (!tenantCtx && !authHeader && process.env.NODE_ENV === "production") {
+      detail: Fail-open: === 'production' or !== 'development' unsafe on absent env
+
+[SUMMARY]  1 finding(s) across 183 files scanned
+[2026-08-18T06:45:01.601216Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-18T21:22:34.303181Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

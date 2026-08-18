@@ -7,6 +7,7 @@
 
 | Table Name | Code Query Status |
 | :--- | :--- |
+| `app_registry` | ACTIVE QUERY TARGET |
 | `backlog_registry` | ACTIVE QUERY TARGET |
 | `branding_rate_cards` | ACTIVE QUERY TARGET |
 | `branding_subcontractors` | ACTIVE QUERY TARGET |
@@ -30,6 +31,10 @@
 | `supplier_mappings` | ACTIVE QUERY TARGET |
 | `tag_library` | ACTIVE QUERY TARGET |
 | `template_registry` | ACTIVE QUERY TARGET |
+| `tenant_api_keys` | ACTIVE QUERY TARGET |
+| `tenant_installations` | ACTIVE QUERY TARGET |
+| `tenant_usage_logs` | ACTIVE QUERY TARGET |
+| `tenant_webhook_logs` | ACTIVE QUERY TARGET |
 
 ## Backend Data Models (parsed dynamically from AST in `main.py`)
 
@@ -46,8 +51,11 @@
 - `ProspectScrapePayload`: `url`
 - `SearchTextPayload`: `textQuery`
 - `CaelRatifyPayload`: `taskId`, `intent`, `ratified_by_user`
+- `CatalogSearchPayload`: `query_vector`, `similarity_threshold`, `match_count`, `category_filter`
 - `WhitelabelUpdateRequest`: `custom_domain`, `git_url`, `webhook_secret`
 - `ClaimResolveRequest`: `user_id`, `tenant_id`
 - `CatalogSearchPayload`: `query_vector`, `similarity_threshold`, `match_count`, `category_filter`
 - `ProposalGenerateRequest`: `brief_id`, `catalog_item_skus`, `applied_margin_percent`, `selected_variations`
+- `CreateAPIKeyPayload`: `key_name`, `scopes`
+- `InstallAppPayload`: `app_id`, `config`
 - `WizardDuplicatePayload`: `title`, `layout_spec`, `description`

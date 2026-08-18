@@ -464,7 +464,7 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: f715b382567b0978b760f4c58714ccb5e6856e9faa45d3f4033e5ab0eeacbc5f
+      sha256: 54135f5f0072806feaa7830c37287af17985124e6778fbdd6073cadee7b48f02
     2026_08_10__AntigravityLocal__CisemConfig__V1_0_py:
       path: platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py
       version: '1.0'

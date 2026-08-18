@@ -470,3 +470,121 @@ ON CONFLICT (code) DO NOTHING;
 INSERT INTO packages (code, name, max_team_members, max_landing_pages)
 VALUES ('starter', 'Starter', 3, 5)
 ON CONFLICT (code) DO NOTHING;
+
+-- =====================================================================
+-- 39. SAAS ABSORPTION, API KEYS & TENANT USAGE METERING SCHEMA
+-- RATIFIED: GOV-2026-08-16-TENANCY / Step 1 & 2 Core Infrastructure
+-- =====================================================================
+
+-- 1. Tenant API Keys (For External Apps to Connect Safely)
+CREATE TABLE IF NOT EXISTS tenant_api_keys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    key_name TEXT NOT NULL,
+    key_prefix TEXT NOT NULL, -- e.g. 'ubop_live_sk_'
+    key_hash TEXT NOT NULL,   -- SHA-256 hash of secret key
+    scopes TEXT[] DEFAULT '{"media:read", "media:write"}'::text[],
+    is_active BOOLEAN DEFAULT true,
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+ALTER TABLE tenant_api_keys ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_api_keys_isolation ON tenant_api_keys
+    FOR ALL USING (tenant_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+-- 2. External App Registry (Modular SaaS Catalog)
+CREATE TABLE IF NOT EXISTS app_registry (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    app_code TEXT UNIQUE NOT NULL, -- e.g. 'MEDIA_TRANSFORM_ENGINE'
+    app_name TEXT NOT NULL,
+    description TEXT,
+    pricing_tier TEXT DEFAULT 'FREE',
+    webhook_events TEXT[] DEFAULT '{}'::text[],
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- 3. Tenant App Installations (Active Module Subscriptions)
+CREATE TABLE IF NOT EXISTS tenant_installations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    app_id UUID NOT NULL REFERENCES app_registry(id) ON DELETE CASCADE,
+    config JSONB DEFAULT '{}'::jsonb,
+    is_enabled BOOLEAN DEFAULT true,
+    installed_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+    UNIQUE(tenant_id, app_id)
+);
+
+ALTER TABLE tenant_installations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_installations_isolation ON tenant_installations
+    FOR ALL USING (tenant_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+-- 4. Tenant Usage Logs (Monetization & Metering Telemetry)
+CREATE TABLE IF NOT EXISTS tenant_usage_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    metric_name TEXT NOT NULL, -- e.g. 'gpu_seconds', 'storage_bytes', 'api_calls'
+    quantity NUMERIC(12,4) NOT NULL,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    recorded_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+ALTER TABLE tenant_usage_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_usage_logs_isolation ON tenant_usage_logs
+    FOR ALL USING (tenant_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+-- =====================================================================
+-- 40. SEED DEFAULT SAAS APP MARKETPLACE CATALOG MODULES
+-- RATIFIED: GOV-2026-08-16-TENANCY / Step 1 App Registry Seeds
+-- =====================================================================
+INSERT INTO app_registry (app_code, app_name, description, pricing_tier, webhook_events)
+VALUES
+    ('MEDIA_TRANSFORM_ENGINE', 'Media Transformation Engine', 'Automated image & video normalization, background removal, and FFmpeg GPU encoding pipeline.', 'PRO', '{"media.normalized", "media.uploaded"}'::text[]),
+    ('AI_PROPOSAL_GENERATOR', 'AI Proposal Generator', 'AI-driven customer proposal generation with dynamic pricing calculations and margin enforcement.', 'STARTER', '{"proposal.generated", "proposal.approved"}'::text[]),
+    ('AUTOMATED_MARKETING_HUB', 'Automated Marketing Hub', 'Multi-channel marketing automation, lead scoring, and automated client follow-up sequences.', 'ENTERPRISE', '{"lead.ingested", "deal.updated"}'::text[])
+ON CONFLICT (app_code) DO NOTHING;
+
+-- =====================================================================
+-- 41. TENANT WEBHOOK DELIVERY LOGS TABLE (AUDIT & TELEMETRY)
+-- RATIFIED: GOV-2026-08-16-TENANCY / Step 3 Webhook Logs Schema
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS tenant_webhook_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    app_code TEXT NOT NULL,
+    event_name TEXT NOT NULL,
+    target_url TEXT NOT NULL,
+    payload JSONB DEFAULT '{}'::jsonb,
+    response_status INTEGER,
+    error_message TEXT,
+    dispatched_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+ALTER TABLE tenant_webhook_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_webhook_logs_isolation ON tenant_webhook_logs
+    FOR ALL USING (tenant_id = coalesce(
+        nullif(current_setting('app.current_tenant_id', true), ''),
+        nullif(current_setting('request.headers', true)::jsonb ->> 'x-current-tenant-id', '')
+    )::uuid);
+
+-- =====================================================================
+-- 42. TENANT API KEY IP ALLOWLIST RESTRICTIONS
+-- RATIFIED: GOV-2026-08-16-TENANCY / Step 5 API Key IP Whitelisting
+-- =====================================================================
+ALTER TABLE tenant_api_keys ADD COLUMN IF NOT EXISTS ip_allowlist TEXT[] DEFAULT '{}'::text[];
+
+-- =====================================================================
+-- 43. TELEMETRY & WEBHOOK AUDIT DDL COMPOSITE INDEXES
+-- RATIFIED: GOV-2026-08-16-TENANCY / Step 1 Index Performance Optimization
+-- =====================================================================
+CREATE INDEX IF NOT EXISTS idx_tenant_usage_tenant_date ON tenant_usage_logs (tenant_id, recorded_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tenant_webhook_tenant_date ON tenant_webhook_logs (tenant_id, dispatched_at DESC);

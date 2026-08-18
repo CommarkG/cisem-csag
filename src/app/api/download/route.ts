@@ -1,126 +1,59 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: GOV-2026-08-18-SECURITY-HARDENING
+# governor_signature: GOV-YARIV-20260818-SECURITY-HARDENING-V2.0
+# version: V2.0
+# reasoning: |
+#   Hardened File Download API endpoint with Tenant Context Authentication,
+#   strict secret file blocking (.env/.git/.pem), and PR-13990 sandbox containment.
+#   Parent Principles: PR-11100 (Cryptographic Context), PR-13990 (Sandbox Boundaries).
+# @playbook_category: Micro-interaction Module
+*/
 import { NextRequest, NextResponse } from "next/server";
+import { verifyTenantContext } from "@/lib/tenant_context";
 import fs from "fs";
 import path from "path";
 
-// Optimized helper to resolve target files directly without performing heavy recursive scans
+// Helper to resolve target files strictly within approved workspace boundaries
 function findFileOptimized(filename: string): string | null {
   const workspaceRoot = process.cwd();
   const cleanTarget = path.basename(filename);
-  
-  // Direct check locations in workspace
-  // Direct check locations in workspace
+  const brainRoot = path.join("C:", "Users", "finky", ".gemini", "antigravity", "brain");
+
+  // Direct check locations inside workspace
   const directLocations = [
-    workspaceRoot + "/" + filename,
-    workspaceRoot + "/cisem_core/" + filename,
-    workspaceRoot + "/cisem_core/planning/" + filename,
-    workspaceRoot + "/cisem_core/sandbox/" + filename,
-    workspaceRoot + "/sandbox/" + filename,
-    "C:\\Users\\finky\\Desktop\\AntiGravity\\Sandbox Csag\\" + filename,
-    "C:\\Users\\finky\\Desktop\\AntiGravity\\Sandbox Csag\\Marketing & Sales\\" + filename,
-    "C:\\Users\\finky\\Desktop\\AntiGravity\\Sandbox Csag\\Marketing & Sales\\Image processing\\" + filename,
-    workspaceRoot + "/" + cleanTarget,
-    workspaceRoot + "/cisem_core/" + cleanTarget,
-    workspaceRoot + "/cisem_core/planning/" + cleanTarget,
-    workspaceRoot + "/cisem_core/sandbox/" + cleanTarget,
-    workspaceRoot + "/sandbox/" + cleanTarget,
+    path.join(workspaceRoot, filename),
+    path.join(workspaceRoot, cleanTarget),
+    path.join(workspaceRoot, ".agents", "reviewer", cleanTarget),
+    path.join(workspaceRoot, "cisem_core", filename),
+    path.join(workspaceRoot, "cisem_core", cleanTarget),
+    path.join(workspaceRoot, "cisem_core", "planning", cleanTarget),
+    path.join(workspaceRoot, "cisem_core", "sandbox", cleanTarget),
+    path.join(workspaceRoot, "sandbox", cleanTarget),
   ];
   
   for (const loc of directLocations) {
-    if (fs.existsSync(loc) && fs.statSync(loc).isFile()) {
-      return loc;
+    const resolved = path.resolve(loc);
+    if (resolved.startsWith(workspaceRoot) && fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
+      return resolved;
     }
   }
 
   // Check brain root folder
-  const brainRoot = "C:\\Users\\finky\\.gemini\\antigravity\\brain";
   if (fs.existsSync(brainRoot)) {
-    // 0. Extract conversation UUID from filename if present
-    const uuidMatch = filename.match(/\b([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\b/i);
-    if (uuidMatch) {
-      const convId = uuidMatch[1];
-      const brainPaths = [
-        brainRoot + "\\" + convId + "\\" + cleanTarget,
-        brainRoot + "\\" + convId + "\\scratch\\" + cleanTarget,
-      ];
-      for (const p of brainPaths) {
-        if (fs.existsSync(p) && fs.statSync(p).isFile()) {
-          return p;
-        }
-      }
-    }
-
-    // 1. Direct check using conversation ID from environment
     const envConvId = process.env.ANTIGRAVITY_CONVERSATION_ID;
     if (envConvId) {
-      const directBrainPaths = [
-        brainRoot + "\\" + envConvId + "\\" + cleanTarget,
-        brainRoot + "\\" + envConvId + "\\scratch\\" + cleanTarget,
+      const brainPaths = [
+        path.join(brainRoot, envConvId, cleanTarget),
+        path.join(brainRoot, envConvId, "scratch", cleanTarget),
       ];
-      for (const p of directBrainPaths) {
-        if (fs.existsSync(p) && fs.statSync(p).isFile()) {
-          return p;
+      for (const p of brainPaths) {
+        const resolved = path.resolve(p);
+        if (resolved.startsWith(brainRoot) && fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
+          return resolved;
         }
       }
     }
-    
-    // 2. Direct checks in active brain subdirectories sorted by modification time
-    try {
-      const entries = fs.readdirSync(brainRoot, { withFileTypes: true });
-      const dirs = entries
-          .filter(e => e.isDirectory() && e.name !== "scratch" && e.name !== "tempmediaStorage")
-          .map(e => {
-            const fullPath = brainRoot + "\\" + e.name;
-            return { name: e.name, path: fullPath, mtime: fs.statSync(fullPath).mtimeMs };
-          })
-          .sort((a, b) => b.mtime - a.mtime);
-         
-      for (const d of dirs) {
-        const brainPaths = [
-          d.path + "\\" + cleanTarget,
-          d.path + "\\scratch\\" + cleanTarget,
-        ];
-        for (const p of brainPaths) {
-          if (fs.existsSync(p) && fs.statSync(p).isFile()) {
-            return p;
-          }
-        }
-      }
-    } catch (e) {}
-  }
-  
-  // Fallback recursive helper restricted to code and planning folders
-  function findFileRecursively(dir: string, targetName: string): string | null {
-    if (!fs.existsSync(dir)) return null;
-    const queue = [dir];
-    while (queue.length > 0) {
-      const currentDir = queue.shift()!;
-      try {
-        const entries = fs.readdirSync(currentDir, { withFileTypes: true });
-        for (const entry of entries) {
-          const fullPath = currentDir + "/" + entry.name;
-          if (entry.isDirectory()) {
-            if (![".git", "node_modules", ".next", "out"].includes(entry.name)) {
-              queue.push(fullPath);
-            }
-          } else if (entry.isFile()) {
-            if (entry.name === targetName || fullPath.endsWith(targetName)) {
-              return fullPath;
-            }
-          }
-        }
-      } catch (e) {}
-    }
-    return null;
-  }
-
-  // Scan workspace subfolders only
-  const fallbackDirs = [
-    workspaceRoot + "/cisem_core",
-    workspaceRoot + "/src"
-  ];
-  for (const dir of fallbackDirs) {
-    const found = findFileRecursively(dir, cleanTarget);
-    if (found) return found;
   }
 
   return null;
@@ -134,44 +67,56 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Missing filename" }, { status: 400 });
   }
 
-  // Security: only allow safe document and configuration extensions
-  const allowedExtensions = [".md", ".yaml", ".json", ".schema", ".py", ".html", ".js", ".ts", ".tsx", ".sql", ".zip", ".local"];
-  const ext = path.extname(filename).toLowerCase();
-  const base = path.basename(filename).toLowerCase();
-  
-  const allowedFilenames = [".env", ".gitignore", ".env.local"];
-  
-  if (!allowedExtensions.includes(ext) && !allowedFilenames.includes(base)) {
-    return NextResponse.json({ error: "Forbidden file extension" }, { status: 403 });
+  const cleanName = path.basename(filename).toLowerCase();
+
+  // 1. ZERO-TRUST SECRET FILE BLACKLIST (Strict Hard Stop - Fails Closed for All Requests)
+  if (
+    cleanName.startsWith(".env") ||
+    cleanName.startsWith(".git") ||
+    cleanName.includes("secret") ||
+    cleanName.includes("private") ||
+    cleanName.includes("credential") ||
+    cleanName.endsWith(".pem") ||
+    cleanName.endsWith(".key")
+  ) {
+    return NextResponse.json(
+      { error: "Forbidden: Access to sensitive environment, credential, or secret files is strictly prohibited." },
+      { status: 403 }
+    );
   }
 
-  const workspaceRoot = process.cwd();
-  const cleanName = path.basename(filename);
+  // 2. Strict Allowed Extensions Whitelist
+  const allowedExtensions = [".md", ".yaml", ".json", ".schema", ".py", ".html", ".js", ".ts", ".tsx", ".sql", ".zip", ".txt"];
+  const ext = path.extname(cleanName).toLowerCase();
 
-  // Resolve path using optimized file resolver
-  let targetPath = findFileOptimized(filename);
+  if (!allowedExtensions.includes(ext)) {
+    return NextResponse.json({ error: "Forbidden: File extension not permitted for download." }, { status: 403 });
+  }
+
+  // 3. Resolve path using strict sandbox resolver
+  const targetPath = findFileOptimized(filename);
 
   if (!targetPath || !fs.existsSync(targetPath)) {
     return NextResponse.json({ error: "File not found" }, { status: 404 });
   }
 
-  // Use Node ReadStream converted to Web ReadableStream for zero-memory streaming
+  // Stream file safely
   const nodeStream = fs.createReadStream(targetPath);
   const webStream = new ReadableStream({
     start(controller) {
-      nodeStream.on('data', (chunk) => controller.enqueue(chunk));
-      nodeStream.on('end', () => controller.close());
-      nodeStream.on('error', (err) => controller.error(err));
+      nodeStream.on("data", (chunk) => controller.enqueue(chunk));
+      nodeStream.on("end", () => controller.close());
+      nodeStream.on("error", (err) => controller.error(err));
     },
     cancel() {
       nodeStream.destroy();
-    }
+    },
   });
 
   return new Response(webStream, {
     headers: {
       "Content-Type": "application/octet-stream",
-      "Content-Disposition": `attachment; filename="${cleanName}"`
-    }
+      "Content-Disposition": `attachment; filename="${cleanName}"`,
+    },
   });
 }

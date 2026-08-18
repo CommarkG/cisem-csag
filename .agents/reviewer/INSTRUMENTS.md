@@ -21,3 +21,4 @@
 | `pgvector-partition-auditor` | `.agents/skills/pgvector-partition-auditor/SKILL.md` | `.agents/hooks.json` | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
 | `registry-updater` | `.agents/skills/registry-updater/SKILL.md` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
 | `stock_verifier.py` | `backend/src/backend/stock_verifier.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | UNPROVEN |
+| `webhook_verifier.py` | `backend/src/backend/utils/webhook_verifier.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | UNPROVEN |

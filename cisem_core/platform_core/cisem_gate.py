@@ -471,9 +471,69 @@ def find_active_implementation_plan():
     return None
 
 
+# ===== CISEM GATE TEETH - installed by Governor ratification, 2026-08-18 =====
+ALLOWED_ADDITIONS_PATH = os.environ.get("CISEM_ALLOWED_ADDITIONS", r"C:\Users\finky\secure\cisem_allowed_additions.txt")
+
+
+def _cisem_staged_name_status():
+    kwargs = {"capture_output": True, "text": True}
+    if sys.platform == "win32":
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+    try:
+        res = subprocess.run(["git", "diff", "--cached", "--name-status"], cwd=ROOT_DIR, **kwargs)
+    except Exception:
+        return []
+    rows = []
+    for line in (res.stdout or "").splitlines():
+        parts = [p for p in line.split("\t") if p.strip()]
+        if len(parts) >= 2:
+            rows.append((parts[0].strip(), parts[-1].strip().replace("\\", "/")))
+    return rows
+
+
+def _cisem_staged_paths():
+    return [p for _s, p in _cisem_staged_name_status()]
+
+
+def check_staged_additions():
+    """Phase 26: no file enters the repository unless the Governor named its path."""
+    import fnmatch
+    print("Phase 26: Running Staged Addition Allowlist...")
+    adds = [p for s, p in _cisem_staged_name_status() if s.upper().startswith("A")]
+    if not adds:
+        print("  Phase 26: PASS (this commit adds no files).")
+        return
+    if not os.path.exists(ALLOWED_ADDITIONS_PATH):
+        print("CISEM_GATE_BLOCKED -- Phase 26: allowlist file not found.")
+        print("  Expected at : " + ALLOWED_ADDITIONS_PATH)
+        sys.exit(1)
+    pats = []
+    with open(ALLOWED_ADDITIONS_PATH, "r", encoding="utf-8-sig") as f:
+        for raw in f:
+            t = raw.strip()
+            if t and not t.startswith("#"):
+                pats.append(t.replace("\\", "/"))
+    bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
+    if bad:
+        print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")
+        for p in bad:
+            print("  NOT AUTHORISED: " + p)
+        print("  Allowlist   : " + ALLOWED_ADDITIONS_PATH)
+        print("  Rule        : the Governor authorises every new path before it exists.")
+        sys.exit(1)
+    print("  Phase 26: PASS (%d addition(s), every path authorised)." % len(adds))
+# ===== end CISEM GATE TEETH =====
+
+
 def check_plan_validation():
     """Runs the Plan Ingestor validation check on the active implementation plan (Phase 6)."""
     print("Phase 6: Running Plan Ingestion Validation...")
+    _cs = _cisem_staged_paths()
+    _cp = [p for p in _cs if p.lower().endswith(".md") and "plan" in os.path.basename(p).lower()]
+    if not _cp:
+        print("  Phase 6: PASS (skipped -- this commit stages no plan document).")
+        return
+
     plan_path = find_active_implementation_plan()
     if not plan_path:
         print("  Phase 6: PASS (No active implementation plan found in brain directory).")
@@ -1910,6 +1970,7 @@ def enforce_gate():
     check_hebrew_rtl_and_fixed_tables()  # Phase 23
     check_zero_fabrication_gate()         # Phase 24 (Gate 19)
     check_context_pack_drift()            # Phase 25 (Context Pack Drift Gate)
+    check_staged_additions()              # Phase 26 (Staged Addition Allowlist)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()

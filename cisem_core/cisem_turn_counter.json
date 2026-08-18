@@ -1,5 +1,5 @@
 {
-  "current_turn": 7,
+  "current_turn": 13,
   "turn_limit_ceiling": 15,
   "turn_minimum_floor": 3,
   "audit_due": false,
@@ -7,41 +7,65 @@
     "park_items_resolved_this_cycle": 0,
     "park_items_created_this_cycle": 0,
     "high_blast_radius_changes": 0,
-    "gate_blocks_encountered": 5,
+    "gate_blocks_encountered": 2,
     "beneficial_drift_detected": 0,
     "last_maturity_score": null
   },
   "maturity_score_threshold": 70,
-  "last_reset": "2026-08-15T11:49:21.546209+00:00",
+  "last_reset": "2026-08-18T06:44:37.442775+00:00",
   "ratified_plan": "CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0",
   "governor_signature": "GOV-YARIV-20260806-CONTEXT-ADAPTIVE-V1.0",
   "turns_log": [
     {
-      "timestamp": "2026-08-15T11:49:26.557665Z",
+      "timestamp": "2026-08-18T06:44:54.034243Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-15T11:49:48.149014Z",
+      "timestamp": "2026-08-18T06:45:09.520043Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-15T11:50:04.428731Z",
+      "timestamp": "2026-08-18T07:12:41.768194Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-15T11:50:35.749550Z",
+      "timestamp": "2026-08-18T07:20:45.117549Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-15T11:50:51.591361Z",
+      "timestamp": "2026-08-18T07:21:32.311523Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-15T11:51:28.857142Z",
+      "timestamp": "2026-08-18T07:29:40.328298Z",
       "action": "cisem_gate.py"
     },
     {
-      "timestamp": "2026-08-15T12:02:53.118115Z",
+      "timestamp": "2026-08-18T12:44:45.450906Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-08-18T12:59:11.917459Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-08-18T21:14:47.341102Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-08-18T21:21:11.409091Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-08-18T21:22:26.475900Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-08-18T21:23:29.739292Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-08-18T21:25:05.060256Z",
       "action": "cisem_gate.py"
     }
   ]

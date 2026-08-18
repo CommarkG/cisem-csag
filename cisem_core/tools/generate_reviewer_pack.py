@@ -55,10 +55,19 @@ def generate_rules():
     rules_path = os.path.join(REVIEWER_DIR, "RULES.md")
     content = ["# CISEM CONSOLIDATED RULES AND GUIDELINES", "> Auto-generated context pack rule definitions.\n"]
     
-    agents_md = os.path.join(ROOT_DIR, "AGENTS.md")
-    if os.path.exists(agents_md):
-        content.append("\n## Source: AGENTS.md\n")
-        with open(agents_md, "r", encoding="utf-8") as f:
+    # Mandatory named source files required in every reviewer pack
+    mandatory_sources = [
+        ("AGENTS.md", os.path.join(ROOT_DIR, "AGENTS.md")),
+        ("2026-08-10__Gemini3.5__YarivHuman__AxiomsAndPrinciples__V1.30.md", os.path.join(ROOT_DIR, "2026-08-10__Gemini3.5__YarivHuman__AxiomsAndPrinciples__V1.30.md"))
+    ]
+
+    for fname, fpath in mandatory_sources:
+        if not os.path.exists(fpath):
+            error_msg = f"FATAL REVIEWER PACK ERROR: Mandatory named source file '{fname}' is missing at '{fpath}'. Generation halted."
+            print(f"[!] {error_msg}", file=sys.stderr)
+            raise FileNotFoundError(error_msg)
+        content.append(f"\n## Source: {fname}\n")
+        with open(fpath, "r", encoding="utf-8") as f:
             content.append(f.read())
             
     rules_dir = os.path.join(ROOT_DIR, ".agents", "rules")

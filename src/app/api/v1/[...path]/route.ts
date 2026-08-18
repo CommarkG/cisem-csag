@@ -9,6 +9,8 @@
 */
 import { NextRequest, NextResponse } from "next/server";
 import { verifyTenantContext } from "@/lib/tenant_context";
+import fs from "fs";
+import path from "path";
 
 const BACKEND_URL = "http://localhost:8000/api/v1";
 
@@ -180,6 +182,76 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
         { status: 403 }
       );
     }
+  }
+
+  // Direct file download handler for local file downloads with Zero-Trust Security Enforcement
+  if (pathStr.startsWith("download") || pathStr === "download") {
+    const filename = req.nextUrl.searchParams.get("filename");
+    if (!filename) {
+      return NextResponse.json({ error: "Missing filename" }, { status: 400 });
+    }
+    const cleanTarget = path.basename(filename).toLowerCase();
+
+    // ZERO-TRUST SECRET FILE BLACKLIST (Strict Hard Stop)
+    if (
+      cleanTarget.startsWith(".env") ||
+      cleanTarget.startsWith(".git") ||
+      cleanTarget.includes("secret") ||
+      cleanTarget.includes("private") ||
+      cleanTarget.includes("credential") ||
+      cleanTarget.endsWith(".pem") ||
+      cleanTarget.endsWith(".key")
+    ) {
+      return NextResponse.json(
+        { error: "Forbidden: Access to sensitive environment, credential, or secret files is strictly prohibited." },
+        { status: 403 }
+      );
+    }
+
+    const allowedExtensions = [".md", ".yaml", ".json", ".schema", ".py", ".html", ".js", ".ts", ".tsx", ".sql", ".zip", ".txt"];
+    const ext = path.extname(cleanTarget).toLowerCase();
+    if (!allowedExtensions.includes(ext)) {
+      return NextResponse.json({ error: "Forbidden: File extension not permitted for download." }, { status: 403 });
+    }
+
+    const workspaceRoot = process.cwd();
+    const directLocations = [
+      path.join(workspaceRoot, filename),
+      path.join(workspaceRoot, cleanTarget),
+      path.join(workspaceRoot, "cisem_core", filename),
+      path.join(workspaceRoot, "cisem_core", cleanTarget),
+      path.join(workspaceRoot, "cisem_core", "planning", cleanTarget),
+      path.join(workspaceRoot, "cisem_core", "sandbox", cleanTarget),
+      path.join(workspaceRoot, "sandbox", cleanTarget),
+    ];
+    let resolvedPath: string | null = null;
+    for (const loc of directLocations) {
+      const resolved = path.resolve(loc);
+      if (resolved.startsWith(workspaceRoot) && fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
+        resolvedPath = resolved;
+        break;
+      }
+    }
+    if (!resolvedPath) {
+      return NextResponse.json({ error: "File not found" }, { status: 404 });
+    }
+    const nodeStream = fs.createReadStream(resolvedPath);
+    const webStream = new ReadableStream({
+      start(controller) {
+        nodeStream.on('data', (chunk) => controller.enqueue(chunk));
+        nodeStream.on('end', () => controller.close());
+        nodeStream.on('error', (err) => controller.error(err));
+      },
+      cancel() {
+        nodeStream.destroy();
+      }
+    });
+    return new Response(webStream, {
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition": `attachment; filename="${cleanTarget}"`
+      }
+    });
   }
 
   const targetUrl = `${BACKEND_URL}/${pathStr}${searchParams ? "?" + searchParams : ""}`;
