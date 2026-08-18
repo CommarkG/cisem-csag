@@ -45,9 +45,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 5,
       "validation_target": 20,
-      "actual_triggers": 326,
+      "actual_triggers": 327,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-18T22:02:25.035284Z",
+      "last_triggered": "2026-08-18T22:12:36.994783Z",
       "notes": "Tested manually 20+ times. Gate correctly blocks on all phases."
     },
     {
@@ -57,9 +57,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 4,
       "validation_target": 16,
-      "actual_triggers": 2096,
+      "actual_triggers": 2097,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-18T22:02:18.083299Z",
+      "last_triggered": "2026-08-18T22:12:30.063452Z",
       "notes": "Called on every gate Phase 2 run. 16+ confirmed runs."
     },
     {
@@ -93,9 +93,9 @@
       "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 547,
+      "actual_triggers": 548,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-18T22:02:17.464556Z",
+      "last_triggered": "2026-08-18T22:12:29.444473Z",
       "notes": "Turn counter increments logged and verified through 4 cycle resets."
     },
     {

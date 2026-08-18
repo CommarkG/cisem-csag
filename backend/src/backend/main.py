@@ -1427,12 +1427,12 @@ async def pdf_queue_worker():
     """
     while True:
         try:
-            if not supabase:
+            if not supabase_admin:
                 await asyncio.sleep(10)
                 continue
                 
             # Checkout one pending job
-            job_res = supabase.table("pdf_queue").select("*").eq("status", "pending").order("created_at").limit(1).execute()
+            job_res = supabase_admin.table("pdf_queue").select("*").eq("status", "pending").order("created_at").limit(1).execute()
             if not job_res.data:
                 await asyncio.sleep(2)
                 continue
@@ -1442,7 +1442,7 @@ async def pdf_queue_worker():
             token = job["proposal_token"]
             
             # Update to processing
-            supabase.table("pdf_queue").update({"status": "processing"}).eq("id", job_id).execute()
+            supabase_admin.table("pdf_queue").update({"status": "processing"}).eq("id", job_id).execute()
             
             # Print PDF via Playwright
             try:
@@ -1463,14 +1463,14 @@ async def pdf_queue_worker():
                     await browser.close()
                 
                 pdf_base64 = base64.b64encode(pdf_bytes).decode("utf-8")
-                supabase.table("pdf_queue").update({
+                supabase_admin.table("pdf_queue").update({
                     "status": "completed",
                     "result_pdf": pdf_base64
                 }).eq("id", job_id).execute()
                 
             except Exception as render_err:
                 print(f"Error rendering PDF for job {job_id}: {render_err}")
-                supabase.table("pdf_queue").update({
+                supabase_admin.table("pdf_queue").update({
                     "status": "failed",
                     "error_message": str(render_err)
                 }).eq("id", job_id).execute()
@@ -1487,17 +1487,17 @@ async def pdf_cleanup_worker():
     """
     while True:
         try:
-            if not supabase:
+            if not supabase_admin:
                 await asyncio.sleep(3600)
                 continue
                 
             from datetime import datetime, timedelta
             threshold = (datetime.utcnow() - timedelta(hours=24)).isoformat()
             
-            to_delete = supabase.table("pdf_queue").select("id").eq("status", "completed").lt("created_at", threshold).execute()
+            to_delete = supabase_admin.table("pdf_queue").select("id").eq("status", "completed").lt("created_at", threshold).execute()
             if to_delete.data:
                 for item in to_delete.data:
-                    supabase.table("pdf_queue").delete().eq("id", item["id"]).execute()
+                    supabase_admin.table("pdf_queue").delete().eq("id", item["id"]).execute()
                     print(f"Cleaned up completed PDF job: {item['id']}")
         except Exception as cleanup_err:
             print(f"Error in pdf cleanup worker: {cleanup_err}")
