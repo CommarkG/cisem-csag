@@ -1,7 +1,10 @@
+// @playbook_category: Micro-interaction Module
+
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DefineFieldsModal from './DefineFieldsModal';
 import { useUIStore } from '../../stores/useUIStore';
+import { useTenantSessionStore } from '../../stores/useTenantSessionStore';
 import { useCollabStore } from '../../stores/useCollabStore';
 import { useTaskStore } from '../../stores/useTaskStore';
 import { useAdminStore } from '../../stores/useAdminStore';
@@ -33,8 +36,8 @@ const ZapIcon = () => (
 export default function PageGreetingBanner({ view }) {
   const navigate = useNavigate();
   const language = useUIStore((s) => s.language);
-  const activeUserId = useUIStore((s) => s.activeUserId);
-  const setActiveUserId = useUIStore((s) => s.setActiveUserId);
+  const activeUserId = useTenantSessionStore((s) => s.userId);
+  const setActiveUserId = useTenantSessionStore((s) => s.setActiveUserId);
   const setFilter = useUIStore((s) => s.setFilter);
   const clearFilters = useUIStore((s) => s.clearFilters);
   const openAddItemModal = useUIStore((s) => s.openAddItemModal);
@@ -298,7 +301,7 @@ export default function PageGreetingBanner({ view }) {
               onClick: () => {
                 showToast({
                   title: 'WhatsApp Broadcast',
-                  message: 'GreenAPI simulation alert sent to Dima / Yariv',
+                  message: 'GreenAPI simulation alert sent',
                   type: 'info'
                 });
               }

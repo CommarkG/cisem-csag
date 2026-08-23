@@ -464,7 +464,18 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: 54135f5f0072806feaa7830c37287af17985124e6778fbdd6073cadee7b48f02
+      sha256: dc0d6c3166f7920c3a1f5d75eaf644a4a2f3c541a44fb11af21f519576d4a0ef
+    2026_08_22__AntigravityLocal__NoUnpartitionedStorageLinter__V1_0_mjs:
+      path: linters/no_unpartitioned_storage.mjs
+      version: '1.0'
+      status: VERIFIED
+      validation_metrics:
+        flow_completion: VERIFIED
+        code_implementation: COMPLETE
+        optimization: OPTIMIZED
+        consolidation: CONSOLIDATED
+        permission_compliance: ENFORCED
+      sha256: ea57d44b1711f7528ee378c4e30a803a88b3ddc07edf8db87b2e37e0d4428eac
     2026_08_10__AntigravityLocal__CisemConfig__V1_0_py:
       path: platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py
       version: '1.0'

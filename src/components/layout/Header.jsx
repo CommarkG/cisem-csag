@@ -1,12 +1,14 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260811-HEADER-UNIFICATION
-# governor_signature: GOV-YARIV-20260811-HEADER-UNIFICATION-V1.0
-# version: V1.3
-# reasoning: |
-#   Unify header layout and formatting, increasing chevron and crumbnail sizes to 14px
-#   for readability and high contrast, supporting both RTL and LTR locales.
-#   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >PR-13500.
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260811-HEADER-UNIFICATION [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260811-HEADER-UNIFICATION-V1 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
 */
 // @playbook_category: Micro-interaction Module
 
@@ -14,6 +16,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, Plus, Bell, Sun, Moon, Search, Globe, ChevronDown, FolderKanban, Users, Truck, UserCheck, ChevronLeft, ChevronRight, Layers, Box, Folder, FileText, CheckCircle2, User, Settings, Check, LayoutTemplate, ShieldCheck } from 'lucide-react';
 import { useUIStore } from '../../stores/useUIStore';
+import { useTenantSessionStore } from '../../stores/useTenantSessionStore';
 import { useTaskStore } from '../../stores/useTaskStore';
 import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useCollabStore } from '../../stores/useCollabStore';
@@ -41,13 +44,14 @@ export default function Header() {
     openAddItemModal,
     openCommandPalette,
     toggleNotificationTray,
-    language, setLanguage,
-    simulatedRole, setSimulatedRole
+    language, setLanguage
   } = useUIStore();
+  const simulatedRole = useTenantSessionStore(state => state.simulatedRole);
+  const setSimulatedRole = useTenantSessionStore(state => state.setSimulatedRole);
   const items = useTaskStore(state => state.items);
   const unreadCount = useNotificationStore(state => state.getUnreadCount());
   
-  const activeUserId = useUIStore(state => state.activeUserId);
+  const activeUserId = useTenantSessionStore(state => state.userId);
   const members = useCollabStore(state => state.members);
   const currentUser = members.find(m => m.id === activeUserId) || members[0];
   

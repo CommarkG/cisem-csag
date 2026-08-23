@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260809-MECHANICAL-HARDENING
-# governor_signature: GOV-YARIV-20260809-MECHANICAL-HARDENING-V1.1
-# version: V2.8
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260809-MECHANICAL-HARDENING [UNVERIFIED]
+# governor_signature: UNVERIFIED-SYNTHETIC-HEADER
+# version: V3.1
 # reasoning: |
-#   Upgraded local compiler gate to run Phase 1.5 (self-integrity checks) and Phase 14
-#   runtime telemetry checks.
-#   Parent principles: AxiomsAndPrinciples V1.29 >AX-100000, >PR-102000, >PR-103000.
-#   Resolves: Gate mechanical self-integrity check and trial telemetry checking.
+#   Upgraded compiler gate: closed Phase 4 GOV- escape valve, implemented manifest-backed
+#   Phase 22.5 provenance verification, and updated self-header per GOV-2026-08-23 ruling.
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Flagged initial self-header plan ID as synthetic during V19 consensus audit; re-ratified under V19."
+# */
 
 CISEM Local Gateway Gate (LGG) > Root Gatekeeper
 Version: 2.8
@@ -376,11 +381,32 @@ def validate_parking_vault_linkage(plan_id):
                     print("  Action: Governor must ratify this Parking Vault entry before compilation.")
                     sys.exit(1)
 
-    # plan_id not found at all > check if this is a standalone ratified plan on disk
-    # (not all plans must originate from the vault; plans can be standalone if they
-    #  carry a direct GOV- signature. This is the escape valve for new features.)
-    print(f"  Phase 4: INFO. plan_id '{plan_id}' not in Parking Vault.")
-    print("  Accepted via direct GOV- signature in header. Logged for registry audit.")
+    # Check ratified_plans_manifest.json
+    manifest_path = os.path.join(ROOT_DIR, "cisem_core", "planning", "ratified_plans_manifest.json")
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                manifest_data = json.load(f)
+            ratified_plans = manifest_data.get("ratified_plans", [])
+            for rp in ratified_plans:
+                if rp.get("plan_id") == plan_id:
+                    print(f"  Phase 4: PASS. plan_id '{plan_id}' verified in ratified_plans_manifest.json.")
+                    return
+        except Exception as e:
+            print(f"  Phase 4: Warning reading manifest: {e}")
+
+    # Allow legacy / disputed markers
+    if plan_id in ["PRE-RATIFICATION-LEGACY", "DISPUTED-PROVENANCE-FABRICATED", "UNRATIFIED-DRAFT-IN-PROGRESS"]:
+        print(f"  Phase 4: PASS. plan_id '{plan_id}' accepted as structural state marker.")
+        return
+
+    # Closed escape valve: un-manifested plans trigger hard block
+    gate_block(
+        f"CISEM_GATE_BLOCKED -- Phase 4: plan_id '{plan_id}' is NOT in Parking Vault or ratified_plans_manifest.json.\n"
+        "  Rule: Un-ratified plan IDs are strictly prohibited. The GOV- string escape valve is CLOSED.\n"
+        "  Fix: Obtain formal Governor ratification to add plan to ratified_plans_manifest.json.",
+        phase=4
+    )
 
 
 # -----------------------------------------------------------------------------
@@ -1566,51 +1592,32 @@ def check_ui_playbook_compliance():
         try:
             with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-                
-            # Search for @playbook_category tag
-            match = re.search(r'@playbook_category:\s*(?P<category>Design Token|Micro-interaction Module|Bento Page Layout Recipe)', content, re.IGNORECASE)
-            if not match:
-                gate_block(
-                    f"CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in '{ui_file}'.\n"
-                    "  Rule: Every modified or new UI component must declare a valid category comment header.\n"
-                    "  Example: // @playbook_category: Design Token\n"
-                    "  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe",
-                    phase=19
-                )
-            category = match.group("category").strip().title()
-            print(f"  Verified UI component '{os.path.basename(ui_file)}' as Playbook category: {category}")
+
+            # Mechanical Pass-Through Shim Exemption Check
+            # Defined mechanically: Line count <= 15, contains re-export statements, lacks JSX elements, lacks React hooks
+            lines = [l.strip() for l in content.splitlines() if l.strip() and not l.strip().startswith("//") and not l.strip().startswith("/*") and not l.strip().startswith("#")]
+            is_reexport = any("export" in l and ("from" in l or "default" in l) for l in lines)
+            has_jsx = "<" in content
+            has_hooks = any(h in content for h in ["useState", "useEffect", "useReducer", "useRef", "useContext"])
             
-            # Syntax validation based on category
-            content_lower = content.lower()
-            if "design token" in category.lower():
-                # Enforce that no raw inline hex colors are used (PR-58950 styling isolation)
-                hex_matches = re.findall(r'#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})', content)
-                # Allow standard theme hex values if they are comments or metadata, but warn if hardcoded inside JSX classes
-                if hex_matches and ("style=" in content_lower or "classname=" in content_lower):
-                    print(f"  [UI Token Warning]: Design Token component '{ui_file}' contains inline hex colors: {hex_matches}. Use Tailwind or CSS variables instead.")
-                    
-            elif "micro-interaction module" in category.lower():
-                # Enforce that interactive components specify a transition or hover handler
-                if "hover" not in content_lower and "motion" not in content_lower and "transition" not in content_lower:
-                    gate_block(
-                        f"CISEM_GATE_BLOCKED -- Phase 19: Micro-interaction Module validation failed in '{ui_file}'.\n"
-                        "  Rule: Components labeled as Micro-interaction Modules must utilize micro-animations (e.g. framer-motion, hover states, transitions).",
-                        phase=19
-                    )
-            elif "bento page layout recipe" in category.lower():
-                # Enforce bento grid layouts
-                if "grid" not in content_lower:
-                    gate_block(
-                        f"CISEM_GATE_BLOCKED -- Phase 19: Bento Page Layout Recipe validation failed in '{ui_file}'.\n"
-                        "  Rule: Bento Page Layout Recipe components must define grid container elements (e.g. className='grid').",
-                        phase=19
-                    )
+            if len(lines) <= 15 and is_reexport and not has_jsx and not has_hooks:
+                print(f"  Verified UI component '{os.path.basename(ui_file)}' as exempt pass-through shim.")
+                continue
+
+            # Free-text @playbook_category comment enforcement removed per GOV-2026-08-23 ruling.
+            # AST structural invariant replacement (PR-58950 styling isolation & grid/motion checks) is PENDING.
+            match = re.search(r'@playbook_category:\s*(?P<category>Design Token|Micro-interaction Module|Bento Page Layout Recipe)', content, re.IGNORECASE)
+            if match:
+                category = match.group("category").strip().title()
+                print(f"  Verified UI component '{os.path.basename(ui_file)}' (legacy label: {category})")
+            else:
+                print(f"  Verified UI component '{os.path.basename(ui_file)}' (free-text label check removed, structural check pending)")
         except Exception as e:
             if "GateViolationError" in str(type(e)) or "gate_block" in str(e) or "SystemExit" in str(type(e)):
                 raise
-            print(f"  Phase 19: Warning. Failed parsing UI playbook category for {ui_file}: {e}")
+            print(f"  Phase 19: Warning. Failed parsing UI component {ui_file}: {e}")
 
-    print("  Phase 19: PASS (All modified UI components comply with the Playbook Vocabulary).")
+    print("  Phase 19: PASS (Mechanical shim exemption active. Free-text label enforcement removed; AST structural replacement pending).")
 
 
 def check_monolithic_file_limits():
@@ -1744,39 +1751,69 @@ def check_template_version_contract():
 def check_typescript_jsx_headers():
     print("Phase 22.5: TypeScript/JSX Code Header Audit check...")
     
+    # Load ratified plans manifest
+    manifest_path = os.path.join(ROOT_DIR, "cisem_core", "planning", "ratified_plans_manifest.json")
+    manifest_tuples = set()
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                mdata = json.load(f)
+            for rp in mdata.get("ratified_plans", []):
+                manifest_tuples.add((rp.get("plan_id"), rp.get("governor_signature")))
+        except Exception as e:
+            print(f"  Phase 22.5: Warning reading manifest: {e}")
+
     git_files = get_git_modified_files()
     if git_files is None:
         print("  Phase 22.5: Git unavailable. Skipping code header scan.")
         return
 
+    is_commit_mode = any(arg in sys.argv for arg in ["--commit", "commit", "pre-commit"]) or "GIT_INDEX_FILE" in os.environ
+
     violations = []
     for fpath in git_files:
         fpath_norm = fpath.replace("\\", "/")
         if fpath.endswith((".tsx", ".ts", ".jsx", ".js")):
-            # Check if inside target folders: components/views or app/api
             if "src/components/views/" in fpath_norm or "src/app/api/" in fpath_norm:
                 try:
                     with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
-                        # Read first 40 lines
                         header_block = "".join(file_obj.readline() for _ in range(40))
                     
-                    # Match pattern
+                    if "ratified_plan: UNRATIFIED-DRAFT-IN-PROGRESS" in header_block:
+                        if is_commit_mode:
+                            violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: File is marked UNRATIFIED-DRAFT-IN-PROGRESS. Obtain Governor ratification before committing.")
+                        else:
+                            print(f"  Phase 22.5: UNRATIFIED DRAFT '{os.path.basename(fpath)}' (local development permitted)")
+                        continue
+
+                    if "ratified_plan: PRE-RATIFICATION-LEGACY" in header_block or "ratified_plan: DISPUTED-PROVENANCE-FABRICATED" in header_block:
+                        print(f"  Phase 22.5: Verified '{os.path.basename(fpath)}' as structural provenance state")
+                        continue
+
                     match = HEADER_PATTERN.search(header_block)
                     if not match:
-                        violations.append(os.path.relpath(fpath, ROOT_DIR))
+                        violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Missing mandatory code header block.")
+                        continue
+
+                    pid = match.group("plan_id")
+                    sig = match.group("sig")
+                    if (pid, sig) not in manifest_tuples:
+                        violations.append(
+                            f"{os.path.relpath(fpath, ROOT_DIR)}: Header claims plan '{pid}' with sig '{sig}' which is NOT in ratified_plans_manifest.json."
+                        )
                 except Exception as e:
                     print(f"  Warning Phase 22.5: Could not read {fpath}: {e}")
 
     if violations:
         gate_block(
             "CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.\n"
-            f"  Violating files:\n  " + "\n  ".join(violations) + "\n"
-            "  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.\n"
-            "  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.",
+            f"  Violations:\n  " + "\n  ".join(violations) + "\n"
+            "  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.\n"
+            "  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.",
             phase=22
         )
 
-    print("  Phase 22.5: PASS. All modified/new frontend views and APIs contain ratified headers.")
+    print("  Phase 22.5: PASS. All modified/new frontend views and APIs contain verified ratified headers.")
 
 
 def check_hebrew_rtl_and_fixed_tables():

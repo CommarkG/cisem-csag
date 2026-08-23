@@ -1,3 +1,15 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260809-MECHANICAL-HARDENING [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260809-MECHANICAL-HARDENING-V1 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
+*/
 const { execSync } = require('child_process');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -97,14 +109,10 @@ function verifyGateIntegrity() {
   console.log("Out-of-band gate integrity check: PASS");
 }
 
-if (!process.env.VERCEL && !process.env.CI) {
-  verifyGateIntegrity(); // Run out-of-band check first
-  try {
-    execSync('python cisem_core/platform_core/cisem_gate.py', { stdio: 'inherit' });
-  } catch (err) {
-    process.exit(1);
-  }
-} else {
-  console.log("VERCEL/CI BUILD DETECTED: Bypassing local compilation gates.");
+verifyGateIntegrity(); // Run out-of-band check first
+try {
+  execSync('python cisem_core/platform_core/cisem_gate.py', { stdio: 'inherit' });
+} catch (err) {
+  process.exit(1);
 }
 process.exit(0);

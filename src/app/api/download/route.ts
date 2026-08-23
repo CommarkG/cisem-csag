@@ -1,13 +1,14 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: GOV-2026-08-18-SECURITY-HARDENING
-# governor_signature: GOV-YARIV-20260818-SECURITY-HARDENING-V2.0
-# version: V2.0
-# reasoning: |
-#   Hardened File Download API endpoint with Tenant Context Authentication,
-#   strict secret file blocking (.env/.git/.pem), and PR-13990 sandbox containment.
-#   Parent Principles: PR-11100 (Cryptographic Context), PR-13990 (Sandbox Boundaries).
-# @playbook_category: Micro-interaction Module
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: GOV-2026-08-18-SECURITY-HARDENING [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260818-SECURITY-HARDENING-V2 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
 */
 import { NextRequest, NextResponse } from "next/server";
 import { verifyTenantContext } from "@/lib/tenant_context";
@@ -24,6 +25,7 @@ function findFileOptimized(filename: string): string | null {
   const directLocations = [
     path.join(workspaceRoot, filename),
     path.join(workspaceRoot, cleanTarget),
+    path.join(workspaceRoot, "cisem_core", "downloads", cleanTarget),
     path.join(workspaceRoot, ".agents", "reviewer", cleanTarget),
     path.join(workspaceRoot, "cisem_core", filename),
     path.join(workspaceRoot, "cisem_core", cleanTarget),
@@ -39,7 +41,7 @@ function findFileOptimized(filename: string): string | null {
     }
   }
 
-  // Check brain root folder
+  // Check brain root folder (including active conversation & fallback sweep across all conversations)
   if (fs.existsSync(brainRoot)) {
     const envConvId = process.env.ANTIGRAVITY_CONVERSATION_ID;
     if (envConvId) {
@@ -53,6 +55,25 @@ function findFileOptimized(filename: string): string | null {
           return resolved;
         }
       }
+    }
+
+    // Fallback: Scan all conversation subdirectories in brainRoot
+    try {
+      const convDirs = fs.readdirSync(brainRoot);
+      for (const dir of convDirs) {
+        const candidatePaths = [
+          path.join(brainRoot, dir, cleanTarget),
+          path.join(brainRoot, dir, "scratch", cleanTarget),
+        ];
+        for (const p of candidatePaths) {
+          const resolved = path.resolve(p);
+          if (resolved.startsWith(brainRoot) && fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
+            return resolved;
+          }
+        }
+      }
+    } catch {
+      // Ignore read errors
     }
   }
 

@@ -1,9 +1,25 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260810-SETTINGS-REFACTOR [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260810-SETTINGS-REFACTOR-V1 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
+*/
+// @playbook_category: Bento Page Layout Recipe
+
 import { useState } from 'react';
 import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useCollabStore } from '../../stores/useCollabStore';
 import { useOnboardingStore } from '../../stores/useOnboardingStore';
 import { useTaskStore } from '../../stores/useTaskStore';
 import { useUIStore } from '../../stores/useUIStore';
+import { useTenantSessionStore } from '../../stores/useTenantSessionStore';
+import { tenantStorageAdapter } from '../../utils/tenantStorageAdapter';
 import { translations } from '../../utils/translations';
 import PageGreetingBanner from '../shared/PageGreetingBanner';
 import {
@@ -307,11 +323,11 @@ export default function SettingsView() {
       return;
     }
     resetData();
-    localStorage.removeItem('dima-notifications');
-    localStorage.removeItem('dima-collab');
-    localStorage.removeItem('dima-onboarding');
-    localStorage.removeItem('dima-theme');
-    localStorage.removeItem('dima-lang');
+    tenantStorageAdapter.removeItem('dima-notifications');
+    tenantStorageAdapter.removeItem('dima-collab');
+    tenantStorageAdapter.removeItem('dima-onboarding');
+    tenantStorageAdapter.removeItem('dima-theme');
+    tenantStorageAdapter.removeItem('dima-lang');
     showToast({ title: 'Reset', message: 'All data has been reset', type: 'warning' });
     setConfirmReset(false);
     setTimeout(() => window.location.reload(), 1000);

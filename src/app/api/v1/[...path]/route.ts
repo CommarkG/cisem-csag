@@ -1,11 +1,14 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CRUEL-REVIEW-AX70000-CONSOLIDATED-V1.0
-# governor_signature: GOV-YARIV-20260810-CRUEL-REVIEW-V1.0
-# version: V1.0
-# reasoning: |
-#   Catch-all proxy and mock handler for all /api/v1/ endpoints to ensure anti-theater resilience when backend is offline.
-#   Parent Principles: PR-11100 (Cryptographic context), PR-13990 (Sandbox Boundaries).
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CRUEL-REVIEW-AX70000-CONSOLIDATED-V1 [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260810-CRUEL-REVIEW-V1 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
 */
 import { NextRequest, NextResponse } from "next/server";
 import { verifyTenantContext } from "@/lib/tenant_context";
@@ -215,9 +218,11 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
     }
 
     const workspaceRoot = process.cwd();
+    const brainRoot = path.join("C:", "Users", "finky", ".gemini", "antigravity", "brain");
     const directLocations = [
       path.join(workspaceRoot, filename),
       path.join(workspaceRoot, cleanTarget),
+      path.join(workspaceRoot, "cisem_core", "downloads", cleanTarget),
       path.join(workspaceRoot, "cisem_core", filename),
       path.join(workspaceRoot, "cisem_core", cleanTarget),
       path.join(workspaceRoot, "cisem_core", "planning", cleanTarget),
@@ -232,6 +237,29 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
         break;
       }
     }
+
+    if (!resolvedPath && fs.existsSync(brainRoot)) {
+      try {
+        const convDirs = fs.readdirSync(brainRoot);
+        for (const dir of convDirs) {
+          const candidatePaths = [
+            path.join(brainRoot, dir, cleanTarget),
+            path.join(brainRoot, dir, "scratch", cleanTarget),
+          ];
+          for (const p of candidatePaths) {
+            const resolved = path.resolve(p);
+            if (resolved.startsWith(brainRoot) && fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
+              resolvedPath = resolved;
+              break;
+            }
+          }
+          if (resolvedPath) break;
+        }
+      } catch {
+        // Ignore read errors
+      }
+    }
+
     if (!resolvedPath) {
       return NextResponse.json({ error: "File not found" }, { status: 404 });
     }

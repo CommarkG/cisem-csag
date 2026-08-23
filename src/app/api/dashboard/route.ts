@@ -1,3 +1,11 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: PRE-RATIFICATION-LEGACY
+# governor_signature: GOV-LEGACY-BASELINE
+# status: PRE_RATIFICATION_LEGACY
+# reasoning: |
+#   File created prior to formal plan ratification governance. Preserved as legacy baseline.
+*/
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";

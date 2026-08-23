@@ -12,6 +12,7 @@
 | `branding_subcontractors` | ACTIVE QUERY TARGET |
 | `briefs` | ACTIVE QUERY TARGET |
 | `catalog_items` | ACTIVE QUERY TARGET |
+| `crm_customers` | ACTIVE QUERY TARGET |
 | `custom_libraries` | ACTIVE QUERY TARGET |
 | `customer_accounts` | ACTIVE QUERY TARGET |
 | `deals` | ACTIVE QUERY TARGET |
@@ -20,7 +21,6 @@
 | `packages` | ACTIVE QUERY TARGET |
 | `pdf_queue` | ACTIVE QUERY TARGET |
 | `pending_claims` | ACTIVE QUERY TARGET |
-| `product_embeddings` | ACTIVE QUERY TARGET |
 | `product_groups` | ACTIVE QUERY TARGET |
 | `product_variations` | ACTIVE QUERY TARGET |
 | `proposal_client_drafts` | ACTIVE QUERY TARGET |

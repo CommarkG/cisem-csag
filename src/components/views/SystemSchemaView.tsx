@@ -1,3 +1,11 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: PRE-RATIFICATION-LEGACY
+# governor_signature: GOV-LEGACY-BASELINE
+# status: PRE_RATIFICATION_LEGACY
+# reasoning: |
+#   File created prior to formal plan ratification governance. Preserved as legacy baseline.
+*/
 // Ratified Plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
 // Architectural Reasoning: Modular SQLite database schemas and CHECK constraints display viewport.
 // Parent Principles: PR-13990 (Sandbox Boundaries), AX-50000

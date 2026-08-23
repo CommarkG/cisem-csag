@@ -155,11 +155,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS enforce_brief_seal_cascade ON briefs;
-CREATE TRIGGER enforce_brief_seal_cascade
-BEFORE UPDATE ON briefs
-FOR EACH ROW
-EXECUTE FUNCTION cascade_document_seal();
+-- FENCED DEAD SQL (Target table 'briefs' absent from 66 live schema tables)
+-- DROP TRIGGER IF EXISTS enforce_brief_seal_cascade ON briefs;
+-- CREATE TRIGGER enforce_brief_seal_cascade
+-- BEFORE UPDATE ON briefs
+-- FOR EACH ROW
+-- EXECUTE FUNCTION cascade_document_seal();
 
 -- 12. Create PDF Generator Task Queue
 CREATE TABLE IF NOT EXISTS pdf_queue (
@@ -219,7 +220,8 @@ CREATE TABLE IF NOT EXISTS catalog_item_sandbox_variants (
 -- 18. Create Proposal Client Drafts Table
 CREATE TABLE IF NOT EXISTS proposal_client_drafts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    proposal_id UUID REFERENCES proposals(id) ON DELETE CASCADE,
+    -- FENCED DEAD SQL (Target table 'proposals' absent from 66 live schema tables)
+-- proposal_id UUID REFERENCES proposals(id) ON DELETE CASCADE,
     selection_matrix JSONB NOT NULL,
     status VARCHAR(50) DEFAULT 'draft_pending' NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
@@ -247,24 +249,25 @@ CREATE TABLE IF NOT EXISTS contacts (
 );
 
 -- 21. Create CRM Deals Table
-CREATE TABLE IF NOT EXISTS deals (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    contact_id UUID REFERENCES contacts(id) ON DELETE CASCADE,
-    brief_id UUID REFERENCES briefs(id) ON DELETE SET NULL,
-    proposal_id UUID REFERENCES proposals(id) ON DELETE SET NULL,
-    deal_stage VARCHAR(50) DEFAULT 'lead_ingestion' NOT NULL,
-    deal_value DECIMAL(10,2) DEFAULT 0.00,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
-);
+-- FENCED DEAD SQL (Target tables 'briefs', 'proposals', 'proposal_items' absent from 66 live schema tables)
+-- CREATE TABLE IF NOT EXISTS deals (
+--     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--     contact_id UUID REFERENCES contacts(id) ON DELETE CASCADE,
+--     brief_id UUID REFERENCES briefs(id) ON DELETE SET NULL,
+--     proposal_id UUID REFERENCES proposals(id) ON DELETE SET NULL,
+--     deal_stage VARCHAR(50) DEFAULT 'lead_ingestion' NOT NULL,
+--     deal_value DECIMAL(10,2) DEFAULT 0.00,
+--     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+-- );
 
 -- 22. Alter Supplier Mappings for International Sourcing (Phase 2)
 ALTER TABLE supplier_mappings ADD COLUMN IF NOT EXISTS country VARCHAR(100) DEFAULT 'IL';
 ALTER TABLE supplier_mappings ADD COLUMN IF NOT EXISTS currency VARCHAR(3) DEFAULT 'ILS';
 ALTER TABLE supplier_mappings ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'active';
 
--- 23. Alter Proposal Items for Multi-Supplier Routing (Phase 2)
-ALTER TABLE proposal_items ADD COLUMN IF NOT EXISTS selected_supplier_mapping_id UUID REFERENCES supplier_mappings(id) ON DELETE SET NULL;
-ALTER TABLE proposal_items ADD COLUMN IF NOT EXISTS selected_variations TEXT[] DEFAULT '{}'::text[];
+-- FENCED DEAD SQL (Target table 'proposal_items' absent from 66 live schema tables)
+-- ALTER TABLE proposal_items ADD COLUMN IF NOT EXISTS selected_supplier_mapping_id UUID REFERENCES supplier_mappings(id) ON DELETE SET NULL;
+-- ALTER TABLE proposal_items ADD COLUMN IF NOT EXISTS selected_variations TEXT[] DEFAULT '{}'::text[];
 
 -- 24. Alter Catalog Items for Curated Recommendations (Phase 2)
 ALTER TABLE catalog_items ADD COLUMN IF NOT EXISTS top_picks BOOLEAN DEFAULT FALSE;
@@ -412,6 +415,25 @@ UPDATE customer_accounts
 -- Phase 3: Enforce NOT NULL (after all rows are classified)
 ALTER TABLE customer_accounts
     ALTER COLUMN account_type SET NOT NULL;
+
+-- 38. Create crm_customers table (entity boundary segregation)
+-- Ratified decision 2026-08-19: Segregates CRM client entities out of customer_accounts
+-- into a dedicated table carrying an explicit tenant_id FK to customer_accounts(id).
+CREATE TABLE IF NOT EXISTS crm_customers (
+    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id    UUID NOT NULL REFERENCES customer_accounts(id) ON DELETE CASCADE,
+    company_name TEXT NOT NULL,
+    tax_id       TEXT,
+    industry     TEXT,
+    brand_assets JSONB DEFAULT '{}'::jsonb,
+    credit_terms TEXT,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE crm_customers ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY crm_customers_tenant_isolation ON crm_customers
+    FOR ALL USING (tenant_id = (auth.jwt() -> 'app_metadata' ->> 'tenant_id')::uuid);
 
 
 -- Phase 4: Constrain to the two declared types only

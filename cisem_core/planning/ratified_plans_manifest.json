@@ -1,0 +1,16 @@
+{
+  "ratified_plans": [
+    {
+      "plan_id": "CISEM-IP-20260822-PEOPLE-PLACES-FILES",
+      "governor_signature": "GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19",
+      "ratified_at": "2026-08-23",
+      "authorized_directories": [
+        "src/components",
+        "src/app",
+        "backend/src/backend",
+        "cisem_core"
+      ],
+      "status": "ACTIVE_RATIFIED"
+    }
+  ]
+}

@@ -1,14 +1,15 @@
-/**
- * # CISEM CODE HEADER > MANDATORY
- * # ratified_plan: CISEM-IP-20260810-CONSOLIDATED-MASTER-V17
- * # governor_signature: GOV-YARIV-20260810-GOVERNANCE-HARDENING-RATIFIED
- * # version: V1.0
- * # reasoning: |
- * #   Licensing and template exporter route with Ed25519 asymmetric key signature checking
- * #   and tiered accessibility contrast controls.
- * #   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >AX-50000.
- */
-
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260810-CONSOLIDATED-MASTER-V17 [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260810-GOVERNANCE-HARDENING-RATIFIED [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
+*/
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { verifyTenantContext, TenantContext } from "../../../../lib/tenant_context";

@@ -1,3 +1,11 @@
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: PRE-RATIFICATION-LEGACY
+# governor_signature: GOV-LEGACY-BASELINE
+# status: PRE_RATIFICATION_LEGACY
+# reasoning: |
+#   File created prior to formal plan ratification governance. Preserved as legacy baseline.
+*/
 import { useState } from 'react';
 import { useCollabStore } from '../../stores/useCollabStore';
 import { useNotificationStore } from '../../stores/useNotificationStore';
@@ -32,7 +40,7 @@ export default function CollaborationHub() {
   const [newMemberName, setNewMemberName] = useState('');
   const [newMemberRole, setNewMemberRole] = useState('colleague');
   const [waMessage, setWaMessage] = useState('');
-  const [waRecipient, setWaRecipient] = useState('Yariv');
+  const [waRecipient, setWaRecipient] = useState('');
 
   const handleAddMember = (e) => {
     e.preventDefault();

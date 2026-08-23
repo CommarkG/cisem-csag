@@ -1,11 +1,14 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR
-# governor_signature: GOV-YARIV-20260810-FRONTEND-PLAYBOOK-V1.0
-# version: V1.4
-# reasoning: |
-#   Consolidated B2B quotes and purchasing hub view with segregated right column glassmorphic sidebar and clean sub-tabs.
-#   Parent principles: PR-13990, AX-50000.
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260810-FRONTEND-PLAYBOOK-V1 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
 */
 // @playbook_category: Bento Page Layout Recipe
 
@@ -500,7 +503,7 @@ export default function B2bHubView({ isDarkMode, locale, dict, initialTab = "bri
                         type="number"
                         required
                         value={newSubcontractor.setup_fee}
-                        onChange={(e) => setNewSubcontractor(prev => ({ ...prev, setup_fee: e.target.value }))}
+                        onChange={(e) => setNewSubcontractor(prev => ({ ...prev, setup_fee: Number(e.target.value) || 0 }))}
                         className="w-full rounded border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-2.5 outline-none font-mono"
                       />
                     </div>

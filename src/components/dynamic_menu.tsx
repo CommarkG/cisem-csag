@@ -1,13 +1,15 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260811-HEADER-UNIFICATION
-# governor_signature: GOV-YARIV-20260811-HEADER-UNIFICATION-V1.0
-# version: V1.3
-# reasoning: |
-#   Integrate back/forward chevrons, language toggle, and crumbnail breadcrumbs into
-#   the dynamic header of the old-b2b layout, ensuring strict single-row uniformity.
-#   Parent principles: AxiomsAndPrinciples V1.30 >AX-10000, >PR-13500.
-# */
+# ratified_plan: DISPUTED-PROVENANCE-FABRICATED
+# original_claimed_plan: CISEM-IP-20260811-HEADER-UNIFICATION [UNVERIFIED]
+# original_claimed_signature: GOV-YARIV-20260811-HEADER-UNIFICATION-V1 [UNVERIFIED]
+# status: DISPUTED_PROVENANCE_FABRICATED
+# history:
+#   - timestamp: "2026-08-23T07:52:00Z"
+#     ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+#     governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
+#     reasoning: "Original plan ID flagged as un-manifested synthetic header during V19 audit; re-ratified under V19."
+*/
 // @playbook_category: Micro-interaction Module
 
 import React, { useState, useEffect } from "react";
