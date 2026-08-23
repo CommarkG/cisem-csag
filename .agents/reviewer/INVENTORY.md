@@ -165,6 +165,9 @@
 | `cisem_core/planning/2026-08-09__Sonnet__YarivHuman__CruelReview_WhatExistsAndPendingPlans__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/planning/2026-08-10__CISEM__AntigravityLocal__GovernanceHardeningPlan__V1.6.md` | `UNSTATED` | `1.6` | MISMATCH (UNSTATED vs 1.6) |
 | `cisem_core/planning/2026-08-10__Gemini3.5__YarivHuman__CoreSpiralMethodologySpecification__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/planning/2026-08-23__AntigravityLocal__YarivGovernor__Enterprise_Planning_Subsystem_Consolidated_Blueprint__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/planning/2026-08-24__AntigravityLocal__YarivGovernor__Backend_Authorization_and_Tenant_Isolation_Plan__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/planning/2026-08-24__AntigravityLocal__YarivGovernor__Backend_Authorization_and_Tenant_Isolation_Plan__V1.1.md` | `1.1` | `1.1` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py` | `1.0` | `1.0` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py` | `1.0` | `1.0` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__UserJourneySimulator__V1.0.py` | `1.0` | `1.0` | MATCH |
