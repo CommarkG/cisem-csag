@@ -7,6 +7,7 @@
 
 | Table Name | Code Query Status |
 | :--- | :--- |
+| `acceptance_records` | ACTIVE QUERY TARGET |
 | `backlog_registry` | ACTIVE QUERY TARGET |
 | `branding_rate_cards` | ACTIVE QUERY TARGET |
 | `branding_subcontractors` | ACTIVE QUERY TARGET |
@@ -17,6 +18,7 @@
 | `customer_accounts` | ACTIVE QUERY TARGET |
 | `deals` | ACTIVE QUERY TARGET |
 | `document_chunks` | ACTIVE QUERY TARGET |
+| `inquiries` | ACTIVE QUERY TARGET |
 | `lookup_registry` | ACTIVE QUERY TARGET |
 | `packages` | ACTIVE QUERY TARGET |
 | `pdf_queue` | ACTIVE QUERY TARGET |
@@ -26,10 +28,13 @@
 | `proposal_client_drafts` | ACTIVE QUERY TARGET |
 | `proposal_items` | ACTIVE QUERY TARGET |
 | `proposals` | ACTIVE QUERY TARGET |
+| `quote_lines` | ACTIVE QUERY TARGET |
+| `quotes` | ACTIVE QUERY TARGET |
 | `status_library` | ACTIVE QUERY TARGET |
 | `supplier_mappings` | ACTIVE QUERY TARGET |
 | `tag_library` | ACTIVE QUERY TARGET |
 | `template_registry` | ACTIVE QUERY TARGET |
+| `work_orders` | ACTIVE QUERY TARGET |
 
 ## Backend Data Models (parsed dynamically from AST in `main.py`)
 
@@ -52,3 +57,8 @@
 - `CatalogSearchPayload`: `query_vector`, `similarity_threshold`, `match_count`, `category_filter`
 - `ProposalGenerateRequest`: `brief_id`, `catalog_item_skus`, `applied_margin_percent`, `selected_variations`
 - `WizardDuplicatePayload`: `title`, `layout_spec`, `description`
+- `InquiryCreatePayload`: `contact_name`, `contact_email`, `contact_phone`, `requirements_summary`, `estimated_budget`
+- `QuoteCreatePayload`: `inquiry_id`, `currency`, `valid_until`, `notes`
+- `QuoteLineCreatePayload`: `description`, `quantity`, `unit_price`
+- `AcceptanceCreatePayload`: `evidence_kind`, `evidence_data`, `accepted_by`
+- `WorkOrderCreatePayload`: `acceptance_record_id`, `notes`

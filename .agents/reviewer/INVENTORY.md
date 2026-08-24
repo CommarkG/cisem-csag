@@ -166,8 +166,15 @@
 | `cisem_core/planning/2026-08-10__CISEM__AntigravityLocal__GovernanceHardeningPlan__V1.6.md` | `UNSTATED` | `1.6` | MISMATCH (UNSTATED vs 1.6) |
 | `cisem_core/planning/2026-08-10__Gemini3.5__YarivHuman__CoreSpiralMethodologySpecification__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/planning/2026-08-23__AntigravityLocal__YarivGovernor__Enterprise_Planning_Subsystem_Consolidated_Blueprint__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/planning/2026-08-23__AntigravityLocal__YarivGovernor__PLAN_Existence_Before_Proposal_Enforcement__V1.1.md` | `1.1` | `1.1` | MATCH |
+| `cisem_core/planning/2026-08-23__AntigravityLocal__YarivGovernor__Platform_Ontology_Hierarchy_and_AI_Context_Architecture_Blueprint__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/planning/2026-08-23__CISEM__CISEM__Preventions_And_Preservations__V1.md` | `1.0` | `1` | MISMATCH (1.0 vs 1) |
 | `cisem_core/planning/2026-08-24__AntigravityLocal__YarivGovernor__Backend_Authorization_and_Tenant_Isolation_Plan__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/planning/2026-08-24__AntigravityLocal__YarivGovernor__Backend_Authorization_and_Tenant_Isolation_Plan__V1.1.md` | `1.1` | `1.1` | MATCH |
+| `cisem_core/planning/2026-08-24__AntigravityLocal__YarivGovernor__CoreSpiralMethodologySpecification__V3.0.md` | `3.0` | `3.0` | MATCH |
+| `cisem_core/planning/2026-08-24__AntigravityLocal__YarivGovernor__PLAN_Repository_Gate_Hardening_and_Hook_Wiring__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/planning/2026-08-24__CISEM__CISEM__PARKED_Pending_Issues_Register__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/planning/2026-08-24__CISEM__Reviewer_Reconnection_Handoff_Pack__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py` | `1.0` | `1.0` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py` | `1.0` | `1.0` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__UserJourneySimulator__V1.0.py` | `1.0` | `1.0` | MATCH |
