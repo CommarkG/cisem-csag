@@ -234,10 +234,14 @@ export default function SettingsView() {
     const idInstance = memberCreds.idInstance || greenApiIdInstance || '';
     const apiTokenInstance = memberCreds.apiTokenInstance || greenApiTokenInstance || '';
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
     // Fire actual Green API request via Next proxy
     fetch('/api/v1/whatsapp/send', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      },
       body: JSON.stringify({
         to: toPhone,
         text: waMessage,

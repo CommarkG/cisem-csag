@@ -39,9 +39,11 @@ export default function HomeView({ isDarkMode, activeRole, locale, dict }: HomeV
   const fetchDashboardMetrics = async () => {
     setIsLoading(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
       const res = await fetch("/api/dashboard", {
         headers: {
-          "x-tenant-id": "cisem-local"
+          "x-tenant-id": "cisem-local",
+          ...(token ? { "Authorization": `Bearer ${token}` } : {})
         }
       });
       if (res.ok) {

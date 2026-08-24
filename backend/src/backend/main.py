@@ -81,14 +81,10 @@ _jwks_client: PyJWKClient | None = (
     PyJWKClient(_JWKS_URL, cache_keys=True) if _JWKS_URL else None
 )
 
-# Initialize Supabase anon client with SSL bypass for local proxies
+# Initialize Supabase client proxy and admin client
 if SUPABASE_URL and SUPABASE_KEY:
-    http_client = httpx.Client(verify=False)
-    options = SyncClientOptions(httpx_client=http_client)
-    _global_supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY, options=options)
     supabase = SupabaseProxy()
 else:
-    _global_supabase = None
     supabase = None
     print("Warning: Supabase credentials not found. API running in offline/mock mode.")
 
@@ -172,7 +168,7 @@ async def tenant_context_middleware(request: Request, call_next):
         path == "/api/v1/auth/webhook/signup"   # Supabase Auth Hook — server-to-server, no JWT
     )
 
-    if is_public or not _global_supabase:
+    if is_public or not supabase_admin:
         return await call_next(request)
 
 
@@ -243,18 +239,18 @@ async def tenant_context_middleware(request: Request, call_next):
         # Read tenant_id from app_metadata ONLY.
         # user_metadata is NEVER read — three prior regressions on record.
         app_metadata: dict = payload.get("app_metadata") or {}
-        tenant_id: str | None = app_metadata.get("tenant_id")
+        tenant_id: str | None = app_metadata.get("active_tenant_id") or app_metadata.get("tenant_id")
         if not tenant_id:
             # C1 correction: verification of provisioning outcome lives here, not in provision_tenant.
             # A valid JWT with no claim means: step 4 failed, or PENDING_ONBOARDING,
             # or a cached pre-provisioning token is being replayed.
             # Write to pending_claims for operator visibility (U6.2.09).
             # Never block the 401 on a logging write — exceptions are silently discarded.
-            if user_id and _global_supabase:
+            if user_id and supabase_admin:
                 try:
                     from .provisioning import record_pending_claim
                     record_pending_claim(
-                        _global_supabase, user_id, None, "CLAIM_FAILED",
+                        supabase_admin, user_id, None, "CLAIM_FAILED",
                         "Valid JWT arrived at middleware with no tenant_id claim."
                     )
                 except Exception:
@@ -267,20 +263,10 @@ async def tenant_context_middleware(request: Request, call_next):
                 instance=path
             )
 
-        # Option B: Server-side role resolution from user_account_roles via admin client.
-        # Default is None if no membership or client unavailable — never a role string fallback.
-        if supabase_admin and user_id and tenant_id:
-            try:
-                role_res = supabase_admin.rpc(
-                    "get_user_role",
-                    {"p_user_id": user_id, "p_tenant_id": tenant_id}
-                ).execute()
-                request.state.role = role_res.data if role_res.data else None
-            except Exception as exc:
-                print(f"[middleware] get_user_role failed for user={user_id}: {exc}")
-                request.state.role = None
-        else:
-            request.state.role = None
+        # Server-side role resolution from verified JWT app_metadata claims.
+        # Default is None if role claim is absent or empty — never a default, never elevated.
+        role_claim = app_metadata.get("role")
+        request.state.role = str(role_claim) if role_claim else None
 
         headers = {
             "x-current-tenant-id": tenant_id,
@@ -331,7 +317,7 @@ def mint_tenant_claim(user_id: str, tenant_id: str) -> None:
         )
     supabase_admin.auth.admin.update_user_by_id(
         user_id,
-        {"app_metadata": {"tenant_id": tenant_id}}
+        {"app_metadata": {"active_tenant_id": tenant_id, "tenant_id": tenant_id}}
     )
 
 
@@ -524,40 +510,7 @@ import hmac
 import hashlib
 import json
 
-def verify_tenant_context_py(request: Request) -> dict:
-    header_val = request.headers.get("x-tenant-context")
-    secret = os.environ.get("TENANT_SIGNING_SECRET")
-    if not secret:
-        raise HTTPException(
-            status_code=503,
-            detail="Service misconfiguration: TENANT_SIGNING_SECRET is not set. Cannot verify tenant context."
-        )
-        
-    if not header_val:
-        raise HTTPException(status_code=401, detail="Unauthorized: Missing cryptographically signed TenantContext.")
-        
-    try:
-        parts = header_val.split(".")
-        if len(parts) != 2:
-            raise HTTPException(status_code=401, detail="Unauthorized: Invalid TenantContext format.")
-            
-        payload_b64, signature = parts
-        expected_sig = hmac.new(secret.encode('utf-8'), payload_b64.encode('utf-8'), hashlib.sha256).hexdigest()
-        
-        if not hmac.compare_digest(signature, expected_sig):
-            raise HTTPException(status_code=401, detail="Unauthorized: TenantContext signature mismatch.")
-            
-        payload_json = base64.b64decode(payload_b64.encode('utf-8')).decode('utf-8')
-        payload = json.loads(payload_json)
-        
-        if not payload.get("tenantId") or not payload.get("tier"):
-            raise HTTPException(status_code=401, detail="Unauthorized: Invalid TenantContext payload.")
-            
-        return payload
-    except HTTPException as he:
-        raise he
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Unauthorized: TenantContext parsing failed: {str(e)}")
+
 
 
 def verify_supabase_webhook_signature(raw_body: bytes, sig_header: str) -> None:
@@ -597,13 +550,18 @@ _whitelabel_config = {
 
 @app.get("/api/v1/tenant/whitelabel")
 def get_tenant_whitelabel(request: Request):
-    context = verify_tenant_context_py(request)
+    tenant_id = getattr(request.state, "tenant_id", None)
+    if not tenant_id:
+        raise HTTPException(status_code=401, detail="Unauthorized: Tenant context required.")
     return _whitelabel_config
 
 @app.post("/api/v1/tenant/whitelabel")
 def update_tenant_whitelabel(payload: WhitelabelUpdateRequest, request: Request):
-    context = verify_tenant_context_py(request)
-    if context.get("tier") != "enterprise":
+    tenant_id = getattr(request.state, "tenant_id", None)
+    tier = getattr(request.state, "tier", "starter")
+    if not tenant_id:
+        raise HTTPException(status_code=401, detail="Unauthorized: Tenant context required.")
+    if tier != "enterprise":
         raise HTTPException(
             status_code=403,
             detail="ENTERPRISE_TIER_REQUIRED: Custom domains and repository syncing are limited to Enterprise tier."
@@ -621,8 +579,11 @@ def update_tenant_whitelabel(payload: WhitelabelUpdateRequest, request: Request)
 
 @app.post("/api/v1/tenant/whitelabel/sync")
 def sync_tenant_whitelabel(request: Request):
-    context = verify_tenant_context_py(request)
-    if context.get("tier") != "enterprise":
+    tenant_id = getattr(request.state, "tenant_id", None)
+    tier = getattr(request.state, "tier", "starter")
+    if not tenant_id:
+        raise HTTPException(status_code=401, detail="Unauthorized: Tenant context required.")
+    if tier != "enterprise":
         raise HTTPException(
             status_code=403,
             detail="ENTERPRISE_TIER_REQUIRED: Repository syncing is limited to Enterprise tier."
@@ -684,10 +645,10 @@ async def handle_signup_webhook(request: Request):
     if not auth_user_id:
         return dict(status="ignored", reason="no_user_id_in_payload")
 
-    if not _global_supabase or not supabase_admin:
+    if not supabase_admin:
         from .provisioning import record_pending_claim
         record_pending_claim(
-            _global_supabase, auth_user_id, None, "CLAIM_FAILED",
+            supabase_admin, auth_user_id, None, "CLAIM_FAILED",
             "Supabase client unavailable at webhook time."
         )
         return dict(status="pending", reason="db_unavailable")
@@ -697,7 +658,6 @@ async def handle_signup_webhook(request: Request):
         auth_user_id=auth_user_id,
         company_name=company_name,
         user_email=user_email,
-        supabase_anon=_global_supabase,
         supabase_admin=supabase_admin,
     )
     print(f"[webhook/signup] {result.status} user={auth_user_id} tenant={result.tenant_id}")
@@ -705,16 +665,19 @@ async def handle_signup_webhook(request: Request):
 
 
 @app.get("/api/v1/admin/pending-claims")
-def get_pending_claims():
+def get_pending_claims(request: Request):
     """
     Operator visibility for broken provisioning state (U6.2.09).
     Returns all unresolved pending_claims rows ordered by failed_at desc.
     Non-empty response = users who are authenticated but cannot use the platform.
+    Requires platform_admin role.
     """
-    if not _global_supabase:
+    if getattr(request.state, "role", None) != "platform_admin":
+        raise HTTPException(status_code=403, detail="Forbidden: Operator access required.")
+    if not supabase_admin:
         raise HTTPException(status_code=503, detail="Supabase client unavailable.")
     res = (
-        _global_supabase
+        supabase_admin
         .table("pending_claims")
         .select("*")
         .is_("resolved_at", None)
@@ -1088,16 +1051,6 @@ def generate_proposal(payload: ProposalGenerateRequest):
         print(f"Error generating proposal: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-async def run_stock_check_background(item_id: str, supplier_product_url: str):
-    if not supabase:
-        return
-    try:
-        supabase.table("proposal_items").update({"stock_status": "verifying"}).eq("id", item_id).execute()
-        res = await verify_supplier_stock(supplier_product_url, 100)
-        supabase.table("proposal_items").update({"stock_status": res["status"]}).eq("id", item_id).execute()
-    except Exception as e:
-        print(f"Error in background stock checking: {e}")
-
 @app.post("/api/v1/proposals/{token}/items/{item_id}/verify")
 def verify_proposal_item_stock(token: str, item_id: str, background_tasks: BackgroundTasks):
     if not supabase:
@@ -1248,53 +1201,6 @@ def get_crm_deals():
     """
     return {"deals": []}
 
-@app.post("/api/v1/catalog/upload-image")
-async def upload_catalog_image(
-    request: Request,
-    file: UploadFile = File(...),
-    sku: str = Query(...),
-    title: str = Query(...),
-    x_tenant_id: str = Header(default="default-tenant")
-):
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase not connected.")
-    try:
-        import time
-        t0 = time.time()
-        contents = await file.read()
-        embedding = EmbeddingService.get_image_embedding(contents, file.content_type or "image/png")
-        gpu_seconds = round(time.time() - t0, 4)
-        
-        authenticated_tenant = getattr(request.state, "tenant_id", None) or x_tenant_id
-        
-        exist_res = supabase.table("product_embeddings").select("*").eq("medusa_product_id", sku).eq("tenant_id", authenticated_tenant).execute()
-        
-        row_data = {
-            "medusa_product_id": sku,
-            "tenant_id": authenticated_tenant,
-            "title": title,
-            "description": f"Visual product uploaded as {file.filename}.",
-            "image_url": f"/public/uploads/{sku}_{file.filename}",
-            "embedding": embedding
-        }
-        
-        if exist_res.data:
-            res = supabase.table("product_embeddings").update(row_data).eq("medusa_product_id", sku).eq("tenant_id", authenticated_tenant).execute()
-        else:
-            res = supabase.table("product_embeddings").insert(row_data).execute()
-            
-            
-        return {
-            "status": "success",
-            "message": "Image analyzed and vector indexed successfully.",
-            "sku": sku,
-            "visual_embedding_length": len(embedding),
-            "gpu_seconds": gpu_seconds
-        }
-    except Exception as e:
-        print(f"Error in catalog image upload: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
 
 
 # --- SYSTEM HEALTH & DB TELEMETRY ENDPOINT ---
@@ -1306,7 +1212,7 @@ def get_system_health():
     REASONING           : Returns database status, RLS state, and service health telemetry.
     PARENT PRINCIPLES   : AxiomsAndPrinciples.md (U1.2.32.7, System Telemetry)
     """
-    db_status = "online" if _global_supabase else "offline"
+    db_status = "online" if supabase_admin else "offline"
     return {
         "status": "healthy",
         "service": "CISEM Backend Platform",
@@ -1626,36 +1532,6 @@ def get_catalog_item_detail(sku: str, request: Request):
         print(f"Error fetching catalog item detail: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/v1/proposals/{token}/draft")
-def submit_proposal_draft(token: str, payload: ProposalClientDraftSubmit):
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase not connected.")
-    try:
-        # Load proposal
-        prop_res = supabase.table("proposals").select("*").eq("public_token", token).execute()
-        if not prop_res.data:
-            raise HTTPException(status_code=404, detail="Proposal not found")
-        proposal = prop_res.data[0]
-        
-        # Save client selections draft
-        draft_res = supabase.table("proposal_client_drafts").insert({
-            "proposal_id": proposal["id"],
-            "selection_matrix": payload.selection_matrix,
-            "status": "draft_pending"
-        }).execute()
-        
-        # Shift CRM stage
-        deal_res = supabase.table("deals").select("id").eq("proposal_id", proposal["id"]).execute()
-        if deal_res.data:
-            supabase.table("deals").update({
-                "deal_stage": "choice_review"
-            }).eq("id", deal_res.data[0]["id"]).execute()
-            
-        return {"status": "submitted_for_review", "draft_id": draft_res.data[0]["id"]}
-    except Exception as e:
-        print(f"Error submitting client draft: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.put("/api/v1/documents/chunks/{chunk_id}")
 def update_document_chunk(chunk_id: str, payload: DocumentChunkUpdate, request: Request):
     """
@@ -1778,7 +1654,7 @@ def upload_customer_brand_assets(customer_id: str, payload: dict, request: Reque
         # CHANGED 2026-08-14: upsert replaced with update to remove implicit
         # row-create path that bypassed account_type enforcement (U1.2.32.7).
         # CHANGED 2026-08-17: added tenant boundary verification (GOV-2026-08-16-TENANCY).
-        res = supabase.table("customer_accounts").update({
+        res = get_db_client().table("crm_customers").update({
             "brand_assets": payload.get("brand_assets", {})
         }).eq("id", customer_id).execute()
         if not res.data:
@@ -2131,10 +2007,172 @@ def duplicate_template_wizard(template_id: str, payload: WizardDuplicatePayload,
         print(f"Error duplicating template wizard: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ==============================================================================
+# UNIVERSAL INQUIRY-TO-WORK-ORDER PIPELINE ENDPOINTS (CoreCycle 1)
+# Enforces PR-11100 Cryptographic Tenant Token Binding & customer_account_id Isolation
+# ==============================================================================
+
+class InquiryCreatePayload(BaseModel):
+    contact_name: str
+    contact_email: Optional[str] = None
+    contact_phone: Optional[str] = None
+    requirements_summary: Optional[str] = None
+    estimated_budget: Optional[float] = 0.0
+
+class QuoteCreatePayload(BaseModel):
+    inquiry_id: str
+    currency: Optional[str] = "ILS"
+    valid_until: Optional[str] = None
+    notes: Optional[str] = None
+
+class QuoteLineCreatePayload(BaseModel):
+    description: str
+    quantity: float = 1.0
+    unit_price: float = 0.0
+
+class AcceptanceCreatePayload(BaseModel):
+    evidence_kind: str = "internal_acceptance"  # internal_acceptance, customer_reference, captured_confirmation, signature
+    evidence_data: Optional[str] = None
+    accepted_by: Optional[str] = None
+
+class WorkOrderCreatePayload(BaseModel):
+    acceptance_record_id: str
+    notes: Optional[str] = None
+
+@app.post("/api/v1/inquiries")
+async def create_inquiry(payload: InquiryCreatePayload, request: Request):
+    """Creates an inquiry tied strictly to the authenticated tenant (PR-11100)."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        data = {
+            "contact_name": payload.contact_name,
+            "contact_email": payload.contact_email,
+            "contact_phone": payload.contact_phone,
+            "requirements_summary": payload.requirements_summary,
+            "estimated_budget": payload.estimated_budget,
+            "status_code": "proposal_draft",
+            "customer_account_id": tenant_id
+        }
+        res = supabase.table("inquiries").insert(data).execute()
+        return {"status": "created", "inquiry": res.data[0] if res.data else data}
+    except Exception as e:
+        print(f"Error creating inquiry: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/v1/inquiries")
+async def list_inquiries(request: Request):
+    """Lists inquiries for the active tenant context only."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        res = supabase.table("inquiries").select("*").eq("customer_account_id", tenant_id).execute()
+        return {"inquiries": res.data if res.data else []}
+    except Exception as e:
+        print(f"Error listing inquiries: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/quotes")
+async def create_quote(payload: QuoteCreatePayload, request: Request):
+    """Creates a quote for an inquiry within tenant context."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        data = {
+            "inquiry_id": payload.inquiry_id,
+            "currency": payload.currency,
+            "valid_until": payload.valid_until,
+            "notes": payload.notes,
+            "status_code": "proposal_draft",
+            "customer_account_id": tenant_id
+        }
+        res = supabase.table("quotes").insert(data).execute()
+        return {"status": "created", "quote": res.data[0] if res.data else data}
+    except Exception as e:
+        print(f"Error creating quote: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/v1/quotes")
+async def list_quotes(request: Request):
+    """Lists quotes for the active tenant context."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        res = supabase.table("quotes").select("*").eq("customer_account_id", tenant_id).execute()
+        return {"quotes": res.data if res.data else []}
+    except Exception as e:
+        print(f"Error listing quotes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/quotes/{quote_id}/lines")
+async def add_quote_line(quote_id: str, payload: QuoteLineCreatePayload, request: Request):
+    """Adds a line item to a quote."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        line_total = payload.quantity * payload.unit_price
+        data = {
+            "quote_id": quote_id,
+            "description": payload.description,
+            "quantity": payload.quantity,
+            "unit_price": payload.unit_price,
+            "line_total": line_total,
+            "customer_account_id": tenant_id
+        }
+        res = supabase.table("quote_lines").insert(data).execute()
+        return {"status": "created", "line": res.data[0] if res.data else data}
+    except Exception as e:
+        print(f"Error adding quote line: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/quotes/{quote_id}/accept")
+async def accept_quote(quote_id: str, payload: AcceptanceCreatePayload, request: Request):
+    """Records customer acceptance evidence attached to a quote."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        data = {
+            "quote_id": quote_id,
+            "evidence_kind": payload.evidence_kind,
+            "evidence_data": payload.evidence_data,
+            "accepted_by": payload.accepted_by,
+            "customer_account_id": tenant_id
+        }
+        res = supabase.table("acceptance_records").insert(data).execute()
+        # Update quote status to signed
+        supabase.table("quotes").update({"status_code": "proposal_active"}).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+        return {"status": "accepted", "acceptance_record": res.data[0] if res.data else data}
+    except Exception as e:
+        print(f"Error accepting quote: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/acceptance-records/{acceptance_id}/work-order")
+async def create_work_order(acceptance_id: str, payload: WorkOrderCreatePayload, request: Request):
+    """Derives a signed work order from an acceptance record."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        data = {
+            "acceptance_record_id": acceptance_id,
+            "notes": payload.notes,
+            "status_code": "proposal_active",
+            "customer_account_id": tenant_id
+        }
+        res = supabase.table("work_orders").insert(data).execute()
+        return {"status": "created", "work_order": res.data[0] if res.data else data}
+    except Exception as e:
+        print(f"Error creating work order: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/v1/work-orders")
+async def list_work_orders(request: Request):
+    """Lists signed work orders for active tenant context."""
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        res = supabase.table("work_orders").select("*").eq("customer_account_id", tenant_id).execute()
+        return {"work_orders": res.data if res.data else []}
+    except Exception as e:
+        print(f"Error listing work orders: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.on_event("startup")
 async def startup_event():
     # Launch background tasks
     asyncio.create_task(pdf_queue_worker())
     asyncio.create_task(pdf_cleanup_worker())
+
 
 

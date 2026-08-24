@@ -217,9 +217,13 @@ export default function TemplateHubView() {
     try {
       const clientObj = CLIENT_LIST.find(c => c.id === selectedClient);
       const pageId = `page-${selectedClient}-${duplicateTarget.template_id}-${Date.now()}`;
+      const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
       const res = await fetch('/api/templates/duplicate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           pageId, name: pageName, templateId: duplicateTarget.template_id,
           clientId: selectedClient, clientName: clientObj?.name ?? selectedClient,

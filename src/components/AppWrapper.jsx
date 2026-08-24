@@ -38,6 +38,7 @@ import SettingsView from './views/SettingsView';
 import CollaborationHub from './views/CollaborationHub';
 import AdminView from './views/AdminView';
 import TemplateHubView from './views/TemplateHubView';
+import SignInView from './views/SignInView';
 
 function AppContent() {
   const location = useLocation();
@@ -164,6 +165,7 @@ function AppContent() {
             <Route path="/collaboration" element={<CollaborationHub />} />
             <Route path="/admin" element={<AdminView />} />
             <Route path="/templates" element={<TemplateHubView />} />
+            <Route path="/signin" element={<SignInView onSuccess={() => window.location.href = '/dashboard'} />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </div>

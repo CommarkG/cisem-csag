@@ -29,9 +29,13 @@ export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId, onQuo
     setLoading(true);
     try {
       // 1. Create quote header
+      const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
       const res = await fetch('/api/v1/quotes', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           inquiry_id: inquiryId,
           currency,
@@ -48,7 +52,10 @@ export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId, onQuo
           if (line.description) {
             await fetch(`/api/v1/quotes/${quoteId}/lines`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+              },
               body: JSON.stringify(line)
             });
           }

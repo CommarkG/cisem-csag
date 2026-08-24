@@ -49,7 +49,7 @@ PROVISIONING_PACKAGE = "starter"
 
 
 def record_pending_claim(
-    supabase_anon,
+    supabase_admin,
     auth_user_id: str,
     tenant_id,
     status: str,
@@ -60,7 +60,7 @@ def record_pending_claim(
     Never re-raises: a logging write must never block the caller's response.
     """
     try:
-        supabase_anon.table("pending_claims").insert({
+        supabase_admin.table("pending_claims").insert({
             "auth_user_id": auth_user_id,
             "tenant_id":    tenant_id,
             "status":       status,
@@ -70,9 +70,9 @@ def record_pending_claim(
         print(f"[provisioning] CRITICAL: could not write pending_claims for {auth_user_id}: {exc}")
 
 
-def _resolve_package_id(supabase_anon, package_code: str):
+def _resolve_package_id(supabase_admin, package_code: str):
     res = (
-        supabase_anon
+        supabase_admin
         .table("packages")
         .select("id")
         .eq("code", package_code)
@@ -87,7 +87,6 @@ def provision_tenant(
     auth_user_id: str,
     company_name,
     user_email:   str,
-    supabase_anon,
     supabase_admin,
 ) -> ProvisioningResult:
     """
@@ -105,12 +104,12 @@ def provision_tenant(
     C1: Step 5 (verification) lives in middleware on first authenticated request.
     """
     if not company_name:
-        return _provision_pending_onboarding(auth_user_id, user_email, supabase_anon)
-    return _provision_full(auth_user_id, company_name, user_email, supabase_anon, supabase_admin)
+        return _provision_pending_onboarding(auth_user_id, user_email, supabase_admin)
+    return _provision_full(auth_user_id, company_name, user_email, supabase_admin)
 
 
-def _provision_full(auth_user_id, company_name, user_email, supabase_anon, supabase_admin):
-    package_id = _resolve_package_id(supabase_anon, PROVISIONING_PACKAGE)
+def _provision_full(auth_user_id, company_name, user_email, supabase_admin):
+    package_id = _resolve_package_id(supabase_admin, PROVISIONING_PACKAGE)
     if not package_id:
         return ProvisioningResult(
             status=ProvisioningStatus.FAILED,
@@ -122,7 +121,7 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_anon, supab
 
     # Step 1
     try:
-        ca_res = supabase_anon.table("customer_accounts").insert({
+        ca_res = supabase_admin.table("customer_accounts").insert({
             "company_name": company_name,
             "account_type": "TENANT",
             "package_id":   package_id,
@@ -136,22 +135,22 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_anon, supab
 
     # Step 2
     try:
-        supabase_anon.table("users").insert({"id": auth_user_id, "email": user_email}).execute()
+        supabase_admin.table("users").insert({"id": auth_user_id, "email": user_email}).execute()
     except Exception as exc:
-        record_pending_claim(supabase_anon, auth_user_id, tenant_id, "CLAIM_FAILED",
+        record_pending_claim(supabase_admin, auth_user_id, tenant_id, "CLAIM_FAILED",
                              f"Step 2 (public.users) failed after step 1: {exc}")
         return ProvisioningResult(status=ProvisioningStatus.PARTIAL_CLAIM_PENDING,
                                   tenant_id=tenant_id, user_id=auth_user_id, error=str(exc))
 
     # Step 3
     try:
-        supabase_anon.table("user_account_roles").insert({
+        supabase_admin.table("user_account_roles").insert({
             "user_id":             auth_user_id,
             "customer_account_id": tenant_id,
             "role_code":           PROVISIONING_ROLE,
         }).execute()
     except Exception as exc:
-        record_pending_claim(supabase_anon, auth_user_id, tenant_id, "CLAIM_FAILED",
+        record_pending_claim(supabase_admin, auth_user_id, tenant_id, "CLAIM_FAILED",
                              f"Step 3 (user_account_roles) failed after steps 1-2: {exc}")
         return ProvisioningResult(status=ProvisioningStatus.PARTIAL_CLAIM_PENDING,
                                   tenant_id=tenant_id, user_id=auth_user_id, error=str(exc))
@@ -160,11 +159,11 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_anon, supab
     try:
         supabase_admin.auth.admin.update_user_by_id(
             auth_user_id,
-            {"app_metadata": {"tenant_id": tenant_id}},
+            {"app_metadata": {"active_tenant_id": tenant_id, "tenant_id": tenant_id}},
         )
     except Exception as exc:
         error_msg = str(exc)
-        record_pending_claim(supabase_anon, auth_user_id, tenant_id, "CLAIM_FAILED",
+        record_pending_claim(supabase_admin, auth_user_id, tenant_id, "CLAIM_FAILED",
                              f"Step 4 (app_metadata) failed after steps 1-3: {error_msg}")
         return ProvisioningResult(status=ProvisioningStatus.PARTIAL_CLAIM_PENDING,
                                   tenant_id=tenant_id, user_id=auth_user_id, error=error_msg)
@@ -173,21 +172,21 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_anon, supab
     return ProvisioningResult(status=ProvisioningStatus.COMPLETE, tenant_id=tenant_id, user_id=auth_user_id)
 
 
-def _provision_pending_onboarding(auth_user_id, user_email, supabase_anon):
+def _provision_pending_onboarding(auth_user_id, user_email, supabase_admin):
     """B3 safety net: company_name absent. DB rows provisioned; claim withheld."""
-    package_id = _resolve_package_id(supabase_anon, PROVISIONING_PACKAGE)
+    package_id = _resolve_package_id(supabase_admin, PROVISIONING_PACKAGE)
     tenant_id = None
     try:
-        ca_res = supabase_anon.table("customer_accounts").insert({
+        ca_res = supabase_admin.table("customer_accounts").insert({
             "company_name": "PENDING_ONBOARDING",
             "account_type": "TENANT",
             "package_id":   package_id,
         }).execute()
         if ca_res.data:
             tenant_id = ca_res.data[0]["id"]
-        supabase_anon.table("users").insert({"id": auth_user_id, "email": user_email}).execute()
+        supabase_admin.table("users").insert({"id": auth_user_id, "email": user_email}).execute()
         if tenant_id:
-            supabase_anon.table("user_account_roles").insert({
+            supabase_admin.table("user_account_roles").insert({
                 "user_id": auth_user_id,
                 "customer_account_id": tenant_id,
                 "role_code": PROVISIONING_ROLE,
@@ -196,7 +195,7 @@ def _provision_pending_onboarding(auth_user_id, user_email, supabase_anon):
         return ProvisioningResult(status=ProvisioningStatus.FAILED, user_id=auth_user_id,
                                   error=f"PENDING_ONBOARDING provisioning failed: {exc}")
 
-    record_pending_claim(supabase_anon, auth_user_id, tenant_id, "PENDING_ONBOARDING",
+    record_pending_claim(supabase_admin, auth_user_id, tenant_id, "PENDING_ONBOARDING",
                          "company_name absent at signup; claim withheld until onboarding completes.")
     print(f"[provisioning] PENDING_ONBOARDING: tenant_id={tenant_id} user_id={auth_user_id}")
     return ProvisioningResult(status=ProvisioningStatus.PENDING_ONBOARDING,

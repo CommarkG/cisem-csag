@@ -17,9 +17,13 @@ export const InquiryIntakeView: React.FC<InquiryIntakeProps> = ({ onInquiryCreat
     e.preventDefault();
     setLoading(true);
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
       const response = await fetch('/api/v1/inquiries', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           contact_name: contactName,
           contact_email: contactEmail,

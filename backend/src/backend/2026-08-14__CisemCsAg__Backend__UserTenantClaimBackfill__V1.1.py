@@ -106,7 +106,7 @@ def run_backfill(dry_run: bool) -> None:
             try:
                 admin.auth.admin.update_user_by_id(
                     user_id,
-                    {"app_metadata": {**current_app_metadata, "tenant_id": tenant_id}},
+                    {"app_metadata": {**current_app_metadata, "active_tenant_id": tenant_id, "tenant_id": tenant_id}},
                 )
                 print(f"  WRITTEN: user_id={user_id} tenant_id={tenant_id}")
                 total_written += 1

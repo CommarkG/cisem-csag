@@ -261,3 +261,15 @@ WHAT IS NOT A LOOP. Investigation that ends in an applied change is not
 a loop even if it takes four turns. The measure is APPLIED, not turns.
 <!-- END:cisem-discovery-loop-rule -->
 
+<!-- BEGIN:cisem-six-line-insight -->
+# THE SIX-LINE INSIGHT — Standing Discipline
+
+1. When work is blocked the pull is to build an instrument.
+2. Agreement is not progress.
+3. A shim that renders is not a feature.
+4. Prose is not evidence.
+5. A change is not landed until it reaches its dependents AND serves its consumers, both verified.
+6. A search not run is a defect accepted.
+<!-- END:cisem-six-line-insight -->
+
+

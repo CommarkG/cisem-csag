@@ -17,9 +17,13 @@ export const WorkOrderAcceptanceView: React.FC<WorkOrderAcceptanceProps> = ({ qu
     setLoading(true);
     try {
       // 1. Record customer acceptance
+      const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
       const acceptRes = await fetch(`/api/v1/quotes/${quoteId}/accept`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           evidence_kind: evidenceKind,
           evidence_data: evidenceData,
@@ -33,7 +37,10 @@ export const WorkOrderAcceptanceView: React.FC<WorkOrderAcceptanceProps> = ({ qu
         // 2. Derive signed work order
         const woRes = await fetch(`/api/v1/acceptance-records/${acceptanceId}/work-order`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
           body: JSON.stringify({ acceptance_record_id: acceptanceId, notes })
         });
         const woData = await woRes.json();
