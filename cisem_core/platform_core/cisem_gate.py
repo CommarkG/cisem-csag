@@ -418,6 +418,45 @@ def validate_parking_vault_linkage(plan_id):
 # -----------------------------------------------------------------------------
 # PHASE 5 (formerly broken): Registry alignment > NOW a hard block
 # -----------------------------------------------------------------------------
+def check_react_state_declarations():
+    """Phase 22.8: AST Undeclared State Identifier Guard check."""
+    print("Phase 22.8: AST Undeclared State Identifier Guard check...")
+    views_dir = os.path.join(ROOT_DIR, "src", "components", "views")
+    if not os.path.exists(views_dir):
+        print("  Phase 22.8: PASS (views directory missing).")
+        return
+
+    violations = []
+    for root, _, files in os.walk(views_dir):
+        for f in files:
+            if f.endswith((".jsx", ".tsx")):
+                full_path = os.path.join(root, f)
+                rel_path = os.path.relpath(full_path, ROOT_DIR)
+                try:
+                    with open(full_path, "r", encoding="utf-8", errors="ignore") as file_obj:
+                        content = file_obj.read()
+                    
+                    cond_vars = set(re.findall(r'\bif\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\)', content))
+                    for var in cond_vars:
+                        if var in {"true", "false", "null", "undefined", "window", "document", "process", "isRtl", "error"}:
+                            continue
+                        decl_pattern = rf'\b(?:useState|const|let|var|function)\b.*\b{var}\b|\b{var}\s*:\s*'
+                        if not re.search(decl_pattern, content):
+                            violations.append(f"{rel_path}: Conditional 'if ({var})' references undeclared identifier '{var}'")
+                except Exception as e:
+                    print(f"  Phase 22.8: Warning scanning {rel_path}: {e}")
+
+    if violations:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 22.8: Undeclared React state variable detected.\n"
+            f"  Violations ({len(violations)}):\n" + "\n".join(f"  - {v}" for v in violations) + "\n"
+            "  Rule: Every React state variable referenced in JSX conditionals MUST be declared in component scope.",
+            phase=22.8
+        )
+
+    print("  Phase 22.8: PASS. All React component state declarations verified.")
+
+
 def check_registry_alignment():
     if not os.path.exists(REGISTRY_PATH):
         print(f"CISEM_GATE_BLOCKED -- Phase 5: Registry not found at {REGISTRY_PATH}.")
@@ -2016,6 +2055,7 @@ def enforce_gate():
     check_external_page_coding_lock()  # Phase 21
     check_template_version_contract() # Phase 22
     check_typescript_jsx_headers()     # Phase 22.5
+    check_react_state_declarations()   # Phase 22.8
     check_hebrew_rtl_and_fixed_tables()  # Phase 23
     check_zero_fabrication_gate()         # Phase 24 (Gate 19)
     check_context_pack_drift()            # Phase 25 (Context Pack Drift Gate)

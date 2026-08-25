@@ -11,13 +11,13 @@
 | `backlog_registry` | ACTIVE QUERY TARGET |
 | `branding_rate_cards` | ACTIVE QUERY TARGET |
 | `branding_subcontractors` | ACTIVE QUERY TARGET |
-| `briefs` | ACTIVE QUERY TARGET |
 | `catalog_items` | ACTIVE QUERY TARGET |
 | `crm_customers` | ACTIVE QUERY TARGET |
 | `custom_libraries` | ACTIVE QUERY TARGET |
 | `customer_accounts` | ACTIVE QUERY TARGET |
 | `deals` | ACTIVE QUERY TARGET |
 | `document_chunks` | ACTIVE QUERY TARGET |
+| `events` | ACTIVE QUERY TARGET |
 | `inquiries` | ACTIVE QUERY TARGET |
 | `lookup_registry` | ACTIVE QUERY TARGET |
 | `packages` | ACTIVE QUERY TARGET |
@@ -26,7 +26,6 @@
 | `product_groups` | ACTIVE QUERY TARGET |
 | `product_variations` | ACTIVE QUERY TARGET |
 | `proposal_client_drafts` | ACTIVE QUERY TARGET |
-| `proposal_items` | ACTIVE QUERY TARGET |
 | `proposals` | ACTIVE QUERY TARGET |
 | `quote_lines` | ACTIVE QUERY TARGET |
 | `quotes` | ACTIVE QUERY TARGET |
@@ -34,6 +33,10 @@
 | `supplier_mappings` | ACTIVE QUERY TARGET |
 | `tag_library` | ACTIVE QUERY TARGET |
 | `template_registry` | ACTIVE QUERY TARGET |
+| `translations` | ACTIVE QUERY TARGET |
+| `user_account_roles` | ACTIVE QUERY TARGET |
+| `users` | ACTIVE QUERY TARGET |
+| `vocabulary_terms` | ACTIVE QUERY TARGET |
 | `work_orders` | ACTIVE QUERY TARGET |
 
 ## Backend Data Models (parsed dynamically from AST in `main.py`)
