@@ -231,34 +231,7 @@ export const createSeedData = () => {
   ];
 };
 
-export const defaultTeamMembers = [
-  {
-    id: 'user-operator',
-    name: 'Operator',
-    role: 'pm',
-    email: 'operator@cisem.com',
-    phone: '+972-54-555-0001',
-    company: 'CISEM Corp',
-    tags: ['Management', 'Lead', 'React'],
-    comments: [
-      { id: 'mc-1', author: 'Yariv', text: 'Excellent progress on the dashboard redesign!', timestamp: new Date(Date.now() - 86400000).toISOString() }
-    ],
-    avatar: '#6c5ce7',
-    initials: 'OP',
-  },
-  {
-    id: 'user-yariv',
-    name: 'Yariv',
-    role: 'boss',
-    email: 'yariv@boss.com',
-    phone: '+972-50-555-0002',
-    company: 'CISEM Corp',
-    tags: ['Strategic', 'Reviewer'],
-    comments: [],
-    avatar: '#e17055',
-    initials: 'YA',
-  },
-];
+export const defaultTeamMembers = [];
 
 export const defaultNotificationRules = [
   { id: generateId(), event: 'status_change', label: 'Task status changed', channel: 'in_app', enabled: true, quietHours: true, leadTimeDays: 0 },

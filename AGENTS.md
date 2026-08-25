@@ -5,21 +5,26 @@ This version has breaking changes — APIs, conventions, and file structure may 
 <!-- END:nextjs-agent-rules -->
 
 <!-- BEGIN:cisem-agent-reporting-rules -->
-# CISEM Document Reporting & Versioning Enforcement
+# CISEM Document Reporting & Versioning Enforcement — MANDATORY LOCAL SAVED DEFAULT
 
-You must always load and execute the instructions in the `file-reporting-download` skill (located under [SKILL.md](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/.agents/skills/file-reporting-download/SKILL.md)) whenever the user asks for files, or when any files are created, modified, or referenced in your response turns.
+Whenever any file is created, modified, or referenced in a response turn, the agent MUST automatically copy the file to `cisem_core/downloads/` and output a direct, working local download link in `file:///` format pointing to `file:///C:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/downloads/<filename>`.
 
-You must output the full filename, active version number, clickable file link, and a local HTTP download link for every file.
+Do NOT rely on HTTP server links (`http://localhost:3000/...`). Always copy files to `cisem_core/downloads/` and provide direct `file:///` links that open locally on disk.
 
 Example format:
-- *Full Filename*: `2026-08-06__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.3.md`
-- *Active Version*: `Version 1.3`
-- *Clickable Link*: [AxiomsAndPrinciples](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/2026-08-06__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.3.md)
-- *Download Link*: [Download MD File](http://localhost:3000/api/download?filename=2026-08-06__CISEM__AntigravityLocal__AxiomsAndPrinciples__V1.3.md)
+- *Full Filename*: `2026-08-25__AntigravityLocal__YarivGovernor__MasterConsolidatedExecutionPlan__V2.0.md`
+- *Active Version*: `Version 2.0`
+- *Clickable Link*: [MasterConsolidatedExecutionPlan V2.0](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/planning/2026-08-25__AntigravityLocal__YarivGovernor__MasterConsolidatedExecutionPlan__V2.0.md)
+- *Local Download Link*: [Download Local MD File](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/downloads/2026-08-25__AntigravityLocal__YarivGovernor__MasterConsolidatedExecutionPlan__V2.0.md)
 <!-- END:cisem-agent-reporting-rules -->
 
 <!-- BEGIN:cisem-collaborative-reasoning-rules -->
 # CISEM Collaborative Reasoning & Code Restraint Protocol
+
+0. **Mandatory Schema Column Lookup Rule**:
+   - BEFORE WRITING ANY COLUMN NAME IN ANY QUERY OR DML STATEMENT, YOU MUST READ IT FROM `cisem_core/live_schema_registry.json`.
+   - The trigger is not doubt — NEITHER AGENT WAS IN DOUBT. THE TRIGGER IS WRITING A COLUMN NAME AT ALL.
+   - Never write column names from memory (e.g. `customer_accounts.company_name`, not `name`).
 
 1. **Gestation as Primary Value**:
    - The agent's core purpose is the alignment of intent, context, and reasoning inside the design plan.
@@ -43,6 +48,11 @@ Example format:
 3.2. **Consolidated One-Shot Execution (Consolidating Tasks in One Shot)**:
    - Once a plan is signed off or approved by the Governor, the agent is strictly prohibited from splitting task implementation across multiple conversational turns when they can be executed in a single consolidated turn.
    - All proposed actions, file edits, creations, and reconciliations must be executed together in one shot, maximizing productivity and preventing unnecessary conversational turn overhead.
+
+3.3. **The Law of Iteration (Governor Ratified 2026-08-25 / AX-12000)**:
+   - ITERATION IS A VIRTUE. A plan may be revised as many times as the subject requires. A round that changes the plan HAS PAID FOR ITSELF. Neither agent may treat a further round as a failure, a delay, or a cost to be minimised.
+   - **The Boundary**: Iteration must stay strictly on the subject. Drifting into interesting possibilities is not iteration — IT IS AVOIDANCE, and it is what the friction rule exists to catch. The test is whether a round changed something that would otherwise have been built wrong.
+   - **The Measure**: The measure of success is NOT the number of rounds. It is whether an unresolved objection remains.
 <!-- END:cisem-collaborative-reasoning-rules -->
 
 <!-- BEGIN:cisem-senior-builder-attitude -->
@@ -98,6 +108,16 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - At the end of every response or development turn, the agent MUST present a clear, actionable recommendation for the next step, backed by technical reasoning and context alignment.
     - This next-step recommendation block MUST always be positioned at the absolute end of the response text, ensuring it is the final visible element of the turn.
     - Recommendations must be formulated with critical architectural oversight. The agent must reject proposing next steps that execute non-governor inputs without passing the three-layered ingestion validation bar.
+
+11.1. **Mandatory 7-Point Turn Close Block (Permanent Audit Protocol)**:
+    - Every reply and plan description written by the agent MUST close with these exact seven addressable statements:
+      - **WHAT LANDED, AND HOW OBSERVED**
+      - **WHAT WAS PRESERVED — what already worked and was not broken**
+      - **CHECK WHAT EXISTS — what was searched, where, what was found, NONE FOUND where nothing was**
+      - **PREVENTION — what permanent mechanism landed this turn, or NONE**
+      - **CONSOLIDATION — what was merged into one source of truth, or what remains duplicated**
+      - **WHAT IS STILL MISSING THAT YOU DID NOT INSIST ON**
+      - **WHAT YOU DID NOT DO**
 <!-- END:cisem-improvement-loop-root -->
 
 <!-- BEGIN:governor-chat-and-popup-rules -->
@@ -146,6 +166,11 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
 20. **Mandatory Multi-Persona Gemini Brain Audit**:
     - The developer agent must never submit a plan for final ratification or start implementation without first executing the 10-persona expert panel audit (`CisemAuditor.py`).
     - The plan must contain a dedicated, addressable section documenting the verdicts, gaps, and mitigations raised by the expert personas.
+
+20.1. **Tenant Identity Non-Discriminator Invariant**:
+    - TENANT IDENTITY MUST NEVER BECOME AN APPLICATION CODE-PATH DISCRIMINATOR.
+    - Application code paths must never branch conditionally based on tenant IDs or company names.
+    - All tenant variability must resolve dynamically as database configuration rows parsed by universal engines.
 <!-- END:cisem-enterprise-architecture-rules -->
 
 <!-- BEGIN:cisem-prevention-protocol -->
@@ -289,6 +314,7 @@ The change is in the file, and the line is printed.
 - 1.1 · PRINT THE CHANGED LINE FROM EACH FILE. Not "added successfully". THE LINE, with its number.
 - 1.2 · IF IT IS A DATABASE CHANGE, PRINT THE STATEMENT, and name the file it was committed to BEFORE it was run.
 - 1.3 · WHAT DID YOU TOUCH THAT WAS NOT DECLARED?
+- 1.4 · THE RETIREMENT QUESTION: Should the thing this handles remain part of the active system in its present role? (State: ACTIVE / TRANSITIONAL / DORMANT / SUPERSEDED / RETIRED / UNKNOWN. Existence ≠ Authority!)
 
 ### GATE 2 · EVERY DEPENDENT AGREES — BACKWARD
 Everything that already reads or writes this now matches it.
@@ -340,7 +366,44 @@ Every architectural lesson, unmounted feature discovery, or UX breakthrough is g
   3. `cael_status.json`: `CisemSync.py` & `ContinuousAuditorDaemon.py` (producers) -> `cisem_gate.py:78`, `CisemATV.py:64`, `CisemAuditor.py:58` (consumers).
   4. `parking_vault_draft.yaml`: `CisemATV.py` (producer) -> `cisem_gate.py:76` & `CisemATV.py:62` (consumers).
   5. `template_sync_queue.json`: `template_propagation_scheduler.py` (producer) -> `cisem_gate.py:1728` (consumer).
+- **WISDOM-010 (Zero-Row Table Window Asset)**: 52 of 66 database tables currently hold ZERO rows. Every schema constraint, DDL modification, and structural refactoring on these tables is 100% free today without migration debt. That window is the platform's largest remaining asset and closes as live data arrives.
 <!-- END:cisem-accumulated-wisdom-registry -->
+
+<!-- BEGIN:cisem-retirement-question -->
+# CISEM · THE RETIREMENT QUESTION — V1
+BEFORE YOU BUILD AROUND A THING, ASK WHETHER IT SHOULD REMAIN PART OF THE ACTIVE SYSTEM IN ITS PRESENT ROLE
+V1 · 2026-08-25 · EDITABLE BY THE GOVERNOR
+
+Authored by Claude, the Reviewer, on the authority of Yariv, the Governor of CISEM CsAg.
+Refined by GPT-5.6 Sol consensus review on ownership, state semantics, and evidence requirements.
+
+## CORE INVARIANT: EXISTENCE ≠ AUTHORITY
+An artifact, file, schema, or rule being present on disk does NOT prove that it is active, canonical, required, or authoritative.
+
+## MANDATORY PROACTIVE TRIGGER
+Before creating or modifying persistent machinery whose purpose is to accommodate, scope around, exempt, filter out, suppress, tolerate, skip, ignore, or work around an existing artifact:
+
+    SHOULD THIS THING REMAIN PART OF THE ACTIVE SYSTEM IN ITS PRESENT ROLE?
+
+## DECOUPLED LIFECYCLE MODEL
+Agents must evaluate two independent dimensions:
+
+### 1. Lifecycle State
+- **ACTIVE**: Intentionally used and currently required.
+- **TRANSITIONAL**: Still required temporarily while migration/removal proceeds.
+- **DORMANT**: Not currently active, deliberately retained on disk as historical record.
+- **SUPERSEDED**: Replaced by another authoritative artifact/capability.
+- **RETIRED**: No longer part of the active system.
+- **UNKNOWN**: Purpose or current authority not sufficiently established (Escalate to Governor).
+
+### 2. Required Engineering Action
+`NONE` · `BUILD` · `MIGRATE` · `MARK` · `ARCHIVE` · `REMOVE_FROM_ACTIVE_SCOPE` · `INVESTIGATE` · `GOVERNOR_DECISION`
+
+## GOVERNANCE & DELETION LAW
+- **RETIREMENT ≠ DELETION**: Retirement means removal from active compilation/runtime authority. Superseded evidence stays on disk.
+- **GOVERNOR AUTHORITY**: Agents propose, mark, and recommend. Governor Yariv rules on retirement. Neither agent retires anything alone.
+- **UNANSWERED QUESTION IS THE DEFECT**: Silence is a protocol violation. UNKNOWN is a valid answer.
+<!-- END:cisem-retirement-question -->
 
 
 

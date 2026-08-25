@@ -1,6 +1,8 @@
+// Scope          : @store_scope: tenant
 import { create } from 'zustand';
 import { defaultNotificationRules } from '../utils/seedData';
 import { useAdminStore } from './useAdminStore';
+import { tenantStorageAdapter } from '../utils/tenantStorageAdapter';
 
 const generateId = () =>
   'xxxx-xxxx-xxxx'.replace(/x/g, () =>
@@ -9,15 +11,15 @@ const generateId = () =>
 
 const loadNotifications = () => {
   try {
-    const stored = localStorage.getItem('dima-notifications');
-    if (stored) return JSON.parse(stored);
+    const stored = tenantStorageAdapter.getItem('dima-notifications');
+    if (stored) return stored;
   } catch (e) {}
   return { log: [], rules: defaultNotificationRules, whatsappLog: [] };
 };
 
 const saveNotifications = (data) => {
   try {
-    localStorage.setItem('dima-notifications', JSON.stringify(data));
+    tenantStorageAdapter.setItem('dima-notifications', data);
   } catch (e) {}
 };
 
@@ -158,7 +160,7 @@ export const useNotificationStore = create((set, get) => {
         // WhatsApp log
         if (rule.channel === 'whatsapp_log' || rule.channel === 'both') {
           const text = data.message || `${rule.label}: ${data.title || ''}`;
-          const to = data.to || 'Yariv';
+          const to = data.to || '';
           
           state.addWhatsAppMessage({
             to: to,

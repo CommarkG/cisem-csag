@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Columns3, List, Calendar, BarChart3, 
   Settings, Users, ChevronRight, Plus, 
-  Folder, FileText, CheckCircle2, Box, Layers
+  Folder, FileText, CheckCircle2, Box, Layers, Sparkles
 } from 'lucide-react';
 import { useUIStore } from '../../stores/useUIStore';
 import { useTaskStore } from '../../stores/useTaskStore';
@@ -93,6 +93,7 @@ export default function Sidebar() {
 
   const views = [
     { id: 'dashboard', label: t.dashboard, icon: LayoutDashboard, path: '/dashboard' },
+    { id: 'onboarding', label: language === 'he' ? 'קליטה ארגונית' : 'Onboarding', icon: Sparkles, path: '/onboarding' },
     { id: 'kanban', label: t.kanban, icon: Columns3, path: '/kanban' },
     { id: 'list', label: t.list, icon: List, path: '/list' },
     { id: 'calendar', label: t.calendar, icon: Calendar, path: '/calendar' },

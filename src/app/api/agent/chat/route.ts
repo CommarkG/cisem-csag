@@ -269,8 +269,8 @@ Rules:
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${activeOpenRouterKey}`,
-          'HTTP-Referer': 'https://commark.co.il',
-          'X-Title': 'Commark CISEM Portal',
+          'HTTP-Referer': 'https://cisem.app',
+          'X-Title': 'CISEM Universal Platform',
         },
         body: JSON.stringify(requestPayload),
       })
@@ -313,8 +313,8 @@ Rules:
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${activeOpenRouterKey}`,
-              'HTTP-Referer': 'https://commark.co.il',
-              'X-Title': 'Commark CISEM Portal',
+              'HTTP-Referer': 'https://cisem.app',
+              'X-Title': 'CISEM Universal Platform',
             },
             body: JSON.stringify(followUpPayload),
           })

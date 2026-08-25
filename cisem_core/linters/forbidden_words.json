@@ -1,0 +1,19 @@
+{
+  "forbidden_words": [
+    "Yariv",
+    "Dima"
+  ],
+  "forbidden_patterns": [
+    "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+  ],
+  "exempt_header_patterns": [
+    "governor_signature:",
+    "ratified_plan:",
+    "ratified_by:",
+    "sealed_by:",
+    "author_user_id:",
+    "GOV-YARIV-",
+    "HISTORICAL_RECORD",
+    "owner:"
+  ]
+}

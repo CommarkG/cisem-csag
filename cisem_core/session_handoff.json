@@ -1,0 +1,34 @@
+{
+  "_header_notice": "MACHINE HALF OF SESSION HANDOFF — DOES NOT REPLACE GOVERNOR HANDOFF DOCUMENT",
+  "session_id": "SESS-20260822-005",
+  "timestamp": "2026-08-22T22:10:55Z",
+  "active_plan_id": "CISEM-IP-20260822-GATE-PLAN-BOUNDARIES-V1.0",
+  "authorized_scope": [
+    "cisem_core/linters/no_forbidden_words.mjs",
+    "eslint.config.mjs",
+    "cisem_core/2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.44.yaml",
+    "cisem_core/planning/active_ratified_plan.json",
+    "cisem_core/planning/gate_config.json",
+    "cisem_core/planning/declared_delivery_manifest.json",
+    "cisem_core/linters/forbidden_words.json",
+    "cisem_core/linters/check_forbidden_words.py",
+    "cisem_core/session_handoff.json",
+    "cisem_core/platform_core/cisem_gate.py"
+  ],
+  "gate_status_snapshot": {
+    "phase_1_5": "SYNCHRONIZED",
+    "phase_3": "ENFORCED",
+    "phase_28": "BLOCKED",
+    "phase_29": "ENFORCED",
+    "phase_30": "ENFORCED"
+  },
+  "open_findings_count": {
+    "opened": 0,
+    "closed": 10
+  },
+  "what_landed_and_how_observed": "Created no_forbidden_words.mjs ESLint rule module and registered 'cisem/no-forbidden-words': 'error' in eslint.config.mjs; verified via eslint.config.mjs source diff.",
+  "what_is_ratified_but_not_built": "Condition Six structural schema protection mechanism.",
+  "what_is_unproven": "Phase 28 live execution against proposal flow routes (parked at 15 callsites).",
+  "what_was_carried_without_rechecking": "NONE",
+  "what_was_got_wrong": "NONE"
+}

@@ -7,8 +7,12 @@ axioms_linked:
 - PR-58950
 - PR-76000
 - PR-95000
-pre_review_status: PASSED
-pre_reviewed_at: '2026-08-10T08:06:05.601071Z'
+pre_review_status: FAILED
+pre_reviewed_at: '2026-08-18T12:58:20.368077Z'
+pre_review_error: 'Proposed change ''(file:///c:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py)''
+  is missing mandatory Playbook integration specs: Wiring, Triggering, Availability,
+  User Journey. Every proposed element must explicitly define its Wiring, Triggering,
+  Availability, and User Journey integration.'
 ---
 
 # Consolidated Master Implementation Plan (V1.7)
@@ -67,6 +71,10 @@ This master plan integrates **Plan A (Governance Hardening & Decoupling)** and *
 - **Exceptions**: Refactor `WorkspaceReconciler.py` and `CisemSync.py` to raise import-safe exceptions instead of executing raw `sys.exit(1)`.
 
 #### [NEW] [CisemConfig](file:///c:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py)
+- **Wiring**: Python configuration module residing in `cisem_core/platform_core/`, dynamically loaded by `CisemSync.py`, `cisem_gate.py`, and `CisemAuditor.py` to resolve workspace root and brain root paths.
+- **Triggering**: Triggered upon module import during LGG gate execution (`cisem_gate.py`), daemon startup (`ContinuousAuditorDaemon`), or direct CLI invocation.
+- **Availability**: Available at all runtime phases as a zero-dependency standard library Python configuration module across Windows and Linux environments.
+- **User Journey**: Infrastructure and developer abstraction layer providing unified, zero-drift path resolution for system scripts without requiring explicit environment variable overrides.
 #### [MODIFY] [WorkspaceReconciler.py](file:///c:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__WorkspaceReconciler__V0.1.py)
 
 ---

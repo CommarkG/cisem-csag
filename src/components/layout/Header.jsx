@@ -53,7 +53,21 @@ export default function Header() {
   
   const activeUserId = useTenantSessionStore(state => state.userId);
   const members = useCollabStore(state => state.members);
-  const currentUser = members.find(m => m.id === activeUserId) || members[0];
+  
+  // STAGE 1: Live authenticated session profile resolution
+  const sessionToken = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
+  const sessionName = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_name') : null;
+  const sessionCompany = typeof window !== 'undefined' ? localStorage.getItem('cisem_company_name') : null;
+
+  const currentUser = sessionToken ? {
+    name: sessionName || 'Authenticated User',
+    role: 'account_admin',
+    company: sessionCompany || 'Active Tenant'
+  } : {
+    name: 'Guest User',
+    role: 'viewer',
+    company: 'Public Workspace'
+  };
   
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('dima-theme');
@@ -485,17 +499,33 @@ export default function Header() {
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        {/* User profile avatar head hover dropdown */}
-        <div className="admin-dropdown-container">
-          <button className="btn-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="admin-dropdown-container header-user-profile-menu" style={{ position: 'relative' }}>
+          <button className="btn-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title={currentUser?.name || "User Profile"}>
             <User size={20} />
           </button>
-          <div className="admin-dropdown-menu" style={{ width: 220, padding: 12 }}>
+          <div 
+            className="admin-dropdown-menu header-user-dropdown-popover" 
+            style={{ 
+              position: 'absolute', 
+              right: 0, 
+              left: 'auto',
+              top: 'calc(100% + 6px)', 
+              width: 250, 
+              maxWidth: 'calc(100vw - 24px)', 
+              padding: 12, 
+              zIndex: 1000, 
+              boxShadow: '0 8px 30px rgba(0,0,0,0.22)', 
+              borderRadius: 12, 
+              background: 'var(--surface-elevated, #ffffff)',
+              border: '1px solid var(--border)',
+              boxSizing: 'border-box'
+            }}
+          >
             <div style={{ paddingBottom: 8, marginBottom: 8, borderBottom: '1px solid var(--border-light)', textAlign: 'inherit' }}>
               <div style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-primary)' }}>
                 {tValue(currentUser?.name, language)}
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: 2, display: 'flex', gap: 4, justifyContent: 'flex-start' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: 2, display: 'flex', gap: 4, justifyContent: 'flex-start', flexWrap: 'wrap' }}>
                 <span className="badge badge-priority-high" style={{ padding: '1px 6px', fontSize: '0.65rem' }}>
                   {tValue(currentUser?.role, language).toUpperCase()}
                 </span>

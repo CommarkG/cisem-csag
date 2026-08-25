@@ -1,0 +1,7 @@
+{
+  "deletion_candidate": "cisem_core/2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.15.yaml",
+  "dependency_check": "Checked workspace. Registry reconciler upgraded to target V1.16. No other scripts hardcode V1.15 path.",
+  "archive_proof": "Backed up V1.15 content inside scratch/registry_v1.15_backup.yaml",
+  "actual_execution_action": "File deletion",
+  "post_operation_verification": "Registry reconciled cleanly targeting V1.16"
+}

@@ -64,9 +64,9 @@ export const translations = {
     seeTopPriority: 'See top priority tasks',
 
     // Welcome Modal
-    welcomeTitle: 'Welcome to DIMA Dashboard!',
-    welcomeSubtitle: 'Your premium task management workspace is ready.',
-    welcomeDesc: "We've loaded a demo project so you can explore right away. Take a quick 60-second tour to learn the basics, or jump straight in.",
+    welcomeTitle: 'Welcome to CISEM Platform!',
+    welcomeSubtitle: 'Your universal enterprise pipeline workspace is ready.',
+    welcomeDesc: "Explore active project pipelines, manage tenant inquiries, or sign in to access your personal tenant context.",
     startTour: 'Start Tour',
     skipExplore: "Skip, I'll explore",
 
@@ -256,9 +256,9 @@ export const translations = {
     seeTopPriority: 'Показать важные задачи',
 
     // Welcome Modal
-    welcomeTitle: 'Добро пожаловать в DIMA Dashboard!',
-    welcomeSubtitle: 'Ваше рабочее пространство готово.',
-    welcomeDesc: 'Мы загрузили демо-проект, чтобы вы могли сразу приступить к работе. Пройдите быстрый 60-секундный тур по основам или начните самостоятельно.',
+    welcomeTitle: 'Добро пожаловать в CISEM Platform!',
+    welcomeSubtitle: 'Ваше универсальное рабочее пространство готово.',
+    welcomeDesc: 'Исследуйте активные пайплайны, управляйте запросами או войдите в систему для доступа к контексту вашего דייר.',
     startTour: 'Начать тур',
     skipExplore: 'Пропустить',
 
@@ -448,9 +448,9 @@ export const translations = {
     seeTopPriority: 'לראות משימות בעדיפות עליונה',
 
     // Welcome Modal
-    welcomeTitle: 'ברוכים הבאים ל-DIMA Dashboard!',
-    welcomeSubtitle: 'סביבת העבודה היוקרתית שלך מוכנה.',
-    welcomeDesc: 'טענו פרויקט הדגמה כדי שתוכל להתחיל לחקור מיד. צא לסיור קצר של 60 שניות כדי ללמוד את היסודות, או התחל מיד.',
+    welcomeTitle: 'ברוכים הבאים ל-CISEM Platform!',
+    welcomeSubtitle: 'סביבת העבודה הארגונית והאוניברסלית שלך מוכנה.',
+    welcomeDesc: 'חקור פרויקטים ופייפליינים פעילים, נהל פניות דיירים, או התחבר למערכת כדי לגשת להגדרות הדייר שלך.',
     startTour: 'התחל סיור',
     skipExplore: 'דלג, אני אחקור לבד',
 

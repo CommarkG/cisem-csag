@@ -1,0 +1,67 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #60 OPTIMIZING PRODUCT ARCHITECTURE IN BACKEND
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Enterprise product architecture requires supporting complex product hierarchies, including product groups/subgroups, variant matrices, add-on additions, bundled packages, versioning, supplier sourcing vs self-creation, and tag/status libraries.
+
+Needs & Business Pains:
+E-commerce and B2B platforms often struggle with rigid product schemas that break when a item is sold as a standalone SKU, bundled inside a package, customized with add-ons, or sourced from multiple suppliers with varying lead times and cost matrices.
+
+Challenges:
+- Recursive Hierarchies: Modeling multi-level product groups and subgroups without causing infinite loop queries or slow join performance.
+- Supplier Sourcing vs In-House Manufacturing: A product can be self-created (in-house) or mapped to one or more external suppliers, each with distinct pricing and availability.
+- Dynamic Additions & Variations: Handling custom branding add-ons (printing, engraving) alongside standard size/color variation matrices.
+
+Common Gaps & Mistakes:
+- Hardcoding variation attributes into flat product tables instead of separate normalized variation matrices.
+- Tight coupling between catalog items and a single supplier, making multi-supplier sourcing impossible.
+- Lacking version history on product pricing, causing historical proposals to retroactively change totals when catalog prices update.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: MedusaJS / Shopify style catalog modeling with basic product variants and tags.
+- What We Can Do Better: A hybrid catalog model: core catalog items linked to supplier mappings (with rate cards), product groups/subgroups, variant matrices, branding rate cards, and pgvector embeddings for semantic product discovery.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Catalog Schemas (backend/src/backend/migrations.sql): catalog_items, product_groups, product_variations, catalog_item_sandbox_variants, supplier_mappings, branding_subcontractors, branding_rate_cards, status_library, tag_library.
+- Semantic Vector Search (backend/src/backend/vector_search_service.py): product_embeddings table with HNSW index and match_product_embeddings RPC function.
+- Catalog Endpoints (backend/src/backend/main.py): /api/v1/catalog/items, /api/v1/suppliers/mappings, /api/v1/vector-search.
+
+Best Way to Use It:
+- Represent base catalog items in catalog_items with an explicit is_in_house boolean flag.
+- Link supplier-sourced items to supplier_mappings (storing supplier_sku, cost_price, lead_time_days).
+- Attach custom branding add-ons via branding_rate_cards and branding_subcontractors.
+- Use vector_search_service to power natural language product discovery across product groups and tags.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Immutable Historical Pricing: When a proposal or deal is generated, snapshot item prices and variation modifiers into proposal_items instead of referencing live catalog_items prices.
+- Circular Group Hierarchy Defense: Ensure product_groups parent-child relationships enforce acyclic graph validation (preventing group A -> group B -> group A).
+- Multi-Supplier Selection Logic: Ensure inventory stock check endpoints (/api/v1/inventory/verify-stock) query active supplier_mappings deterministically based on cost and lead time.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Single-Row Product Summary Layout: Display SKU, title, category tags, supplier status, and price on a single horizontal row to maximize visual density.
+- Interactive Variant Matrix Selector: Provide clean dropdowns/pills for variation attributes (size, color, material) with real-time cost modifier calculation.
+- Tag & Status Filtering: Support multi-select tag pills and status chips for rapid catalog filtering.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire catalog_items to product_groups (group_id FK) and product_variations (item_id FK).
+- Wire supplier_mappings to catalog_items (internal_sku FK) and supplier customer accounts.
+- Wire product embeddings generation trigger when a catalog_item is created or updated.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS on catalog custom libraries and sandbox variants.
+- Hardwire SKU uniqueness constraints per tenant boundary.
+- Hardwire immutable snapshotting of catalog prices into proposal line items upon proposal creation.

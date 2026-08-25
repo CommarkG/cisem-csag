@@ -53,9 +53,15 @@ export default function PageGreetingBanner({ view }) {
 
   const t = translations[language] || translations.en;
 
+  const sessionToken = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
+  const sessionName = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_name') : null;
+
   const currentUser = useMemo(() => {
-    return members.find(m => m.id === activeUserId) || members[0];
-  }, [members, activeUserId]);
+    if (sessionToken) {
+      return { id: 'auth-user', name: sessionName || 'Authenticated User', role: 'account_admin' };
+    }
+    return { id: 'guest-user', name: 'Guest User', role: 'viewer' };
+  }, [sessionToken, sessionName]);
 
   const handleUserSwap = (e) => {
     setActiveUserId(e.target.value);

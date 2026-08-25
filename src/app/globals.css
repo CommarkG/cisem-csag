@@ -1,10 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700;800&family=Heebo:wght@300;400;500;600;700;800&family=Assistant:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
 /* ================================================
-   DIMA DASHBOARD — Design System
+   PLATFORM DASHBOARD — Design System
    Auto Light/Dark • Glassmorphism • Premium Feel
    ================================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700;800&family=Heebo:wght@300;400;500;600;700;800&family=Assistant:wght@300;400;500;600;700;800&display=swap');
 
 /* ---- CSS Reset ---- */
 *, *::before, *::after {
@@ -1708,11 +1708,6 @@ h3, .h3, [dir="rtl"] h3, [lang="he"] h3 {
   border-bottom-left-radius: 8px;
 }
 
-[dir='rtl'] .settings-section-title svg {
-  margin-left: 8px;
-  margin-right: 0;
-}
-
 /* ================================================
    Admin Dropdown Menu Styling (Glassmorphism)
    ================================================ */
@@ -1725,8 +1720,9 @@ h3, .h3, [dir="rtl"] h3, [lang="he"] h3 {
   display: none;
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
-  min-width: 170px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 160px;
   background: var(--surface-elevated);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
@@ -1774,21 +1770,6 @@ h3, .h3, [dir="rtl"] h3, [lang="he"] h3 {
 .admin-dropdown-item svg {
   color: var(--text-muted);
   transition: color var(--transition-fast);
-}
-
-.admin-dropdown-item:hover svg {
-  color: var(--accent);
-}
-
-/* RTL Support for Dropdown Menu */
-[dir='rtl'] .admin-dropdown-menu {
-  left: auto;
-  right: 0;
-}
-
-[dir='rtl'] .admin-dropdown-item {
-  text-align: right;
-  flex-direction: row-reverse;
 }
 
 @keyframes fadeIn {

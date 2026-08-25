@@ -1,0 +1,4 @@
+{
+  "expiration_window_hours": 48,
+  "allow_standalone_plan_override": false
+}

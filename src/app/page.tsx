@@ -7,10 +7,10 @@
 
 import dynamic from "next/dynamic";
 
-const DimaApp = dynamic(() => import("../components/DimaAppWrapper"), {
+const App = dynamic(() => import("../components/AppWrapper"), {
   ssr: false,
 });
 
 export default function Page() {
-  return <DimaApp />;
+  return <App />;
 }

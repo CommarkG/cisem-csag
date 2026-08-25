@@ -39,6 +39,7 @@ import CollaborationHub from './views/CollaborationHub';
 import AdminView from './views/AdminView';
 import TemplateHubView from './views/TemplateHubView';
 import SignInView from './views/SignInView';
+import UniversalOnboardingViewport from './views/UniversalOnboardingViewport';
 
 function AppContent() {
   const location = useLocation();
@@ -155,8 +156,9 @@ function AppContent() {
         <Sidebar />
         <div className="app-content" style={{ flex: 1, overflowY: 'auto', position: 'relative' }}>
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Navigate to="/onboarding" replace />} />
             <Route path="/dashboard" element={<DashboardView />} />
+            <Route path="/onboarding" element={<UniversalOnboardingViewport />} />
             <Route path="/kanban" element={<KanbanView />} />
             <Route path="/list" element={<ListView />} />
             <Route path="/calendar" element={<CalendarView />} />
@@ -165,8 +167,8 @@ function AppContent() {
             <Route path="/collaboration" element={<CollaborationHub />} />
             <Route path="/admin" element={<AdminView />} />
             <Route path="/templates" element={<TemplateHubView />} />
-            <Route path="/signin" element={<SignInView onSuccess={() => window.location.href = '/dashboard'} />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/signin" element={<SignInView onSuccess={() => window.location.hash = '#/onboarding'} />} />
+            <Route path="*" element={<Navigate to="/onboarding" replace />} />
           </Routes>
         </div>
       </div>
@@ -179,8 +181,8 @@ function AppContent() {
       <ToastContainer />
 
       {/* Onboarding */}
-      {showWelcome && <WelcomeModal />}
-      {onboardingActive && <OnboardingTour />}
+      {showWelcome && location.pathname !== '/signin' && <WelcomeModal />}
+      {onboardingActive && location.pathname !== '/signin' && <OnboardingTour />}
     </div>
   );
 }

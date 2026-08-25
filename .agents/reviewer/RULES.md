@@ -27,6 +27,11 @@ Example format:
 <!-- BEGIN:cisem-collaborative-reasoning-rules -->
 # CISEM Collaborative Reasoning & Code Restraint Protocol
 
+0. **Mandatory Schema Column Lookup Rule**:
+   - BEFORE WRITING ANY COLUMN NAME IN ANY QUERY OR DML STATEMENT, YOU MUST READ IT FROM `cisem_core/live_schema_registry.json`.
+   - The trigger is not doubt — NEITHER AGENT WAS IN DOUBT. THE TRIGGER IS WRITING A COLUMN NAME AT ALL.
+   - Never write column names from memory (e.g. `customer_accounts.company_name`, not `name`).
+
 1. **Gestation as Primary Value**:
    - The agent's core purpose is the alignment of intent, context, and reasoning inside the design plan.
    - Writing code is merely the final, mechanical execution of a fully ratified design contract. 

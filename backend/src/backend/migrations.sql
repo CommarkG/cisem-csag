@@ -610,3 +610,10 @@ ALTER TABLE tenant_api_keys ADD COLUMN IF NOT EXISTS ip_allowlist TEXT[] DEFAULT
 -- =====================================================================
 CREATE INDEX IF NOT EXISTS idx_tenant_usage_tenant_date ON tenant_usage_logs (tenant_id, recorded_at DESC);
 CREATE INDEX IF NOT EXISTS idx_tenant_webhook_tenant_date ON tenant_webhook_logs (tenant_id, dispatched_at DESC);
+
+-- =====================================================================
+-- 44. ADD SETTINGS JSONB COLUMN TO CUSTOMER ACCOUNTS TABLE
+-- RATIFIED: GOV-2026-08-25-UNIVERSAL-SETTINGS / Layer 2 Onboarding Infrastructure
+-- =====================================================================
+ALTER TABLE customer_accounts ADD COLUMN IF NOT EXISTS settings jsonb DEFAULT '{}'::jsonb;
+

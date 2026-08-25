@@ -1,0 +1,67 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #61 OPTIMIZING CLIENT ARCHITECTURE IN BACKEND
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Enterprise client architecture requires supporting multi-tenant isolation, company hierarchies, industry classifications, internal client teams, key decision makers, and external participants (such as external designers, legal counsel, or procurement consultants).
+
+Needs & Business Pains:
+Traditional CRM schemas treat clients as flat contact lists. In real-world enterprise sales, a client company has multiple departments, internal decision makers (VP of Procurement, CFO), and external third-party stakeholders (architects, exterior design agencies, legal advisors) who participate in proposal approvals or document reviews.
+
+Challenges:
+- Entity Overloading: Conflating platform SaaS tenant accounts (who own data) with CRM client companies (who buy products/services).
+- Complex Stakeholder Roles: A contact may be an employee, a decision maker, or an external consultant with restricted access to commercial proposal details.
+- Multi-Tenant Security: Ensuring client records created by Tenant A are strictly invisible to Tenant B under all query paths.
+
+Common Gaps & Mistakes:
+- Storing CRM clients in the same table as platform SaaS tenant accounts without entity type segregation or tenant ID ownership.
+- Lacking multi-contact role mapping, forcing all communications to route through a single email address.
+- Giving external stakeholders (designers/lawyers) full admin access instead of scoped guest/reviewer permissions.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: Basic CRM contacts table with a company foreign key.
+- What We Can Do Better: Entity Boundary Segregation: customer_accounts holds platform SaaS tenants, while crm_customers holds CRM client companies with explicit tenant_id FK and RLS. Contacts carry role tags (decision_maker, designer, legal) with granular proposal review links.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Platform Tenant Accounts (backend/src/backend/migrations.sql): customer_accounts (holding tenant workspace accounts).
+- Segregated CRM Client Table (backend/src/backend/migrations.sql Section 38): crm_customers (holding CRM clients with tenant_id FK to customer_accounts(id) and RLS policy crm_customers_tenant_isolation).
+- Contacts Schema: contacts (with customer_account_id / customer_id, assigned_user_id, email, phone, role_code).
+- Client Brand Assets Route (backend/src/backend/main.py): /api/v1/customers/{customer_id}/brand-assets.
+
+Best Way to Use It:
+- Use crm_customers for storing companies that the tenant sells to.
+- Use contacts for storing individual people within client organizations, tagging their decision-maker status and department.
+- Store external participant involvement (designers, lawyers) in proposal_client_drafts or dedicated contact role associations.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Strict RLS Enforcement: Every query against crm_customers and contacts must execute via get_db_client() using the caller's JWT, enforcing tenant_id = current_tenant_id().
+- External Access Control: Public proposal review tokens (public_token in proposals) must restrict external participants (designers/lawyers) to read-only proposal views without exposing internal margin calculations or supplier rate cards.
+- Cascading Teardown: Ensure crm_customers references customer_accounts(id) ON DELETE CASCADE, preventing orphaned client data upon tenant offboarding.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Single-Row Stakeholder Summary: Display client company name, industry, primary decision maker, and external designer on a single clean horizontal row.
+- Role Badge Visual Tokens: Render distinct visual pills for contact roles ("Decision Maker", "External Designer", "Legal Counsel").
+- Contact Creation Modal: Provide structured fields for company, job title, decision-maker authority level, and notification preferences.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire crm_customers to customer_accounts (tenant_id FK).
+- Wire contacts to crm_customers (customer_id FK) and platform users (assigned_user_id FK).
+- Wire proposal approval workflows to notify designated client decision makers upon proposal submission.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS on crm_customers and contacts.
+- Hardwire exclusion of internal margin data from public client proposal tokens.
+- Hardwire mandatory tenant_id validation on all client creation endpoints.

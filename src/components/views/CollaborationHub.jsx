@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 
 export default function CollaborationHub() {
-  const members = useCollabStore((s) => s.members);
+  const storeMembers = useCollabStore((s) => s.members);
   const activityFeed = useCollabStore((s) => s.activityFeed);
   const addMember = useCollabStore((s) => s.addMember);
   const removeMember = useCollabStore((s) => s.removeMember);
@@ -41,6 +41,47 @@ export default function CollaborationHub() {
   const [newMemberRole, setNewMemberRole] = useState('colleague');
   const [waMessage, setWaMessage] = useState('');
   const [waRecipient, setWaRecipient] = useState('');
+
+  // STAGE 3 MANDATORY ADAPTER: Hydrate team members from backend API
+  const [realMembers, setRealMembers] = useState([]);
+  const [loadingMembers, setLoadingMembers] = useState(true);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      setLoadingMembers(true);
+      try {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
+        const res = await fetch('/api/v1/tenant/members', {
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.members && data.members.length > 0) {
+            const mapped = data.members.map((m) => ({
+              id: m.id || m.email,
+              name: m.name || m.full_name || m.email,
+              email: m.email,
+              role: m.role || 'member',
+              company: m.company || 'AGN Ltd',
+              initials: (m.name || m.email || 'U').substring(0, 2).toUpperCase(),
+              avatar: m.avatar || '👨‍💼'
+            }));
+            setRealMembers(mapped);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching tenant members:', err);
+      } finally {
+        setLoadingMembers(false);
+      }
+    };
+    fetchMembers();
+  }, []);
+
+  const members = realMembers.length > 0 ? realMembers : storeMembers;
 
   const handleAddMember = (e) => {
     e.preventDefault();

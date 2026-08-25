@@ -1,0 +1,10 @@
+{
+  "turn_id": "TURN-20260822-005",
+  "declared_files": [
+    "cisem_core/linters/no_forbidden_words.mjs",
+    "eslint.config.mjs",
+    "cisem_core/planning/declared_delivery_manifest.json",
+    "cisem_core/planning/active_ratified_plan.json",
+    "cisem_core/session_handoff.json"
+  ]
+}

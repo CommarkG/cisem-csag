@@ -6,7 +6,10 @@ import os
 import re
 import urllib.parse
 import requests
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 
 def scrape_and_extract_brand(target_url: str) -> dict:
     print(f"[Scraper] Scraping target URL: {target_url}")

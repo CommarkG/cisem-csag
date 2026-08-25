@@ -1,0 +1,71 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #73 TEMPLATE USAGE AS ONE SOURCE OF TRUTH
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Building enterprise software systems, client proposals, website pages, supplier agreements, product listings, or internal reports from scratch creates inconsistency, errors, and massive inefficiency. "#73 Template Usage as One Source of Truth" mandates that every creation flow across the entire platform MUST originate from a ratified, battle-tested master template registered in a central Template Engine.
+
+Types of Templates & Usage Scenarios:
+- Commercial & Proposal Templates: Pre-approved pricing structures, terms, line-item bundles, and branding for client quotes.
+- Document & Report Templates: Standardized layouts for project scopes, legal agreements, delivery receipts, and compliance audits.
+- Web & UI Viewport Templates: Modular layout structures (Header + FilterBar + Grid + SingleRowList) for creating new platform pages or client websites.
+- Entity Blueprint Templates: Pre-configured attribute schemas for quick onboarding of new Clients, Suppliers, Products, and Workflows.
+- Workflow & Pipeline Templates: Standardized state machine templates (Intake -> Qualification -> Proposal -> Execution -> Validation).
+
+Needs & Business Pains:
+- Uncontrolled Drafting: Employees or developers creating custom documents, UI pages, or quotes with inconsistent fields, outdated terms, or broken formatting.
+- Lost Operational Excellence: High-performing sales proposals or project workflows remaining trapped in single files instead of being codified into reusable platform templates.
+- Schema & Compliance Drift: Hardcoding custom fields on individual entities without validating them against master platform schemas.
+
+Draft Pipeline for Ratifying Templates & Statuses:
+1. DRAFT (`draft`): Initial creation of template structure and placeholder schema.
+2. REVIEW (`under_review`): Peer and architectural audit of field bindings, layout rules, and security placeholders.
+3. RATIFIED (`ratified`): Official approval by Governor/Admin; marked as immutable master template for production use.
+4. DEPRECATED (`deprecated`): Archived template version retained for historical audit trails while blocking new instantiations.
+
+How Templates Become the Single Source of Truth:
+By storing master templates in a central database registry (`template_registry`), every new document, website page, quote, supplier agreement, or product line item is instantiated by cloning the active `ratified` template version and injecting runtime entity data. This guarantees 100% architectural and visual consistency across all internal and external touchpoints.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Template Version Contract Gate (cisem_core/platform_core/cisem_gate.py Phase 22): Pre-commit verification enforcing that UI pages and data models adhere to ratified template contracts.
+- Database Schema (backend/src/backend/migrations.sql):
+  - status_library & state_transitions: Authoritative template status transitions (`draft` -> `under_review` -> `ratified` -> `deprecated`).
+  - lookup_registry: Centralized lookup tables for template categories and entity blueprints.
+- UI Layout Blueprints (src/components/views/ & src/app/): Standardized single-row placement, RTL alignment, and glassmorphism styling tokens.
+
+Best Way to Use It:
+- Require every intake flow (Intake-to-Project, Proposal Generator, Supplier Onboarding) to call `/api/v1/templates?category=<type>&status=ratified` to select an approved master template before accepting user input.
+- Hydrate template placeholders dynamically using server-side schema interpolators, binding entity context (`customer_accounts`, `crm_customers`, `supplier_mappings`, `catalog_items`).
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Immutable Ratified Templates: Once a template reaches `ratified` status, its core structure and field definitions MUST be locked. Schema updates must produce a new version number (e.g. `V1.1` -> `V1.2`) rather than overwriting existing templates.
+- Template Hydration Performance: Template compilation (merging mustache/jinja variables into JSON/HTML structures) must be cached in memory or executed via streaming pipelines to ensure sub-50ms response times.
+- Strict Tenant Isolation: Template registries must distinguish between global platform templates (`tenant_id IS NULL`) and tenant-customized templates (`tenant_id = current_tenant_id()`).
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Template Selection Modal: Mandatory initial step in all creation flows ("Start from Template") displaying thumbnail previews, version badges, and ratification status tags.
+- Dynamic Form Rendering: Auto-generate client-side form controls directly from template JSON schema definitions (`template_schema`), ensuring zero hardcoded input fields.
+- Real-Time Preview Panel: Render a live side-by-side preview showing the hydrated document, web page, or quote as the user fills in template variables.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire `/api/v1/templates` backend endpoint directly to frontend Template Picker components.
+- Wire template ratification state transitions (`draft` -> `under_review` -> `ratified`) to database `enforce_state_transition()` triggers.
+- Wire Intake-to-Project (ITP) workflow to auto-instantiate task trees from ratified project templates upon proposal sign-off.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Phase 22 (cisem_gate.py) to block any commit that instantiates entities or UI views without referencing a ratified template contract.
+- Hardwire database check constraints enforcing that only `ratified` templates can be used for external client proposals, invoices, or public website pages.
+- Hardwire single-source-of-truth file resolution for template asset downloads in `/api/download`.

@@ -1,0 +1,11 @@
+{
+  "plan_id": "CISEM-IP-20260822-GATE-PLAN-BOUNDARIES-V1.0",
+  "governor_signature": "GOV-YARIV-20260822-GATE-PLAN-BOUNDARIES-V1.0",
+  "ratified_at": "2026-08-22T20:16:03Z",
+  "authorized_target_files": [
+    "cisem_core/platform_core/cisem_gate.py",
+    "cisem_core/planning/active_ratified_plan.json",
+    "cisem_core/planning/gate_config.json",
+    "cisem_core/session_handoff.json"
+  ]
+}

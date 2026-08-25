@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CISEM Tenant Configuration Schema V1.0",
+  "type": "object",
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "pattern": "^TENANT-[A-Z0-9_-]+$"
+    },
+    "company_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "brand_color": {
+      "type": "string",
+      "pattern": "^#(?:[0-9a-fA-F]{3}){1,2}$"
+    },
+    "default_locale": {
+      "type": "string",
+      "enum": ["he-IL", "en-US"]
+    },
+    "rtl_enabled": {
+      "type": "boolean"
+    },
+    "enabled_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "terminology": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["tenant_id", "company_name", "enabled_capabilities"],
+  "additionalProperties": false
+}

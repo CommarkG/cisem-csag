@@ -1,0 +1,66 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #80 ACCOUNTABILITY, PROJECT & TASK MANAGEMENT
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Enterprise accountability, project, and task management requires building a single source of operational truth that binds project milestones, hierarchical task trees, completion tracking, role assignments, and clear ownership matrices directly to client contracts, supplier purchase orders, and catalog product line items.
+
+Needs & Business Pains:
+Organizations frequently struggle with isolated project tools (e.g. Asana/Trello) that have zero real-time awareness of CRM deals, client contracts, or supplier fulfillment timelines. This disconnect causes project delays, untracked scope creep, unassigned task dependencies, and a complete lack of financial accountability when supplier delays impact client delivery dates.
+
+Challenges:
+- Hierarchical Task Dependency Trees: Modeling nested task structures (Phase -> Milestone -> Task -> Subtask) while enforcing strict completion prerequisites and predecessor rules.
+- Multi-Entity Wiring: Linking a single task (e.g. "Laser Engraving Quality Audit") simultaneously to a CRM client (`crm_customers`), a specific supplier mapping (`supplier_mappings`), an assigned internal user (`users`), and a catalog item variation (`product_variations`).
+- Accountability & Ownership Tracing: Ensuring every action, status change, and delay has an immutable audit log identifying the responsible actor and tenant boundary.
+
+Common Gaps & Mistakes:
+- Managing projects in isolated third-party tools without database foreign keys back to commercial proposals and supplier purchase orders.
+- Lacking atomic task state dependency checks, allowing downstream tasks to mark as "completed" before upstream prerequisites are finished.
+- Failing to snapshot task responsibility metrics, making accountability audits impossible when delivery deadlines are missed.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: Standalone project management software connected via lightweight webhooks.
+- What We Can Do Better: Integrated Accountability Engine: backlog_registry + deals + crm_customers + supplier_mappings + status_library + state_transitions + automated proof-of-work telemetry, enforcing zero un-owned tasks and immediate cross-entity visibility.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Task & Backlog Schemas (backend/src/backend/migrations.sql): backlog_registry, status_library, state_transitions, deals, crm_customers, contacts, supplier_mappings, role_definitions, user_account_roles.
+- Hierarchical Dashboard UI (src/components/views/AdminView.jsx & src/app/page.tsx): DIMA Dashboard Kanban & Task Tree views with responsive status filtering.
+- State Transition Engine (backend/src/backend/migrations.sql Section 2): enforce_state_transition() trigger enforcing valid status progressions.
+
+Best Way to Use It:
+- Store master project tasks in backlog_registry with foreign keys pointing to deal_id, customer_id, supplier_mapping_id, and assigned_user_id.
+- Use status_library and state_transitions to enforce deterministic status progression (backlog -> in_progress -> review -> verified_impact).
+- Bind task milestones to proposal line items (proposal_items), creating automatic task generation upon proposal approval.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Predecessor Task Dependency Guards: Endpoints updating task status to "completed" must verify that all predecessor tasks (parent_task_id / dependency_ids) are fully resolved.
+- Strict Tenant RLS Isolation: Ensure backlog_registry queries enforce tenant_id = current_tenant_id() in Postgres RLS policies across all multi-tenant API routes.
+- Immutable Accountability Audit Trails: Every status transition or assignment update must write an entry to an audit log containing actor_id, timestamp, previous_state, new_state, and evidence_link.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Single-Row Task Summary Layout: Display task title, assigned user pill, client badge, supplier chip, target due date, and status indicator on a single dense horizontal row.
+- Visual Entity Link Tokens: Render distinct visual chips for linked entities (Blue = Client, Purple = Supplier, Green = Product SKU).
+- Predecessor Dependency Warnings: Visually lock or disable task completion toggles when upstream dependency tasks remain incomplete.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire backlog_registry tasks to crm_customers (customer_id FK) and supplier_mappings (supplier_id FK).
+- Wire backlog_registry to platform users (assigned_user_id FK) and role_definitions.
+- Wire client proposal approval events to automatically instantiate project task trees in backlog_registry.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS on backlog_registry and project task tables.
+- Hardwire database state transition triggers (enforce_state_transition()) to prevent illegal task state jumps.
+- Hardwire mandatory validated_impact verification before marking project milestones as 100% complete.

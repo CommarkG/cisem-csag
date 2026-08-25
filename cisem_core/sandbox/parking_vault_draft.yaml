@@ -4,15 +4,16 @@ parked_items:
   complexity: 7
   description: Switching themes in the dashboard portal has a latency lag on Vercel
     Edge. Needs client hydration bypass.
-  governor_signature: null
+  governor_signature: GOV-RATIFIED-2026-08-25-MASTER-V2
   item_id: PARK-001
-  linked_plans: []
+  linked_plans:
+  - CISEM-IP-20260825-MASTER-CONSOLIDATED-V2
   priority_score: 7.8
-  ratified_by_governor: false
+  ratified_by_governor: true
   requires_governor_approval: true
   scope: 8
   significance: 8
-  status: parked
+  status: ratified
   tags:
   - '[PERFORMANCE.CACHE]'
   - '[UI.THEME]'
@@ -275,18 +276,20 @@ parked_items:
   - '[AUDIT.RIGIDITY]'
   title: Naked Numbers Found -- Context/Reasoning missing for 568 numbers
 - atv_generated: true
-  atv_timestamp: '2026-08-06T20:29:32.319168+00:00'
+  atv_timestamp: '2026-08-22T20:09:02.053875+00:00'
   description: 'ATV Contextual check detected expected personas for ''SECURITY'' scenario
     did not fire. Expected: [''SECURITY_AUDITOR_PERSONA'', ''STABILITY_EXPERT_PERSONA'',
-    ''GOVERNOR_PROXY_PERSONA'']. Fired: [''SECURITY_AUDITOR_PERSONA'', ''STABILITY_EXPERT_PERSONA''].'
-  governor_signature: GOV-YARIV-20260806-PERSONA-EXPANSION-V1.0
+    ''GOVERNOR_PROXY_PERSONA'']. Fired: [''SECURITY_AUDITOR_PERSONA'', ''STABILITY_EXPERT_PERSONA''].
+
+    Re-detected on 2026-08-22T20:09:02.053875+00:00.'
+  governor_signature: null
   item_id: PARK-016
   linked_plans:
   - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
   - CISEM-IP-20260806-PERSONA-EXPANSION-V1.0
-  ratified_by_governor: true
+  ratified_by_governor: false
   requires_governor_approval: true
-  status: validated_impact
+  status: parked
   tags:
   - '[IMPROVEMENT.GAP]'
   - '[AUDIT.CONTEXTUAL]'
@@ -745,8 +748,9 @@ parked_items:
   title: Naked Numbers Found -- Context/Reasoning missing for 30 numbers
 - atv_generated: true
   atv_timestamp: '2026-08-14T23:20:00+03:00'
-  description: The workspace reconciler duplicate version detector flagged eleven coexisting
-    versions of the Universal Registry (V1.25 through V1.44) residing in cisem_core/.
+  description: The workspace reconciler duplicate version detector flagged eleven
+    coexisting versions of the Universal Registry (V1.25 through V1.44) residing in
+    cisem_core/.
   governor_signature: null
   item_id: PARK-041
   linked_plans: []
@@ -760,8 +764,9 @@ parked_items:
 - atv_generated: true
   atv_timestamp: '2026-08-14T23:20:00+03:00'
   description: ATV verdict mapping calls reset_turn_counter() when GAPS_FOUND is returned,
-    clearing the turn counter and resetting maturity signals. This allows open gaps to bypass
-    the turn limit ceiling (15) that would otherwise force a Governor-level audit.
+    clearing the turn counter and resetting maturity signals. This allows open gaps
+    to bypass the turn limit ceiling (15) that would otherwise force a Governor-level
+    audit.
   governor_signature: null
   item_id: PARK-042
   linked_plans: []
@@ -772,4 +777,37 @@ parked_items:
   - '[IMPROVEMENT.GAP]'
   - '[PROCESS.RESET_LOOP]'
   title: ATV Verdict Self-Reset Loop -- GAPS_FOUND verdict calls reset_turn_counter()
-
+- atv_generated: true
+  atv_timestamp: '2026-08-24T18:19:54.798961+00:00'
+  description: 'ATV Contextual check detected expected personas for ''ARCHITECTURE_CONSOLIDATION''
+    scenario did not fire. Expected: [''CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA'',
+    ''PLATFORM_DEVELOPER_PERSONA'', ''GOVERNOR_PROXY_PERSONA'', ''STABILITY_EXPERT_PERSONA''].
+    Fired: [].'
+  governor_signature: null
+  item_id: PARK-043
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[IMPROVEMENT.GAP]'
+  - '[AUDIT.CONTEXTUAL]'
+  - '[WEEKLY_SESSION_PARKING]'
+  title: Contextual Audit Gap -- Low persona trigger relevance (0.0%) in scenario
+    'ARCHITECTURE_CONSOLIDATION'
+- atv_generated: true
+  atv_timestamp: '2026-08-24T18:19:54.864077+00:00'
+  description: 'ATV detected theater signals: [workspace.diff] ZERO_TRIGGERS: 10 personas
+    registered but 0 triggered'
+  governor_signature: null
+  item_id: PARK-044
+  linked_plans:
+  - CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+  ratified_by_governor: false
+  requires_governor_approval: true
+  status: parked
+  tags:
+  - '[THEATER.DETECTED]'
+  - '[AUDIT.INTEGRITY]'
+  title: Theater Detected in Audit Cycle

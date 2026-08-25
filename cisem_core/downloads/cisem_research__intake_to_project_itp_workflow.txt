@@ -1,0 +1,67 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #40 CREATION ITP "INTAKE-TO-PROJECT" WORKFLOW OPTIMIZATION
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+The "Intake-to-Project" (ITP) workflow governs the complete operational conversion pipeline: initial client brief intake -> AI-assisted product selection & vector matching -> dynamic proposal generation -> client review & digital approval -> automated project instantiation & supplier purchase order dispatch.
+
+Needs & Business Pains:
+Service providers, agencies, and corporate vendors suffer from slow lead-to-proposal conversion times. When brief intake relies on manual back-and-forth emails, compiling line-item pricing takes days, and client approval status is untracked, resulting in lost deals and operational friction.
+
+Challenges:
+- Unstructured Intake Parsing: Converting raw client brief text (budget, quantity, event date, branding preferences) into structured catalog queries.
+- Zero-Friction Proposal Generation: Generating a accurate commercial proposal with line-item cost modifier calculations in under 2 seconds.
+- Seamless Project Handoff: Instantiating an active project with line-item task assignments immediately upon client digital sign-off.
+
+Common Gaps & Mistakes:
+- Re-keying intake data manually into multiple systems (CRM, proposal tool, accounting software).
+- Allowing client proposals to be modified after digital approval without creating an audited revision version.
+- Lacking automated stock and supplier lead-time checks prior to proposal submission.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: Manual PDF proposal generation emailed to clients with manual invoice creation upon approval.
+- What We Can Do Better: ITP Pipeline Architecture: Structured Brief Intake + AI Vector Product Matching (/api/v1/vector-search) + Instant Proposal Engine (/api/v1/proposals/generate) + Secure Public Review Token Tokenization + Automated Project & Purchase Order Dispatch.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Brief & Chunk Schemas (backend/src/backend/migrations.sql): briefs, document_chunks, proposal_client_drafts, proposals, proposal_items, pdf_queue.
+- Vector Product Discovery (backend/src/backend/vector_search_service.py): pgvector similarity search against catalog embeddings.
+- Proposal Generation Engine (backend/src/backend/main.py): /api/v1/proposals/generate (creates proposal line item snapshots), /api/v1/proposals/public/{token} (public client review token endpoint), /api/v1/inventory/verify-stock.
+
+Best Way to Use It:
+- Ingest client brief requirements into briefs and document_chunks.
+- Run vector_search_service to discover matching catalog items based on brief keywords and target budget constraints.
+- Call /api/v1/proposals/generate to construct an immutable proposal with line-item variation modifiers and supplier mappings.
+- Render public client proposal review views using secure public_token endpoints.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Immutable Line-Item Pricing Snapshots: Ensure proposal_items locks in unit costs, branding fees, and variation modifiers at generation time. Live catalog price updates must never retroactively alter approved proposals.
+- Public Token Security: Ensure public proposal review endpoints (/api/v1/proposals/public/{token}) expose only client-facing prices, product titles, and variation modifiers. Internal wholesale supplier costs and gross profit margins must be strictly omitted.
+- Atomic Project Creation Trigger: Ensure client approval triggers an atomic transaction creating the active project record, locking line items, and enqueuing PDF generation in pdf_queue.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Single-Row Pipeline Stepper: Render ITP pipeline stages (Brief Ingest -> AI Matching -> Proposal -> Client Sign-Off -> Project Active) on a single compact horizontal header row.
+- Instant Proposal Preview: Provide an interactive side-by-side proposal preview pane as sales reps select catalog items and variations.
+- Digital Sign-Off Modal: Render a clean digital approval signature modal for client review.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire client briefs to vector product discovery queries.
+- Wire /api/v1/proposals/generate to proposal_items line items and supplier mapping cost tables.
+- Wire client approval events to pdf_queue for asynchronous background PDF rendering and project instantiation.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS on briefs, proposals, and project records.
+- Hardwire immutable proposal version locking upon client digital sign-off.
+- Hardwire mandatory stock verification checks before locking final proposal approval.

@@ -209,3 +209,145 @@ Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust
 [2026-08-18T06:45:01.601216Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-08-18T21:22:34.303181Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-08-18T21:55:18.592126Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-19T01:11:22.744490Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-19T07:06:10.849444Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T03:25:44.961355Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 78fd61da53c53e40796f5eea6e072527c009b00019af0ef5e08ee95b63ab7ebe
+  Registered hash: 3c2c6c73978ffe4ee0aefe991108070a8b17c40f24bc7bcea7a28f00775e7203
+[2026-08-22T03:26:17.173407Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\shared\PageGreetingBanner.jsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-22T03:26:34.075465Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violating files:
+  src\components\views\SettingsView.jsx
+  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.
+  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.
+[2026-08-22T03:26:55.269712Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T14:13:58.798672Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: dbdfd8753780dee877a670ce8920999a1b02c94568722262e610817149dfc7d8
+  Registered hash: d8dc4e96a5acccc7abf1955a615da2241b9b775ce475092013cb2c97d6298cbd
+[2026-08-22T14:15:32.273412Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: Bento Page Layout Recipe validation failed in 'src\components\views\KanbanView.jsx'.
+  Rule: Bento Page Layout Recipe components must define grid container elements (e.g. className='grid').
+[2026-08-22T14:16:30.204829Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: Bento Page Layout Recipe validation failed in 'src\components\views\KanbanView.jsx'.
+  Rule: Bento Page Layout Recipe components must define grid container elements (e.g. className='grid').
+[2026-08-22T14:18:04.994392Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T14:43:59.680245Z] [Phase 18] CISEM_GATE_BLOCKED -- Phase 18: Mega task failed expert audit panel validation.
+  Blast Radius: HIGH
+  Audit Scenario: workspace.diff (ARCHITECTURE_CONSOLIDATION)
+  Verdict: BLOCKED
+  Rule: Mega tasks require an APPROVED verdict from all triggered expert audit personas.
+[2026-08-22T15:04:01.870981Z] [Phase 18] CISEM_GATE_BLOCKED -- Phase 18: Mega task failed expert audit panel validation.
+  Blast Radius: HIGH
+  Audit Scenario: workspace.diff (ARCHITECTURE_CONSOLIDATION)
+  Verdict: BLOCKED
+  Rule: Mega tasks require an APPROVED verdict from all triggered expert audit personas.
+[2026-08-22T15:05:31.714754Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T15:41:48.753220Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T16:14:36.899971Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 377eb3ce3587862a86c1591a038fb4ad7a8bb0f388e04bccbd822c8ece6a2936
+  Registered hash: dbdfd8753780dee877a670ce8920999a1b02c94568722262e610817149dfc7d8
+[2026-08-22T16:19:40.070651Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T16:41:05.099076Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-22T20:05:47.571226Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: e8b780e9146613dcd1bd88b5443b7feeb76843a02dff3942217282eb465c51b6
+  Registered hash: 67bac6ee5e00ef0a2dee79effc0cd8bb5246e96c5fa54f2bc353349e749e9974
+[2026-08-22T20:08:14.259852Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 29a92478787fa109630786a0d1841050044454dd751f58300a22b1b20879e762
+  Registered hash: e8b780e9146613dcd1bd88b5443b7feeb76843a02dff3942217282eb465c51b6
+[2026-08-22T20:09:15.118362Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\DimaAppWrapper.jsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-23T02:36:24.541059Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: a5aac0c33ab8ecb79bc2d9ea064bdc2b259855421930dbe6d5d4b7306dd5223a
+  Registered hash: 29a92478787fa109630786a0d1841050044454dd751f58300a22b1b20879e762
+[2026-08-23T02:44:29.733455Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\DimaAppWrapper.jsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-23T02:49:36.740141Z] [Phase 19] CISEM_GATE_BLOCKED -- Phase 19: UI Playbook compliance violation in 'src\components\shared\AdminTable.jsx'.
+  Rule: Every modified or new UI component must declare a valid category comment header.
+  Example: // @playbook_category: Design Token
+  Allowed values: Design Token | Micro-interaction Module | Bento Page Layout Recipe
+[2026-08-23T03:12:35.306511Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violating files:
+  src\components\views\CollaborationHub.jsx
+  Rule: Mandatory CISEM code header and GOV signature must be present in JSDoc style.
+  Fix: Add the mandatory JSDoc header at the top of the file: ratified_plan & governor_signature.
+[2026-08-23T04:53:17.096479Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-23T06:40:34.654201Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-23T19:24:13.469054Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T04:52:45.648372Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T11:46:43.745712Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\InquiryIntakeView.tsx: Missing mandatory code header block.
+  src\components\views\QuoteBuilderView.tsx: Missing mandatory code header block.
+  src\components\views\WorkOrderAcceptanceView.tsx: Missing mandatory code header block.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-24T12:32:37.308549Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T18:02:37.553718Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T18:04:30.682797Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T18:05:30.271094Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T18:33:47.744308Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-24T19:23:41.575684Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\SignInView.tsx: Missing mandatory code header block.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-24T19:26:50.567913Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T00:16:32.810948Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T00:40:43.596026Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T00:43:01.990852Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: ed5a2e48b5297e3412471402c75ed9fad4167dd8a4f0376854e8d3c1fbfc707c
+  Registered hash: f4ac5d9a2d1eeb7cde46f76acedd3cab285c717bec106ee452cd148ea4a521f3
+[2026-08-25T01:25:33.391185Z] [Phase 18] CISEM_GATE_BLOCKED -- Phase 18: Micro task violates file modification limits.
+  Blast Radius: LOW
+  Modified Files (excl. plans/tasks): ['.agents\\reviewer\\DATABASE_INTENT.md', '.agents\\reviewer\\GENERATION_METADATA.json', '.agents\\reviewer\\GOVERNANCE_STATE.md', '.agents\\reviewer\\INVENTORY.md', '.agents\\reviewer\\RULES.md', '2026-08-10__AntigravityLocal__YarivHuman__Consolidated_Master_Implementation_Plan_V17_Plan__V1.7.md', '2026-08-10__CISEM__AntigravityLocal__SystemDependenciesMap__V1.0.md', 'AGENTS.md', 'cisem_core\\cael_status.json', 'cisem_core\\cisem_turn_counter.json', 'cisem_core\\logs\\gate_violations.log', 'cisem_core\\sandbox\\atv_report.json', 'cisem_core\\sandbox\\orchestration_trial_report.json', 'cisem_core\\sandbox\\parking_vault_draft.yaml', 'cisem_core\\sandbox\\root_cause_registry.json', 'eslint.config.mjs', 'src\\app\\globals.css', 'src\\app\\page.tsx', 'src\\components\\AppWrapper.jsx', 'src\\components\\layout\\Header.jsx', 'src\\components\\views\\CollaborationHub.jsx', 'src\\components\\views\\SignInView.tsx', 'src\\lib\\tenant_context.ts', 'src\\stores\\useAdminStore.js', 'src\\stores\\useCollabStore.js', 'src\\stores\\useNotificationStore.js', 'src\\stores\\useOnboardingStore.js', 'src\\stores\\useTaskStore.js', 'src\\stores\\useUIStore.js', '2026-08-23__AntigravityLocal__YarivHuman__Execution_Permanent_Architecture_and_Security_Hardening_Walkthrough__V1.0.md', '2026-08-23__AntigravityLocal__YarivHuman__Master_Permanent_System_Architecture_and_Security_Hardening_Plan__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Execution_Permanent_Architecture_and_Security_Hardening_Walkthrough__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Master_Permanent_System_Architecture_and_Security_Hardening_Plan__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Ratified_CoreCycle_Universal_Inquiry_to_Signed_Work_Order_Pipeline_Plan__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Universal_Inquiry_to_Signed_Work_Order_Core_Pipeline_Walkthrough__V1.0.md', '2026-08-24__CISEM__CanonicalGovernanceBundle__V1.0.zip', '2026-08-25__AntigravityLocal__YarivHuman__Plan_CISEM_IP_20260825_UNIVERSAL_ONBOARDING_V1_Plan__V1.md', '2026-08-25__AntigravityLocal__YarivHuman__Ratified_CoreCycle_Universal_Inquiry_to_Signed_Work_Order_Pipeline_Plan__V1.0.md', '2026-08-25__AntigravityLocal__YarivHuman__Universal_Inquiry_to_Signed_Work_Order_Core_Pipeline_Walkthrough__V1.0.md', 'Product_and_Pricing_Bundle_Unpacked', 'cisem_core\\canon\\2026-08-22__CISEM__Core_Capability_vs_Application_Isolation_Architectures__V1.0.md', 'cisem_core\\canon\\2026-08-22__CISEM__Product_Supplier_Cost_Delivery_Wiring_Model__V1.0.md', 'cisem_core\\downloads', 'cisem_core\\linters', 'cisem_core\\live_schema_registry.json', 'cisem_core\\planning\\2026-08-25__AntigravityLocal__YarivGovernor__UniversalOnboardingArchitecture__V1.0.md', 'cisem_core\\session_handoff.json', 'cisem_core\\tools\\run_guarded.py', 'cisem_research__accountability_project_task_management.txt', 'cisem_research__client_architecture_optimization.txt', 'cisem_research__communication_hub_frictionless_uxui.txt', 'cisem_research__consolidation_one_source_of_truth.txt', 'cisem_research__crm_and_accounting_architecture.txt', 'cisem_research__hardcode_ai_pocket_ai_oversight.txt', 'cisem_research__intake_to_project_itp_workflow.txt', 'cisem_research__product_architecture_optimization.txt', 'cisem_research__stress_test_backend_vs_platform_frontend.txt', 'cisem_research__supplier_architecture_optimization.txt', 'cisem_research__template_usage_as_one_source_of_truth.txt', 'public\\2026-08-15__CISEM__ReviewerContextPack__Export__V1.0.zip', 'public\\2026-08-18__CISEM__ReviewerContextPack__Export__V1.1.zip', 'public\\2026-08-19__CISEM__ResearchBriefs__Export__V1.0.zip', 'public\\cisem_research__accountability_project_task_management.txt', 'public\\cisem_research__client_architecture_optimization.txt', 'public\\cisem_research__communication_hub_frictionless_uxui.txt', 'public\\cisem_research__consolidation_one_source_of_truth.txt', 'public\\cisem_research__crm_and_accounting_architecture.txt', 'public\\cisem_research__hardcode_ai_pocket_ai_oversight.txt', 'public\\cisem_research__intake_to_project_itp_workflow.txt', 'public\\cisem_research__product_architecture_optimization.txt', 'public\\cisem_research__stress_test_backend_vs_platform_frontend.txt', 'public\\cisem_research__supplier_architecture_optimization.txt', 'public\\cisem_research__template_usage_as_one_source_of_truth.txt', 'public\\downloads', 'src\\stores\\useTenantSessionStore.js', 'src\\utils\\tenantStorageAdapter.js', 'tests'] (Count: 77, Limit: <= 2)
+  Rule: Micro (LOW blast radius) tasks are restricted to minor, localized edits of at most 2 files.
+[2026-08-25T01:25:44.984294Z] [Phase 18] CISEM_GATE_BLOCKED -- Phase 18: Micro task violates file modification limits.
+  Blast Radius: LOW
+  Modified Files (excl. plans/tasks): ['.agents\\reviewer\\DATABASE_INTENT.md', '.agents\\reviewer\\GENERATION_METADATA.json', '.agents\\reviewer\\GOVERNANCE_STATE.md', '.agents\\reviewer\\INVENTORY.md', '.agents\\reviewer\\RULES.md', '2026-08-10__AntigravityLocal__YarivHuman__Consolidated_Master_Implementation_Plan_V17_Plan__V1.7.md', '2026-08-10__CISEM__AntigravityLocal__SystemDependenciesMap__V1.0.md', 'AGENTS.md', 'cisem_core\\cael_status.json', 'cisem_core\\cisem_turn_counter.json', 'cisem_core\\logs\\gate_violations.log', 'cisem_core\\sandbox\\atv_report.json', 'cisem_core\\sandbox\\orchestration_trial_report.json', 'cisem_core\\sandbox\\parking_vault_draft.yaml', 'cisem_core\\sandbox\\root_cause_registry.json', 'eslint.config.mjs', 'src\\app\\globals.css', 'src\\app\\page.tsx', 'src\\components\\AppWrapper.jsx', 'src\\components\\layout\\Header.jsx', 'src\\components\\views\\CollaborationHub.jsx', 'src\\components\\views\\SignInView.tsx', 'src\\lib\\tenant_context.ts', 'src\\stores\\useAdminStore.js', 'src\\stores\\useCollabStore.js', 'src\\stores\\useNotificationStore.js', 'src\\stores\\useOnboardingStore.js', 'src\\stores\\useTaskStore.js', 'src\\stores\\useUIStore.js', '2026-08-23__AntigravityLocal__YarivHuman__Execution_Permanent_Architecture_and_Security_Hardening_Walkthrough__V1.0.md', '2026-08-23__AntigravityLocal__YarivHuman__Master_Permanent_System_Architecture_and_Security_Hardening_Plan__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Execution_Permanent_Architecture_and_Security_Hardening_Walkthrough__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Master_Permanent_System_Architecture_and_Security_Hardening_Plan__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Ratified_CoreCycle_Universal_Inquiry_to_Signed_Work_Order_Pipeline_Plan__V1.0.md', '2026-08-24__AntigravityLocal__YarivHuman__Universal_Inquiry_to_Signed_Work_Order_Core_Pipeline_Walkthrough__V1.0.md', '2026-08-24__CISEM__CanonicalGovernanceBundle__V1.0.zip', '2026-08-25__AntigravityLocal__YarivHuman__Plan_CISEM_IP_20260825_UNIVERSAL_ONBOARDING_V1_Plan__V1.md', '2026-08-25__AntigravityLocal__YarivHuman__Ratified_CoreCycle_Universal_Inquiry_to_Signed_Work_Order_Pipeline_Plan__V1.0.md', '2026-08-25__AntigravityLocal__YarivHuman__Universal_Inquiry_to_Signed_Work_Order_Core_Pipeline_Walkthrough__V1.0.md', 'Product_and_Pricing_Bundle_Unpacked', 'cisem_core\\canon\\2026-08-22__CISEM__Core_Capability_vs_Application_Isolation_Architectures__V1.0.md', 'cisem_core\\canon\\2026-08-22__CISEM__Product_Supplier_Cost_Delivery_Wiring_Model__V1.0.md', 'cisem_core\\downloads', 'cisem_core\\linters', 'cisem_core\\live_schema_registry.json', 'cisem_core\\planning\\2026-08-25__AntigravityLocal__YarivGovernor__UniversalOnboardingArchitecture__V1.0.md', 'cisem_core\\session_handoff.json', 'cisem_core\\tools\\run_guarded.py', 'cisem_research__accountability_project_task_management.txt', 'cisem_research__client_architecture_optimization.txt', 'cisem_research__communication_hub_frictionless_uxui.txt', 'cisem_research__consolidation_one_source_of_truth.txt', 'cisem_research__crm_and_accounting_architecture.txt', 'cisem_research__hardcode_ai_pocket_ai_oversight.txt', 'cisem_research__intake_to_project_itp_workflow.txt', 'cisem_research__product_architecture_optimization.txt', 'cisem_research__stress_test_backend_vs_platform_frontend.txt', 'cisem_research__supplier_architecture_optimization.txt', 'cisem_research__template_usage_as_one_source_of_truth.txt', 'public\\2026-08-15__CISEM__ReviewerContextPack__Export__V1.0.zip', 'public\\2026-08-18__CISEM__ReviewerContextPack__Export__V1.1.zip', 'public\\2026-08-19__CISEM__ResearchBriefs__Export__V1.0.zip', 'public\\cisem_research__accountability_project_task_management.txt', 'public\\cisem_research__client_architecture_optimization.txt', 'public\\cisem_research__communication_hub_frictionless_uxui.txt', 'public\\cisem_research__consolidation_one_source_of_truth.txt', 'public\\cisem_research__crm_and_accounting_architecture.txt', 'public\\cisem_research__hardcode_ai_pocket_ai_oversight.txt', 'public\\cisem_research__intake_to_project_itp_workflow.txt', 'public\\cisem_research__product_architecture_optimization.txt', 'public\\cisem_research__stress_test_backend_vs_platform_frontend.txt', 'public\\cisem_research__supplier_architecture_optimization.txt', 'public\\cisem_research__template_usage_as_one_source_of_truth.txt', 'public\\downloads', 'src\\stores\\useTenantSessionStore.js', 'src\\utils\\tenantStorageAdapter.js', 'tests'] (Count: 77, Limit: <= 2)
+  Rule: Micro (LOW blast radius) tasks are restricted to minor, localized edits of at most 2 files.
+[2026-08-25T01:27:25.927698Z] [Phase 22] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\UniversalOnboardingViewport.jsx: Header claims plan 'CISEM-IP-20260825-UNIVERSAL-ONBOARDING' with sig 'GOV-RATIFIED-2026-08-25' which is NOT in ratified_plans_manifest.json.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-25T02:23:06.879550Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T02:26:52.999324Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T03:39:35.405384Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T04:06:45.286051Z] [Phase 24] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0.py: isolated
+  scratch\check_content.py: isolated
+  scratch\check_schema.py: isolated
+  scratch\check_walkthrough.py: isolated
+  scratch\debug_gate_phase8.py: isolated
+  scratch\find_offending_file.py: isolated
+  scratch\fix_and_gate.py: isolated
+  scratch\fix_and_test.py: isolated
+  scratch\fix_walkthrough.py: isolated
+  scratch\list_walkthroughs.py: isolated
+  scratch\print_atv_results.py: isolated
+  scratch\print_registry_end.py: isolated
+  scratch\promote_walkthrough.py: isolated
+  scratch\test_api.py: isolated
+  scratch\test_gate_regex.py: isolated
+  scratch\test_git_modified.py: isolated
+  scratch\test_tenant_blind_state_preventions.py: isolated
+
+[FINDINGS]
+
+  CHECK B - Header trust without HMAC (window=20) (1 finding(s))
+    backend\src\backend\main.py:150
+      code:   hdr_tenant = request.headers.get("x-tenant-id") or request.headers.get("x-current-tenant-id")
+      detail: x-tenant* header read without hmac verification within 20 lines
+
+[SUMMARY]  1 finding(s) across 192 files scanned
+[2026-08-25T08:11:42.205822Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

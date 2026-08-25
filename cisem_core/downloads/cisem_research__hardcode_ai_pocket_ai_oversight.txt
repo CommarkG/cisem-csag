@@ -1,0 +1,65 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #50 HARD CODE & AI POCKET & AI OVERSIGHT
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Enterprise AI platforms must balance deterministic "Hard Code" execution (compiled rules, cryptographic security, database constraints) with dynamic "AI Pockets" (LLM reasoning, context extraction, recommendations) under strict "AI Oversight" (verification gates, audit logging, human approval).
+
+Needs & Business Pains:
+Relying 100% on hardcoded rules makes software rigid and incapable of adapting to varied user inputs. Conversely, relying 100% on LLM prompt outputs creates hallucination risk, security bypasses, and un-reproducible business logic.
+
+Challenges:
+- Defining Boundaries: Knowing exactly which decisions MUST be hardcoded (security boundaries, tenant isolation, price totals) versus which belong in an AI Pocket (summary generation, classification, product recommendations).
+- Hallucination Control: Preventing an AI Pocket from fabricating database entity IDs, pricing values, or customer credentials.
+
+Common Gaps & Mistakes:
+- Allowing LLMs to write directly to SQL tables without a hardcoded schema validator.
+- Executing LLM-generated code or commands without pre-commit or pre-execution gate verification.
+- Treating AI outputs as final truth rather than proposed drafts requiring human/governance ratification.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: Wrapper functions with basic JSON schema validation.
+- What We Can Do Better: A 3-layered architecture: Hardcoded Security Foundation + Isolated AI Pocket Engine + Multi-Persona AI Oversight Auditor (e.g., CisemAuditor / ATV verifiers) ensuring zero unverified side effects.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Hardcoded Enforcement Engine (cisem_core/platform_core/cisem_gate.py): Hardened pre-commit gate verifying AST modularity, file line ceilings, and migration constraints.
+- AI Model Integration (backend/src/backend/main.py): OpenRouter / OpenAI / Gemini client bridges for dynamic inference.
+- AI Oversight Protocols (AGENTS.md & GEMINI.md): 10-persona expert panel audit requirements and mandatory planning mode default.
+
+Best Way to Use It:
+- Hardcode all authorization checks, tenant boundary logic, and database schemas in Python/SQL.
+- Encapsulate LLM prompts inside dedicated AI Pocket service functions (such as vector similarity search or document chunk extraction).
+- Route all AI Pocket outputs through a hardcoded Pydantic schema validator before returning to the frontend or database.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Prompt Injection Defense: Sanitize all user-supplied text before embedding it into LLM prompt contexts.
+- Deterministic Fallbacks: Ensure every AI Pocket has a hardcoded deterministic fallback if the LLM API times out or fails schema validation.
+- Audit Telemetry: Log every AI Pocket execution (prompt hash, model name, latency, token count) to an immutable audit table.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Visual Indicators for AI Drafts: Clearly mark AI-generated proposals, summaries, or matches with distinct UI badges ("AI Proposed") vs ratified human records.
+- Approval Actions: Provide explicit "Approve", "Edit", or "Regenerate" UI buttons for AI Pocket outputs before committing changes.
+- Loading & Fallback States: Render smooth micro-animations and fallback UI skeletons during AI Pocket inference.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire FastAPI AI Pocket endpoints to OpenRouter / Gemini API credentials via environment variables.
+- Wire Pydantic validation error events to return structured 422 Unprocessable Entity responses to the frontend.
+- Wire AI Pocket outputs to the frontend UI store for human-in-the-loop review.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire database RLS policies to prevent AI Pockets from querying cross-tenant records.
+- Hardwire pre-commit gate checks (cisem_gate.py) to block code commits that bypass audit logging.
+- Hardwire mandatory planning mode: no AI agent may execute code modifications without Governor sign-off.

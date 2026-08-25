@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-18T21:55:07.698211+00:00",
+  "last_updated": "2026-08-25T04:19:40.282594+00:00",
   "registry": [
     {
       "timestamp": "2026-08-06T22:05:40.096028+00:00",
@@ -9597,6 +9597,84 @@
     },
     {
       "timestamp": "2026-08-18T21:55:07.698211+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-22T14:43:04.009656+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-22T20:09:02.324668+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-23T19:20:35.937668+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-24T18:19:55.086623+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-08-24T18:27:23.296934+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-08-25T00:18:10.138393+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-08-25T00:32:28.507782+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-08-25T00:35:53.343216+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-25T00:38:56.180448+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-08-25T01:26:03.892347+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-25T02:40:02.545913+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-08-25T02:44:01.359030+00:00",
+      "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
+      "root_cause": "none detected in this cycle",
+      "root_type": "NOMINAL"
+    },
+    {
+      "timestamp": "2026-08-25T04:19:40.282594+00:00",
       "scenario": "security_handshake_bypass; database_deadlock_sync; duplicate_registry_controller; glassmorphism_visual_theme; edge_cache_latency_lag; todo_placeholder_stub",
       "root_cause": "none detected in this cycle",
       "root_type": "NOMINAL"

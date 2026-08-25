@@ -1,0 +1,65 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: STRESS TEST OF BACKEND VS PLATFORM-LEVEL FRONTEND WITH TIERS AND PERMISSIONS
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Building a multi-tenant platform with tiered subscriptions (Starter, Professional, Enterprise) and granular role-based access control (RBAC/ABAC) requires a unified contract between backend API enforcement and frontend UI presentation. 
+
+Needs & Business Pains:
+SaaS platforms often experience "permission leakage" or "tier drift", where frontend UI components expose buttons or pages that backend APIs reject, or conversely, backend APIs allow unauthorized operations because they rely on client-asserted headers. The business pain is twofold: security vulnerability (privilege escalation) and poor user experience (clicking upgrade loops or receiving mysterious 403 errors).
+
+Challenges:
+- 80/20 Scope Balance: Standard SaaS platforms struggle when trying to over-engineer hyper-complex custom permission matrices for edge cases that represent <5% of users. The challenge is handling 80% of standard roles (Owner, Admin, Member, Guest) and 3 tiers (Starter, Pro, Enterprise) rock-solid without creating unmaintainable permission sprawl.
+- Performance at Scale: Checking 50 individual feature flags and 10 role permissions on every API request can degrade response times if not cached or derived from JWT tokens.
+
+Common Gaps & Mistakes:
+- Dual Source of Truth: Defining permission rules in frontend React components independently from backend FastAPI route dependencies.
+- Header Forgery: Trusting raw client headers like X-User-Role or X-Tenant-Tier without cryptographic JWT verification.
+- Over-exaggerated Edge Cases: Hardcoding custom per-user overrides into core schema tables instead of using clean role-group taxonomy.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: OAuth2 + JWT containing app_metadata with tenant_id, role, and tier.
+- What We Can Do Better: Cryptographically enforce tenant isolation at the database layer (Postgres RLS) while passing decoded JWT claims down to FastAPI request.state and frontend Zustand UI stores, ensuring zero-latency permission synchronization.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Backend Middleware (backend/src/backend/main.py): tenant_context_middleware parses Bearer JWTs, decodes app_metadata.tenant_id, role, and tier, and attaches them to request.state.
+- Role & Tier Schemas (backend/src/backend/migrations.sql): packages, feature_registry, package_feature_grants, role_definitions, and user_account_roles.
+- Frontend Navigation (src/components/dynamic_menu.tsx): Role-gated and tier-gated menu items filtered by user claims.
+
+Best Way to Use It:
+- Use request.state.tenant_id and request.state.role inside FastAPI route handlers.
+- Use get_db_client() which passes the caller's JWT Authorization header to PostgREST, activating Postgres Row Level Security (USING (tenant_id = current_tenant_id())).
+- Frontend components should read tenant tier and user role from useUIStore or JWT session state to conditionally render UI controls.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Unauthenticated Administrative Backdoors: Ensure no background service-role client (supabase_admin) is passed to user-facing API routes. Administrative clients must be restricted strictly to webhook claim-minting and system provisioning.
+- Tier Restriction Checks: Endpoints restricted to Enterprise (such as custom domains or repository syncing in /api/v1/tenant/whitelabel) must check request.state.tier == "enterprise" before executing logic.
+- RLS Policy Fallbacks: Every multi-tenant table must have ENABLE ROW LEVEL SECURITY and USING (tenant_id = (auth.jwt() -> 'app_metadata' ->> 'tenant_id')::uuid).
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Upgrade Trigger UI: When a user on Starter attempts to access Enterprise features, render a clean QuotaUpgradeModal instead of a broken page or generic alert.
+- Sibling Consistency: Buttons and controls in the same row must visually adapt to disabled states when permission is denied, maintaining consistent UI density.
+- Token Refreshing: Ensure JWT token refreshes automatically update local storage and Zustand UI stores when user roles or subscription tiers change.
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire Authorization: Bearer <token> from frontend API client requests into backend tenant_context_middleware.
+- Wire package_feature_grants table joins to dynamically return authorized features per tier code.
+- Wire frontend menu items in dynamic_menu.tsx to active user role codes (account_owner, member, guest).
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS policies on all tenant tables (crm_customers, contacts, deals, document_chunks).
+- Hardwire platform_admin role assertion on operator routes (/api/v1/admin/pending-claims).
+- Hardwire fail-closed 401/403 HTTP exception responses when JWT claims are missing or invalid.

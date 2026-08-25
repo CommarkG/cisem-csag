@@ -1,33 +1,40 @@
+// =============================================================================
+// CISEM Mandatory Code Header
+// File           : useUIStore.js
+// Ratified plan  : Prerequisite Store Split & M2 Store Scope Declaration (2026-08-21)
+// Architectural  : Pure device UI preferences store (language, theme, visual layout).
+//                  Decoupled from tenant session authority and active user identity.
+// Scope          : @store_scope: device
+// Axioms         : AX-SECURITY-01, AX-STATELESS-01, U1.2.40 (Prevention Protocol)
+// =============================================================================
+
 import { create } from 'zustand';
 
-// Read initial language
-const initialLang = localStorage.getItem('dima-lang') || 'en';
-// Set initial HTML direction for RTL languages like Hebrew
-document.documentElement.dir = initialLang === 'he' ? 'rtl' : 'ltr';
-document.documentElement.lang = initialLang;
+// Read initial language safely on client
+const getInitialLang = () => {
+  if (typeof window === 'undefined' || !window.localStorage) return 'en';
+  return window.localStorage.getItem('dima-lang') || 'en';
+};
+
+const initialLang = getInitialLang();
+
+if (typeof document !== 'undefined') {
+  document.documentElement.dir = initialLang === 'he' ? 'rtl' : 'ltr';
+  document.documentElement.lang = initialLang;
+}
 
 export const useUIStore = create((set, get) => ({
-  // Language
+  // Language (Device Scope)
   language: initialLang,
   setLanguage: (lang) => {
-    localStorage.setItem('dima-lang', lang);
-    document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
-    document.documentElement.lang = lang;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem('dima-lang', lang);
+    }
+    if (typeof document !== 'undefined') {
+      document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+      document.documentElement.lang = lang;
+    }
     set({ language: lang });
-  },
-
-  // Active User Profile
-  activeUserId: localStorage.getItem('dima-active-user') || 'user-operator',
-  setActiveUserId: (id) => {
-    localStorage.setItem('dima-active-user', id);
-    set({ activeUserId: id });
-  },
-
-  // Role Impersonation (sandbox only — does not affect real auth)
-  simulatedRole: localStorage.getItem('dima-simulated-role') || 'platform_admin',
-  setSimulatedRole: (role) => {
-    localStorage.setItem('dima-simulated-role', role);
-    set({ simulatedRole: role });
   },
 
   // Sidebar
@@ -81,7 +88,7 @@ export const useUIStore = create((set, get) => ({
       filters: { status: null, priority: null, assigneeId: null, label: null },
     }),
 
-  // Table Visual Settings (Batch 1 & 2)
+  // Table Visual Settings
   tableTemplate: 'master',
   tableFontSize: 'sm',
   visibleColumns: {
@@ -110,7 +117,6 @@ export const useUIStore = create((set, get) => ({
     currency: false,
   },
   setTableTemplate: (template) => {
-    // Automatically preset visible columns based on template selection
     let columns = { ...get().visibleColumns };
     if (template === 'quotes') {
       columns = {
@@ -143,4 +149,3 @@ export const useUIStore = create((set, get) => ({
   setTableFontSize: (size) => set({ tableFontSize: size }),
   setVisibleColumns: (cols) => set((s) => ({ visibleColumns: { ...s.visibleColumns, ...cols } })),
 }));
-

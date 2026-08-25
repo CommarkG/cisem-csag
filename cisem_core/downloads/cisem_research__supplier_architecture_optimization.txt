@@ -1,0 +1,66 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #62 OPTIMIZING SUPPLIER ARCHITECTURE IN BACKEND
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+Enterprise supplier architecture requires modeling vendor profiles, multi-currency price lists, branding subcontractor rate cards, catalog item mappings, lead-time matrices, and direct wiring into project line items and procurement orders.
+
+Needs & Business Pains:
+Businesses relying on third-party suppliers often suffer from pricing inaccuracies, out-of-stock surprises, and manual recalculation of subcontractor customization costs (e.g. screen printing, laser engraving, packaging). Without automated supplier architecture, margin calculations become inaccurate.
+
+Challenges:
+- Multi-Supplier Sourcing: A single catalog item may be supplied by 3 different vendors with varying wholesale prices, minimum order quantities (MOQ), and shipping lead times.
+- Complex Customization Costs: Branding subcontractors charge tiered rate cards based on quantity, print locations, and setup fees.
+- Wiring to Projects: Linking a line item in an active client proposal directly to a supplier purchase order without manual data re-entry.
+
+Common Gaps & Mistakes:
+- Hardcoding supplier costs directly onto catalog items instead of decoupled supplier mapping tables.
+- Lacking multi-currency support for international vendors.
+- Failing to snapshot supplier rate cards at project approval time, exposing active projects to vendor price updates.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: Basic vendor name and cost price fields on product records.
+- What We Can Do Better: Multi-Tiered Supplier Engine: supplier_mappings for wholesale catalog items + branding_subcontractors and branding_rate_cards for custom finishing + real-time stock verification API (/api/v1/inventory/verify-stock) wired directly to proposal line items.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Supplier Schemas (backend/src/backend/migrations.sql): supplier_mappings (with country, currency, status, supplier_sku, cost_price, lead_time_days), branding_subcontractors, branding_rate_cards.
+- Supplier Endpoints (backend/src/backend/main.py): /api/v1/suppliers/mappings, /api/v1/inventory/verify-stock.
+- Proposal Item Linkage (backend/src/backend/migrations.sql Section 23): proposal_items.selected_supplier_mapping_id.
+
+Best Way to Use It:
+- Store supplier identities and wholesale catalog terms in supplier_mappings.
+- Store branding customization costs in branding_rate_cards (linking setup fees, per-unit printing costs, and volume tiers).
+- Bind proposal line items to selected_supplier_mapping_id during intake/proposal generation to lock in vendor cost snapshots.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Currency Conversion Safety: Ensure multi-currency supplier prices (EUR, USD, ILS) are converted using verified rate calculators before computing proposal margins.
+- Immutable Cost Snapshots: Snapshot supplier wholesale cost and rate card fees onto proposal_items at project lock time, preventing vendor price changes from altering active project profitability.
+- Supplier RLS Isolation: Ensure tenant-created supplier mappings and private rate cards are isolated per tenant_id.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Single-Row Supplier Rate Matrix: Render supplier name, SKU, unit cost, lead time, and stock status on a single compact row.
+- Subcontractor Rate Card Calculator: Provide an interactive calculator widget showing how branding quantity tiers impact unit customization cost.
+- Supplier Comparison View: Render side-by-side vendor comparison cards for identical SKUs (Cost vs Lead Time vs Reliability Score).
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire supplier_mappings to catalog_items (internal_sku FK).
+- Wire branding_rate_cards to branding_subcontractors (subcontractor_id FK).
+- Wire proposal_items to supplier_mappings (selected_supplier_mapping_id FK) for automated purchase order drafting.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS on supplier_mappings and branding_rate_cards.
+- Hardwire automated margin calculations (Client Price - Wholesale Supplier Cost - Branding Cost = Gross Margin).
+- Hardwire fallback lead-time buffers to prevent client delivery commitments that exceed supplier capabilities.

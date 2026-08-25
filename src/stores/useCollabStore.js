@@ -1,5 +1,7 @@
+// Scope          : @store_scope: tenant
 import { create } from 'zustand';
 import { defaultTeamMembers } from '../utils/seedData';
+import { tenantStorageAdapter } from '../utils/tenantStorageAdapter';
 
 const generateId = () =>
   'xxxx-xxxx-xxxx'.replace(/x/g, () =>
@@ -8,15 +10,15 @@ const generateId = () =>
 
 const loadCollab = () => {
   try {
-    const stored = localStorage.getItem('dima-collab');
-    if (stored) return JSON.parse(stored);
+    const stored = tenantStorageAdapter.getItem('dima-collab');
+    if (stored) return stored;
   } catch (e) {}
   return { members: defaultTeamMembers, activityFeed: [] };
 };
 
 const saveCollab = (data) => {
   try {
-    localStorage.setItem('dima-collab', JSON.stringify(data));
+    tenantStorageAdapter.setItem('dima-collab', data);
   } catch (e) {}
 };
 
@@ -61,8 +63,7 @@ export const useCollabStore = create((set, get) => {
 
     // Remove team member
     removeMember: (id) => {
-      // Don't allow removing Dima
-      if (id === 'user-operator') return;
+      // GAP: No minimum-member or role-based check exists to prevent removing the last remaining administrator.
       set((state) => {
         const members = state.members.filter((m) => m.id !== id);
         saveCollab({ members, activityFeed: state.activityFeed });

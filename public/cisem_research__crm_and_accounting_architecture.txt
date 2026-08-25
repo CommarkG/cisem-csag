@@ -1,0 +1,66 @@
+================================================================================
+CISEM ARCHITECTURAL RESEARCH BRIEF: #63 OPTIMIZING CRM AND ACCOUNTING ARCHITECTURE IN BACKEND
+================================================================================
+
+1. INTRODUCTION & INDUSTRY CONTEXT
+--------------------------------------------------------------------------------
+Topic Overview:
+End-to-end CRM and accounting architecture requires connecting client companies, contacts, sales pipeline deals, proposals, line-item pricing, inventory costs, supplier purchase orders, and ledger financial transactions within a multi-tenant isolation model.
+
+Needs & Business Pains:
+SaaS and agency platforms often suffer from disconnected operational silos: sales reps track deals in a lightweight CRM, proposals are sent as un-tracked PDFs, and accounting calculates invoices in separate software. This leads to untracked receivables, inaccurate profit margins, and broken audit trails.
+
+Challenges:
+- Complete Lifecycle Traceability: Tracking a lead from initial brief intake -> CRM deal -> client proposal -> approved deal -> supplier purchase order -> invoice issuance.
+- Multi-Tenant Financial Auditability: Ensuring financial transactions, tax computations, and billing records strictly enforce tenant boundaries without cross-tenant exposure.
+- State Machine Integrity: Preventing illegal financial state jumps (e.g. issuing an invoice for an unapproved deal or marking a proposal paid before creation).
+
+Common Gaps & Mistakes:
+- Storing currency amounts as floating-point numbers instead of integer cents or fixed-decimal numeric types.
+- Lacking atomic state transitions on deal stages and financial statuses.
+- Storing invoices as un-audited mutable records instead of immutable ledger transactions.
+
+Common Solutions Available & What We Can Do Better:
+- Standard Solution: Basic CRM pipeline with third-party webhooks to accounting software.
+- What We Can Do Better: State-Machine Driven CRM & Accounting Engine: state_transitions table enforcing valid status flows, deal pipeline stages bound to proposals, immutable proposal_items line item snapshots, and automated margin calculations.
+
+
+2. PLATFORM CONTEXT & OPTIMAL USAGE
+--------------------------------------------------------------------------------
+What Exists in Our Platform:
+- Pipeline Schemas (backend/src/backend/migrations.sql): deals, contacts, crm_customers, status_library, state_transitions, proposals, proposal_items, pdf_queue.
+- Financial Routing (backend/src/backend/main.py): /api/v1/proposals/generate, /api/v1/proposals/public/{token}, /api/v1/deals/{deal_id}/stage.
+- State Engine (backend/src/backend/migrations.sql Section 2 & 10): enforce_state_transition() SQL trigger on document state changes.
+
+Best Way to Use It:
+- Represent sales opportunities in deals (linked to crm_customers and contacts).
+- Generate structured commercial proposals using /api/v1/proposals/generate, which creates proposal_items line item cost snapshots.
+- Enforce valid lifecycle transitions (draft -> pending_approval -> approved -> invoiced) via state_transitions and enforce_state_transition() database triggers.
+
+
+3. BACKEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Integer / Fixed-Precision Currency Math: All price calculations (cost_price, margin, tax, total) must compute using exact decimal precision (or integer cents) to prevent rounding drift.
+- Atomic State Transition Guards: Prevent deals or invoices from moving to "completed" or "invoiced" unless all required line items have passed stock verification (/api/v1/inventory/verify-stock).
+- Financial RLS Isolation: Ensure deals, proposals, and ledger records enforce tenant_id = current_tenant_id() across 100% of read/write queries.
+
+
+4. FRONTEND SENSITIVE POINTS NEEDING ATTENTION
+--------------------------------------------------------------------------------
+- Single-Row Deal Summary: Render deal title, client company, pipeline stage, total value, gross margin %, and action button on a single compact row.
+- Real-Time Margin Indicator: Display live gross margin percentage chips (Green = >30%, Yellow = 15-30%, Red = <15%) as sales reps build proposals.
+- Lifecycle Stage Progress Bar: Render an interactive pipeline progress stepper (Intake -> Proposal -> Review -> Approved -> Invoiced).
+
+
+5. WHAT MUST BE WIRED
+--------------------------------------------------------------------------------
+- Wire deals to crm_customers (customer_id FK) and contacts (primary_contact_id FK).
+- Wire proposals to deals (deal_id FK) and proposal_items line items.
+- Wire invoice generation events to pdf_queue for asynchronous background PDF rendering.
+
+
+6. WHAT MUST BE HARDWIRED
+--------------------------------------------------------------------------------
+- Hardwire Postgres RLS on deals, proposals, and proposal_items.
+- Hardwire database state transition triggers (enforce_state_transition()) to block illegal status skips.
+- Hardwire immutable transaction logging for all financial status updates.

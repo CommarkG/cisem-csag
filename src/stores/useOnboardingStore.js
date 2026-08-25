@@ -1,4 +1,6 @@
+// Scope          : @store_scope: person
 import { create } from 'zustand';
+import { tenantStorageAdapter } from '../utils/tenantStorageAdapter';
 
 const ONBOARDING_STEPS = [
   {
@@ -41,25 +43,30 @@ const ONBOARDING_STEPS = [
 
 const loadOnboarding = () => {
   try {
-    const stored = localStorage.getItem('dima-onboarding');
-    if (stored) return JSON.parse(stored);
+    const hasAuthToken = typeof window !== 'undefined' && localStorage.getItem('cisem_access_token');
+    if (hasAuthToken) {
+      return { completed: true, currentStep: 0, active: false }; // FORBID welcome tour modal
+    }
+    const stored = tenantStorageAdapter.getItem('dima-onboarding');
+    if (stored) return stored;
   } catch (e) {}
   return { completed: false, currentStep: 0, active: false };
 };
 
 const saveOnboarding = (data) => {
   try {
-    localStorage.setItem('dima-onboarding', JSON.stringify(data));
+    tenantStorageAdapter.setItem('dima-onboarding', data);
   } catch (e) {}
 };
 
 export const useOnboardingStore = create((set, get) => {
   const initial = loadOnboarding();
+  const hasAuthToken = typeof window !== 'undefined' && localStorage.getItem('cisem_access_token');
   return {
     completed: initial.completed || false,
     currentStep: initial.currentStep || 0,
     active: false, // only true while tour is running
-    showWelcome: !initial.completed,
+    showWelcome: hasAuthToken ? false : !initial.completed,
     steps: ONBOARDING_STEPS,
 
     startTour: () => {

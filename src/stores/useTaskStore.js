@@ -1,35 +1,41 @@
+// Scope          : @store_scope: tenant
 import { create } from 'zustand';
 import { createSeedData } from '../utils/seedData';
 import { getDescendants, getNextOrder, wouldCreateCycle } from '../utils/treeHelpers';
+import { tenantStorageAdapter } from '../utils/tenantStorageAdapter';
 
 const generateId = () =>
   'xxxx-xxxx-xxxx'.replace(/x/g, () =>
     Math.floor(Math.random() * 16).toString(16)
   );
 
-// Load from localStorage or seed
+// Load from tenantStorageAdapter or seed
 const loadTasks = () => {
   try {
-    const stored = localStorage.getItem('dima-tasks');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    const hasAuthToken = typeof window !== 'undefined' && localStorage.getItem('cisem_access_token');
+    if (hasAuthToken) {
+      // STAGE 2 MANDATORY RULE: FORBID demo seeding for live authenticated sessions
+      const stored = tenantStorageAdapter.getItem('dima-tasks');
+      if (stored && Array.isArray(stored)) return stored;
+      return []; // Return clean empty list, NEVER mock tasks
     }
+    const stored = tenantStorageAdapter.getItem('dima-tasks');
+    if (stored && Array.isArray(stored) && stored.length > 0) return stored;
   } catch (e) {}
   return createSeedData();
 };
 
 const loadArchive = () => {
   try {
-    const stored = localStorage.getItem('dima-archive-tasks');
-    if (stored) return JSON.parse(stored);
+    const stored = tenantStorageAdapter.getItem('dima-archive-tasks');
+    if (stored && Array.isArray(stored)) return stored;
   } catch (e) {}
   return [];
 };
 
 const saveTasks = (tasks) => {
   try {
-    localStorage.setItem('dima-tasks', JSON.stringify(tasks));
+    tenantStorageAdapter.setItem('dima-tasks', tasks);
   } catch (e) {
     console.error('Failed to save tasks:', e);
   }

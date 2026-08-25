@@ -1,0 +1,17 @@
+{
+  "deletion_candidate_list": [
+    "C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\cisem_core\\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.32.yaml"
+  ],
+  "dependency_check": {
+    "status": "PASSED",
+    "notes": "Verified that cisem_gate.py resolves the latest version V1.33 automatically. Removing V1.32 does not break any absolute path imports."
+  },
+  "archive_proof": {
+    "backup_location": "C:\\Users\\finky\\.gemini\\antigravity\\brain\\7ab8f311-e871-43fb-b5f8-6671cb1eb4c9\\scratch\\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.32.yaml"
+  },
+  "actual_execution_action": "Remove-Item -Path 'C:\\Users\\finky\\Desktop\\AntiGravity\\Cisem CsAg\\cisem_core\\2026-08-05__CISEM__Universal_Workspace_and_Accountability_Registry__V1.32.yaml'",
+  "post_operation_verification_report": {
+    "status": "PENDING",
+    "verification_method": "Run npm run build to verify cisem_gate.py compiles successfully using V1.33."
+  }
+}

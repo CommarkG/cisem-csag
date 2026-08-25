@@ -1,3 +1,4 @@
+// Scope          : @store_scope: tenant
 import { create } from 'zustand';
 
 const generateId = () =>
@@ -40,7 +41,7 @@ const defaultClients = [
     linkedProjectIds: [],
     tags: ['RU', 'Enterprise', 'VIP'],
     comments: [
-      { id: 'cc-2', author: 'Yariv', text: 'Yariv met her in Moscow. High potential.', timestamp: new Date(Date.now() - 86400000 * 5).toISOString() }
+      { id: 'cc-2', author: 'Operator', text: 'Initial consultation completed. High potential.', timestamp: new Date(Date.now() - 86400000 * 5).toISOString() }
     ]
   }
 ];
@@ -98,21 +99,21 @@ const defaultTagColors = {
   'tooling': '#6c5ce7'
 };
 
+
 const loadAdmin = () => {
   try {
-    const stored = localStorage.getItem('dima-admin');
+    const stored = tenantStorageAdapter.getItem('dima-admin');
     if (stored) {
-      const parsed = JSON.parse(stored);
       return {
-        clients: parsed.clients || defaultClients,
-        suppliers: parsed.suppliers || defaultSuppliers,
-        clientCustomFields: parsed.clientCustomFields || [],
-        supplierCustomFields: parsed.supplierCustomFields || [],
-        teamCustomFields: parsed.teamCustomFields || [],
-        tagColors: parsed.tagColors || defaultTagColors,
-        greenApiIdInstance: parsed.greenApiIdInstance || '',
-        greenApiTokenInstance: parsed.greenApiTokenInstance || '',
-        memberGreenApiCredentials: parsed.memberGreenApiCredentials || {}
+        clients: stored.clients || defaultClients,
+        suppliers: stored.suppliers || defaultSuppliers,
+        clientCustomFields: stored.clientCustomFields || [],
+        supplierCustomFields: stored.supplierCustomFields || [],
+        teamCustomFields: stored.teamCustomFields || [],
+        tagColors: stored.tagColors || defaultTagColors,
+        greenApiIdInstance: stored.greenApiIdInstance || '',
+        greenApiTokenInstance: stored.greenApiTokenInstance || '',
+        memberGreenApiCredentials: stored.memberGreenApiCredentials || {}
       };
     }
   } catch (e) {}
@@ -131,11 +132,7 @@ const loadAdmin = () => {
 
 const saveAdmin = (partialData) => {
   try {
-    const currentStored = localStorage.getItem('dima-admin');
-    let currentParsed = {};
-    if (currentStored) {
-      currentParsed = JSON.parse(currentStored);
-    }
+    const currentParsed = tenantStorageAdapter.getItem('dima-admin') || {};
     const merged = {
       clients: partialData.clients !== undefined ? partialData.clients : currentParsed.clients,
       suppliers: partialData.suppliers !== undefined ? partialData.suppliers : currentParsed.suppliers,
@@ -147,7 +144,7 @@ const saveAdmin = (partialData) => {
       greenApiTokenInstance: partialData.greenApiTokenInstance !== undefined ? partialData.greenApiTokenInstance : currentParsed.greenApiTokenInstance,
       memberGreenApiCredentials: partialData.memberGreenApiCredentials !== undefined ? partialData.memberGreenApiCredentials : currentParsed.memberGreenApiCredentials
     };
-    localStorage.setItem('dima-admin', JSON.stringify(merged));
+    tenantStorageAdapter.setItem('dima-admin', merged);
   } catch (e) {}
 };
 
