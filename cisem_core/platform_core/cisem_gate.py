@@ -87,18 +87,11 @@ def gate_block(msg, phase=None):
     os.makedirs(log_dir, exist_ok=True)
     log_path = os.path.join(log_dir, "gate_violations.log")
     timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    
+    # FIX 1 MANDATE: Record block occurrence in log telemetry WITHOUT driving up maturity ceiling
     with open(log_path, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] [Phase {phase if phase is not None else 'N/A'}] {msg.strip()}\n")
-    if os.path.exists(TURN_COUNTER_PATH):
-        try:
-            with open(TURN_COUNTER_PATH, "r", encoding="utf-8") as tf:
-                counter = json.load(tf)
-            if "maturity_signals" in counter:
-                counter["maturity_signals"]["gate_blocks_encountered"] = counter["maturity_signals"].get("gate_blocks_encountered", 0) + 1
-            with open(TURN_COUNTER_PATH, "w", encoding="utf-8") as tf:
-                json.dump(counter, tf, indent=2)
-        except Exception:
-            pass
+
     sys.exit(1)
 
 
@@ -201,16 +194,15 @@ def check_gate_lock():
         with open(GATE_LOCK_PATH, "r", encoding="utf-8") as f:
             lock_data = json.load(f)
     except (json.JSONDecodeError, IOError):
-        lock_data = {"lock_reason": "UNREADABLE_LOCK_FILE", "target_file": "unknown", "timestamp": "unknown"}
+        lock_data = {"lock_reason": "UNREADABLE_LOCK_FILE", "target_file": "unknown", "target_files": [], "timestamp": "unknown"}
 
     target_file = lock_data.get('target_file', 'unknown')
-    # Bypassing sandbox/playground gate locks to prioritize development velocity in the sandbox
-    is_sandbox = (
-        "sandbox" in target_file.lower() or 
-        "marketing" in target_file.lower() or 
-        "sales" in target_file.lower() or 
-        "cosmic" in target_file.lower()
-    )
+    target_files = lock_data.get('target_files', [target_file]) if isinstance(lock_data.get('target_files'), list) else [target_file]
+    plan_id = lock_data.get('plan_id', 'UNKNOWN_PLAN')
+
+    # FIX 3 MANDATE: Scoped & Self-Clearing Plan Lock
+    # 1. Bypassing sandbox/playground gate locks to prioritize velocity
+    is_sandbox = any("sandbox" in f.lower() or "marketing" in f.lower() or "sales" in f.lower() for f in target_files + [target_file])
     if is_sandbox:
         print(f"CISEM_GATE: Bypassing sandbox gate lock for target: {os.path.basename(target_file)}")
         try:
@@ -219,11 +211,25 @@ def check_gate_lock():
             pass
         return
 
+    # 2. Check current git diff / staged files
+    staged_files = []
+    try:
+        res = subprocess.run(["git", "diff", "--name-only"], capture_output=True, text=True, cwd=ROOT_DIR)
+        if res.returncode == 0:
+            staged_files = [line.strip() for line in res.stdout.splitlines() if line.strip()]
+    except Exception:
+        staged_files = []
+
+    # 3. Self-clearing: If the current commit does NOT touch the lock's target files, ignore the lock!
+    if staged_files and not any(any(tf.lower() in sf.lower() or sf.lower() in tf.lower() for tf in target_files) for sf in staged_files):
+        print(f"CISEM_GATE: Lock {plan_id} active on unrelated files. Current commit touches different files. Proceeding.")
+        return
+
     reason = lock_data.get('lock_reason', 'N/A')
     print("=" * 60)
-    print("CISEM_GATE_BLOCKED -- Phase 1: .gate_lock active")
+    print(f"CISEM_GATE_BLOCKED -- Phase 1: .gate_lock active for plan [{plan_id}]")
     print(f"  Reason      : {reason}")
-    print(f"  Target file : {lock_data.get('target_file', 'N/A')}")
+    print(f"  Target file : {target_file}")
     print(f"  Error type  : {lock_data.get('error_type', 'N/A')}")
     print(f"  Timestamp   : {lock_data.get('timestamp', 'N/A')}")
     
@@ -237,7 +243,7 @@ def check_gate_lock():
     else:
         print()
         print("  > Resolve: Investigate the witness violation reported above.")
-        print("    Correct or restore the file, then delete .gate_lock manually.")
+        print("    Correct or restore the file, then delete .gate_lock automatically on clean commit.")
     print("=" * 60)
     sys.exit(1)
 
@@ -552,17 +558,18 @@ def check_staged_additions():
 
 
 def check_plan_validation():
-    """Runs the Plan Ingestor validation check on the active implementation plan (Phase 6)."""
+    """Runs the Plan Ingestor validation check strictly on plan documents staged in the current commit (Phase 6)."""
     print("Phase 6: Running Plan Ingestion Validation...")
     _cs = _cisem_staged_paths()
-    _cp = [p for p in _cs if p.lower().endswith(".md") and "plan" in os.path.basename(p).lower()]
-    if not _cp:
-        print("  Phase 6: PASS (skipped -- this commit stages no plan document).")
-        return
-
-    plan_path = find_active_implementation_plan()
-    if not plan_path:
-        print("  Phase 6: PASS (No active implementation plan found in brain directory).")
+    
+    # FIX 3 PART THREE MANDATE: Scope Phase 6 strictly by what is STAGED IN THIS COMMIT, not by filename.
+    staged_plans = [
+        p for p in _cs 
+        if p.lower().endswith(".md") and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+    ]
+    
+    if not staged_plans:
+        print("  Phase 6: PASS (skipped -- current commit stages no plan document).")
         return
 
     ingestor_script = os.path.join(CORE_DIR, "planning", "2026-08-07__GoogleAntigravity__Planning__PlanIngestor__V0.2.py")
@@ -570,37 +577,42 @@ def check_plan_validation():
         print(f"CISEM_GATE_BLOCKED -- Phase 6: Ingestor script not found at {ingestor_script}")
         sys.exit(1)
 
-    try:
-        kwargs = {"capture_output": True, "text": True}
-        if sys.platform == "win32":
-            kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
-        res = subprocess.run(
-            [sys.executable, ingestor_script, "--plan", plan_path],
-            **kwargs
-        )
-        if res.returncode != 0:
-            print("CISEM_GATE_BLOCKED -- Phase 6: Plan validation failed.")
-            print(res.stdout)
-            print(res.stderr)
-            sys.exit(1)
-        
-        # Verify pre-review approval status
-        with open(plan_path, "r", encoding="utf-8") as f:
-            content = f.read()
-        parts = content.split("---")
-        if len(parts) >= 3:
-            meta = yaml.safe_load(parts[1])
-            if not meta or meta.get("pre_review_status") != "PASSED":
-                print("CISEM_GATE_BLOCKED -- Phase 6: Pre-review gate not passed.")
-                print(f"  Plan        : {os.path.basename(plan_path)}")
-                print(f"  Current Status: {meta.get('pre_review_status') if meta else 'N/A'}")
-                print("  Rule        : Plan must pass automated pre-review validation (pre_review_status: PASSED).")
+    for relative_plan in staged_plans:
+        plan_path = os.path.join(ROOT_DIR, relative_plan) if not os.path.isabs(relative_plan) else relative_plan
+        if not os.path.exists(plan_path):
+            continue
+
+        try:
+            kwargs = {"capture_output": True, "text": True}
+            if sys.platform == "win32":
+                kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+            res = subprocess.run(
+                [sys.executable, ingestor_script, "--plan", plan_path],
+                **kwargs
+            )
+            if res.returncode != 0:
+                print(f"CISEM_GATE_BLOCKED -- Phase 6: Plan validation failed for staged plan [{os.path.basename(plan_path)}].")
+                print(res.stdout)
+                print(res.stderr)
                 sys.exit(1)
-        
-        print("  Phase 6: PASS (Pre-review validation succeeded).")
-    except Exception as e:
-        print(f"CISEM_GATE_BLOCKED -- Phase 6: Execution error: {e}")
-        sys.exit(1)
+            
+            # Verify pre-review approval status for staged plan
+            with open(plan_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            parts = content.split("---")
+            if len(parts) >= 3:
+                meta = yaml.safe_load(parts[1])
+                if not meta or meta.get("pre_review_status") != "PASSED":
+                    print(f"CISEM_GATE_BLOCKED -- Phase 6: Pre-review gate not passed for staged plan [{os.path.basename(plan_path)}].")
+                    print(f"  Plan        : {os.path.basename(plan_path)}")
+                    print(f"  Current Status: {meta.get('pre_review_status') if meta else 'N/A'}")
+                    print("  Rule        : Staged plan must pass automated pre-review validation (pre_review_status: PASSED).")
+                    sys.exit(1)
+            
+            print(f"  Phase 6: PASS (Pre-review validation succeeded for staged plan [{os.path.basename(plan_path)}]).")
+        except Exception as e:
+            print(f"CISEM_GATE_BLOCKED -- Phase 6: Execution error on plan [{os.path.basename(plan_path)}]: {e}")
+            sys.exit(1)
 
 
 # -----------------------------------------------------------------------------

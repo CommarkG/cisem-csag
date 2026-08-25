@@ -210,20 +210,16 @@ class CisemAuditor:
             triggered = False
             matched_reason = ""
             
-            if relevance in ("HIGH", "MEDIUM"):
-                triggered = True
-                matched_reason = f"Expected relevance ({relevance})"
-            else:
-                matched_words = []
-                for tag in focus:
-                    base_tag = tag.split(".")[0]
-                    trigger_words = PERSONA_KEYWORD_TRIGGERS.get(base_tag, [])
-                    for word in trigger_words:
-                        if word in diff_content.lower():
-                            triggered = True
-                            matched_words.append(word)
-                if triggered:
-                    matched_reason = f"Keyword match: {list(set(matched_words))}"
+            matched_words = []
+            for tag in focus:
+                base_tag = tag.split(".")[0]
+                trigger_words = PERSONA_KEYWORD_TRIGGERS.get(base_tag, [])
+                for word in trigger_words:
+                    if word in diff_content.lower():
+                        triggered = True
+                        matched_words.append(word)
+            if triggered:
+                matched_reason = f"Keyword match: {list(set(matched_words))}"
                     
             if triggered:
                 comment = f"[{role} Audit] Real diff file check of {scenario_name}. Inferred relevance: {relevance}."
@@ -288,22 +284,16 @@ class CisemAuditor:
                 triggered = False
                 matched_reason = ""
                 
-                # Trigger if expected by distribution
-                if relevance in ("HIGH", "MEDIUM"):
-                    triggered = True
-                    matched_reason = f"Expected relevance ({relevance})"
-                else:
-                    # Keyword match fallback
-                    matched_words = []
-                    for tag in focus:
-                        base_tag = tag.split(".")[0]
-                        trigger_words = PERSONA_KEYWORD_TRIGGERS.get(base_tag, [])
-                        for word in trigger_words:
-                            if word in diff.lower():
-                                triggered = True
-                                matched_words.append(word)
-                    if triggered:
-                        matched_reason = f"Keyword match: {list(set(matched_words))}"
+                matched_words = []
+                for tag in focus:
+                    base_tag = tag.split(".")[0]
+                    trigger_words = PERSONA_KEYWORD_TRIGGERS.get(base_tag, [])
+                    for word in trigger_words:
+                        if word in diff.lower():
+                            triggered = True
+                            matched_words.append(word)
+                if triggered:
+                    matched_reason = f"Keyword match: {list(set(matched_words))}"
                             
                 if triggered:
                     comment = f"[{role} Audit] Active review of scenario {name}. Triggered by: {matched_reason}."
@@ -319,6 +309,13 @@ class CisemAuditor:
                         "audit_weight": weight
                     })
                     
+            # FIX 2 MANDATE: Zero persona matches on a clean diff is a VALID CLEAN PASS
+            verdict = "APPROVED"
+            if any(f["severity"] in ["CRITICAL", "HIGH"] for f in findings):
+                verdict = "BLOCKED"
+            elif len(findings) == 0:
+                verdict = "APPROVED (0 personas matched diff footprint - clean pass)"
+
             report = {
                 "scenario": name,
                 "scenario_type": data["type"],
@@ -326,7 +323,7 @@ class CisemAuditor:
                 "personas_triggered": len(findings),
                 "external_consultant_placeholders": [c.get("consultant_id") for c in self.consultants],
                 "findings": findings,
-                "verdict": "BLOCKED" if any(f["severity"] in ["CRITICAL", "HIGH"] for f in findings) else "APPROVED"
+                "verdict": verdict
             }
             suite_reports.append(report)
             

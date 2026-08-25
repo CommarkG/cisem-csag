@@ -272,4 +272,75 @@ a loop even if it takes four turns. The measure is APPLIED, not turns.
 6. A search not run is a defect accepted.
 <!-- END:cisem-six-line-insight -->
 
+<!-- BEGIN:cisem-wiring-standard -->
+# CISEM · THE WIRING STANDARD — V1
+FIVE GATES EVERY IMPLEMENTATION PASSES, EVERY TIME, FOREVER
+V1 · 2026-08-24 · EDITABLE BY THE GOVERNOR
+
+Authored by Claude, the Reviewer, on the authority of Yariv, the Governor of CISEM CsAg.
+FOR PROJECT FILES AND FOR ANTIGRAVITY'S RULES FILE.
+THIS IS NOT A ONE-TIME CHECKLIST. IT RUNS ON EVERY IMPLEMENTATION.
+
+## THE FIVE GATES
+EVERY GATE IS ANSWERED WITH A FILE, A LINE, A COUNT, OR THE WORD UNKNOWN.
+
+### GATE 1 · IT EXISTS
+The change is in the file, and the line is printed.
+- 1.1 · PRINT THE CHANGED LINE FROM EACH FILE. Not "added successfully". THE LINE, with its number.
+- 1.2 · IF IT IS A DATABASE CHANGE, PRINT THE STATEMENT, and name the file it was committed to BEFORE it was run.
+- 1.3 · WHAT DID YOU TOUCH THAT WAS NOT DECLARED?
+
+### GATE 2 · EVERY DEPENDENT AGREES — BACKWARD
+Everything that already reads or writes this now matches it.
+- 2.1 · WHAT READS THIS? Name each, FILE:line, or NONE FOUND.
+- 2.2 · WHAT WRITES THIS? Name each, FILE:line, or NONE FOUND.
+- 2.3 · RUN THE DUAL-SEARCH ACROSS THE WHOLE TREE FOR BOTH THE SYMBOL NAME AND THE ARTIFACT/FILE NAME PRODUCED. Gate 2.3 requires an executed search command string plus verbatim output, NOT a sentence. A SEARCH NOT RUN IS A DEFECT ACCEPTED.
+- 2.4 · NAME YOUR OWN BLIND SPOT. Say what your search could not have found.
+
+### GATE 3 · IT SERVES ITS CONSUMER — FORWARD
+Something that will use this can, and it was DEMONSTRATED, not asserted.
+- 3.1 · WHAT CALLS THIS NOW? If the answer is nothing, IT IS NOT WIRED.
+- 3.2 · NAME THE OBSERVATION THAT PROVES IT SERVES. Gate 3.2 requires an executed command string plus verbatim stdout output, NOT a prediction.
+- 3.3 · IF NOTHING CONSUMES IT YET, SAY SO PLAINLY AND NAME WHAT WILL, AND WHEN.
+
+### GATE 4 · IT IS RECORDED
+It exists where the next person and the next chat will find it.
+- 4.1 · IS IT COMMITTED? Print the commit reference and the file count.
+- 4.2 · WHICH STANDING FILE CHANGED BECAUSE OF THIS? Name the file and its new version, or NONE.
+- 4.3 · DOES THE PLAN THAT AUTHORISED IT REFLECT WHAT WAS ACTUALLY BUILT?
+
+### GATE 5 · IT IS GUARDED AND IT SURVIVES
+Something refuses a change that breaks it, and it outlives this conversation.
+- 5.1 · WHAT REFUSES A CHANGE THAT BREAKS THIS?
+- 5.2 · WHAT DEFEATS THAT GUARD?
+- 5.3 · WHERE DOES THE KNOWLEDGE OF THIS LIVE SO IT SURVIVES A CHAT CLOSING?
+- 5.4 · IS IT A MECHANISM OR A CARRIER? SAY WHICH, PLAINLY.
+
+UNTIL ALL FIVE ARE ANSWERED, THE WORD IS "CHANGED", NOT "LANDED".
+<!-- END:cisem-wiring-standard -->
+
+<!-- BEGIN:cisem-accumulated-wisdom-registry -->
+# CISEM MASTER ACCUMULATED WISDOM REGISTRY — V1.0
+
+Every architectural lesson, unmounted feature discovery, or UX breakthrough is given a permanent versioned entry:
+
+- **WISDOM-001 (Hash Router Navigation)**: All React client routes MUST use `window.location.hash = '#/route'`, never plain string paths (`/route`), to prevent Next.js 404 server errors.
+- **WISDOM-002 (General Rule of Built-and-Unread Structures)**: ALWAYS search the codebase for existing built structures before designing or building a replacement. Over 13 major platform capabilities (roles, permissions, pipelines, team hierarchies, dynamic menus, model routers, events table) were built and unmounted. VERIFY AND WIRE EXISTING STRUCTURES FIRST.
+- **WISDOM-003 (Atomic Audit Logging)**: If database `events` audit logging fails during a mutation, the underlying transaction MUST roll back (`HTTP 500 / 403`), making untracked edits physically impossible.
+- **WISDOM-004 (Field-Level Delta Storage)**: Audit logs store ONLY modified field diffs (`changes: { field: { old, new } }`), keeping storage 99.5% cheaper than row snapshots while answering "what was there before?".
+- **WISDOM-005 (Human Interaction & Intent Principles)**: Applies specifically when a human sees or interacts with a UI surface:
+  1. *Intent Before Taxonomy*: Present human intent options ("A customer asked me for something") before forcing system objects (`Inquiry`).
+  2. *ConceptChoice*: Explain ambiguous terms at the exact moment of decision.
+  3. *IntentCapture*: Offer Suggested Choices + Other + Free Text + Voice Input 🎤.
+  4. *Progressive Structure*: Express -> Interpret -> Identify Gaps -> Confirm -> Structure.
+  5. *Orientation First*: Orient users to success before displaying empty dashboards.
+- **WISDOM-006 (Producer-Consumer Artifact Dual-Search)**: When modifying any function or script that writes or emits an artifact (a file, JSON schema, database table, or status lock), Gate 2.3 MANDATES searching for BOTH the symbol name AND the artifact filename produced. The 5 registered workspace producer-consumer pairs:
+  1. `orchestration_trial_report.json`: `CisemAuditor.py` (producer) -> `CisemATV.py:63` & `cisem_gate.py:1528` (consumers).
+  2. `.gate_lock`: `PlanIngestor.py` & `CxpWatcher.py` (producers) -> `cisem_gate.py:75,186` (consumers).
+  3. `cael_status.json`: `CisemSync.py` & `ContinuousAuditorDaemon.py` (producers) -> `cisem_gate.py:78`, `CisemATV.py:64`, `CisemAuditor.py:58` (consumers).
+  4. `parking_vault_draft.yaml`: `CisemATV.py` (producer) -> `cisem_gate.py:76` & `CisemATV.py:62` (consumers).
+  5. `template_sync_queue.json`: `template_propagation_scheduler.py` (producer) -> `cisem_gate.py:1728` (consumer).
+<!-- END:cisem-accumulated-wisdom-registry -->
+
+
 
