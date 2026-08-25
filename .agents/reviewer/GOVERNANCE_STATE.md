@@ -18,4 +18,4 @@
 - `CISEM-ATV-V1`: status=VALIDATED, triggers=1632/4
 - `CISEM-TURN-COUNTER`: status=VALIDATED, triggers=700/4
 - `CISEM-PERSONA-AUDITOR`: status=VALIDATED, triggers=1610/4
-- `CISEM-GRAPHIFY`: status=VALIDATED, triggers=7/4
+- `CISEM-GRAPHIFY`: status=VALIDATED, triggers=8/4

@@ -202,11 +202,13 @@ metadata:
         with open(backlog_path, "r", encoding="utf-8") as f:
             content = f.read()
             
-        rows = re.findall(r"INSERT INTO backlog_registry .*? VALUES \('(PARK-\d+)', '([^']+)', '(.*?)'", content)
+        rows = re.findall(r"INSERT INTO backlog_registry .*? VALUES \('([A-Z0-9_\-]+)', '[^']+', '([^']+)'", content)
         
         scores = {}
-        for code, title, context in rows:
-            score = len(context)
+        for code, title in rows:
+            score = len(title)
+            if "PIPELINE" in code or "PRODUCT" in title.upper():
+                score += 800
             if "GATE" in title.upper() or "SECURITY" in title.upper():
                 score += 500
             if "CAEL" in title.upper() or "IMPROVEMENT" in title.upper():
