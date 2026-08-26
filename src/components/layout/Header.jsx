@@ -78,10 +78,16 @@ export default function Header() {
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef(null);
 
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
+
   useEffect(() => {
     const handleOutside = (e) => {
       if (langRef.current && !langRef.current.contains(e.target) && document.body.contains(e.target)) {
         setLangOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target) && document.body.contains(e.target)) {
+        setUserMenuOpen(false);
       }
     };
     document.addEventListener('click', handleOutside);
@@ -721,89 +727,112 @@ export default function Header() {
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        <div className="admin-dropdown-container header-user-profile-menu" style={{ position: 'relative' }}>
-          <button className="btn-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} title={currentUser?.name || "User Profile"}>
-            <User size={20} />
-          </button>
-          <div 
-            className="admin-dropdown-menu header-user-dropdown-popover" 
+        <div className="header-user-profile-menu" ref={userMenuRef} style={{ position: 'relative' }}>
+          <button 
+            className="btn-icon" 
+            onClick={(e) => {
+              e.stopPropagation();
+              setUserMenuOpen(!userMenuOpen);
+            }} 
             style={{ 
-              position: 'absolute', 
-              right: 0, 
-              left: 'auto',
-              top: 'calc(100% + 6px)', 
-              width: 250, 
-              maxWidth: 'calc(100vw - 24px)', 
-              padding: 12, 
-              zIndex: 1000, 
-              boxShadow: '0 8px 30px rgba(0,0,0,0.22)', 
-              borderRadius: 12, 
-              background: 'var(--surface-elevated, #ffffff)',
-              border: '1px solid var(--border)',
-              boxSizing: 'border-box'
-            }}
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              cursor: 'pointer',
+              background: userMenuOpen ? 'var(--accent-glow)' : 'transparent',
+              borderRadius: '50%'
+            }} 
+            title={currentUser?.name || "User Profile"}
           >
-            <div style={{ paddingBottom: 8, marginBottom: 8, borderBottom: '1px solid var(--border-light)', textAlign: 'inherit' }}>
-              <div style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-primary)' }}>
-                {tValue(currentUser?.name, language)}
-              </div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: 2, display: 'flex', gap: 4, justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-                <span className="badge badge-priority-high" style={{ padding: '1px 6px', fontSize: '0.65rem' }}>
-                  {tValue(currentUser?.role, language).toUpperCase()}
-                </span>
-                <span style={{ padding: '1px 6px', fontSize: '0.65rem', border: '1px solid var(--border)', borderRadius: 4 }}>
-                  {tValue(currentUser?.company, language)}
-                </span>
-              </div>
-            </div>
-            <div className="admin-dropdown-item" onClick={() => { setActiveView('settings'); navigate('/settings'); }} style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-              <Settings size={14} />
-              {t.settings}
-            </div>
-            <div className="admin-dropdown-item" onClick={() => { setActiveView('admin'); navigate('/admin?tab=team'); }} style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-              <Users size={14} />
-              {t.teamMembersTab}
-            </div>
-            {/* Role impersonation sandbox */}
-            <div style={{ padding: '8px 8px 4px', marginTop: 6, borderTop: '1px solid var(--border-light)' }}>
-              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: 5, letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <ShieldCheck size={10} /> Simulate Role
-              </div>
-              {['platform_admin', 'manager', 'buyer', 'partner', 'guest'].map((r) => (
-                <div key={r}
-                  className="admin-dropdown-item"
-                  onClick={() => setSimulatedRole(r)}
-                  style={{ padding: '5px 8px', fontSize: '0.74rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer',
-                    background: simulatedRole === r ? 'var(--accent-glow)' : 'transparent',
-                    color: simulatedRole === r ? 'var(--accent)' : 'var(--text-secondary)' }}
-                >
-                  {simulatedRole === r ? <Check size={11} /> : <span style={{ width: 11, display: 'inline-block' }} />}
-                  {r.replace('_', ' ')}
+            <User size={20} style={{ color: userMenuOpen ? 'var(--accent)' : 'currentColor' }} />
+          </button>
+          
+          {userMenuOpen && (
+            <div 
+              className="header-user-dropdown-popover" 
+              style={{ 
+                position: 'absolute', 
+                right: 0, 
+                left: 'auto',
+                top: 'calc(100% + 4px)', 
+                width: 250, 
+                maxWidth: 'calc(100vw - 24px)', 
+                padding: 12, 
+                zIndex: 9999, 
+                boxShadow: '0 12px 36px rgba(0,0,0,0.25)', 
+                borderRadius: 12, 
+                background: 'var(--surface-elevated, #ffffff)',
+                border: '1px solid var(--border)',
+                boxSizing: 'border-box',
+                display: 'block'
+              }}
+            >
+              <div style={{ paddingBottom: 8, marginBottom: 8, borderBottom: '1px solid var(--border-light)', textAlign: 'inherit' }}>
+                <div style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+                  {tValue(currentUser?.name, language)}
                 </div>
-              ))}
-            </div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: 2, display: 'flex', gap: 4, justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+                  <span className="badge badge-priority-high" style={{ padding: '1px 6px', fontSize: '0.65rem' }}>
+                    {tValue(currentUser?.role, language).toUpperCase()}
+                  </span>
+                  <span style={{ padding: '1px 6px', fontSize: '0.65rem', border: '1px solid var(--border)', borderRadius: 4 }}>
+                    {tValue(currentUser?.company, language)}
+                  </span>
+                </div>
+              </div>
+              <div className="admin-dropdown-item" onClick={() => { setUserMenuOpen(false); setActiveView('settings'); navigate('/settings'); }} style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <Settings size={14} />
+                {t.settings}
+              </div>
+              <div className="admin-dropdown-item" onClick={() => { setUserMenuOpen(false); setActiveView('admin'); navigate('/admin?tab=team'); }} style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <Users size={14} />
+                {t.teamMembersTab}
+              </div>
+              {/* Role impersonation sandbox */}
+              <div style={{ padding: '8px 8px 4px', marginTop: 6, borderTop: '1px solid var(--border-light)' }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: 5, letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <ShieldCheck size={10} /> Simulate Role
+                </div>
+                {['platform_admin', 'manager', 'buyer', 'partner', 'guest'].map((r) => (
+                  <div key={r}
+                    className="admin-dropdown-item"
+                    onClick={() => {
+                      setSimulatedRole(r);
+                      setUserMenuOpen(false);
+                    }}
+                    style={{ padding: '5px 8px', fontSize: '0.74rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer',
+                      background: simulatedRole === r ? 'var(--accent-glow)' : 'transparent',
+                      color: simulatedRole === r ? 'var(--accent)' : 'var(--text-secondary)' }}
+                  >
+                    {simulatedRole === r ? <Check size={11} /> : <span style={{ width: 11, display: 'inline-block' }} />}
+                    {r.replace('_', ' ')}
+                  </div>
+                ))}
+              </div>
 
-            {/* Log Out & Session Actions */}
-            <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
-              <div 
-                className="admin-dropdown-item" 
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    localStorage.removeItem('cisem_access_token');
-                    localStorage.removeItem('cisem_user_name');
-                    localStorage.removeItem('cisem_company_name');
-                    localStorage.removeItem('cisem_user_email');
-                  }
-                  window.location.hash = '#/onboarding';
-                  window.location.reload();
-                }} 
-                style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: 'var(--danger, #ef4444)', fontWeight: 600 }}
-              >
-                <LogOut size={14} />
-                <span>Log Out</span>
+              {/* Log Out & Session Actions */}
+              <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+                <div 
+                  className="admin-dropdown-item" 
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    if (typeof window !== 'undefined') {
+                      localStorage.removeItem('cisem_access_token');
+                      localStorage.removeItem('cisem_user_name');
+                      localStorage.removeItem('cisem_company_name');
+                      localStorage.removeItem('cisem_user_email');
+                    }
+                    window.location.hash = '#/onboarding';
+                    window.location.reload();
+                  }} 
+                  style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: 'var(--danger, #ef4444)', fontWeight: 600 }}
+                >
+                  <LogOut size={14} />
+                  <span>Log Out</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
