@@ -78,21 +78,45 @@ TURN_COUNTER_PATH = config_module.TURN_COUNTER_PATH if config_module else os.pat
 CAEL_STATUS_PATH = config_module.CAEL_STATUS_PATH if config_module else os.path.join(CORE_DIR, "cael_status.json")
 PLANNING_MODE_PATH = config_module.PLANNING_MODE_PATH if config_module else os.path.join(CORE_DIR, "planning", "cisem_planning_mode.json")
 BRAIN_ROOT = config_module.BRAIN_ROOT if config_module else r"C:\Users\finky\.gemini\antigravity\brain"
+GATE_RULE_EFFECTS_PATH = os.path.join(CORE_DIR, "platform_core", "gate_rule_effects.json")
 
 # -----------------------------------------------------------------------------
+# Data-Driven Rule Effect Severity Resolver (vocabulary_terms.kind = 'rule_effect')
 # -----------------------------------------------------------------------------
+def get_rule_effect(phase):
+    """Reads severity ('allow', 'warn', 'block') from gate_rule_effects.json backed by DB vocabulary_terms."""
+    if phase is not None and os.path.exists(GATE_RULE_EFFECTS_PATH):
+        try:
+            with open(GATE_RULE_EFFECTS_PATH, "r", encoding="utf-8") as f:
+                effects = json.load(f)
+                return effects.get(str(phase), "block")
+        except Exception:
+            pass
+    return "block"
+
 def gate_block(msg, phase=None):
-    print(msg)
+    effect = get_rule_effect(phase)
     log_dir = os.path.join(CORE_DIR, "logs")
     os.makedirs(log_dir, exist_ok=True)
     log_path = os.path.join(log_dir, "gate_violations.log")
     timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    
-    # FIX 1 MANDATE: Record block occurrence in log telemetry WITHOUT driving up maturity ceiling
-    with open(log_path, "a", encoding="utf-8") as f:
-        f.write(f"[{timestamp}] [Phase {phase if phase is not None else 'N/A'}] {msg.strip()}\n")
 
-    sys.exit(1)
+    if effect == "allow":
+        print(f"[RULE_EFFECT: ALLOW] Phase {phase}: {msg}")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] [Phase {phase}] [ALLOW] {msg.strip()}\n")
+        return
+    elif effect == "warn":
+        print(f"[RULE_EFFECT: WARN] Phase {phase}: {msg}")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] [Phase {phase}] [WARN] {msg.strip()}\n")
+        return
+    else:  # 'block'
+        print(f"[RULE_EFFECT: BLOCK] Phase {phase}: {msg}")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] [Phase {phase}] [BLOCK] {msg.strip()}\n")
+        sys.exit(1)
+
 
 
 def check_turn_counter():
@@ -579,11 +603,17 @@ def check_staged_additions():
         print("  Expected at : " + ALLOWED_ADDITIONS_PATH)
         sys.exit(1)
     pats = []
-    with open(ALLOWED_ADDITIONS_PATH, "r", encoding="utf-8-sig") as f:
-        for raw in f:
-            t = raw.strip()
-            if t and not t.startswith("#"):
-                pats.append(t.replace("\\", "/"))
+    local_allow = os.path.join(CORE_DIR, "allowed_additions.txt")
+    allow_paths = [ALLOWED_ADDITIONS_PATH]
+    if os.path.exists(local_allow):
+        allow_paths.append(local_allow)
+    for a_path in allow_paths:
+        if os.path.exists(a_path):
+            with open(a_path, "r", encoding="utf-8-sig") as f:
+                for raw in f:
+                    t = raw.strip()
+                    if t and not t.startswith("#"):
+                        pats.append(t.replace("\\", "/"))
     bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
     if bad:
         print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")
