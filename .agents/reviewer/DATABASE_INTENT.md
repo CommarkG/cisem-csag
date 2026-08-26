@@ -60,7 +60,7 @@
 - `CatalogSearchPayload`: `query_vector`, `similarity_threshold`, `match_count`, `category_filter`
 - `ProposalGenerateRequest`: `brief_id`, `catalog_item_skus`, `applied_margin_percent`, `selected_variations`
 - `WizardDuplicatePayload`: `title`, `layout_spec`, `description`
-- `InquiryCreatePayload`: `contact_name`, `contact_email`, `contact_phone`, `requirements_summary`, `estimated_budget`
+- `InquiryCreatePayload`: `title`, `description`, `contact_name`, `contact_email`, `contact_phone`, `requirements_summary`, `estimated_budget`, `counterparty_id`
 - `QuoteCreatePayload`: `inquiry_id`, `currency`, `valid_until`, `notes`
 - `QuoteLineCreatePayload`: `description`, `quantity`, `unit_price`
 - `AcceptanceCreatePayload`: `evidence_kind`, `evidence_data`, `accepted_by`

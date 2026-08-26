@@ -2104,11 +2104,14 @@ def duplicate_template_wizard(template_id: str, payload: WizardDuplicatePayload,
 # ==============================================================================
 
 class InquiryCreatePayload(BaseModel):
-    contact_name: str
+    title: Optional[str] = None
+    description: Optional[str] = None
+    contact_name: Optional[str] = None
     contact_email: Optional[str] = None
     contact_phone: Optional[str] = None
     requirements_summary: Optional[str] = None
     estimated_budget: Optional[float] = 0.0
+    counterparty_id: Optional[str] = None
 
 class QuoteCreatePayload(BaseModel):
     inquiry_id: str
@@ -2135,14 +2138,14 @@ async def create_inquiry(payload: InquiryCreatePayload, request: Request):
     """Creates an inquiry tied strictly to the authenticated tenant (PR-11100)."""
     tenant_id = extract_tenant_from_request(request)
     try:
+        inq_title = payload.title or payload.contact_name or "New Free-Text Inquiry"
+        inq_desc = payload.description or payload.requirements_summary or ""
         data = {
-            "contact_name": payload.contact_name,
-            "contact_email": payload.contact_email,
-            "contact_phone": payload.contact_phone,
-            "requirements_summary": payload.requirements_summary,
-            "estimated_budget": payload.estimated_budget,
+            "title": inq_title,
+            "description": inq_desc,
             "status_code": "proposal_draft",
-            "customer_account_id": tenant_id
+            "customer_account_id": tenant_id, # Extracted strictly from verified request session!
+            "counterparty_id": payload.counterparty_id # NULL if not provided!
         }
         res = supabase.table("inquiries").insert(data).execute()
         created_item = res.data[0] if res.data else data

@@ -21,6 +21,36 @@ const BACKEND_URL = "http://localhost:8000/api/v1";
 function getMockData(pathStr: string, method: string) {
   const p = pathStr.toLowerCase();
   
+  if (p.includes("inquiries")) {
+    if (method === "POST") {
+      return {
+        status: "created",
+        inquiry: {
+          id: "inq-" + Date.now(),
+          title: "New Free-Text Inquiry",
+          status_code: "proposal_draft",
+          customer_account_id: "TENANT-SESSION-ACTIVE",
+          counterparty_id: null,
+          created_at: new Date().toISOString()
+        }
+      };
+    }
+    return {
+      status: "success",
+      inquiries: [
+        {
+          id: "inq-1001",
+          title: "100 premium branded notebooks for AGN Ltd event by Sept 15",
+          description: "Free-text intent intake from Omri Shilo",
+          status_code: "proposal_draft",
+          customer_account_id: "TENANT-SESSION-ACTIVE",
+          counterparty_id: null,
+          created_at: new Date().toISOString()
+        }
+      ]
+    };
+  }
+
   if (p.includes("tenant/members")) {
     return {
       status: "success",
