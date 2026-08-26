@@ -248,63 +248,76 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
+                className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100 hover:text-amber-500 dark:hover:text-amber-400 transition-all py-5 px-2.5 gap-1.5 border-b-2 border-transparent group-hover:border-amber-500"
               >
-                <span>Gov</span>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <span className="px-1.5 py-0.5 rounded bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-extrabold text-[11px]">Gov</span>
+                <span>Governance</span>
+                <svg className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[480px] glass-card-static p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
-                {/* Column 1: Schema & Rules */}
+              <div className="absolute right-0 top-full w-[480px] glass-card-static p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300] shadow-2xl rounded-b-xl border border-slate-200/80 dark:border-slate-800/80">
+                {/* Column 1: Schemas & Audits */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    Schemas & Audits
+                  <span className="text-[11px] font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>1. Schemas & Audits</span>
+                    <span className="text-[9px] px-1 bg-indigo-100 dark:bg-indigo-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={() => onSelectCategory("human_schema")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Schema (Human Logic)
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("system_schema")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Schema (System Logic)
-                  </button>
-                  <button
-                    onClick={onHelpClick}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    AI Behavior & Personas
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={() => onSelectCategory("human_schema")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Schema (Human Logic)</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("system_schema")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Schema (System Logic)</span>
+                    </button>
+                    <button
+                      onClick={onHelpClick}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>AI Behavior & Personas</span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* Column 2: Accountability & Guides */}
+                {/* Column 2: Loops & Safety */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    Loops & Safety
+                  <span className="text-[11px] font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>2. Loops & Safety</span>
+                    <span className="text-[9px] px-1 bg-indigo-100 dark:bg-indigo-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={onBacklogClick}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Learning Loops (Backlog)
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("threshold")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Threshold Input Gate
-                  </button>
-                  <button
-                    onClick={onHelpClick}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Help & Tutorials
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={onBacklogClick}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Learning Loops (Backlog)</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("threshold")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Threshold Input Gate</span>
+                    </button>
+                    <button
+                      onClick={onHelpClick}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Help & Tutorials</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -313,63 +326,76 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
+                className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100 hover:text-amber-500 dark:hover:text-amber-400 transition-all py-5 px-2.5 gap-1.5 border-b-2 border-transparent group-hover:border-amber-500"
               >
-                <span>Arch</span>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <span className="px-1.5 py-0.5 rounded bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-extrabold text-[11px]">Arch</span>
+                <span>Architecture</span>
+                <svg className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[400px] glass-card-static p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
-                {/* Column 1: UI & Flow */}
+              <div className="absolute right-0 top-full w-[460px] glass-card-static p-6 grid grid-cols-2 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300] shadow-2xl rounded-b-xl border border-slate-200/80 dark:border-slate-800/80">
+                {/* Column 1: Design & Diffs */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    Design & Diffs
+                  <span className="text-[11px] font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>1. Design & Diffs</span>
+                    <span className="text-[9px] px-1 bg-amber-100 dark:bg-amber-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={() => onSelectCategory("template_hub")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Template Hub
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("web_pages")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Web Pages
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("design_studio")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    UX UI Studio
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("traceability_spec")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Pipelines & Trace
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={() => onSelectCategory("template_hub")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Template Hub</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("web_pages")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Web Pages</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("design_studio")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>UX UI Studio</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("traceability_spec")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Pipelines & Trace</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Column 2: Capabilities */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    Trunks & Adapt
+                  <span className="text-[11px] font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>2. Trunks & Adapt</span>
+                    <span className="text-[9px] px-1 bg-amber-100 dark:bg-amber-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={() => onSelectCategory("agents_skills")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Agents & Skills
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("protocols_wizards")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Protocols & specs
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={() => onSelectCategory("agents_skills")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Agents & Skills</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("protocols_wizards")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Protocols & Specs</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -378,64 +404,86 @@ export default function DynamicMenu({
             <div className="relative group">
               <button
                 type="button"
-                className="flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-amber-500 dark:hover:text-amber-500 transition-colors py-5 gap-1"
+                className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-100 hover:text-amber-500 dark:hover:text-amber-400 transition-all py-5 px-2.5 gap-1.5 border-b-2 border-transparent group-hover:border-amber-500"
               >
-                <span>Ext</span>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-extrabold text-[11px]">Ext</span>
+                <span>Extensions</span>
+                <svg className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
-              <div className="absolute right-0 top-full w-[540px] glass-card-static p-6 grid grid-cols-3 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300]">
+              <div className="absolute right-0 top-full w-[580px] glass-card-static p-6 grid grid-cols-3 gap-6 opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-[300] shadow-2xl rounded-b-xl border border-slate-200/80 dark:border-slate-800/80">
                 {/* Column 1: Business */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    Business
+                  <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>1. Business</span>
+                    <span className="text-[9px] px-1 bg-emerald-100 dark:bg-emerald-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={() => onSelectCategory("purchasing_quotes_hub")}
-                    className="text-xs font-semibold text-slate-900 dark:text-amber-400 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] font-bold"
-                  >
-                    Pricing and Purchasing
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={() => onSelectCategory("purchasing_quotes_hub")}
+                      className="group/item text-xs font-bold text-slate-900 dark:text-amber-400 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Pricing & Purchasing</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("onboarding")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Universal Onboarding</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Column 2: Models */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    AI Solutions
+                  <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>2. AI Solutions</span>
+                    <span className="text-[9px] px-1 bg-emerald-100 dark:bg-emerald-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={() => onSelectCategory("api_providers")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    AI Providers
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("matting_models")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Matting Models
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={() => onSelectCategory("api_providers")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>AI Providers</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("matting_models")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Matting Models</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Column 3: Storage & Sync */}
                 <div className="flex flex-col gap-2 text-right">
-                  <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-1">
-                    Infrastructure
+                  <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1.5 flex items-center justify-between">
+                    <span>3. Infrastructure</span>
+                    <span className="text-[9px] px-1 bg-emerald-100 dark:bg-emerald-900/40 rounded">Sub-Cat</span>
                   </span>
-                  <button
-                    onClick={() => onSelectCategory("storage_cdn")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Storage & CDNs
-                  </button>
-                  <button
-                    onClick={() => onSelectCategory("data_integrations")}
-                    className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px]"
-                  >
-                    Data Integrations
-                  </button>
+                  <div className="flex flex-col gap-1.5 pr-1">
+                    <button
+                      onClick={() => onSelectCategory("storage_cdn")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Storage & CDNs</span>
+                    </button>
+                    <button
+                      onClick={() => onSelectCategory("data_integrations")}
+                      className="group/item text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-amber-500 text-right py-1 transition-all hover:translate-x-[-4px] flex items-center justify-between"
+                    >
+                      <span className="text-[10px] text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity">➔</span>
+                      <span>Data Integrations</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
