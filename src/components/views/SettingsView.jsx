@@ -12,7 +12,7 @@
 */
 // @playbook_category: Bento Page Layout Recipe
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useCollabStore } from '../../stores/useCollabStore';
 import { useOnboardingStore } from '../../stores/useOnboardingStore';
