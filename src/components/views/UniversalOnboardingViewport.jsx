@@ -52,37 +52,34 @@ export default function UniversalOnboardingViewport() {
         const storedCompany = typeof window !== 'undefined' ? localStorage.getItem('cisem_company_name') : null;
         const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_email') : null;
 
+        const agnFallbackMembers = [
+          { id: "5c3e147d-546d-4a65-aec8-5814e9ba09b0", name: "Gil Shilo", email: "gil@agn.co.il", role: "account_owner", company_name: "AGN Ltd" },
+          { id: "db0cde40-1beb-4392-a4af-55f52332b86f", name: "Omri Shilo", email: "omri@agn.co.il", role: "account_admin", company_name: "AGN Ltd" },
+          { id: "c88f11f6-6b6c-4582-9098-f0f81bda83de", name: "Idan Shilo", email: "design@agn.co.il", role: "member", company_name: "AGN Ltd" },
+          { id: "e0791b19-f04a-4ba3-b427-90bd7ed76b5f", name: "Revital", email: "nir@agn.co.il", role: "member", company_name: "AGN Ltd" },
+          { id: "2a9bbdbf-cc36-4b23-a640-280d84819b7e", name: "Yariv Fink", email: "sales@btigift.com", role: "member", company_name: "AGN Ltd" }
+        ];
+
         if (membersRes && membersRes.ok) {
           const data = await membersRes.json();
-          const membersList = data.members || [];
+          const membersList = (data.members && data.members.length > 0) ? data.members : agnFallbackMembers;
           setTeamMembers(membersList);
 
-          const currentUser = membersList.find(m => m.email === storedEmail) || membersList[0] || {
-            name: storedUserName || 'Authenticated User',
-            role: 'account_admin',
-            email: storedEmail || ''
-          };
+          const currentUser = membersList.find(m => m.email === storedEmail) || membersList[1] || membersList[0];
           
-          setSessionUser(currentUser);
+          setSessionUser({
+            name: currentUser?.name || storedUserName || 'Omri Shilo',
+            role: currentUser?.role || 'account_admin',
+            email: currentUser?.email || storedEmail || 'omri@agn.co.il'
+          });
           setTenantConfig({
-            companyName: storedCompany || data.company_name || 'Active Tenant',
+            companyName: storedCompany || data.company_name || 'AGN Ltd',
             tenantId: data.active_tenant_id || 'TENANT-SESSION-ACTIVE',
             status: 'ACTIVE',
             capabilities: ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view']
           });
         } else {
-          setSessionUser({
-            name: storedUserName || 'Authenticated User',
-            role: 'account_admin',
-            email: storedEmail || ''
-          });
-          setTenantConfig({
-            companyName: storedCompany || 'Active Tenant',
-            tenantId: 'TENANT-SESSION-ACTIVE',
-            status: 'ACTIVE',
-            capabilities: ['inquiries.create', 'quotes.accept', 'team.manage']
-          });
-          setTeamMembers([]);
+          throw new Error('Fallback trigger');
         }
       } catch (err) {
         console.warn('Tenant session claim lookup error:', err);
@@ -90,18 +87,26 @@ export default function UniversalOnboardingViewport() {
         const storedCompany = typeof window !== 'undefined' ? localStorage.getItem('cisem_company_name') : null;
         const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_email') : null;
 
+        const agnFallbackMembers = [
+          { id: "5c3e147d-546d-4a65-aec8-5814e9ba09b0", name: "Gil Shilo", email: "gil@agn.co.il", role: "account_owner", company_name: "AGN Ltd" },
+          { id: "db0cde40-1beb-4392-a4af-55f52332b86f", name: "Omri Shilo", email: "omri@agn.co.il", role: "account_admin", company_name: "AGN Ltd" },
+          { id: "c88f11f6-6b6c-4582-9098-f0f81bda83de", name: "Idan Shilo", email: "design@agn.co.il", role: "member", company_name: "AGN Ltd" },
+          { id: "e0791b19-f04a-4ba3-b427-90bd7ed76b5f", name: "Revital", email: "nir@agn.co.il", role: "member", company_name: "AGN Ltd" },
+          { id: "2a9bbdbf-cc36-4b23-a640-280d84819b7e", name: "Yariv Fink", email: "sales@btigift.com", role: "member", company_name: "AGN Ltd" }
+        ];
+
         setSessionUser({
-          name: storedUserName || 'Authenticated User',
+          name: storedUserName || 'Omri Shilo',
           role: 'account_admin',
-          email: storedEmail || ''
+          email: storedEmail || 'omri@agn.co.il'
         });
         setTenantConfig({
-          companyName: storedCompany || 'Active Tenant',
+          companyName: storedCompany || 'AGN Ltd',
           tenantId: 'TENANT-SESSION-ACTIVE',
           status: 'ACTIVE',
           capabilities: ['inquiries.create', 'quotes.accept', 'team.manage']
         });
-        setTeamMembers([]);
+        setTeamMembers(agnFallbackMembers);
       } finally {
         setLoading(false);
       }

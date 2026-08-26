@@ -21,6 +21,22 @@ const BACKEND_URL = "http://localhost:8000/api/v1";
 function getMockData(pathStr: string, method: string) {
   const p = pathStr.toLowerCase();
   
+  if (p.includes("tenant/members")) {
+    return {
+      status: "success",
+      success: true,
+      company_name: "AGN Ltd",
+      active_tenant_id: "TENANT-SESSION-ACTIVE",
+      members: [
+        { id: "5c3e147d-546d-4a65-aec8-5814e9ba09b0", name: "Gil Shilo", email: "gil@agn.co.il", role: "account_owner", company_name: "AGN Ltd" },
+        { id: "db0cde40-1beb-4392-a4af-55f52332b86f", name: "Omri Shilo", email: "omri@agn.co.il", role: "account_admin", company_name: "AGN Ltd" },
+        { id: "c88f11f6-6b6c-4582-9098-f0f81bda83de", name: "Idan Shilo", email: "design@agn.co.il", role: "member", company_name: "AGN Ltd" },
+        { id: "e0791b19-f04a-4ba3-b427-90bd7ed76b5f", name: "Revital", email: "nir@agn.co.il", role: "member", company_name: "AGN Ltd" },
+        { id: "2a9bbdbf-cc36-4b23-a640-280d84819b7e", name: "Yariv Fink", email: "sales@btigift.com", role: "member", company_name: "AGN Ltd" }
+      ]
+    };
+  }
+
   if (p.includes("admin/personas/activate")) {
     return { success: true, status: "activated" };
   }

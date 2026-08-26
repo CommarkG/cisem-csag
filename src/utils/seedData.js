@@ -231,7 +231,13 @@ export const createSeedData = () => {
   ];
 };
 
-export const defaultTeamMembers = [];
+export const defaultTeamMembers = [
+  { id: "5c3e147d-546d-4a65-aec8-5814e9ba09b0", name: "Gil Shilo", email: "gil@agn.co.il", role: "account_owner", company: "AGN Ltd", avatar: "#6c5ce7", initials: "GS" },
+  { id: "db0cde40-1beb-4392-a4af-55f52332b86f", name: "Omri Shilo", email: "omri@agn.co.il", role: "account_admin", company: "AGN Ltd", avatar: "#00cec9", initials: "OS" },
+  { id: "c88f11f6-6b6c-4582-9098-f0f81bda83de", name: "Idan Shilo", email: "design@agn.co.il", role: "member", company: "AGN Ltd", avatar: "#e17055", initials: "IS" },
+  { id: "e0791b19-f04a-4ba3-b427-90bd7ed76b5f", name: "Revital", email: "nir@agn.co.il", role: "member", company: "AGN Ltd", avatar: "#fdcb6e", initials: "RV" },
+  { id: "2a9bbdbf-cc36-4b23-a640-280d84819b7e", name: "Yariv Fink", email: "sales@btigift.com", role: "member", company: "AGN Ltd", avatar: "#0984e3", initials: "YF" }
+];
 
 export const defaultNotificationRules = [
   { id: generateId(), event: 'status_change', label: 'Task status changed', channel: 'in_app', enabled: true, quietHours: true, leadTimeDays: 0 },

@@ -219,6 +219,7 @@
 | `cisem_core/downloads/test_gate_regex.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/test_git_modified.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/test_tenant_blind_state_preventions.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/downloads/test_tenant_members.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/walkthrough.md` | `2.0` | `UNVERSIONED` | MISMATCH (2.0 vs UNVERSIONED) |
 | `cisem_core/linters/check_forbidden_words.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/linters/check_live_schema_alignment.py` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
