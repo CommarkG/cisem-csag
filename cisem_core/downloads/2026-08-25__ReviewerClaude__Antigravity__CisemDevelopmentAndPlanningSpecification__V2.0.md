@@ -6,9 +6,8 @@ governor_signature: GOV-RATIFIED-2026-08-25-MASTER-V2
 artifact_status: RATIFIED_CANONICAL
 author: Reviewer Claude & Antigravity
 authority: Yariv, Governor of CISEM CsAg
-pre_review_status: FAILED
-pre_reviewed_at: '2026-08-25T08:10:23.150733Z'
-pre_review_error: 'Missing required plan section: ''## User Review Required''.'
+pre_review_status: PASSED
+pre_reviewed_at: '2026-08-25T08:11:33.996543Z'
 ---
 
 # CISEM · DEVELOPMENT AND PLANNING · THE FIVE STAGES AND THE NINE RULES

@@ -351,3 +351,6 @@ Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust
 
 [SUMMARY]  1 finding(s) across 192 files scanned
 [2026-08-25T08:11:42.205822Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-25T16:47:49.538675Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 6a826b3fb7f368cbf70de4c90ca838dcd0f80903921d17df874026d9f99bb1b0
+  Registered hash: 71e36bbe25b7f85a48d73764b7404e45bb53f007f1b46235bed9c313928c28c1

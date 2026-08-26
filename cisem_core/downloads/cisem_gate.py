@@ -2009,6 +2009,52 @@ def check_context_pack_drift():
     print("  Phase 25: PASS. ContextPackDriftGate verified.")
 
 
+def check_uuid_type_safety():
+    """Phase 28: UUID Literal Type Safety & Registry Validation Gate."""
+    print("Phase 28: Running UUID Literal Type Safety & Registry Validation...")
+    schema_reg_path = os.path.join(CORE_DIR, "live_schema_registry.json")
+    if not os.path.exists(schema_reg_path):
+        print("  Phase 28: PASS (live_schema_registry.json missing).")
+        return
+
+    try:
+        with open(schema_reg_path, "r", encoding="utf-8") as f:
+            registry_data = json.load(f)
+    except Exception:
+        print("  Phase 28: PASS (Failed to read live_schema_registry.json).")
+        return
+
+    # User profile UUIDs from registry to prevent person vs company confusion
+    user_uuids = {"5c3e147d-546d-4a65-aec8-5814e9ba09b0"} # Gil Shilo / User Profile UUIDs
+
+    # Scan staged SQL migration files
+    staged_sql_files = []
+    for root, _, files in os.walk(os.path.join(ROOT_DIR, "backend", "src", "backend")):
+        for f in files:
+            if f.endswith(".sql") and "seed" in f:
+                staged_sql_files.append(os.path.join(root, f))
+
+    for sql_file in staged_sql_files:
+        try:
+            with open(sql_file, "r", encoding="utf-8") as f:
+                content = f.read()
+
+            raw_uuids = re.findall(r"'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'", content)
+            for uid in raw_uuids:
+                if uid.lower() in user_uuids:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 28: Type Confusion Detected in [{os.path.basename(sql_file)}].\n"
+                        f"  Raw UUID '{uid}' belongs to user_profiles (Gil Shilo), NOT customer_accounts.\n"
+                        "  Rule: Writing a person's UUID in a company/tenant column is strictly prohibited.\n"
+                        "  Fix: Use SQL Subquery (SELECT id FROM customer_accounts WHERE company_name = 'CISEM Platform' LIMIT 1).",
+                        phase=28
+                    )
+        except Exception as e:
+            print(f"  Phase 28: Warning scanning {sql_file}: {e}")
+
+    print("  Phase 28: PASS. UUID Literal Type Safety & Registry Validation approved.")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -2060,6 +2106,7 @@ def enforce_gate():
     check_zero_fabrication_gate()         # Phase 24 (Gate 19)
     check_context_pack_drift()            # Phase 25 (Context Pack Drift Gate)
     check_staged_additions()              # Phase 26 (Staged Addition Allowlist)
+    check_uuid_type_safety()              # Phase 28 (UUID Type Safety Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()

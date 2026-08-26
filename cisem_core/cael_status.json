@@ -57,9 +57,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 4,
       "validation_target": 16,
-      "actual_triggers": 2238,
+      "actual_triggers": 2239,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-25T08:40:33.130519Z",
+      "last_triggered": "2026-08-25T12:00:01.343234Z",
       "notes": "Called on every gate Phase 2 run. 16+ confirmed runs."
     },
     {
@@ -93,9 +93,9 @@
       "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 699,
+      "actual_triggers": 701,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-25T08:40:32.503847Z",
+      "last_triggered": "2026-08-25T16:47:49.445115Z",
       "notes": "Turn counter increments logged and verified through 4 cycle resets."
     },
     {
@@ -117,9 +117,9 @@
       "ratified_plan": "CISEM-IP-20260810-FRONTEND-PLAYBOOK-REFACTOR",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 7,
+      "actual_triggers": 8,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-25T08:09:18.386266Z",
+      "last_triggered": "2026-08-25T16:22:17.490084Z",
       "notes": "Triggers tracked via Phase 20 gate mapper execution."
     }
   ],
