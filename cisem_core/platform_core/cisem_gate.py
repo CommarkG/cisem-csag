@@ -2187,7 +2187,29 @@ def check_uuid_type_safety():
         except Exception as e:
             print(f"  Phase 28: Warning scanning {sql_file}: {e}")
 
-    print("  Phase 28: PASS. UUID Literal Type Safety & Registry Validation approved.")
+def check_db_persistence_uuid_shape():
+    """
+    Phase 29: Database Persistence UUID Shape & Anti-Mock Gate.
+    Verifies that no API router file or test suite invents timestamp IDs ('inq-178...') or flat string tenants ('TENANT-SESSION-ACTIVE') for endpoints asserting database persistence.
+    Rejects mock responses for database persistence endpoints.
+    """
+    print("Phase 29: Running DB Persistence UUID Shape & Anti-Mock Audit...")
+    route_file = os.path.join(ROOT_DIR, "src", "app", "api", "v1", "[...path]", "route.ts")
+    if os.path.exists(route_file):
+        try:
+            with open(route_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            if "if (p.includes(\"inquiries\"))" in content and "inq-" in content:
+                gate_block(
+                    "CISEM_GATE_BLOCKED -- Phase 29: Synthetic Mock Fallback Detected in route.ts.\n"
+                    "  Endpoint '/api/v1/inquiries' must NOT return mock objects with timestamp IDs ('inq-...') or flat string tenants.\n"
+                    "  Rule: Persistence endpoints must communicate with PostgreSQL or return HTTP Error (502).",
+                    phase=29
+                )
+        except Exception as e:
+            print(f"  Phase 29: Warning scanning route.ts: {e}")
+
+    print("  Phase 29: PASS. DB Persistence UUID Shape & Anti-Mock Audit approved.")
 
 
 def enforce_gate():
@@ -2243,6 +2265,7 @@ def enforce_gate():
     check_staged_additions()              # Phase 26 (Staged Addition Allowlist)
     check_claim_versus_log()              # Phase 27 (Claim-Versus-Log Ground Truth Audit)
     check_uuid_type_safety()              # Phase 28 (UUID Type Safety Gate)
+    check_db_persistence_uuid_shape()     # Phase 29 (Database Persistence UUID Shape & Anti-Mock Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()

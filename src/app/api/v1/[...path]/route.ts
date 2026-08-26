@@ -21,36 +21,6 @@ const BACKEND_URL = "http://localhost:8000/api/v1";
 function getMockData(pathStr: string, method: string) {
   const p = pathStr.toLowerCase();
   
-  if (p.includes("inquiries")) {
-    if (method === "POST") {
-      return {
-        status: "created",
-        inquiry: {
-          id: "inq-" + Date.now(),
-          title: "New Free-Text Inquiry",
-          status_code: "proposal_draft",
-          customer_account_id: "TENANT-SESSION-ACTIVE",
-          counterparty_id: null,
-          created_at: new Date().toISOString()
-        }
-      };
-    }
-    return {
-      status: "success",
-      inquiries: [
-        {
-          id: "inq-1001",
-          title: "100 premium branded notebooks for AGN Ltd event by Sept 15",
-          description: "Free-text intent intake from Omri Shilo",
-          status_code: "proposal_draft",
-          customer_account_id: "TENANT-SESSION-ACTIVE",
-          counterparty_id: null,
-          created_at: new Date().toISOString()
-        }
-      ]
-    };
-  }
-
   if (p.includes("tenant/members")) {
     return {
       status: "success",
@@ -372,6 +342,13 @@ async function handleRequest(req: NextRequest, context: { params: Promise<{ path
       });
     }
   } catch (err: any) {
+    if (pathStr.toLowerCase().includes("inquiries")) {
+      return NextResponse.json({
+        error: "Database Unreachable: Python backend (port 8000) is offline. Direct PostgreSQL persistence required.",
+        path: pathStr,
+        details: err.message
+      }, { status: 502 });
+    }
     console.warn(`[Proxy Fail] Unreachable python backend for /api/v1/${pathStr}. Serving mock fallback. Error:`, err.message);
     const mockResponse = getMockData(pathStr, req.method);
     return NextResponse.json(mockResponse);

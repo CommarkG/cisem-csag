@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-08-26T04:15:39.213056Z",
-  "read_token": "4c9d66ba",
+  "timestamp": "2026-08-26T04:26:08.622678Z",
+  "read_token": "ebe84eb5",
   "git_tree_hashes": {
-    "cisem_core": "2ad2f3b70311551ef6114d37c14c35b25cec327a0d1002e09f8dba2ef0cf46c4",
+    "cisem_core": "4067ed14b73106bac59a83bbd61d59cb4d69d274f8bd8e1ae5f14205d44b3873",
     "backend": "ef3d07f519cf1266b76b9b01bf991f84159e74f6647cb8ba87713242689cd420",
     "agents_rules": "020c441c0818bdd63d88a92870d6d539bb20dc9a9aabd66d15c6f1e634c13bf1"
   }
