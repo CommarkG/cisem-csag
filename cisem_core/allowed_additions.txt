@@ -1,5 +1,6 @@
 # Local Workspace Addition Allowlist
 cisem_core/platform_core/gate_rule_effects.json
 cisem_core/allowed_additions.txt
+cisem_core/planning/*WitnessLog*
 .agents/reviewer/*
 cisem_core/downloads/*

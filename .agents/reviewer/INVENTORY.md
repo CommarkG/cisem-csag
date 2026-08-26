@@ -191,6 +191,7 @@
 | `cisem_core/downloads/2026-08-25__AntigravityLocal__YarivGovernor__UniversalUserJourneyAndContextSeparationPlan__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-25__ReviewerClaude__Antigravity__CisemDevelopmentAndPlanningSpecification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-25__ReviewerClaude__Antigravity__CisemDevelopmentAndPlanningSpecification__V2.0.md` | `2.0` | `2.0` | MATCH |
+| `cisem_core/downloads/2026-08-26__AntigravityLocal__WitnessLog__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/AGENTS.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/CisemATV.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/downloads/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
@@ -255,6 +256,7 @@
 | `cisem_core/planning/2026-08-25__AntigravityLocal__YarivGovernor__UniversalUserJourneyAndContextSeparationPlan__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/planning/2026-08-25__ReviewerClaude__Antigravity__CisemDevelopmentAndPlanningSpecification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/planning/2026-08-25__ReviewerClaude__Antigravity__CisemDevelopmentAndPlanningSpecification__V2.0.md` | `2.0` | `2.0` | MATCH |
+| `cisem_core/planning/2026-08-26__AntigravityLocal__WitnessLog__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/planning/index_unfinished_plans.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py` | `1.0` | `1.0` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py` | `1.0` | `1.0` | MATCH |
