@@ -1762,31 +1762,6 @@ h3, .h3, [dir="rtl"] h3, [lang="he"] h3 {
   text-align: left;
 }
 
-.admin-dropdown-item:hover {
-  background: var(--accent-subtle);
-  color: var(--accent);
-}
-
-.admin-dropdown-item svg {
-  color: var(--text-muted);
-  transition: color var(--transition-fast);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ================================================
-   Spreadsheet Inline Editor Table Inputs
-   ================================================ */
-table input.input,
 table select.input {
   background: transparent;
   border: 1px solid transparent;

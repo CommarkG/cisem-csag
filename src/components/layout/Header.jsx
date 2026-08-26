@@ -311,113 +311,300 @@ export default function Header() {
       <div id="view-tabs" className="view-tabs" style={{ 
         display: 'flex', 
         alignItems: 'center', 
-        gap: 4, 
+        gap: 6, 
         position: 'absolute', 
         left: '50%', 
         transform: 'translateX(-50%)', 
         zIndex: 10 
       }}>
-        {/* Views Dropdown Menu */}
+        {/* 1. Views Dropdown Menu (Purple Pill) */}
         <div className="admin-dropdown-container">
           <button 
-            className={`view-tab ${views.includes(activeView) ? 'active' : ''}`}
-            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+            className="view-tab"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: '#6366f1', 
+              color: '#ffffff', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: 'none',
+              cursor: 'pointer'
+            }}
           >
             {language === 'he' ? 'מבטים' : 'Views'}
             <ChevronDown size={14} />
           </button>
-          <div className="admin-dropdown-menu">
-            {views.map(v => (
-              <div 
-                key={v}
-                className={`admin-dropdown-item ${activeView === v ? 'selected' : ''}`}
-                onClick={() => handleTabClick(v)}
-                style={{ cursor: 'pointer' }}
-              >
-                {t[v] || v}
-              </div>
-            ))}
+          <div className="admin-dropdown-menu" style={{ minWidth: 190 }}>
+            <div className="admin-dropdown-item" onClick={() => handleTabClick('kanban')}>
+              <FolderKanban size={14} /> {language === 'he' ? 'לוח קנבן' : 'Kanban View'}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => handleTabClick('list')}>
+              <FileText size={14} /> {language === 'he' ? 'תצוגת רשימה' : 'List View'}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => handleTabClick('calendar')}>
+              <Layers size={14} /> {language === 'he' ? 'לוח שנה' : 'Calendar View'}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => handleTabClick('gantt')}>
+              <Box size={14} /> {language === 'he' ? 'תרשים גאנט' : 'Gantt View'}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => handleTabClick('dashboard')}>
+              <LayoutTemplate size={14} /> {language === 'he' ? 'דשבורד' : 'Dashboard View'}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => handleTabClick('collaboration')}>
+              <Users size={14} /> {language === 'he' ? 'מרכז שיתוף' : 'Collaboration Hub'}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => { setActiveView('onboarding'); navigate('/onboarding'); }}>
+              <UserCheck size={14} /> {language === 'he' ? 'אונבורדינג אוניברסלי' : 'Universal Onboarding'}
+            </div>
           </div>
         </div>
         
-        {/* Ext/Arch/Gov/Tools Dropdown Menu */}
+        {/* 2. Ext/Arch/Gov/Tools Dropdown Menu (White Pill with Hover Flyouts) */}
         <div className="admin-dropdown-container">
           <button 
             className="view-tab"
-            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: 'var(--surface-elevated)', 
+              color: 'var(--text-primary)', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: '1px solid var(--border)',
+              cursor: 'pointer'
+            }}
           >
             Ext/Arch/Gov/Tools
             <ChevronDown size={14} />
           </button>
-          <div className="admin-dropdown-menu" style={{ minWidth: 130 }}>
-            <div 
-              className="admin-dropdown-item" 
-              onClick={() => navigate('/old-b2b?menu=purchasing_quotes_hub')} 
-              style={{ cursor: 'pointer', textAlign: 'inherit' }}
-            >
-              <FileText size={14} /> Ext
+
+          <div className="admin-dropdown-menu" style={{ minWidth: 160 }}>
+            {/* Item 1: Ext */}
+            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <FileText size={14} style={{ color: '#10b981' }} />
+                <span>Ext</span>
+              </div>
+              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+
+              {/* Ext Flyout Sub-menu */}
+              <div className="flyout-submenu">
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
+                  1. Commercial & Sales
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=purchasing_quotes_hub')}>
+                  Pricing & Purchasing
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/onboarding')}>
+                  Universal Onboarding
+                </div>
+
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
+                  2. AI Solutions
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=api_providers')}>
+                  AI Providers Router
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=matting_models')}>
+                  Matting Models
+                </div>
+
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
+                  3. Infrastructure
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=storage_cdn')}>
+                  Storage & CDNs
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=data_integrations')}>
+                  Data Integrations
+                </div>
+              </div>
             </div>
-            <div 
-              className="admin-dropdown-item" 
-              onClick={() => navigate('/old-b2b?menu=system_schema')} 
-              style={{ cursor: 'pointer', textAlign: 'inherit' }}
-            >
-              <Layers size={14} /> Arch
+
+            {/* Item 2: Arch */}
+            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Layers size={14} style={{ color: '#f59e0b' }} />
+                <span>Arch</span>
+              </div>
+              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+
+              {/* Arch Flyout Sub-menu */}
+              <div className="flyout-submenu">
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
+                  1. Design & Diffs
+                </span>
+                <div className="admin-dropdown-item" onClick={() => { setActiveView('templates'); navigate('/templates'); }}>
+                  Template Hub
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=web_pages')}>
+                  Web Pages
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=design_studio')}>
+                  UX UI Studio
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=traceability_spec')}>
+                  Pipelines & Trace
+                </div>
+
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
+                  2. Trunks & Adapt
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=agents_skills')}>
+                  Agents & Skills
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=protocols_wizards')}>
+                  Protocols & Specs
+                </div>
+              </div>
             </div>
-            <div 
-              className="admin-dropdown-item" 
-              onClick={() => navigate('/old-b2b?menu=threshold')} 
-              style={{ cursor: 'pointer', textAlign: 'inherit' }}
-            >
-              <ShieldCheck size={14} /> Gov
+
+            {/* Item 3: Gov */}
+            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <ShieldCheck size={14} style={{ color: '#6366f1' }} />
+                <span>Gov</span>
+              </div>
+              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+
+              {/* Gov Flyout Sub-menu */}
+              <div className="flyout-submenu">
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#6366f1', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
+                  1. Schemas & Audits
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=human_schema')}>
+                  Schema (Human Logic)
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=system_schema')}>
+                  Schema (System Logic)
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/settings')}>
+                  AI Behavior & Personas
+                </div>
+
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#6366f1', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
+                  2. Loops & Safety
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/admin?tab=projects')}>
+                  Learning Loops (Backlog)
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=threshold')}>
+                  Threshold Input Gate
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/settings')}>
+                  Help & Tutorials
+                </div>
+              </div>
             </div>
-            <div 
-              className="admin-dropdown-item" 
-              onClick={() => { setActiveView('templates'); navigate('/templates'); }} 
-              style={{ cursor: 'pointer', textAlign: 'inherit' }}
-            >
-              <LayoutTemplate size={14} /> Template Hub
+
+            {/* Item 4: Template Hub */}
+            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <LayoutTemplate size={14} style={{ color: '#ec4899' }} />
+                <span>Template Hub</span>
+              </div>
+              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+
+              {/* Template Hub Flyout Sub-menu */}
+              <div className="flyout-submenu">
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ec4899', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
+                  Templates & Design Studio
+                </span>
+                <div className="admin-dropdown-item" onClick={() => { setActiveView('templates'); navigate('/templates'); }}>
+                  Template Hub View
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Website Prototypes
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Landing Page Studio
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  CRM Stacker Templates
+                </div>
+              </div>
             </div>
-            <div 
-              className="admin-dropdown-item" 
-              onClick={() => openCommandPalette()} 
-              style={{ cursor: 'pointer', textAlign: 'inherit' }}
-            >
-              <Settings size={14} /> Tools
+
+            {/* Item 5: Tools */}
+            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Settings size={14} style={{ color: '#8b5cf6' }} />
+                <span>Tools</span>
+              </div>
+              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+
+              {/* Tools Flyout Sub-menu */}
+              <div className="flyout-submenu">
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#8b5cf6', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
+                  Studio & Diagnostics
+                </span>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Image Normalizer
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Batch Specs Auditor
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Shape Library
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Folder Manager
+                </div>
+                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+                  Diagnostics & Learning Lab
+                </div>
+                <div className="admin-dropdown-item" onClick={() => openCommandPalette()}>
+                  Command Palette (Cmd+K)
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Cnfg Hover Dropdown Menu */}
+        {/* 3. Cnfg Hover Dropdown Menu (White Pill) */}
         <div className="admin-dropdown-container">
           <button 
-            className={`view-tab ${activeView === 'admin' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveView('admin');
-              navigate('/admin?tab=clients');
+            className="view-tab"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: 'var(--surface-elevated)', 
+              color: 'var(--text-primary)', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: '1px solid var(--border)',
+              cursor: 'pointer'
             }}
-            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
           >
             Cnfg
             <ChevronDown size={14} />
           </button>
           
-          <div className="admin-dropdown-menu">
+          <div className="admin-dropdown-menu" style={{ minWidth: 170 }}>
             <div className="admin-dropdown-item" onClick={() => { setActiveView('admin'); navigate('/admin?tab=clients'); }}>
-              <Users size={14} />
-              {t.clients}
+              <Users size={14} /> {t.clients}
             </div>
             <div className="admin-dropdown-item" onClick={() => { setActiveView('admin'); navigate('/admin?tab=suppliers'); }}>
-              <Truck size={14} />
-              {t.suppliers}
+              <Truck size={14} /> {t.suppliers}
             </div>
             <div className="admin-dropdown-item" onClick={() => { setActiveView('admin'); navigate('/admin?tab=projects'); }}>
-              <FolderKanban size={14} />
-              {t.projects}
+              <FolderKanban size={14} /> {t.projects}
             </div>
             <div className="admin-dropdown-item" onClick={() => { setActiveView('admin'); navigate('/admin?tab=team'); }}>
-              <UserCheck size={14} />
-              {t.teamMembersTab}
+              <UserCheck size={14} /> {t.teamMembersTab}
+            </div>
+            <div className="admin-dropdown-item" onClick={() => { setActiveView('settings'); navigate('/settings'); }}>
+              <Settings size={14} /> {t.settings || 'Settings'}
             </div>
           </div>
         </div>
