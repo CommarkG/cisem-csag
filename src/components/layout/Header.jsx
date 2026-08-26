@@ -14,7 +14,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, Plus, Bell, Sun, Moon, Search, Globe, ChevronDown, FolderKanban, Users, Truck, UserCheck, ChevronLeft, ChevronRight, Layers, Box, Folder, FileText, CheckCircle2, User, Settings, Check, LayoutTemplate, ShieldCheck } from 'lucide-react';
+import { Menu, Plus, Bell, Sun, Moon, Search, Globe, ChevronDown, FolderKanban, Users, Truck, UserCheck, ChevronLeft, ChevronRight, Layers, Box, Folder, FileText, CheckCircle2, User, Settings, Check, LayoutTemplate, ShieldCheck, LogOut } from 'lucide-react';
 import { useUIStore } from '../../stores/useUIStore';
 import { useTenantSessionStore } from '../../stores/useTenantSessionStore';
 import { useTaskStore } from '../../stores/useTaskStore';
@@ -781,6 +781,27 @@ export default function Header() {
                   {r.replace('_', ' ')}
                 </div>
               ))}
+            </div>
+
+            {/* Log Out & Session Actions */}
+            <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+              <div 
+                className="admin-dropdown-item" 
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    localStorage.removeItem('cisem_access_token');
+                    localStorage.removeItem('cisem_user_name');
+                    localStorage.removeItem('cisem_company_name');
+                    localStorage.removeItem('cisem_user_email');
+                  }
+                  window.location.hash = '#/onboarding';
+                  window.location.reload();
+                }} 
+                style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: 'var(--danger, #ef4444)', fontWeight: 600 }}
+              >
+                <LogOut size={14} />
+                <span>Log Out</span>
+              </div>
             </div>
           </div>
         </div>
