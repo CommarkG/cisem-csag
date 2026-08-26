@@ -363,7 +363,7 @@ export default function Header() {
           </div>
         </div>
         
-        {/* 2. Ext/Arch/Gov/Tools Dropdown Menu (White Pill with Hover Flyouts) */}
+        {/* 2. Ext Root Pill Button */}
         <div className="admin-dropdown-container">
           <button 
             className="view-tab"
@@ -381,189 +381,224 @@ export default function Header() {
               cursor: 'pointer'
             }}
           >
-            Ext/Arch/Gov/Tools
+            Ext
             <ChevronDown size={14} />
           </button>
-
-          <div className="admin-dropdown-menu" style={{ minWidth: 160 }}>
-            {/* Item 1: Ext */}
-            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <FileText size={14} style={{ color: '#10b981' }} />
-                <span>Ext</span>
-              </div>
-              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
-
-              {/* Ext Flyout Sub-menu */}
-              <div className="flyout-submenu">
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
-                  1. Commercial & Sales
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=purchasing_quotes_hub')}>
-                  Pricing & Purchasing
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/onboarding')}>
-                  Universal Onboarding
-                </div>
-
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
-                  2. AI Solutions
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=api_providers')}>
-                  AI Providers Router
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=matting_models')}>
-                  Matting Models
-                </div>
-
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
-                  3. Infrastructure
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=storage_cdn')}>
-                  Storage & CDNs
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=data_integrations')}>
-                  Data Integrations
-                </div>
-              </div>
+          <div className="admin-dropdown-menu" style={{ minWidth: 220, padding: '8px 12px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '2px 4px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              1. Commercial & Sales
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=purchasing_quotes_hub')}>
+              Pricing & Purchasing
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/onboarding')}>
+              Universal Onboarding
             </div>
 
-            {/* Item 2: Arch */}
-            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Layers size={14} style={{ color: '#f59e0b' }} />
-                <span>Arch</span>
-              </div>
-              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
-
-              {/* Arch Flyout Sub-menu */}
-              <div className="flyout-submenu">
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
-                  1. Design & Diffs
-                </span>
-                <div className="admin-dropdown-item" onClick={() => { setActiveView('templates'); navigate('/templates'); }}>
-                  Template Hub
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=web_pages')}>
-                  Web Pages
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=design_studio')}>
-                  UX UI Studio
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=traceability_spec')}>
-                  Pipelines & Trace
-                </div>
-
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
-                  2. Trunks & Adapt
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=agents_skills')}>
-                  Agents & Skills
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=protocols_wizards')}>
-                  Protocols & Specs
-                </div>
-              </div>
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '6px 4px 2px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              2. AI Solutions
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=api_providers')}>
+              AI Providers Router
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=matting_models')}>
+              Matting Models
             </div>
 
-            {/* Item 3: Gov */}
-            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ShieldCheck size={14} style={{ color: '#6366f1' }} />
-                <span>Gov</span>
-              </div>
-              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '6px 4px 2px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              3. Infrastructure
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=storage_cdn')}>
+              Storage & CDNs
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=data_integrations')}>
+              Data Integrations
+            </div>
+          </div>
+        </div>
 
-              {/* Gov Flyout Sub-menu */}
-              <div className="flyout-submenu">
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#6366f1', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
-                  1. Schemas & Audits
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=human_schema')}>
-                  Schema (Human Logic)
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=system_schema')}>
-                  Schema (System Logic)
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/settings')}>
-                  AI Behavior & Personas
-                </div>
-
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#6366f1', textTransform: 'uppercase', padding: '6px 8px 2px', borderBottom: '1px solid var(--border)' }}>
-                  2. Loops & Safety
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/admin?tab=projects')}>
-                  Learning Loops (Backlog)
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=threshold')}>
-                  Threshold Input Gate
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/settings')}>
-                  Help & Tutorials
-                </div>
-              </div>
+        {/* 3. Arch Root Pill Button */}
+        <div className="admin-dropdown-container">
+          <button 
+            className="view-tab"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: 'var(--surface-elevated)', 
+              color: 'var(--text-primary)', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: '1px solid var(--border)',
+              cursor: 'pointer'
+            }}
+          >
+            Arch
+            <ChevronDown size={14} />
+          </button>
+          <div className="admin-dropdown-menu" style={{ minWidth: 210, padding: '8px 12px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', padding: '2px 4px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              1. Design & Diffs
+            </span>
+            <div className="admin-dropdown-item" onClick={() => { setActiveView('templates'); navigate('/templates'); }}>
+              Template Hub
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=web_pages')}>
+              Web Pages
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=design_studio')}>
+              UX UI Studio
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=traceability_spec')}>
+              Pipelines & Trace
             </div>
 
-            {/* Item 4: Template Hub */}
-            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <LayoutTemplate size={14} style={{ color: '#ec4899' }} />
-                <span>Template Hub</span>
-              </div>
-              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', padding: '6px 4px 2px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              2. Trunks & Adapt
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=agents_skills')}>
+              Agents & Skills
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=protocols_wizards')}>
+              Protocols & Specs
+            </div>
+          </div>
+        </div>
 
-              {/* Template Hub Flyout Sub-menu */}
-              <div className="flyout-submenu">
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ec4899', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
-                  Templates & Design Studio
-                </span>
-                <div className="admin-dropdown-item" onClick={() => { setActiveView('templates'); navigate('/templates'); }}>
-                  Template Hub View
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Website Prototypes
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Landing Page Studio
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  CRM Stacker Templates
-                </div>
-              </div>
+        {/* 4. Gov Root Pill Button */}
+        <div className="admin-dropdown-container">
+          <button 
+            className="view-tab"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: 'var(--surface-elevated)', 
+              color: 'var(--text-primary)', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: '1px solid var(--border)',
+              cursor: 'pointer'
+            }}
+          >
+            Gov
+            <ChevronDown size={14} />
+          </button>
+          <div className="admin-dropdown-menu" style={{ minWidth: 220, padding: '8px 12px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#6366f1', textTransform: 'uppercase', padding: '2px 4px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              1. Schemas & Audits
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=human_schema')}>
+              Schema (Human Logic)
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=system_schema')}>
+              Schema (System Logic)
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/settings')}>
+              AI Behavior & Personas
             </div>
 
-            {/* Item 5: Tools */}
-            <div className="admin-dropdown-item flyout-trigger" style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', width: '100%' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Settings size={14} style={{ color: '#8b5cf6' }} />
-                <span>Tools</span>
-              </div>
-              <ChevronRight size={12} style={{ opacity: 0.6, marginLeft: 'auto' }} />
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#6366f1', textTransform: 'uppercase', padding: '6px 4px 2px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              2. Loops & Safety
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/admin?tab=projects')}>
+              Learning Loops (Backlog)
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=threshold')}>
+              Threshold Input Gate
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/settings')}>
+              Help & Tutorials
+            </div>
+          </div>
+        </div>
 
-              {/* Tools Flyout Sub-menu */}
-              <div className="flyout-submenu">
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#8b5cf6', textTransform: 'uppercase', padding: '2px 8px', borderBottom: '1px solid var(--border)' }}>
-                  Studio & Diagnostics
-                </span>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Image Normalizer
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Batch Specs Auditor
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Shape Library
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Folder Manager
-                </div>
-                <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
-                  Diagnostics & Learning Lab
-                </div>
-                <div className="admin-dropdown-item" onClick={() => openCommandPalette()}>
-                  Command Palette (Cmd+K)
-                </div>
-              </div>
+        {/* 5. Template Hub Root Pill Button */}
+        <div className="admin-dropdown-container">
+          <button 
+            className="view-tab"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: 'var(--surface-elevated)', 
+              color: 'var(--text-primary)', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: '1px solid var(--border)',
+              cursor: 'pointer'
+            }}
+          >
+            Template Hub
+            <ChevronDown size={14} />
+          </button>
+          <div className="admin-dropdown-menu" style={{ minWidth: 210, padding: '8px 12px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ec4899', textTransform: 'uppercase', padding: '2px 4px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              Templates & Design Studio
+            </span>
+            <div className="admin-dropdown-item" onClick={() => { setActiveView('templates'); navigate('/templates'); }}>
+              Template Hub View
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Website Prototypes
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Landing Page Studio
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              CRM Stacker Templates
+            </div>
+          </div>
+        </div>
+
+        {/* 6. Tools Root Pill Button */}
+        <div className="admin-dropdown-container">
+          <button 
+            className="view-tab"
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 4, 
+              background: 'var(--surface-elevated)', 
+              color: 'var(--text-primary)', 
+              borderRadius: '9999px', 
+              padding: '6px 14px', 
+              fontWeight: 700, 
+              fontSize: '0.78rem',
+              border: '1px solid var(--border)',
+              cursor: 'pointer'
+            }}
+          >
+            Tools
+            <ChevronDown size={14} />
+          </button>
+          <div className="admin-dropdown-menu" style={{ minWidth: 210, padding: '8px 12px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#8b5cf6', textTransform: 'uppercase', padding: '2px 4px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
+              Studio & Diagnostics
+            </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Image Normalizer
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Batch Specs Auditor
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Shape Library
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Folder Manager
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=sandbox_playground')}>
+              Diagnostics & Learning Lab
+            </div>
+            <div className="admin-dropdown-item" onClick={() => openCommandPalette()}>
+              Command Palette (Cmd+K)
             </div>
           </div>
         </div>
