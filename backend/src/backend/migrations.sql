@@ -360,6 +360,9 @@ ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE deals ENABLE ROW LEVEL SECURITY;
 
 -- 35. Inject RLS Policies for Tenant Isolation
+-- WARNING: The coalesce(current_setting(...)) pattern below is HISTORICAL INTENT ONLY.
+-- The CANONICAL LIVE DATABASE RLS pattern uses current_tenant_id() (JWT app_metadata -> tenant_id).
+-- ALL NEW POLICIES MUST USE current_tenant_id() EXCLUSIVELY.
 CREATE POLICY tenant_isolation_policy ON template_registry
     FOR ALL
     USING (customer_account_id IS NULL OR customer_account_id = coalesce(
