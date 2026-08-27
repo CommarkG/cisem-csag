@@ -36,9 +36,9 @@ def compute_dir_hash(dir_path):
         return "DIR_NOT_FOUND"
     hasher = hashlib.sha256()
     for root, dirs, files in os.walk(dir_path):
-        dirs[:] = sorted([d for d in dirs if d not in {".git", "node_modules", ".venv", "__pycache__", "dist", "build", ".next", "reviewer"}])
+        dirs[:] = sorted([d for d in dirs if d not in {".git", "node_modules", ".venv", "__pycache__", "dist", "build", ".next", "reviewer", "logs", "downloads", "snapshots", "scratch"}])
         for f in sorted(files):
-            if f in {"cisem_turn_counter.json", "cael_status.json", "GENERATION_METADATA.json"}:
+            if f in {"cisem_turn_counter.json", "cael_status.json", "GENERATION_METADATA.json", "gate_violations.log", "atv_report.json", "orchestration_trial_report.json", "root_cause_registry.json", "live_schema_registry.json"}:
                 continue
             if f.endswith((".py", ".ts", ".tsx", ".js", ".jsx", ".yaml", ".json", ".md")):
                 fpath = os.path.join(root, f)

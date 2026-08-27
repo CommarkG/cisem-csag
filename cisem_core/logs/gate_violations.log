@@ -477,3 +477,45 @@ Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust
 [2026-08-27T02:28:28.921963Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-08-27T03:18:06.332088Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-08-27T03:30:23.710791Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T03:36:32.289318Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 6d052b914b3e8a39df41f7348cd0018ba76f3a0faa301989073b7fb1d590fdb1
+  Registered hash: 852ddeacc26d9c52f7622a7ed97f47acaf17b4060ae2c25656bb2584503bba07
+[2026-08-27T03:46:00.724060Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T06:01:52.397951Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "networkidle"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "networkidle"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-27T06:02:18.289556Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "networkidle"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "networkidle"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-27T06:09:50.329825Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+
+[CRITICAL FAILURE]: Playwright detected 2 uncaught console or dead script errors!
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.

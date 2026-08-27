@@ -9,7 +9,7 @@ export interface SignInViewProps {
 }
 
 export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
-  const [email, setEmail] = useState('omri@agn.co.il');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

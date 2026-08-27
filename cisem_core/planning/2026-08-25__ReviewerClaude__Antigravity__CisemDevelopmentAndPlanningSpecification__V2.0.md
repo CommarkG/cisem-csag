@@ -23,7 +23,7 @@ None. Consensus is 100% closed and ratified on V2.0 planning rules and the Activ
 Utilizes CoreSpiral V3 context-adaptive methodology to execute CoreCycle 1 intake-to-completion. Codifies the 5 Stages, 9 Rules, 5 Preventions (Retirement Question, Proposed vs Current, Wiring Gates, Search by Artifact, Input Absent), Rule 3.3 Law of Iteration (`AX-12000`), Iteration Delta Log (Rule 6.1), 10-Field Turn Close Block (Rule 6.2), and the Active Orchestration Engine (`backlog_registry` DB table + `GraphifyDependencyMapper.py`).
 
 ## CoreSpiral Cycle Sequences
-- **CoreCycle 1**: Intake of an inquiry through to a signed work order.
+- **CoreCycle 1**: Intent to measurable outcome (A person says what they want, in their own words, and the platform helps transform it into a well-defined goal and reach a real, measurable outcome).
 - **CoreCycle 7**: Dependency Graphing & Verification.
 
 ## Gemini Brain Multi-Persona Audit

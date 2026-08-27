@@ -193,10 +193,12 @@
 | `cisem_core/downloads/2026-08-25__ReviewerClaude__Antigravity__CisemDevelopmentAndPlanningSpecification__V2.0.md` | `2.0` | `2.0` | MATCH |
 | `cisem_core/downloads/2026-08-26__AntigravityLocal__ReviewerClaude__CISEM_IP_20260826_DETERMINISTIC_FIRST__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-26__AntigravityLocal__WitnessLog__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-08-27__AntigravityLocal__YarivGovernor__Corporate_Awards_Materials_and_Branding_Taxonomy__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/AGENTS.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/CisemATV.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/downloads/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
 | `cisem_core/downloads/UniversalOnboardingViewport.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/downloads/ViciousWiringAuditor.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_all_references.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_infrastructure_code.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_missing_ratified_docs.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
@@ -220,6 +222,7 @@
 | `cisem_core/downloads/print_atv_results.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/print_registry_end.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/promote_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/downloads/simulate_universal_misfits.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/sweep_silent_fallbacks.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/sweep_uncalled_routes.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/template_propagation_scheduler.py` | `1.2` | `UNVERSIONED` | MISMATCH (1.2 vs UNVERSIONED) |
@@ -266,6 +269,7 @@
 | `cisem_core/planning/2026-08-25__ReviewerClaude__Antigravity__CisemDevelopmentAndPlanningSpecification__V2.0.md` | `2.0` | `2.0` | MATCH |
 | `cisem_core/planning/2026-08-26__AntigravityLocal__ReviewerClaude__CISEM_IP_20260826_DETERMINISTIC_FIRST__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/planning/2026-08-26__AntigravityLocal__WitnessLog__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/planning/2026-08-27__AntigravityLocal__YarivGovernor__Corporate_Awards_Materials_and_Branding_Taxonomy__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/planning/index_unfinished_plans.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__CisemConfig__V1.0.py` | `1.0` | `1.0` | MATCH |
 | `cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py` | `1.0` | `1.0` | MATCH |
@@ -277,6 +281,7 @@
 | `cisem_core/platform_core/2026-08-14__CISEM__AntigravityLocal__E2_ApplyMigration__V1.0.py` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/platform_core/CisemATV.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/platform_core/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
+| `cisem_core/platform_core/ViciousWiringAuditor.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/platform_core/cisem_gate.py` | `3.1` | `UNVERSIONED` | MISMATCH (3.1 vs UNVERSIONED) |
 | `cisem_core/platform_core/persona_registry_draft.yaml` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/platform_core/persona_scenario_map.yaml` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |

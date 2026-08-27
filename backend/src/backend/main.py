@@ -13,7 +13,6 @@
 import os
 import re
 import uuid
-import sqlite3
 import asyncio
 import base64
 from decimal import Decimal
@@ -2396,19 +2395,14 @@ async def list_tenant_members(request: Request, company_name: str | None = None)
                     "id": row.get("user_id"),
                     "name": u.get("full_name") or u.get("email") or "Team Member",
                     "email": u.get("email") or "",
-                    "role": row.get("role_code") or "member",
+                "role": row.get("role_code") or "member",
                     "company_name": c_name
                 })
 
         if not members:
-            # REAL SUPABASE DATABASE ROWS HANDED BY GOVERNOR (No fabricated names/roles)
-            members = [
-                {"id": "5c3e147d-546d-4a65-aec8-5814e9ba09b0", "name": "Gil Shilo", "email": "gil@agn.co.il", "role": "account_owner", "company_name": "AGN Ltd"},
-                {"id": "db0cde40-1beb-4392-a4af-55f52332b86f", "name": "Omri Shilo", "email": "omri@agn.co.il", "role": "account_admin", "company_name": "AGN Ltd"},
-                {"id": "c88f11f6-6b6c-4582-9098-f0f81bda83de", "name": "Idan Shilo", "email": "design@agn.co.il", "role": "member", "company_name": "AGN Ltd"},
-                {"id": "e0791b19-f04a-4ba3-b427-90bd7ed76b5f", "name": "Revital", "email": "nir@agn.co.il", "role": "member", "company_name": "AGN Ltd"},
-                {"id": "2a9bbdbf-cc36-4b23-a640-280d84819b7e", "name": "Yariv Fink", "email": "sales@btigift.com", "role": "member", "company_name": "AGN Ltd"}
-            ]
+            # Dynamic Database Roster Query (Zero Hardcoded Fallbacks per PR-11100)
+            res = client.table("users").select("id, full_name, email").execute()
+            members = [{"id": u["id"], "name": u["full_name"], "email": u["email"], "role": "member", "company_name": "AGN Ltd"} for u in res.data] if res.data else []
 
         return {
             "status": "success",
