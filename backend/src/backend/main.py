@@ -184,17 +184,19 @@ async def tenant_context_middleware(request: Request, call_next):
             instance=path
         )
 
-    # Skip auth for public endpoints or if supabase client is offline
-    is_public = (
-        path == "/" or
-        path.startswith("/docs") or
-        path.startswith("/redoc") or
-        path.startswith("/openapi.json") or
-        path.startswith("/api/v1/tenant/") or
-        path.startswith("/api/v1/inquiries") or
-        (path.startswith("/api/v1/proposals/") and not path.endswith("generate") and "admin" not in path) or
-        path == "/api/v1/auth/webhook/signup"   # Supabase Auth Hook — server-to-server, no JWT
-    )
+    # STRICT SECURITY HARDENING: Default-Deny Allowlist (Exact Method + Path Matching)
+    # ZERO Prefix Matching. Every route is AUTHENTICATED BY DEFAULT.
+    PUBLIC_ALLOWLIST = {
+        ("GET", "/"),
+        ("GET", "/health"),
+        ("GET", "/docs"),
+        ("GET", "/redoc"),
+        ("GET", "/openapi.json"),
+        ("POST", "/api/v1/inquiries"),           # Guest Inquiry Intake ONLY (Returns ID only)
+        ("POST", "/api/v1/auth/webhook/signup"),  # Supabase Auth Signup Hook (Server-to-Server HMAC)
+    }
+
+    is_public = (request.method.upper(), path) in PUBLIC_ALLOWLIST
 
     if is_public or not supabase_admin:
         return await call_next(request)
@@ -2154,7 +2156,7 @@ async def create_inquiry(payload: InquiryCreatePayload, request: Request):
         res = db_client.table("inquiries").insert(data).execute()
         if not res.data:
             raise HTTPException(status_code=500, detail="PostgreSQL insert returned zero rows.")
-        return {"status": "created", "inquiry": res.data[0]}
+        return {"status": "created", "id": res.data[0]["id"]}
     except HTTPException:
         raise
     except Exception as e:

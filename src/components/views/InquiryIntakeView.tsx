@@ -29,9 +29,15 @@ export const InquiryIntakeView: React.FC<InquiryIntakeProps> = ({ onInquiryCreat
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const fetchInquiries = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
+    if (!token) return; // Unauthenticated guest intake does not read existing inquiries!
+
     try {
       const response = await fetch('/api/v1/inquiries', {
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (response.ok) {
         const data = await response.json();

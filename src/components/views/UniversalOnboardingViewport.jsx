@@ -37,21 +37,21 @@ export default function UniversalOnboardingViewport() {
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         };
 
-        // Parallel Fetching for Maximum Performance (AX-10000 / UX Performance)
-        const [membersRes, vocabRes] = await Promise.all([
-          fetch('/api/v1/tenant/members', { headers: authHeaders }).catch(() => null),
-          fetch('/api/v1/tenant/vocabulary', { headers: authHeaders }).catch(() => null)
-        ]);
-
-        if (vocabRes && vocabRes.ok) {
-          const vData = await vocabRes.json();
-          if (vData.terms) setDbVocabulary(vData.terms);
-        }
-
         const storedUserName = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_name') : null;
         const storedCompany = typeof window !== 'undefined' ? localStorage.getItem('cisem_company_name') : null;
         const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_email') : null;
+        const sessionToken = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
         const isAuthenticated = Boolean(storedUserName || storedEmail || sessionToken);
+
+        let membersRes = null;
+        let vocabRes = null;
+
+        if (isAuthenticated && sessionToken) {
+          [membersRes, vocabRes] = await Promise.all([
+            fetch('/api/v1/tenant/members', { headers: authHeaders }).catch(() => null),
+            fetch('/api/v1/tenant/vocabulary', { headers: authHeaders }).catch(() => null)
+          ]);
+        }
 
         if (membersRes && membersRes.ok) {
           const data = await membersRes.json();
