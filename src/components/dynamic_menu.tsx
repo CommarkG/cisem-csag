@@ -557,8 +557,7 @@ export default function DynamicMenu({
                 {[
                   { id: "guest", label: "Anonymous Guest" },
                   { id: "buyer", label: "Standard Client" },
-                  { id: "partner", label: "Partner Tenant" },
-                  { id: "platform_admin", label: "Platform Admin" }
+                  { id: "partner", label: "Partner Tenant" }
                 ].map((role) => (
                   <button
                     key={role.id}

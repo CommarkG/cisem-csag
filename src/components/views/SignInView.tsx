@@ -45,21 +45,21 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
       } else {
         // Dev fallback session token for 1-click login without password
         sessionToUse = {
-          access_token: 'mock-omri-token-agn-ltd',
+          access_token: 'demo-token-active-tenant',
           user: {
-            id: 'omri-shilo-uuid-agn',
-            email: 'omri@agn.co.il',
-            user_metadata: { full_name: 'Omri Shilo', company_name: 'AGN Ltd' },
-            app_metadata: { active_tenant_id: 'agn-ltd-uuid-001' }
+            id: 'demo-user-uuid-001',
+            email: 'demo-admin@tenant.local',
+            user_metadata: { full_name: 'Demo Admin', company_name: 'Demo Workspace' },
+            app_metadata: { active_tenant_id: 'demo-tenant-uuid-001' }
           }
         };
       }
 
       if (sessionToUse) {
         localStorage.setItem('cisem_access_token', sessionToUse.access_token);
-        localStorage.setItem('cisem_user_email', sessionToUse.user?.email || 'omri@agn.co.il');
-        localStorage.setItem('cisem_user_name', sessionToUse.user?.user_metadata?.full_name || 'Omri Shilo');
-        localStorage.setItem('cisem_company_name', sessionToUse.user?.user_metadata?.company_name || 'AGN Ltd');
+        localStorage.setItem('cisem_user_email', sessionToUse.user?.email || 'demo-admin@tenant.local');
+        localStorage.setItem('cisem_user_name', sessionToUse.user?.user_metadata?.full_name || 'Demo Admin');
+        localStorage.setItem('cisem_company_name', sessionToUse.user?.user_metadata?.company_name || 'Demo Workspace');
         if (sessionToUse.user?.app_metadata?.active_tenant_id) {
           localStorage.setItem('cisem_active_tenant_id', sessionToUse.user.app_metadata.active_tenant_id);
         }
@@ -84,8 +84,8 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
   };
 
   const handleOneClickLogin = () => {
-    setEmail('omri@agn.co.il');
-    performSignIn('omri@agn.co.il', password || 'omri-password');
+    setEmail('demo-admin@tenant.local');
+    performSignIn('demo-admin@tenant.local', password || 'demo-password');
   };
 
   return (

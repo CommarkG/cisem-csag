@@ -1,11 +1,12 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: CISEM-IP-20260825-UNIVERSAL-ONBOARDING
-# governor_signature: GOV-RATIFIED-2026-08-25
+# ratified_plan: CISEM-IP-20260825-MASTER-CONSOLIDATED-V2
+# governor_signature: GOV-RATIFIED-2026-08-25-MASTER-V2
 # status: RATIFIED_IMPLEMENTATION
 # reasoning: |
 #   Universal Onboarding Viewport implementing the 3-place architectural split.
-#   Reads authenticated session claims and tenant settings dynamically from API without domain leakage.
+#   Reads authenticated session claims and tenant team members dynamically from backend API.
+#   Contains ZERO hardcoded tenant names or person fallbacks (Tenant Discriminator Invariant compliant).
 # axioms_linked:
 #   - PR-11100
 #   - PR-11400
@@ -14,7 +15,7 @@
 */
 import React, { useEffect, useState } from 'react';
 import { useUIStore } from '../../stores/useUIStore';
-import { ShieldCheck, Building2, User, CheckCircle2, ArrowRight, Layers, Sparkles } from 'lucide-react';
+import { ShieldCheck, Building2, User, Users, CheckCircle2, Sparkles, UserCheck } from 'lucide-react';
 
 export default function UniversalOnboardingViewport() {
   const language = useUIStore((s) => s.language);
@@ -22,66 +23,77 @@ export default function UniversalOnboardingViewport() {
 
   const [sessionUser, setSessionUser] = useState(null);
   const [tenantConfig, setTenantConfig] = useState(null);
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [dbVocabulary, setDbVocabulary] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function loadOnboardingSession() {
       setLoading(true);
-      setError(null);
       try {
         const token = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
-        const res = await fetch('/api/v1/tenant/members', {
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-          }
-        });
+        const authHeaders = {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        };
 
-        if (res.ok) {
-          const data = await res.json();
-          // Extract current authenticated user or primary tenant profile
-          const membersList = data.members || [];
-          const currentUser = membersList[0] || {
-            name: localStorage.getItem('cisem_user_name') || 'Omri Shilo',
-            role: 'account_admin',
-            email: 'omri@agn.co.il'
-          };
+        // Parallel Fetching for Maximum Performance (AX-10000 / UX Performance)
+        const [membersRes, vocabRes] = await Promise.all([
+          fetch('/api/v1/tenant/members', { headers: authHeaders }).catch(() => null),
+          fetch('/api/v1/tenant/vocabulary', { headers: authHeaders }).catch(() => null)
+        ]);
+
+        if (vocabRes && vocabRes.ok) {
+          const vData = await vocabRes.json();
+          if (vData.terms) setDbVocabulary(vData.terms);
+        }
+
+        const storedUserName = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_name') : null;
+        const storedCompany = typeof window !== 'undefined' ? localStorage.getItem('cisem_company_name') : null;
+        const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_email') : null;
+        const isAuthenticated = Boolean(storedUserName || storedEmail || sessionToken);
+
+        if (membersRes && membersRes.ok) {
+          const data = await membersRes.json();
+          const membersList = (isAuthenticated && data.members && data.members.length > 0) ? data.members : [];
+          setTeamMembers(membersList);
+
+          const currentUser = (isAuthenticated && storedEmail) ? membersList.find(m => m.email === storedEmail) : null;
           
-          setSessionUser(currentUser);
+          setSessionUser({
+            name: currentUser?.name || storedUserName || (isAuthenticated ? 'Authenticated User' : 'Guest User'),
+            role: currentUser?.role || (isAuthenticated ? 'account_admin' : 'guest'),
+            email: currentUser?.email || storedEmail || (isAuthenticated ? 'user@tenant.local' : 'guest@platform.local')
+          });
           setTenantConfig({
-            companyName: localStorage.getItem('cisem_company_name') || data.company_name || 'AGN Ltd',
-            tenantId: data.tenant_id || 'TENANT-AGN-001',
-            status: 'ACTIVE',
-            capabilities: ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view']
+            companyName: storedCompany || data.company_name || (isAuthenticated ? 'Active Workspace' : 'Public Workspace'),
+            tenantId: isAuthenticated ? (data.active_tenant_id || null) : null,
+            status: isAuthenticated ? 'ACTIVE' : 'UNAUTHENTICATED',
+            capabilities: isAuthenticated ? ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view'] : ['inquiries.create']
           });
         } else {
-          // Fallback to local session claims
-          setSessionUser({
-            name: localStorage.getItem('cisem_user_name') || 'Omri Shilo',
-            role: 'account_admin',
-            email: 'omri@agn.co.il'
-          });
-          setTenantConfig({
-            companyName: localStorage.getItem('cisem_company_name') || 'AGN Ltd',
-            tenantId: 'TENANT-AGN-001',
-            status: 'ACTIVE',
-            capabilities: ['inquiries.create', 'quotes.accept', 'team.manage']
-          });
+          throw new Error('Fallback trigger');
         }
       } catch (err) {
-        console.warn('Tenant session claim lookup fallback:', err);
+        console.warn('Tenant session claim lookup error:', err);
+        const storedUserName = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_name') : null;
+        const storedCompany = typeof window !== 'undefined' ? localStorage.getItem('cisem_company_name') : null;
+        const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_email') : null;
+
+        const isAuthenticated = Boolean(storedUserName || storedEmail || (typeof window !== 'undefined' && localStorage.getItem('cisem_access_token')));
         setSessionUser({
-          name: localStorage.getItem('cisem_user_name') || 'Omri Shilo',
-          role: 'account_admin',
-          email: 'omri@agn.co.il'
+          name: isAuthenticated ? (storedUserName || 'Authenticated User') : 'Guest User',
+          role: isAuthenticated ? 'account_admin' : 'guest',
+          email: isAuthenticated ? (storedEmail || 'user@tenant.local') : 'guest@platform.local'
         });
         setTenantConfig({
-          companyName: localStorage.getItem('cisem_company_name') || 'AGN Ltd',
-          tenantId: 'TENANT-AGN-001',
-          status: 'ACTIVE',
-          capabilities: ['inquiries.create', 'quotes.accept', 'team.manage']
+          companyName: isAuthenticated ? (storedCompany || 'Active Workspace') : 'Public Workspace',
+          tenantId: null,
+          status: isAuthenticated ? 'ACTIVE' : 'UNAUTHENTICATED',
+          capabilities: isAuthenticated ? ['inquiries.create', 'quotes.accept', 'team.manage'] : ['inquiries.create']
         });
+        // NO SESSION MUST MEAN NO ROSTER
+        setTeamMembers([]);
       } finally {
         setLoading(false);
       }
@@ -92,9 +104,11 @@ export default function UniversalOnboardingViewport() {
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-        <Sparkles size={24} style={{ animation: 'spin 2s linear infinite', marginBottom: '0.5rem' }} />
-        <div>{isRtl ? 'טוען פרופיל ארגוני...' : 'Loading Universal Session Profile...'}</div>
+      <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+        <Sparkles size={28} style={{ animation: 'spin 2s linear infinite', marginBottom: '0.75rem', color: 'var(--accent)' }} />
+        <div style={{ fontSize: '1rem', fontWeight: '600' }}>
+          {isRtl ? 'טוען פרופיל ארגוני...' : 'Loading Universal Session Profile...'}
+        </div>
       </div>
     );
   }
@@ -115,7 +129,7 @@ export default function UniversalOnboardingViewport() {
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'space-between',
-          padding: '1rem 1.25rem',
+          padding: '1.1rem 1.35rem',
           background: 'var(--bg-card)',
           border: '1px solid var(--border-color)',
           borderRadius: '10px',
@@ -125,8 +139,8 @@ export default function UniversalOnboardingViewport() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
           <div 
             style={{ 
-              width: '42px', 
-              height: '42px', 
+              width: '44px', 
+              height: '44px', 
               borderRadius: '8px', 
               background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', 
               display: 'flex', 
@@ -135,11 +149,11 @@ export default function UniversalOnboardingViewport() {
               color: '#ffffff'
             }}
           >
-            <Building2 size={22} />
+            <Building2 size={24} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-primary)' }}>
                 {tenantConfig?.companyName}
               </span>
               <span 
@@ -157,6 +171,23 @@ export default function UniversalOnboardingViewport() {
               >
                 <ShieldCheck size={12} /> {tenantConfig?.status}
               </span>
+              {dbVocabulary && (
+                <span 
+                  style={{ 
+                    fontSize: '0.72rem', 
+                    padding: '2px 8px', 
+                    borderRadius: '12px', 
+                    background: '#dbeafe', 
+                    color: '#1e40af',
+                    fontWeight: '600',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '3px'
+                  }}
+                >
+                  <Sparkles size={12} /> DB Vocab: {Object.keys(dbVocabulary).length} Terms (Consumer Served)
+                </span>
+              )}
             </div>
             <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
               {isRtl ? 'מזהה דייר:' : 'Tenant Context:'} <code style={{ fontFamily: 'monospace' }}>{tenantConfig?.tenantId}</code>
@@ -170,25 +201,25 @@ export default function UniversalOnboardingViewport() {
             display: 'flex', 
             alignItems: 'center', 
             gap: '0.75rem',
-            padding: '0.5rem 0.85rem',
+            padding: '0.55rem 0.95rem',
             background: 'var(--bg-hover)',
             borderRadius: '8px',
             border: '1px solid var(--border-color)'
           }}
         >
-          <User size={18} style={{ color: 'var(--accent)' }} />
+          <User size={20} style={{ color: '#3b82f6' }} />
           <div style={{ textAlign: isRtl ? 'right' : 'left' }}>
-            <div style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-primary)' }}>
               {sessionUser?.name}
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              {sessionUser?.role}
+              {sessionUser?.role} {sessionUser?.email ? `(${sessionUser.email})` : ''}
             </div>
           </div>
         </div>
       </div>
 
-      {/* UNIVERSAL CAPABILITIES MATRIX (CORE-GOVERNED DECLARED SETTINGS) */}
+      {/* TEAM MEMBERS ROSTER (REAL TENANT PEOPLE FROM API) */}
       <div 
         style={{ 
           padding: '1.25rem', 
@@ -197,31 +228,61 @@ export default function UniversalOnboardingViewport() {
           borderRadius: '10px' 
         }}
       >
-        <div style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Layers size={18} style={{ color: '#3b82f6' }} />
-          {isRtl ? 'יכולות ארגוניות פעילות' : 'Active Governed Tenant Capabilities'}
+        <div style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Users size={20} style={{ color: '#3b82f6' }} />
+          {isRtl ? 'צוות דייר פעיל' : `Active Team Members (${teamMembers.length})`}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem' }}>
-          {tenantConfig?.capabilities.map((cap) => (
-            <div 
-              key={cap}
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '0.5rem',
-                padding: '0.6rem 0.85rem',
-                background: 'var(--bg-hover)',
-                borderRadius: '6px',
-                border: '1px solid var(--border-color)',
-                fontSize: '0.83rem',
-                color: 'var(--text-primary)'
-              }}
-            >
-              <CheckCircle2 size={16} style={{ color: '#10b981' }} />
-              <code style={{ fontFamily: 'monospace' }}>{cap}</code>
-            </div>
-          ))}
-        </div>
+
+        {teamMembers.length === 0 ? (
+          <div style={{ padding: '1rem', color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '0.9rem' }}>
+            {isRtl ? 'אין חברי צוות רשומים בדייר זה עדיין.' : 'No registered team members found for this tenant yet.'}
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.85rem' }}>
+            {teamMembers.map((member, idx) => (
+              <div 
+                key={member.id || idx}
+                style={{
+                  padding: '0.85rem 1rem',
+                  background: 'var(--bg-hover)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
+                }}
+              >
+                <div 
+                  style={{ 
+                    width: '36px', 
+                    height: '36px', 
+                    borderRadius: '50%', 
+                    background: '#e0f2fe', 
+                    color: '#0284c7', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    fontWeight: '700',
+                    fontSize: '0.95rem'
+                  }}
+                >
+                  {member.name ? member.name.charAt(0).toUpperCase() : <UserCheck size={18} />}
+                </div>
+                <div>
+                  <div style={{ fontWeight: '600', fontSize: '0.88rem', color: 'var(--text-primary)' }}>
+                    {member.name}
+                  </div>
+                  <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
+                    {member.email}
+                  </div>
+                  <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: '#3b82f6', fontWeight: '600' }}>
+                    {member.role}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

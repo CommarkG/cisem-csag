@@ -25,14 +25,11 @@ function getMockData(pathStr: string, method: string) {
     return {
       status: "success",
       success: true,
-      company_name: "AGN Ltd",
-      active_tenant_id: "5f2bfda8-6ff1-483d-870e-14335a59915c",
+      company_name: "Demo Workspace",
+      active_tenant_id: "demo-tenant-uuid-001",
       members: [
-        { id: "5c3e147d-546d-4a65-aec8-5814e9ba09b0", name: "Gil Shilo", email: "gil@agn.co.il", role: "account_owner", company_name: "AGN Ltd" },
-        { id: "db0cde40-1beb-4392-a4af-55f52332b86f", name: "Omri Shilo", email: "omri@agn.co.il", role: "account_admin", company_name: "AGN Ltd" },
-        { id: "c88f11f6-6b6c-4582-9098-f0f81bda83de", name: "Idan Shilo", email: "design@agn.co.il", role: "member", company_name: "AGN Ltd" },
-        { id: "e0791b19-f04a-4ba3-b427-90bd7ed76b5f", name: "Revital", email: "nir@agn.co.il", role: "member", company_name: "AGN Ltd" },
-        { id: "2a9bbdbf-cc36-4b23-a640-280d84819b7e", name: "Yariv Fink", email: "sales@btigift.com", role: "member", company_name: "AGN Ltd" }
+        { id: "demo-user-001", name: "Demo Admin", email: "demo-admin@tenant.local", role: "account_owner", company_name: "Demo Workspace" },
+        { id: "demo-user-002", name: "Demo Manager", email: "demo-manager@tenant.local", role: "account_admin", company_name: "Demo Workspace" }
       ]
     };
   }
