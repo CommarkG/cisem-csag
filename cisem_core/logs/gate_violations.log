@@ -530,3 +530,12 @@ Call log:
 
   Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
 [2026-08-27T07:20:27.221377Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T10:28:26.139900Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: b0b2dcf42122d107ec1729d6ee9516cbea4afa1a3d64130fc56a01acb28d9aaf
+  Registered hash: 6d052b914b3e8a39df41f7348cd0018ba76f3a0faa301989073b7fb1d590fdb1
+[2026-08-27T10:28:46.269836Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T10:29:27.883600Z] [Phase 35] [BLOCK] CISEM_GATE_BLOCKED -- Phase 35: Schema Reference Gate Violation in '2026-08-12__CisemCsAg__Database__RLSTenantIsolationMigration__V1.0.sql'.
+  Table 'deals' is referenced in ALTER TABLE or REFERENCES but DOES NOT EXIST in live_schema_registry.json!
+  Rule: DDL migration MUST NOT reference or alter non-existent tables.
+  Registered tables in live_schema_registry.json: ['_migration_ledger', 'account_closure', 'artifacts', 'attachments', 'backlog_registry', 'branding_rate_cards', 'branding_subcontractors', 'catalog_item_sandbox_variants', 'catalog_items', 'classification_nodes', 'classification_trees', 'contacts', 'counterparties', 'crm_customers', 'custom_libraries', 'customer_accounts', 'decision_records', 'document_chunks', 'events', 'exchange_rates', 'feature_registry', 'inquiries', 'inquiry_units', 'lookup_registry', 'marks', 'navigation_menu_items', 'offering_classifications', 'offerings', 'option_types', 'option_values', 'pack_items', 'pack_transitions', 'package_feature_grants', 'packages', 'packs', 'participants', 'pdf_queue', 'pending_claims', 'platform_change_requests', 'price_list_lines', 'price_lists', 'product_groups', 'product_variations', 'quote_lines', 'quotes', 'role_definitions', 'round_artifacts', 'rounds', 'rules', 'state_transitions', 'status_library', 'supplier_mappings', 'suppliers', 'supply_offers', 'tag_library', 'team_closure', 'teams', 'template_registry', 'translations', 'unit_composition', 'unit_options', 'units', 'user_account_roles', 'users', 'vocabulary_terms', 'vocabulary_transitions']
+  Defeat Route: Referencing a table name without checking live_schema_registry.json structured table list.

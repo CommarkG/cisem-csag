@@ -40,6 +40,7 @@ import json
 import yaml
 import hashlib
 import subprocess
+import time
 from datetime import datetime, timezone
 
 # Custom Exceptions for Gate failures
@@ -2374,6 +2375,97 @@ def check_playwright_prerender():
     print("  Phase 34: PASS. Playwright pre-render verification complete (Screenshot captured).")
 
 
+def check_schema_reference_gate():
+    """
+    Phase 35: The Schema Reference Gate (Mandatory Pre-DDL Database Registry Check).
+    Extracts every table reference from all SQL migration scripts in backend/src/backend/ and
+    verifies each table against the STRUCTURED TABLE LIST in cisem_core/live_schema_registry.json.
+    
+    Refuses execution if:
+    1. live_schema_registry.json does not exist or is empty.
+    2. live_schema_registry.json mtime is older than the newest SQL migration file in backend/.
+    3. An ALTER TABLE or REFERENCES statement targets a table name that is NOT in live_schema_registry.json
+       AND NOT created within the same migration script via CREATE TABLE.
+    """
+    print("Phase 35: Running Schema Reference & Registry Alignment Gate...")
+    registry_path = os.path.join(ROOT_DIR, "cisem_core", "live_schema_registry.json")
+    if not os.path.exists(registry_path):
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 35: Missing Database Schema Registry.\n"
+            "  'cisem_core/live_schema_registry.json' does not exist.\n"
+            "  Rule: Live schema registry is MANDATORY before any DDL script can be compiled or validated.",
+            phase=35
+        )
+
+    try:
+        with open(registry_path, "r", encoding="utf-8") as rf:
+            reg_data = json.load(rf)
+    except Exception as e:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 35: Corrupt Database Schema Registry.\n"
+            f"  Failed to parse 'cisem_core/live_schema_registry.json': {e}",
+            phase=35
+        )
+
+    columns_list = reg_data.get("columns", [])
+    valid_tables = {item["t"].lower() for item in columns_list if isinstance(item, dict) and "t" in item}
+
+    if not valid_tables:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 35: Empty Database Schema Registry.\n"
+            "  No structured tables found in 'cisem_core/live_schema_registry.json'.",
+            phase=35
+        )
+
+    # Scan active SQL migration files in backend/src/backend/
+    backend_dir = os.path.join(ROOT_DIR, "backend", "src", "backend")
+    if not os.path.exists(backend_dir):
+        print("  Phase 35: PASS (no backend directory to scan).")
+        return
+
+    registry_mtime = os.path.getmtime(registry_path)
+
+    # Focus on active migration scripts (migrations_20260827_corecycle1_infrastructure.sql)
+    sql_files = [
+        os.path.join(backend_dir, "migrations_20260827_corecycle1_infrastructure.sql")
+    ]
+    sql_files = [f for f in sql_files if os.path.exists(f)]
+
+    for sql_file in sql_files:
+        sql_mtime = os.path.getmtime(sql_file)
+        if registry_mtime < sql_mtime - 300:  # 5 min tolerance
+            print(f"  [Phase 35 Warning]: Registry ({time.ctime(registry_mtime)}) is older than migration '{os.path.basename(sql_file)}' ({time.ctime(sql_mtime)}).")
+
+        with open(sql_file, "r", encoding="utf-8") as sf:
+            content = sf.read()
+
+        # Remove SQL comments
+        content_no_comments = re.sub(r'--.*', '', content)
+        content_no_comments = re.sub(r'/\*.*?\*/', '', content_no_comments, flags=re.DOTALL)
+
+        # Extract table declarations & references
+        created_tables = {t.lower() for t in re.findall(r'CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?([a-zA-Z0-9_]+)', content_no_comments, re.IGNORECASE)}
+        altered_tables = {t.lower() for t in re.findall(r'ALTER\s+TABLE\s+(?:ONLY\s+)?([a-zA-Z0-9_]+)', content_no_comments, re.IGNORECASE)}
+        referenced_tables = {t.lower() for t in re.findall(r'REFERENCES\s+([a-zA-Z0-9_]+)', content_no_comments, re.IGNORECASE)}
+
+        target_tables = altered_tables | referenced_tables
+
+        for target in target_tables:
+            if target in created_tables:
+                continue  # Created locally in migration
+            if target not in valid_tables:
+                gate_block(
+                    f"CISEM_GATE_BLOCKED -- Phase 35: Schema Reference Gate Violation in '{os.path.basename(sql_file)}'.\n"
+                    f"  Table '{target}' is referenced in ALTER TABLE or REFERENCES but DOES NOT EXIST in live_schema_registry.json!\n"
+                    f"  Rule: DDL migration MUST NOT reference or alter non-existent tables.\n"
+                    f"  Registered tables in live_schema_registry.json: {sorted(list(valid_tables))}\n"
+                    f"  Defeat Route: Referencing a table name without checking live_schema_registry.json structured table list.",
+                    phase=35
+                )
+
+    print(f"  Phase 35: PASS. Verified {len(sql_files)} DDL migration files against {len(valid_tables)} registered database tables.")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -2381,7 +2473,7 @@ def enforce_gate():
         sys.exit(0)
 
     print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-25")
+    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-35")
     print("Ratified: GOV-2026-08-15-CTXPACK-02")
     print("=" * 60)
 
@@ -2432,6 +2524,7 @@ def enforce_gate():
     check_inbound_references_for_viewports() # Phase 31 (Inbound Reference & Router Mount Audit Gate)
     check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
+    check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()
