@@ -1,10 +1,14 @@
 -- ==========================================================================================
--- CISEM CORECYCLE 1 MASTER INFRASTRUCTURE MIGRATION (REVISED V5.0 - COMPLETE READ/WRITE RLS)
+-- CISEM CORECYCLE 1 MASTER INFRASTRUCTURE MIGRATION (REVISED V6.0 - SLIMMED & AUDITED)
 -- Ratified Plan: PLAN-CISEM-20260827-CO1-MASTER-PIPELINE V1.0
 -- Governor Authority: GOV-YARIV-20260827-CORECYCLE1-SCHEMA
--- Purpose: Complete referential hierarchy, faceted classification, atomic sequence generator,
---          column-level provenance, 5 Free Schema Decisions, explicit ::INT casts, 
---          platform facet partial index, and CANONICAL RLS policies with EXPLICIT WRITE-SIDE WITH CHECK CLAUSES.
+-- Purpose: Complete referential hierarchy, atomic sequence generator, column-level provenance, 
+--          5 Free Schema Decisions, explicit ::INT casts, catalog_items versioning, 
+--          and CANONICAL RLS policies on surviving 3 new tables (inquiry_contacts, tenant_sequence_counters, column_provenance_logs).
+-- DROPPED (RETIRED & SUPERSEDED BY PRE-EXISTING DATABASE STRUCTURES):
+--   - taxonomy_facets, taxonomy_facet_values -> SUPERSEDED by pre-existing product_groups (hierarchy) and product_variations (facets).
+--   - product_facet_assignments -> SUPERSEDED by product_variations.catalog_item_id link.
+--   - products -> SUPERSEDED by pre-existing catalog_items table.
 -- ==========================================================================================
 
 BEGIN;
@@ -16,41 +20,7 @@ ADD COLUMN IF NOT EXISTS version INT DEFAULT 1 NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_vocabulary_terms_parent_id ON vocabulary_terms(parent_id);
 
--- 2. CREATE FACETED CLASSIFICATION TABLES (Orthogonal dimensions across hierarchy)
-CREATE TABLE IF NOT EXISTS taxonomy_facets (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    customer_account_id UUID REFERENCES customer_accounts(id) ON DELETE CASCADE,
-    facet_code VARCHAR(50) NOT NULL, -- 'material', 'branding_technology', 'event_type'
-    facet_label VARCHAR(100) NOT NULL,
-    is_multi_select BOOLEAN DEFAULT true,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    UNIQUE (customer_account_id, facet_code)
-);
-
--- Partial Unique Index for Platform-Level Facets (where customer_account_id IS NULL)
-CREATE UNIQUE INDEX IF NOT EXISTS idx_taxonomy_facets_platform_code 
-ON taxonomy_facets (facet_code) WHERE customer_account_id IS NULL;
-
-CREATE TABLE IF NOT EXISTS taxonomy_facet_values (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    facet_id UUID REFERENCES taxonomy_facets(id) ON DELETE CASCADE NOT NULL,
-    value_code VARCHAR(100) NOT NULL,
-    value_label VARCHAR(255) NOT NULL,
-    sort_order INT DEFAULT 0 NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    UNIQUE (facet_id, value_code)
-);
-
--- Join table linking product variants / items to facet values
-CREATE TABLE IF NOT EXISTS product_facet_assignments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    product_id UUID REFERENCES products(id) ON DELETE CASCADE NOT NULL,
-    facet_value_id UUID REFERENCES taxonomy_facet_values(id) ON DELETE CASCADE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
-    UNIQUE (product_id, facet_value_id)
-);
-
--- 3. CREATE INQUIRY CONTACTS (One-to-Many Relation: Multiple contacts per inquiry)
+-- 2. CREATE INQUIRY CONTACTS (One-to-Many Relation: Multiple contacts per inquiry)
 CREATE TABLE IF NOT EXISTS inquiry_contacts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     inquiry_id UUID REFERENCES inquiries(id) ON DELETE CASCADE NOT NULL,
@@ -61,7 +31,7 @@ CREATE TABLE IF NOT EXISTS inquiry_contacts (
     UNIQUE (inquiry_id, contact_id)
 );
 
--- 4. ATOMIC TENANT SEQUENCE GENERATOR (Human-Facing Numbering Engine)
+-- 3. ATOMIC TENANT SEQUENCE GENERATOR (Human-Facing Numbering Engine)
 CREATE TABLE IF NOT EXISTS tenant_sequence_counters (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_account_id UUID REFERENCES customer_accounts(id) ON DELETE CASCADE NOT NULL,
@@ -97,7 +67,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 5. ALTER EXISTING inquiries TABLE: Add explicit dates, human numbers, tax columns, idempotency, versioning & column provenance
+-- 4. ALTER EXISTING inquiries TABLE: Add explicit dates, human numbers, tax columns, idempotency, versioning & column provenance
 ALTER TABLE inquiries
 ADD COLUMN IF NOT EXISTS inquiry_number VARCHAR(50),
 ADD COLUMN IF NOT EXISTS year_code INT DEFAULT EXTRACT(YEAR FROM NOW())::INT, -- Explicit ::INT cast to prevent numeric DDL failure
@@ -117,7 +87,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_inquiries_idempotency ON inquiries(idempot
 CREATE INDEX IF NOT EXISTS idx_inquiries_event_date ON inquiries(event_date);
 CREATE INDEX IF NOT EXISTS idx_inquiries_factory_ready_date ON inquiries(factory_ready_date);
 
--- 6. ALTER EXISTING quotes TABLE (Targeting 17 Existing Columns: id, customer_account_id, inquiry_id, version, fx_rate, etc.)
+-- 5. ALTER EXISTING quotes TABLE (Targeting 17 Existing Columns: id, customer_account_id, inquiry_id, version, fx_rate, etc.)
 ALTER TABLE quotes
 ADD COLUMN IF NOT EXISTS quote_number VARCHAR(50),
 ADD COLUMN IF NOT EXISTS subtotal_amount NUMERIC(12,2) DEFAULT 0.00,
@@ -133,13 +103,13 @@ ADD COLUMN IF NOT EXISTS column_provenance JSONB DEFAULT '{}'::jsonb; -- Per-col
 CREATE UNIQUE INDEX IF NOT EXISTS idx_quotes_human_number ON quotes(customer_account_id, quote_number, version);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_quotes_idempotency ON quotes(idempotency_key) WHERE idempotency_key IS NOT NULL;
 
--- 7. ALTER EXISTING products TABLE
-ALTER TABLE products 
+-- 6. ALTER EXISTING catalog_items TABLE (Pre-existing sellable item table)
+ALTER TABLE catalog_items 
 ADD COLUMN IF NOT EXISTS version INT DEFAULT 1 NOT NULL;
 
--- 8. DETAILED COLUMN PROVENANCE AUDIT TABLE
+-- 7. DETAILED COLUMN PROVENANCE AUDIT TABLE
 -- DELIBERATE ARCHITECTURAL CHOICE: Scoped to 'inquiries' and 'quotes' initially.
--- To add provenance logging for a 3rd entity (e.g. 'work_orders'), update Section 9.6 policy USING & WITH CHECK subqueries.
+-- To add provenance logging for a 3rd entity (e.g. 'work_orders'), update Section 8.3 policy USING & WITH CHECK subqueries.
 CREATE TABLE IF NOT EXISTS column_provenance_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     table_name VARCHAR(100) NOT NULL,
@@ -154,51 +124,12 @@ CREATE TABLE IF NOT EXISTS column_provenance_logs (
 CREATE INDEX IF NOT EXISTS idx_column_provenance_lookup ON column_provenance_logs(table_name, record_id);
 
 -- ==========================================================================================
--- 9. ROW-LEVEL SECURITY (RLS) POLICIES FOR ALL 6 NEW TABLES
+-- 8. ROW-LEVEL SECURITY (RLS) POLICIES FOR SURVIVING 3 NEW TABLES
 -- USING CANONICAL current_tenant_id() FUNCTION WITH EXPLICIT READ (USING) AND WRITE (WITH CHECK) SEPARATION
--- ZERO SESSION SETTINGS. ZERO REQUEST HEADERS. ZERO UNGUARDED PLATFORM INJECTIONS.
+-- ZERO SESSION SETTINGS. ZERO REQUEST HEADERS. ZERO UNGUARDED INJECTIONS.
 -- ==========================================================================================
 
--- 9.1 taxonomy_facets
--- READ (USING): Tenants can READ inherited platform-level facets (customer_account_id IS NULL) OR their own tenant facets.
--- WRITE (WITH CHECK): Tenants can ONLY INSERT/UPDATE facets with customer_account_id = current_tenant_id().
--- Platform-level facets (NULL) are inserted strictly by Super Admin bypassing RLS via service_role key.
-ALTER TABLE taxonomy_facets ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation_policy ON taxonomy_facets
-    FOR ALL
-    USING (customer_account_id IS NULL OR customer_account_id = current_tenant_id())
-    WITH CHECK (customer_account_id = current_tenant_id());
-
--- 9.2 taxonomy_facet_values
--- READ (USING): Tenants can READ facet values under platform facets OR their own tenant facets.
--- WRITE (WITH CHECK): Tenants can ONLY INSERT/UPDATE values under their own tenant's custom facets.
-ALTER TABLE taxonomy_facet_values ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation_policy ON taxonomy_facet_values
-    FOR ALL
-    USING (facet_id IN (
-        SELECT id FROM taxonomy_facets
-        WHERE customer_account_id IS NULL OR customer_account_id = current_tenant_id()
-    ))
-    WITH CHECK (facet_id IN (
-        SELECT id FROM taxonomy_facets
-        WHERE customer_account_id = current_tenant_id()
-    ));
-
--- 9.3 product_facet_assignments
--- Inherits tenant access from parent product via product_id FK.
-ALTER TABLE product_facet_assignments ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation_policy ON product_facet_assignments
-    FOR ALL
-    USING (product_id IN (
-        SELECT id FROM products
-        WHERE customer_account_id = current_tenant_id()
-    ))
-    WITH CHECK (product_id IN (
-        SELECT id FROM products
-        WHERE customer_account_id = current_tenant_id()
-    ));
-
--- 9.4 inquiry_contacts
+-- 8.1 inquiry_contacts
 -- Inherits tenant access from parent inquiry via inquiry_id FK.
 ALTER TABLE inquiry_contacts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON inquiry_contacts
@@ -212,7 +143,7 @@ CREATE POLICY tenant_isolation_policy ON inquiry_contacts
         WHERE customer_account_id = current_tenant_id()
     ));
 
--- 9.5 tenant_sequence_counters
+-- 8.2 tenant_sequence_counters
 -- Direct tenant isolation matching JWT tenant_id.
 ALTER TABLE tenant_sequence_counters ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON tenant_sequence_counters
@@ -220,7 +151,7 @@ CREATE POLICY tenant_isolation_policy ON tenant_sequence_counters
     USING (customer_account_id = current_tenant_id())
     WITH CHECK (customer_account_id = current_tenant_id());
 
--- 9.6 column_provenance_logs
+-- 8.3 column_provenance_logs
 -- Restricts audit log visibility and writes strictly to records owned by current_tenant_id().
 ALTER TABLE column_provenance_logs ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON column_provenance_logs
