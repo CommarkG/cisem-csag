@@ -65,18 +65,19 @@ export default function UniversalOnboardingViewport() {
           const membersList = (data.members && data.members.length > 0) ? data.members : agnFallbackMembers;
           setTeamMembers(membersList);
 
-          const currentUser = membersList.find(m => m.email === storedEmail) || membersList[1] || membersList[0];
+          const isAuthenticated = Boolean(storedUserName || storedEmail || sessionToken);
+          const currentUser = storedEmail ? membersList.find(m => m.email === storedEmail) : null;
           
           setSessionUser({
-            name: currentUser?.name || storedUserName || 'Omri Shilo',
-            role: currentUser?.role || 'account_admin',
-            email: currentUser?.email || storedEmail || 'omri@agn.co.il'
+            name: currentUser?.name || storedUserName || (isAuthenticated ? 'Omri Shilo' : 'Guest User'),
+            role: currentUser?.role || (isAuthenticated ? 'account_admin' : 'guest'),
+            email: currentUser?.email || storedEmail || (isAuthenticated ? 'omri@agn.co.il' : 'guest@platform.local')
           });
           setTenantConfig({
-            companyName: storedCompany || data.company_name || 'AGN Ltd',
+            companyName: storedCompany || data.company_name || (isAuthenticated ? 'AGN Ltd' : 'Public Workspace'),
             tenantId: data.active_tenant_id || null,
-            status: 'ACTIVE',
-            capabilities: ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view']
+            status: isAuthenticated ? 'ACTIVE' : 'UNAUTHENTICATED',
+            capabilities: isAuthenticated ? ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view'] : ['inquiries.create']
           });
         } else {
           throw new Error('Fallback trigger');
@@ -95,16 +96,17 @@ export default function UniversalOnboardingViewport() {
           { id: "2a9bbdbf-cc36-4b23-a640-280d84819b7e", name: "Yariv Fink", email: "sales@btigift.com", role: "member", company_name: "AGN Ltd" }
         ];
 
+        const isAuthenticated = Boolean(storedUserName || storedEmail || localStorage.getItem('cisem_access_token'));
         setSessionUser({
-          name: storedUserName || 'Omri Shilo',
-          role: 'account_admin',
-          email: storedEmail || 'omri@agn.co.il'
+          name: isAuthenticated ? (storedUserName || 'Omri Shilo') : 'Guest User',
+          role: isAuthenticated ? 'account_admin' : 'guest',
+          email: isAuthenticated ? (storedEmail || 'omri@agn.co.il') : 'guest@platform.local'
         });
         setTenantConfig({
-          companyName: storedCompany || 'AGN Ltd',
+          companyName: isAuthenticated ? (storedCompany || 'AGN Ltd') : 'Public Workspace',
           tenantId: null,
-          status: 'UNAUTHENTICATED',
-          capabilities: ['inquiries.create', 'quotes.accept', 'team.manage']
+          status: isAuthenticated ? 'ACTIVE' : 'UNAUTHENTICATED',
+          capabilities: isAuthenticated ? ['inquiries.create', 'quotes.accept', 'team.manage'] : ['inquiries.create']
         });
         setTeamMembers(agnFallbackMembers);
       } finally {

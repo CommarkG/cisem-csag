@@ -830,8 +830,9 @@ export default function Header() {
                       localStorage.removeItem('cisem_user_name');
                       localStorage.removeItem('cisem_company_name');
                       localStorage.removeItem('cisem_user_email');
+                      localStorage.removeItem('cisem_active_tenant_id');
                     }
-                    window.location.hash = '#/onboarding';
+                    window.location.hash = '#/signin';
                     window.location.reload();
                   }} 
                   style={{ padding: '6px 8px', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: 'var(--danger, #ef4444)', fontWeight: 600 }}

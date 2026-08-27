@@ -519,3 +519,14 @@ Call log:
   - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
 
   Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-27T06:57:56.437345Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+
+[CRITICAL FAILURE]: Playwright detected 2 uncaught console or dead script errors!
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 502 (Bad Gateway)
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-27T07:20:27.221377Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
