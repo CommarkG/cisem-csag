@@ -1,10 +1,10 @@
 -- ==========================================================================================
--- CISEM CORECYCLE 1 MASTER INFRASTRUCTURE MIGRATION (REVISED V4.0 - CANONICAL RLS)
+-- CISEM CORECYCLE 1 MASTER INFRASTRUCTURE MIGRATION (REVISED V5.0 - COMPLETE READ/WRITE RLS)
 -- Ratified Plan: PLAN-CISEM-20260827-CO1-MASTER-PIPELINE V1.0
 -- Governor Authority: GOV-YARIV-20260827-CORECYCLE1-SCHEMA
 -- Purpose: Complete referential hierarchy, faceted classification, atomic sequence generator,
 --          column-level provenance, 5 Free Schema Decisions, explicit ::INT casts, 
---          platform facet partial index, and CANONICAL RLS policies using current_tenant_id().
+--          platform facet partial index, and CANONICAL RLS policies with EXPLICIT WRITE-SIDE WITH CHECK CLAUSES.
 -- ==========================================================================================
 
 BEGIN;
@@ -137,7 +137,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_quotes_idempotency ON quotes(idempotency_k
 ALTER TABLE products 
 ADD COLUMN IF NOT EXISTS version INT DEFAULT 1 NOT NULL;
 
--- 8. DETAILED COLUMN PROVENANCE AUDIT TABLE (Optional compliance logging for state transitions)
+-- 8. DETAILED COLUMN PROVENANCE AUDIT TABLE
+-- DELIBERATE ARCHITECTURAL CHOICE: Scoped to 'inquiries' and 'quotes' initially.
+-- To add provenance logging for a 3rd entity (e.g. 'work_orders'), update Section 9.6 policy USING & WITH CHECK subqueries.
 CREATE TABLE IF NOT EXISTS column_provenance_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     table_name VARCHAR(100) NOT NULL,
@@ -153,27 +155,33 @@ CREATE INDEX IF NOT EXISTS idx_column_provenance_lookup ON column_provenance_log
 
 -- ==========================================================================================
 -- 9. ROW-LEVEL SECURITY (RLS) POLICIES FOR ALL 6 NEW TABLES
--- USING CANONICAL current_tenant_id() FUNCTION (72 Live Database Policies Standard)
--- ZERO SESSION SETTINGS. ZERO REQUEST HEADERS.
+-- USING CANONICAL current_tenant_id() FUNCTION WITH EXPLICIT READ (USING) AND WRITE (WITH CHECK) SEPARATION
+-- ZERO SESSION SETTINGS. ZERO REQUEST HEADERS. ZERO UNGUARDED PLATFORM INJECTIONS.
 -- ==========================================================================================
 
 -- 9.1 taxonomy_facets
--- ARCHITECTURAL DECISION: Platform-level facets have customer_account_id IS NULL.
--- Every authenticated tenant is explicitly permitted to READ platform-level facets (inherited taxonomy).
--- Tenant-specific custom facets (customer_account_id = current_tenant_id()) are readable ONLY by their owning tenant.
+-- READ (USING): Tenants can READ inherited platform-level facets (customer_account_id IS NULL) OR their own tenant facets.
+-- WRITE (WITH CHECK): Tenants can ONLY INSERT/UPDATE facets with customer_account_id = current_tenant_id().
+-- Platform-level facets (NULL) are inserted strictly by Super Admin bypassing RLS via service_role key.
 ALTER TABLE taxonomy_facets ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON taxonomy_facets
     FOR ALL
-    USING (customer_account_id IS NULL OR customer_account_id = current_tenant_id());
+    USING (customer_account_id IS NULL OR customer_account_id = current_tenant_id())
+    WITH CHECK (customer_account_id = current_tenant_id());
 
 -- 9.2 taxonomy_facet_values
--- Inherits tenant access from parent taxonomy_facets node via facet_id FK.
+-- READ (USING): Tenants can READ facet values under platform facets OR their own tenant facets.
+-- WRITE (WITH CHECK): Tenants can ONLY INSERT/UPDATE values under their own tenant's custom facets.
 ALTER TABLE taxonomy_facet_values ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON taxonomy_facet_values
     FOR ALL
     USING (facet_id IN (
         SELECT id FROM taxonomy_facets
         WHERE customer_account_id IS NULL OR customer_account_id = current_tenant_id()
+    ))
+    WITH CHECK (facet_id IN (
+        SELECT id FROM taxonomy_facets
+        WHERE customer_account_id = current_tenant_id()
     ));
 
 -- 9.3 product_facet_assignments
@@ -182,6 +190,10 @@ ALTER TABLE product_facet_assignments ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON product_facet_assignments
     FOR ALL
     USING (product_id IN (
+        SELECT id FROM products
+        WHERE customer_account_id = current_tenant_id()
+    ))
+    WITH CHECK (product_id IN (
         SELECT id FROM products
         WHERE customer_account_id = current_tenant_id()
     ));
@@ -194,6 +206,10 @@ CREATE POLICY tenant_isolation_policy ON inquiry_contacts
     USING (inquiry_id IN (
         SELECT id FROM inquiries
         WHERE customer_account_id = current_tenant_id()
+    ))
+    WITH CHECK (inquiry_id IN (
+        SELECT id FROM inquiries
+        WHERE customer_account_id = current_tenant_id()
     ));
 
 -- 9.5 tenant_sequence_counters
@@ -201,14 +217,23 @@ CREATE POLICY tenant_isolation_policy ON inquiry_contacts
 ALTER TABLE tenant_sequence_counters ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON tenant_sequence_counters
     FOR ALL
-    USING (customer_account_id = current_tenant_id());
+    USING (customer_account_id = current_tenant_id())
+    WITH CHECK (customer_account_id = current_tenant_id());
 
 -- 9.6 column_provenance_logs
--- Restricts audit log visibility strictly to records owned by current_tenant_id().
+-- Restricts audit log visibility and writes strictly to records owned by current_tenant_id().
 ALTER TABLE column_provenance_logs ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON column_provenance_logs
     FOR ALL
     USING (
+        (table_name = 'inquiries' AND record_id IN (
+            SELECT id FROM inquiries WHERE customer_account_id = current_tenant_id()
+        )) OR
+        (table_name = 'quotes' AND record_id IN (
+            SELECT id FROM quotes WHERE customer_account_id = current_tenant_id()
+        ))
+    )
+    WITH CHECK (
         (table_name = 'inquiries' AND record_id IN (
             SELECT id FROM inquiries WHERE customer_account_id = current_tenant_id()
         )) OR
