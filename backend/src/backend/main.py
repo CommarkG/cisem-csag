@@ -167,15 +167,43 @@ def extract_tenant_from_request(request: Request) -> str:
 #                  previously escaped both handlers and produced a 500.
 # ---------------------------------------------------------------------------
 
+SECURE_PUBLIC_ROUTES_PATH = r"C:\Users\finky\secure\cisem_public_routes.txt"
+
+def load_external_public_allowlist() -> set:
+    """
+    STRICT SECURITY HARDENING: Reads public route allowlist from external Governor file outside repository.
+    FAIL CLOSED MANDATE: If file is missing or unreadable, returns empty set(). Every route is 100% authenticated.
+    """
+    if not os.path.exists(SECURE_PUBLIC_ROUTES_PATH):
+        print(f"[SECURITY WARNING]: External public routes file '{SECURE_PUBLIC_ROUTES_PATH}' missing. FAILING CLOSED: All routes authenticated.")
+        return set()
+    try:
+        allowlist = set()
+        with open(SECURE_PUBLIC_ROUTES_PATH, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                parts = line.split(maxsplit=1)
+                if len(parts) == 2:
+                    method, route_path = parts[0].upper(), parts[1]
+                    allowlist.add((method, route_path))
+        return allowlist
+    except Exception as e:
+        print(f"[SECURITY WARNING]: Failed to read '{SECURE_PUBLIC_ROUTES_PATH}': {e}. FAILING CLOSED: All routes authenticated.")
+        return set()
+
 @app.middleware("http")
-async def tenant_context_middleware(request: Request, call_next):
+async def auth_middleware(request: Request, call_next):
+    """
+    STRICT STAGE 2 MANDATORY GATE (PR-11100):
+    Default-Deny Authentication Middleware enforcing cryptographically signed JWT sessions.
+    Reads public route allowlist from external Governor file C:/Users/finky/secure/cisem_public_routes.txt.
+    """
     path = request.url.path
 
-    # Sunset check: Reject X-User-Role header in production
-    x_user_role = request.headers.get("x-user-role")
-    _env = (os.environ.get("ENV") or os.environ.get("NODE_ENV") or "").lower()
-    is_prod = _env != "development"  # absent or unrecognised → production (fail-closed)
-    if x_user_role and is_prod:
+    # Reject deprecated X-User-Role spoofing attempt
+    if request.headers.get("X-User-Role"):
         return rfc_7807_error(
             type_url="about:blank",
             title="Bad Request",
@@ -184,22 +212,13 @@ async def tenant_context_middleware(request: Request, call_next):
             instance=path
         )
 
-    # STRICT SECURITY HARDENING: Default-Deny Allowlist (Exact Method + Path Matching)
+    # STRICT SECURITY HARDENING: Default-Deny Allowlist (External Governor File Matching)
     # ZERO Prefix Matching. Every route is AUTHENTICATED BY DEFAULT.
-    PUBLIC_ALLOWLIST = {
-        ("GET", "/"),
-        ("GET", "/docs"),
-        ("GET", "/redoc"),
-        ("GET", "/openapi.json"),
-        ("POST", "/api/v1/inquiries"),           # Guest Inquiry Intake ONLY (Returns ID only)
-        ("POST", "/api/v1/auth/webhook/signup"),  # Supabase Auth Signup Hook (Server-to-Server HMAC)
-    }
-
-    is_public = (request.method.upper(), path) in PUBLIC_ALLOWLIST
+    public_allowlist = load_external_public_allowlist()
+    is_public = (request.method.upper(), path) in public_allowlist
 
     if is_public or not supabase_admin:
         return await call_next(request)
-
 
     auth_header = request.headers.get("Authorization")
 

@@ -45,9 +45,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 5,
       "validation_target": 20,
-      "actual_triggers": 456,
+      "actual_triggers": 459,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-27T12:33:25.225922Z",
+      "last_triggered": "2026-08-27T12:44:55.290681Z",
       "notes": "Tested manually 20+ times. Gate correctly blocks on all phases."
     },
     {
@@ -57,9 +57,9 @@
       "ratified_plan": "CISEM-IP-20260806-GATE-HARDENING",
       "estimated_triggers_per_cycle": 4,
       "validation_target": 16,
-      "actual_triggers": 2345,
+      "actual_triggers": 2349,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-27T12:33:09.619338Z",
+      "last_triggered": "2026-08-27T12:44:39.133925Z",
       "notes": "Called on every gate Phase 2 run. 16+ confirmed runs."
     },
     {
@@ -81,9 +81,9 @@
       "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 1636,
+      "actual_triggers": 1637,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-27T10:29:01.068219Z",
+      "last_triggered": "2026-08-27T12:44:35.663146Z",
       "notes": "Verified through 4 run cycles in Sandbox environment."
     },
     {
@@ -93,9 +93,9 @@
       "ratified_plan": "CISEM-IP-20260806-ANTITHEATER-V1.0",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 821,
+      "actual_triggers": 825,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-27T12:33:08.980016Z",
+      "last_triggered": "2026-08-27T12:44:38.460588Z",
       "notes": "Turn counter increments logged and verified through 4 cycle resets."
     },
     {
@@ -105,9 +105,9 @@
       "ratified_plan": "CISEM-IP-20260806-ACCUMULATED-DESIGN",
       "estimated_triggers_per_cycle": 1,
       "validation_target": 4,
-      "actual_triggers": 1614,
+      "actual_triggers": 1615,
       "status": "VALIDATED",
-      "last_triggered": "2026-08-27T10:28:57.332090Z",
+      "last_triggered": "2026-08-27T12:44:34.832131Z",
       "notes": "Orchestrated across 4 simulation test runs."
     },
     {

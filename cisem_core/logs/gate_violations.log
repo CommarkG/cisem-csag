@@ -559,3 +559,4 @@ Call log:
 
 
   Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-27T12:44:14.786637Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
