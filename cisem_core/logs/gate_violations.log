@@ -539,3 +539,23 @@ Call log:
   Rule: DDL migration MUST NOT reference or alter non-existent tables.
   Registered tables in live_schema_registry.json: ['_migration_ledger', 'account_closure', 'artifacts', 'attachments', 'backlog_registry', 'branding_rate_cards', 'branding_subcontractors', 'catalog_item_sandbox_variants', 'catalog_items', 'classification_nodes', 'classification_trees', 'contacts', 'counterparties', 'crm_customers', 'custom_libraries', 'customer_accounts', 'decision_records', 'document_chunks', 'events', 'exchange_rates', 'feature_registry', 'inquiries', 'inquiry_units', 'lookup_registry', 'marks', 'navigation_menu_items', 'offering_classifications', 'offerings', 'option_types', 'option_values', 'pack_items', 'pack_transitions', 'package_feature_grants', 'packages', 'packs', 'participants', 'pdf_queue', 'pending_claims', 'platform_change_requests', 'price_list_lines', 'price_lists', 'product_groups', 'product_variations', 'quote_lines', 'quotes', 'role_definitions', 'round_artifacts', 'rounds', 'rules', 'state_transitions', 'status_library', 'supplier_mappings', 'suppliers', 'supply_offers', 'tag_library', 'team_closure', 'teams', 'template_registry', 'translations', 'unit_composition', 'unit_options', 'units', 'user_account_roles', 'users', 'vocabulary_terms', 'vocabulary_transitions']
   Defeat Route: Referencing a table name without checking live_schema_registry.json structured table list.
+[2026-08-27T12:30:46.764652Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T12:31:17.428994Z] [Phase 38] [BLOCK] CISEM_GATE_BLOCKED -- Phase 38: Stale Public Allowlist Hole Detected in main.py.
+  Entry(s) ['GET /health'] listed in PUBLIC_ALLOWLIST but NO MATCHING ROUTE EXISTS in FastAPI app.routes!
+  Rule: Public allowlist MUST NOT contain stale or phantom routes.
+  Action: Remove the stale entry from PUBLIC_ALLOWLIST or implement the declared route in main.py.
+  Defeat Route: Leaving phantom allowlist entries in main.py allows future route additions to be exposed silently.
+[2026-08-27T12:32:35.084042Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.

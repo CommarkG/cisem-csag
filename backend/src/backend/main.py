@@ -188,7 +188,6 @@ async def tenant_context_middleware(request: Request, call_next):
     # ZERO Prefix Matching. Every route is AUTHENTICATED BY DEFAULT.
     PUBLIC_ALLOWLIST = {
         ("GET", "/"),
-        ("GET", "/health"),
         ("GET", "/docs"),
         ("GET", "/redoc"),
         ("GET", "/openapi.json"),

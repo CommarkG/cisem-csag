@@ -2466,6 +2466,74 @@ def check_schema_reference_gate():
     print(f"  Phase 35: PASS. Verified {len(sql_files)} DDL migration files against {len(valid_tables)} registered database tables.")
 
 
+def check_cumulative_route_surface_gate():
+    """
+    Phase 38: Cumulative Route Surface & Stale Public Allowlist Audit Gate
+    Enumerates declared FastAPI routes and compares against main.py PUBLIC_ALLOWLIST.
+    Blocks if any PUBLIC_ALLOWLIST entry names a route that does not exist (stale allowlist hole).
+    Blocks if any wildcard or prefix matching rule is detected in allowlist.
+    """
+    print("Phase 38: Running Cumulative Route Surface & Stale Allowlist Gate...")
+    main_py_path = os.path.join(ROOT_DIR, "backend", "src", "backend", "main.py")
+    if not os.path.exists(main_py_path):
+        print("  Phase 38: PASS (main.py not found).")
+        return
+
+    with open(main_py_path, "r", encoding="utf-8") as f:
+        code = f.read()
+
+    # Extract declared routes @app.get(...), @app.post(...), @app.put(...), @app.delete(...)
+    declared_routes = set()
+    route_matches = re.findall(r'@app\.(get|post|put|delete|patch|options|head)\s*\(\s*["\']([^"\']+)["\']', code, re.IGNORECASE)
+    for method, path in route_matches:
+        declared_routes.add((method.upper(), path))
+
+    # Standard FastAPI default routes
+    declared_routes.add(("GET", "/"))
+    declared_routes.add(("GET", "/docs"))
+    declared_routes.add(("GET", "/redoc"))
+    declared_routes.add(("GET", "/openapi.json"))
+
+    # Extract PUBLIC_ALLOWLIST tuples from main.py
+    allowlist_match = re.search(r'PUBLIC_ALLOWLIST\s*=\s*\{([^}]+)\}', code, re.DOTALL)
+    if not allowlist_match:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 38: PUBLIC_ALLOWLIST missing in main.py.\n"
+            "  Rule: FastAPI auth middleware MUST define explicit PUBLIC_ALLOWLIST set.",
+            phase=38
+        )
+        return
+
+    allowlist_block = allowlist_match.group(1)
+    allowlist_entries = set()
+    tuple_matches = re.findall(r'\(\s*["\']([A-Z]+)["\']\s*,\s*["\']([^"\']+)["\']\s*\)', allowlist_block)
+    for method, path in tuple_matches:
+        allowlist_entries.add((method.upper(), path))
+
+    # Check 1: Detect Wildcard / Prefix Matching Rules
+    if "startswith" in allowlist_block or "*" in allowlist_block:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 38: Wildcard / Prefix matching rule detected in PUBLIC_ALLOWLIST.\n"
+            "  Rule: PUBLIC_ALLOWLIST must contain ONLY exact (method, path) tuples. Prefix matching is PROHIBITED.",
+            phase=38
+        )
+
+    # Check 2: Detect Stale Allowlist Entries (Allowlist entry with NO matching route in app.routes)
+    stale_entries = allowlist_entries - declared_routes
+    if stale_entries:
+        stale_formatted = [f"{m} {p}" for m, p in sorted(list(stale_entries))]
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 38: Stale Public Allowlist Hole Detected in main.py.\n"
+            f"  Entry(s) {stale_formatted} listed in PUBLIC_ALLOWLIST but NO MATCHING ROUTE EXISTS in FastAPI app.routes!\n"
+            f"  Rule: Public allowlist MUST NOT contain stale or phantom routes.\n"
+            f"  Action: Remove the stale entry from PUBLIC_ALLOWLIST or implement the declared route in main.py.\n"
+            f"  Defeat Route: Leaving phantom allowlist entries in main.py allows future route additions to be exposed silently.",
+            phase=38
+        )
+
+    print(f"  Phase 38: PASS. Verified {len(declared_routes)} declared routes against {len(allowlist_entries)} exact public allowlist entries. Zero stale entries.")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -2473,7 +2541,7 @@ def enforce_gate():
         sys.exit(0)
 
     print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-35")
+    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-38")
     print("Ratified: GOV-2026-08-15-CTXPACK-02")
     print("=" * 60)
 
@@ -2525,6 +2593,7 @@ def enforce_gate():
     check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
     check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
+    check_cumulative_route_surface_gate()  # Phase 38 (Cumulative Route Surface & Stale Allowlist Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()
