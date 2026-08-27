@@ -40,6 +40,9 @@ import AdminView from './views/AdminView';
 import TemplateHubView from './views/TemplateHubView';
 import SignInView from './views/SignInView';
 import UniversalOnboardingViewport from './views/UniversalOnboardingViewport';
+import InquiryIntakeView from './views/InquiryIntakeView';
+import QuoteBuilderView from './views/QuoteBuilderView';
+import WorkOrderAcceptanceView from './views/WorkOrderAcceptanceView';
 
 function AppContent() {
   const location = useLocation();
@@ -158,6 +161,9 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<Navigate to="/onboarding" replace />} />
             <Route path="/dashboard" element={<DashboardView />} />
+            <Route path="/inquiry-intake" element={<InquiryIntakeView />} />
+            <Route path="/quote-builder" element={<QuoteBuilderView />} />
+            <Route path="/work-order-acceptance" element={<WorkOrderAcceptanceView />} />
             <Route path="/onboarding" element={<UniversalOnboardingViewport />} />
             <Route path="/kanban" element={<KanbanView />} />
             <Route path="/list" element={<ListView />} />

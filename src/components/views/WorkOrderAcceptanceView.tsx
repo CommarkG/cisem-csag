@@ -114,3 +114,5 @@ export const WorkOrderAcceptanceView: React.FC<WorkOrderAcceptanceProps> = ({ qu
     </div>
   );
 };
+
+export default WorkOrderAcceptanceView;

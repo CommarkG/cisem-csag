@@ -1,0 +1,179 @@
+# CISEM CODE HEADER -- MANDATORY
+# ratified_plan: CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0
+# governor_signature: GOV-YARIV-20260806-CONTEXT-ADAPTIVE-V1.0
+# version: V1.0
+# reasoning: |
+#   Maps scenario types (detected from code diff keywords) to the
+#   expected persona distribution for that scenario. This replaces the
+#   hidden assumption that all personas should trigger equally on every
+#   scenario. A security patch legitimately triggers SECURITY heavily and
+#   barely touches UI personas -- that is correct, not a gap.
+#   NONE means the persona is not expected to fire for this scenario type.
+#   HIGH/MEDIUM/LOW defines the contextual relevance weight.
+#   Parent principles: AxiomsAndPrinciples V1.12. AGENTS.md §7-9.
+#   Resolves: PARK-005 (wrong Check 1 conclusion from uniform assumption).
+
+scenario_types:
+
+  - type: "SECURITY"
+    description: "Changes involving authentication, access control, injection risks, backdoors"
+    keywords:
+      - "backdoor"
+      - "bypass"
+      - "injection"
+      - "auth"
+      - "token"
+      - "password"
+      - "hardcoded"
+      - "access"
+      - "unlock"
+      - "privilege"
+    expected_distribution:
+      SECURITY_AUDITOR_PERSONA:              HIGH
+      STABILITY_EXPERT_PERSONA:              MEDIUM
+      GOVERNOR_PROXY_PERSONA:                MEDIUM
+      PLATFORM_DEVELOPER_PERSONA:            LOW
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: LOW
+      COMPLETION_EXPERT_PERSONA:             LOW
+      SCALABILITY_EXPERT_PERSONA:            NONE
+      PERFORMANCE_ARCHITECT_PERSONA:         NONE
+      UX_EXPERT_PERSONA:                     NONE
+      UI_EXPERT_PERSONA:                     NONE
+
+  - type: "STABILITY_LOCKING"
+    description: "Changes involving locks, race conditions, sync, database transactions"
+    keywords:
+      - "lock"
+      - "transaction"
+      - "race"
+      - "sync"
+      - "mutex"
+      - "acquire"
+      - "release"
+      - "concurrent"
+      - "thread"
+      - "deadlock"
+    expected_distribution:
+      STABILITY_EXPERT_PERSONA:             HIGH
+      SECURITY_AUDITOR_PERSONA:             MEDIUM
+      SCALABILITY_EXPERT_PERSONA:           MEDIUM
+      PLATFORM_DEVELOPER_PERSONA:           MEDIUM
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: LOW
+      COMPLETION_EXPERT_PERSONA:            LOW
+      GOVERNOR_PROXY_PERSONA:               LOW
+      PERFORMANCE_ARCHITECT_PERSONA:        NONE
+      UX_EXPERT_PERSONA:                    NONE
+      UI_EXPERT_PERSONA:                    NONE
+
+  - type: "ARCHITECTURE_CONSOLIDATION"
+    description: "Changes involving routing, registries, duplicate handlers, SSOT violations"
+    keywords:
+      - "duplicate"
+      - "route"
+      - "registry"
+      - "schema"
+      - "ssot"
+      - "handler"
+      - "controller"
+      - "refactor"
+      - "bundle"
+      - "consolidate"
+    expected_distribution:
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: HIGH
+      PLATFORM_DEVELOPER_PERSONA:           HIGH
+      GOVERNOR_PROXY_PERSONA:               MEDIUM
+      STABILITY_EXPERT_PERSONA:             MEDIUM
+      COMPLETION_EXPERT_PERSONA:            LOW
+      SECURITY_AUDITOR_PERSONA:             LOW
+      SCALABILITY_EXPERT_PERSONA:           LOW
+      PERFORMANCE_ARCHITECT_PERSONA:        NONE
+      UX_EXPERT_PERSONA:                    NONE
+      UI_EXPERT_PERSONA:                    NONE
+
+  - type: "UI_VISUAL"
+    description: "Changes involving styling, visual design, animations, themes"
+    keywords:
+      - "style"
+      - "css"
+      - "color"
+      - "theme"
+      - "glassmorphism"
+      - "animation"
+      - "typography"
+      - "font"
+      - "gradient"
+      - "visual"
+    expected_distribution:
+      UI_EXPERT_PERSONA:                    HIGH
+      UX_EXPERT_PERSONA:                    HIGH
+      COMPLETION_EXPERT_PERSONA:            MEDIUM
+      PERFORMANCE_ARCHITECT_PERSONA:        MEDIUM
+      SCALABILITY_EXPERT_PERSONA:           NONE
+      STABILITY_EXPERT_PERSONA:             NONE
+      SECURITY_AUDITOR_PERSONA:             NONE
+      PLATFORM_DEVELOPER_PERSONA:           NONE
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: NONE
+      GOVERNOR_PROXY_PERSONA:               LOW
+
+  - type: "PERFORMANCE_CACHE"
+    description: "Changes involving caching, latency, API rate limits, resource allocation"
+    keywords:
+      - "cache"
+      - "latency"
+      - "rate"
+      - "limit"
+      - "memory"
+      - "cpu"
+      - "resource"
+      - "edge"
+      - "cdn"
+      - "ttl"
+    expected_distribution:
+      PERFORMANCE_ARCHITECT_PERSONA:        HIGH
+      SCALABILITY_EXPERT_PERSONA:           HIGH
+      STABILITY_EXPERT_PERSONA:             MEDIUM
+      PLATFORM_DEVELOPER_PERSONA:           MEDIUM
+      SECURITY_AUDITOR_PERSONA:             LOW
+      COMPLETION_EXPERT_PERSONA:            LOW
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: NONE
+      UX_EXPERT_PERSONA:                    NONE
+      UI_EXPERT_PERSONA:                    NONE
+      GOVERNOR_PROXY_PERSONA:               NONE
+
+  - type: "COMPLETION_AUDIT"
+    description: "Changes reviewed for completeness: TODOs, unhandled edges, missing tests"
+    keywords:
+      - "todo"
+      - "fixme"
+      - "hack"
+      - "incomplete"
+      - "placeholder"
+      - "stub"
+      - "missing"
+      - "unhandled"
+    expected_distribution:
+      COMPLETION_EXPERT_PERSONA:            HIGH
+      PLATFORM_DEVELOPER_PERSONA:           HIGH
+      GOVERNOR_PROXY_PERSONA:               MEDIUM
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: MEDIUM
+      STABILITY_EXPERT_PERSONA:             LOW
+      SECURITY_AUDITOR_PERSONA:             LOW
+      SCALABILITY_EXPERT_PERSONA:           NONE
+      PERFORMANCE_ARCHITECT_PERSONA:        NONE
+      UX_EXPERT_PERSONA:                    NONE
+      UI_EXPERT_PERSONA:                    NONE
+
+  - type: "MIXED"
+    description: "Default fallback when scenario cannot be typed from keywords alone"
+    keywords: []
+    expected_distribution:
+      SECURITY_AUDITOR_PERSONA:             MEDIUM
+      STABILITY_EXPERT_PERSONA:             MEDIUM
+      PLATFORM_DEVELOPER_PERSONA:           MEDIUM
+      CONSOLIDATION_OPTIMIZATION_SSOT_PERSONA: MEDIUM
+      COMPLETION_EXPERT_PERSONA:            MEDIUM
+      GOVERNOR_PROXY_PERSONA:               LOW
+      SCALABILITY_EXPERT_PERSONA:           LOW
+      PERFORMANCE_ARCHITECT_PERSONA:        LOW
+      UX_EXPERT_PERSONA:                    LOW
+      UI_EXPERT_PERSONA:                    LOW

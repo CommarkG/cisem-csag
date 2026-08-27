@@ -36,6 +36,19 @@
         "cisem_core"
       ],
       "status": "ACTIVE_RATIFIED"
+    },
+    {
+      "plan_id": "PLAN-CISEM-20260826-ITP-WIRING",
+      "version": "V2.0",
+      "governor_signature": "GOV-YARIV-20260826-ITP-WIRING-V2",
+      "ratified_at": "2026-08-26",
+      "authorized_directories": [
+        "src/components",
+        "src/app",
+        "backend/src/backend",
+        "cisem_core"
+      ],
+      "status": "ACTIVE_RATIFIED"
     }
   ]
 }

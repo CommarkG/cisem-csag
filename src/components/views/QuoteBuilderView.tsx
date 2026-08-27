@@ -157,3 +157,5 @@ export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId, onQuo
     </div>
   );
 };
+
+export default QuoteBuilderView;

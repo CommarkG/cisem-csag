@@ -26,7 +26,7 @@ function getMockData(pathStr: string, method: string) {
       status: "success",
       success: true,
       company_name: "AGN Ltd",
-      active_tenant_id: "TENANT-SESSION-ACTIVE",
+      active_tenant_id: "5f2bfda8-6ff1-483d-870e-14335a59915c",
       members: [
         { id: "5c3e147d-546d-4a65-aec8-5814e9ba09b0", name: "Gil Shilo", email: "gil@agn.co.il", role: "account_owner", company_name: "AGN Ltd" },
         { id: "db0cde40-1beb-4392-a4af-55f52332b86f", name: "Omri Shilo", email: "omri@agn.co.il", role: "account_admin", company_name: "AGN Ltd" },

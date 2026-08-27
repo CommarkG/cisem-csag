@@ -354,3 +354,126 @@ Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust
 [2026-08-25T16:47:49.538675Z] [Phase 1] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
   Current hash: 6a826b3fb7f368cbf70de4c90ca838dcd0f80903921d17df874026d9f99bb1b0
   Registered hash: 71e36bbe25b7f85a48d73764b7404e45bb53f007f1b46235bed9c313928c28c1
+[2026-08-25T16:51:39.639748Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T00:38:52.703405Z] [Phase N/A] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T01:51:32.656512Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: f999fbc148cf7f3986ad08c40f5764f86253a5b6d0fb083fab6edbc59085bfc7
+  Registered hash: 6a826b3fb7f368cbf70de4c90ca838dcd0f80903921d17df874026d9f99bb1b0
+[2026-08-26T01:51:55.436724Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T01:52:41.232965Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: e6594959975f220f0458ba14a844a07c259813bbd441c7130d893170151532b5
+  Registered hash: f999fbc148cf7f3986ad08c40f5764f86253a5b6d0fb083fab6edbc59085bfc7
+[2026-08-26T02:05:24.284586Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 72fd2f6cc2ddc68f1aafdab84b3998de32f3e2e7b12971f639ef1b0bb049dcbf
+  Registered hash: e6594959975f220f0458ba14a844a07c259813bbd441c7130d893170151532b5
+[2026-08-26T02:06:00.922212Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 5da60d22bbf22bffac2e1070b88b88e864a3de6e120017541f82e9ec65023528
+  Registered hash: 72fd2f6cc2ddc68f1aafdab84b3998de32f3e2e7b12971f639ef1b0bb049dcbf
+[2026-08-26T04:15:32.843703Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T04:16:32.666518Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T04:26:02.292505Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 9abcc24aee9b19359044c4ab9558263897b80054518ed42fc889706d5fdb5757
+  Registered hash: 5da60d22bbf22bffac2e1070b88b88e864a3de6e120017541f82e9ec65023528
+[2026-08-26T04:31:57.934085Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 14b6f1af63feefecc2a7c001738f891e81638a54d8b77667b36ea4e17d287bb3
+  Registered hash: 9abcc24aee9b19359044c4ab9558263897b80054518ed42fc889706d5fdb5757
+[2026-08-26T04:37:27.034423Z] [Phase 24] [BLOCK] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0.py: isolated
+  scratch\audit_all_references.py: isolated
+  scratch\audit_missing_ratified_docs.py: isolated
+  scratch\check_content.py: isolated
+  scratch\check_schema.py: isolated
+  scratch\check_walkthrough.py: isolated
+  scratch\debug_gate_phase8.py: isolated
+  scratch\find_offending_file.py: isolated
+  scratch\fix_and_gate.py: isolated
+  scratch\fix_and_test.py: isolated
+  scratch\fix_walkthrough.py: isolated
+  scratch\generate_backlog_seed.py: isolated
+  scratch\generate_deduplicated_seed.py: isolated
+  scratch\list_walkthroughs.py: isolated
+  scratch\print_atv_results.py: isolated
+  scratch\print_registry_end.py: isolated
+  scratch\promote_walkthrough.py: isolated
+  scratch\test_api.py: isolated
+  scratch\test_gate_regex.py: isolated
+  scratch\test_git_modified.py: isolated
+  scratch\test_tenant_blind_state_preventions.py: isolated
+
+[FINDINGS]
+
+  CHECK B - Header trust without HMAC (window=20) (1 finding(s))
+    backend\src\backend\main.py:146
+      code:   raw_header = request.headers.get("x-tenant-id")
+      detail: x-tenant* header read without hmac verification within 20 lines
+
+[SUMMARY]  1 finding(s) across 233 files scanned
+[2026-08-26T04:39:18.815171Z] [Phase 24] [BLOCK] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0.py: isolated
+  scratch\audit_all_references.py: isolated
+  scratch\audit_missing_ratified_docs.py: isolated
+  scratch\check_content.py: isolated
+  scratch\check_schema.py: isolated
+  scratch\check_walkthrough.py: isolated
+  scratch\debug_gate_phase8.py: isolated
+  scratch\find_offending_file.py: isolated
+  scratch\fix_and_gate.py: isolated
+  scratch\fix_and_test.py: isolated
+  scratch\fix_walkthrough.py: isolated
+  scratch\generate_backlog_seed.py: isolated
+  scratch\generate_deduplicated_seed.py: isolated
+  scratch\list_walkthroughs.py: isolated
+  scratch\print_atv_results.py: isolated
+  scratch\print_registry_end.py: isolated
+  scratch\promote_walkthrough.py: isolated
+  scratch\test_api.py: isolated
+  scratch\test_gate_regex.py: isolated
+  scratch\test_git_modified.py: isolated
+  scratch\test_tenant_blind_state_preventions.py: isolated
+
+[FINDINGS]
+
+  CHECK B - Header trust without HMAC (window=20) (1 finding(s))
+    backend\src\backend\main.py:146
+      code:   raw_header = request.headers.get("x-tenant-id")
+      detail: x-tenant* header read without hmac verification within 20 lines
+
+[SUMMARY]  1 finding(s) across 233 files scanned
+[2026-08-26T04:51:16.499499Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: bcf066ef649441df0917e24c8b493760931a9551c52a33112efbbc74f8d5b3f6
+  Registered hash: 14b6f1af63feefecc2a7c001738f891e81638a54d8b77667b36ea4e17d287bb3
+[2026-08-26T05:04:38.175903Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T05:18:48.113126Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: ae934440fb74718835e12b8e327127220c3ab334fe13293a1723a745c229779e
+  Registered hash: bcf066ef649441df0917e24c8b493760931a9551c52a33112efbbc74f8d5b3f6
+[2026-08-26T05:29:27.288979Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 620af80afbe39970ae5cb15cf80fd61cfbf14bc4daeada73ce8ac23d8793aece
+  Registered hash: ae934440fb74718835e12b8e327127220c3ab334fe13293a1723a745c229779e
+[2026-08-26T05:37:45.868452Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T05:56:51.622461Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 4215c68d02fe719dbe8a3ad26b31a1e832b310b451879d9f5fd9bc92fa8ddc92
+  Registered hash: 620af80afbe39970ae5cb15cf80fd61cfbf14bc4daeada73ce8ac23d8793aece
+[2026-08-26T05:57:22.749547Z] [Phase 33] [BLOCK] CISEM_GATE_BLOCKED -- Phase 33: Customer Surface System Jargon Violation in InquiryIntakeView.tsx.
+  Forbidden backend/schema term 'counterparty_id' was detected on human UI surface!
+  Rule: Human language MUST precede system language. Customer surfaces MUST NOT display database or schema terms.
+  Fix: Remove 'counterparty_id' from InquiryIntakeView.tsx and replace with plain human language.
+[2026-08-26T06:00:45.693986Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T06:03:16.622982Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T06:04:05.734649Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-26T06:06:11.112096Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 852ddeacc26d9c52f7622a7ed97f47acaf17b4060ae2c25656bb2584503bba07
+  Registered hash: 4215c68d02fe719dbe8a3ad26b31a1e832b310b451879d9f5fd9bc92fa8ddc92
+[2026-08-27T01:11:01.149126Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T02:28:28.921963Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T03:18:06.332088Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-27T03:30:23.710791Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

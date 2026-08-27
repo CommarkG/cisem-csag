@@ -74,7 +74,7 @@ export default function UniversalOnboardingViewport() {
           });
           setTenantConfig({
             companyName: storedCompany || data.company_name || 'AGN Ltd',
-            tenantId: data.active_tenant_id || 'TENANT-SESSION-ACTIVE',
+            tenantId: data.active_tenant_id || null,
             status: 'ACTIVE',
             capabilities: ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view']
           });
@@ -102,8 +102,8 @@ export default function UniversalOnboardingViewport() {
         });
         setTenantConfig({
           companyName: storedCompany || 'AGN Ltd',
-          tenantId: 'TENANT-SESSION-ACTIVE',
-          status: 'ACTIVE',
+          tenantId: null,
+          status: 'UNAUTHENTICATED',
           capabilities: ['inquiries.create', 'quotes.accept', 'team.manage']
         });
         setTeamMembers(agnFallbackMembers);

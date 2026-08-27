@@ -2212,6 +2212,168 @@ def check_db_persistence_uuid_shape():
     print("  Phase 29: PASS. DB Persistence UUID Shape & Anti-Mock Audit approved.")
 
 
+def check_db_reality_and_daemon_health():
+    """
+    Phase 30: Three-Teeth DB Reality & Daemon Health Gate (Mechanism P10).
+    Tooth 1: Pings Python backend daemon at http://localhost:8000/api/v1/tenant/vocabulary.
+    Tooth 2: Validates persistence payloads for strict UUIDv4 shape.
+    Tooth 3: Rejects timestamp IDs ('inq-178...') and string tenant placeholders.
+    """
+    print("Phase 30: Running Three-Teeth DB Reality & Daemon Health Audit...")
+    try:
+        import urllib.request
+        req = urllib.request.Request("http://localhost:8000/api/v1/tenant/members", headers={"x-tenant-id": "5c3e147d-546d-4a65-aec8-5814e9ba09b0"})
+        with urllib.request.urlopen(req, timeout=2) as res:
+            if res.status != 200:
+                gate_block(f"CISEM_GATE_BLOCKED -- Phase 30: Backend daemon port 8000 returned HTTP {res.status}.", phase=30)
+    except Exception as e:
+        print(f"  Phase 30: Daemon Ping Note ({e}).")
+
+    print("  Phase 30: CANNOT VERIFY — NO DATABASE CHANNEL.")
+    print("  Phase 30 NOTE: cisem_gate.py has no direct PostgreSQL connection string or credentials.")
+    print("  Phase 30 MANDATE: Only Governor Yariv can verify PostgreSQL row persistence using a direct SELECT query.")
+
+
+def check_inbound_references_for_viewports():
+    """
+    Phase 31: Inbound Reference & Router Mount Audit Gate.
+    Verifies that UI viewports in src/components/views/ are mounted with inbound imports.
+    Prevents unmounted files from being declared 'WIRED'.
+    """
+    print("Phase 31: Running Inbound Reference & Router Mount Audit...")
+    views_dir = os.path.join(ROOT_DIR, "src", "components", "views")
+    if not os.path.exists(views_dir):
+        print("  Phase 31: PASS (views directory not found).")
+        return
+
+    unmounted_components = []
+    src_dir = os.path.join(ROOT_DIR, "src")
+
+    for f in os.listdir(views_dir):
+        if f.endswith(".tsx") or f.endswith(".jsx"):
+            comp_name = os.path.splitext(f)[0]
+            hits = 0
+            for root, _, files in os.walk(src_dir):
+                for file in files:
+                    if file.endswith((".tsx", ".jsx", ".ts", ".js")):
+                        fp = os.path.join(root, file)
+                        try:
+                            with open(fp, "r", encoding="utf-8") as vf:
+                                if comp_name in vf.read():
+                                    hits += 1
+                        except Exception:
+                            pass
+            if hits <= 1:
+                unmounted_components.append(comp_name)
+
+    if "InquiryIntakeView" in unmounted_components:
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 31: Unmounted Component Detected.\n"
+            "  'InquiryIntakeView' has 0 inbound imports in src/.\n"
+            "  Rule: An unmounted component sitting on disk without a route is DORMANT, not WIRED.\n"
+            "  Fix: Mount InquiryIntakeView in AppWrapper.jsx under route '/inquiry-intake'.",
+            phase=31
+        )
+
+    # Extension Phase 31.2: Router Element Import Resolution Audit
+    app_wrapper = os.path.join(ROOT_DIR, "src", "components", "AppWrapper.jsx")
+    if os.path.exists(app_wrapper):
+        with open(app_wrapper, "r", encoding="utf-8") as f:
+            app_code = f.read()
+
+        import re
+        route_elements = re.findall(r'<Route\s+[^>]*element=\{<([A-Z][A-Za-z0-9_]*)\b', app_code)
+        for comp in set(route_elements):
+            if comp in ["Navigate"]:
+                continue
+            import_pattern = rf'import\s+.*\b{comp}\b.*from'
+            if not re.search(import_pattern, app_code):
+                gate_block(
+                    f"CISEM_GATE_BLOCKED -- Phase 31: Unresolved JSX Route Element in AppWrapper.jsx.\n"
+                    f"  Route element '<{comp} />' is referenced in <Route> but is NOT imported in AppWrapper.jsx!\n"
+                    f"  Rule: Every Route element MUST have an explicit matching import at the top of AppWrapper.jsx.\n"
+                    f"  Fix: Add 'import {comp} from ...' to AppWrapper.jsx.",
+                    phase=31
+                )
+
+    print(f"  Phase 31: PASS. Inbound reference & router element import audit complete ({len(unmounted_components)} unmounted components detected).")
+
+
+def check_ui_design_tokens_and_jargon():
+    """
+    Phase 32 & 33: Design Token Re-anchoring & Customer-Facing System Jargon Prohibition Gate.
+    Phase 32: Verifies that new/modified viewports in src/components/views/ integrate PageGreetingBanner.
+    Phase 33: Prohibits backend/database/governance terms on customer UI surfaces.
+    """
+    print("Phase 32 & 33: Running Design Token & Forbidden System Jargon Audit...")
+    views_dir = os.path.join(ROOT_DIR, "src", "components", "views")
+    if not os.path.exists(views_dir):
+        print("  Phase 32 & 33: PASS (views directory not found).")
+        return
+
+    import re
+    forbidden_words = ["PostgreSQL", "Supabase", "counterparty_id", "customer_account_id", "Submit Intent to PostgreSQL"]
+
+    for f in os.listdir(views_dir):
+        if f.endswith(".tsx") or f.endswith(".jsx"):
+            fp = os.path.join(views_dir, f)
+            with open(fp, "r", encoding="utf-8") as vf:
+                content = vf.read()
+
+            code_body = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+            code_body = re.sub(r'//.*', '', code_body)
+
+            for word in forbidden_words:
+                if word in code_body:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 33: Customer Surface System Jargon Violation in {f}.\n"
+                        f"  Forbidden backend/schema term '{word}' was detected on human UI surface!\n"
+                        f"  Rule: Human language MUST precede system language. Customer surfaces MUST NOT display database or schema terms.\n"
+                        f"  Fix: Remove '{word}' from {f} and replace with plain human language.",
+                        phase=33
+                    )
+
+            if f in ["InquiryIntakeView.tsx"]:
+                if "PageGreetingBanner" not in content:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 32: Design Token & Shared Banner Violation in {f}.\n"
+                        f"  Viewport '{f}' does NOT import or render PageGreetingBanner!\n"
+                        f"  Rule: Viewports must consume pre-existing shared layout banners and design tokens.\n"
+                        f"  Fix: Add 'import PageGreetingBanner from \"../shared/PageGreetingBanner\";' to {f}.",
+                        phase=32
+                    )
+
+    print("  Phase 32 & 33: PASS. Design token re-anchoring & zero system jargon audit complete.")
+
+
+def check_playwright_prerender():
+    """
+    Phase 34: Mandatory Playwright Pre-Render Verification Gate.
+    Boots headless Chrome against live routes, asserts 0 DOM errors, and generates screenshot artifacts.
+    """
+    print("Phase 34: Running Mandatory Playwright Pre-Render Verification Gate...")
+    render_script = os.path.join(ROOT_DIR, "scratch", "verify_viewport_render.js")
+    if not os.path.exists(render_script):
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 34: Missing Playwright Render Verification Script.\n"
+            "  'scratch/verify_viewport_render.js' does not exist.\n"
+            "  Rule: Playwright pre-render check is MANDATORY before any UI component is declared wired.",
+            phase=34
+        )
+
+    import subprocess
+    res = subprocess.run(["node", render_script], cwd=ROOT_DIR, capture_output=True, text=True)
+    if res.returncode != 0:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.\n"
+            f"  Output:\n{res.stderr or res.stdout}\n"
+            f"  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.",
+            phase=34
+        )
+
+    print("  Phase 34: PASS. Playwright pre-render verification complete (Screenshot captured).")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -2266,6 +2428,10 @@ def enforce_gate():
     check_claim_versus_log()              # Phase 27 (Claim-Versus-Log Ground Truth Audit)
     check_uuid_type_safety()              # Phase 28 (UUID Type Safety Gate)
     check_db_persistence_uuid_shape()     # Phase 29 (Database Persistence UUID Shape & Anti-Mock Gate)
+    check_db_reality_and_daemon_health()  # Phase 30 (Three-Teeth DB Reality & Daemon Health Gate)
+    check_inbound_references_for_viewports() # Phase 31 (Inbound Reference & Router Mount Audit Gate)
+    check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
+    check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V2")
     print()

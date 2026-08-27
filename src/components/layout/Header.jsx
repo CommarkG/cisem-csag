@@ -394,6 +394,15 @@ export default function Header() {
             <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', padding: '2px 4px', borderBottom: '1px solid var(--border)', display: 'block', width: '100%' }}>
               1. Commercial & Sales
             </span>
+            <div className="admin-dropdown-item" onClick={() => navigate('/inquiry-intake')}>
+              Inquiry Intake View
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/quote-builder')}>
+              Quote Builder View
+            </div>
+            <div className="admin-dropdown-item" onClick={() => navigate('/work-order-acceptance')}>
+              Work Order Acceptance
+            </div>
             <div className="admin-dropdown-item" onClick={() => navigate('/old-b2b?menu=purchasing_quotes_hub')}>
               Pricing & Purchasing
             </div>
