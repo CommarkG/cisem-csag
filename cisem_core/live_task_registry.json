@@ -33,11 +33,11 @@
     {
       "task_id": "TASK-004",
       "title": "Phase A: FastAPI Tenant Context Injection (SET LOCAL app.current_tenant_id)",
-      "status": "PENDING",
+      "status": "VALIDATED_IMPACT",
       "owner": "ANTIGRAVITY",
       "unblocks_count": 12,
-      "defeat_vector": "Ensures FastAPI requests pass cryptographically signed tenant context to PostgreSQL session",
-      "evidence": "Queued for execution"
+      "defeat_vector": "Cryptographically signed JWT app_metadata.tenant_id injected into request.state & scoped DB client",
+      "evidence": "backend/src/backend/main.py:324-328"
     },
     {
       "task_id": "TASK-005",

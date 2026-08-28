@@ -321,8 +321,9 @@ async def auth_middleware(request: Request, call_next):
                 instance=path
             )
 
-        # Server-side role resolution from verified JWT app_metadata claims.
-        # Default is None if role claim is absent or empty — never a default, never elevated.
+        # Cryptographically verified tenant & user context injection
+        request.state.tenant_id = tenant_id
+        request.state.user_id = user_id
         role_claim = app_metadata.get("role")
         request.state.role = str(role_claim) if role_claim else None
 

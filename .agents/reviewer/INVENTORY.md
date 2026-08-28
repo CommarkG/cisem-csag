@@ -194,6 +194,8 @@
 | `cisem_core/downloads/2026-08-26__AntigravityLocal__ReviewerClaude__CISEM_IP_20260826_DETERMINISTIC_FIRST__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-26__AntigravityLocal__WitnessLog__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-27__AntigravityLocal__YarivGovernor__Corporate_Awards_Materials_and_Branding_Taxonomy__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-08-28__AntigravityLocal__YarivGovernor__CoreSpiral_Master_CoreCycles_Architecture_Blueprint__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-08-28__AntigravityLocal__YarivGovernor__Core_Methodologies_Roles_and_Enforcement_Specification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/AGENTS.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/CisemATV.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/downloads/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
