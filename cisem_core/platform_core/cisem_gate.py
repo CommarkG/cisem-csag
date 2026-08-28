@@ -646,11 +646,43 @@ def check_staged_additions():
         allow_paths.append(local_allow)
     for a_path in allow_paths:
         if os.path.exists(a_path):
+            total_lines = 0
+            file_pats = 0
             with open(a_path, "r", encoding="utf-8-sig") as f:
-                for raw in f:
+                for idx, raw in enumerate(f, start=1):
+                    total_lines = idx
                     t = raw.strip()
-                    if t and not t.startswith("#"):
-                        pats.append(t.replace("\\", "/"))
+                    if not t or t.startswith("#"):
+                        continue
+                    
+                    # Fused Line Detection: Multiple file extensions on a single line (e.g. supabaseClient.tscisem_core/...)
+                    exts = re.findall(r'\.(py|js|ts|jsx|tsx|json|yaml|yml|md|sql|txt|log|mjs|cjs)\b', t, re.IGNORECASE)
+                    if len(exts) > 1 or re.search(r'\s+.*[/\\]', t):
+                        gate_block(
+                            f"CISEM_GATE_BLOCKED -- Phase 26: Corrupted / Fused Line Detected in Allowlist File!\n"
+                            f"  File      : {a_path}\n"
+                            f"  Line :{idx}  : '{t}'\n"
+                            f"  Error     : Fused file path detected! Multiple extensions ({exts}) on a single line.\n"
+                            f"  Rule      : Every path must be on its own standalone line. Fused lines destroy authorizations silently.",
+                            phase=26
+                        )
+
+                    # Shape Validation: Plausible relative path format
+                    clean_path = t.replace("\\", "/")
+                    if " " in clean_path or clean_path.startswith("/"):
+                        gate_block(
+                            f"CISEM_GATE_BLOCKED -- Phase 26: Malformed Path Entry in Allowlist File!\n"
+                            f"  File      : {a_path}\n"
+                            f"  Line :{idx}  : '{t}'\n"
+                            f"  Error     : Invalid path format. Paths must be relative with zero whitespace.",
+                            phase=26
+                        )
+
+                    pats.append(clean_path)
+                    file_pats += 1
+
+            print(f"  Phase 26: Read {file_pats} authorised path entries from {total_lines} lines in {os.path.basename(a_path)}.")
+
     bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
     if bad:
         print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")

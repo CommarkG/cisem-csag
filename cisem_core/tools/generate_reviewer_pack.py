@@ -374,6 +374,36 @@ def generate_metadata():
         json.dump(data, f, indent=2)
     print(f"[*] Wrote: {metadata_path} (read_token: {read_token})")
 
+def generate_task_surface():
+    task_surface_path = os.path.join(REVIEWER_DIR, "TASK_SURFACE.md")
+    live_task_path = os.path.join(CORE_DIR, "live_task_registry.json")
+    content = [
+        "# CISEM SHARED ACTIVE TASK SURFACE",
+        "> Auto-generated from cisem_core/live_task_registry.json. Sourced 100% dynamically.\n",
+        "| Task ID | Title | Status | Owner | Unblocks | Defeat Vector / Evidence |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- |"
+    ]
+    if os.path.exists(live_task_path):
+        try:
+            with open(live_task_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                for t in data.get("tasks", []):
+                    tid = t.get("task_id", "")
+                    title = t.get("title", "")
+                    status = t.get("status", "")
+                    owner = t.get("owner", "")
+                    unblocks = t.get("unblocks_count", 0)
+                    evidence = t.get("evidence") or t.get("defeat_vector") or ""
+                    content.append(f"| `{tid}` | {title} | **{status}** | `{owner}` | {unblocks} | {evidence} |")
+        except Exception as e:
+            content.append(f"\n*Error loading live_task_registry.json: {e}*")
+    else:
+        content.append("\n*NO LIVE TASK REGISTRY FOUND*")
+
+    with open(task_surface_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(content))
+    print(f"[*] Wrote: {task_surface_path}")
+
 def main():
     print("=== Generating Reviewer Context Pack in .agents/reviewer/ ===")
     generate_rules()
@@ -381,6 +411,7 @@ def main():
     generate_inventory()
     generate_governance_state()
     generate_database_intent()
+    generate_task_surface()
     generate_metadata()
     print("=== Context Pack Generation Complete ===")
 

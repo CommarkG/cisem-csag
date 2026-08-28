@@ -172,22 +172,32 @@ SECURE_PUBLIC_ROUTES_PATH = r"C:\Users\finky\secure\cisem_public_routes.txt"
 def load_external_public_allowlist() -> set:
     """
     STRICT SECURITY HARDENING: Reads public route allowlist from external Governor file outside repository.
-    FAIL CLOSED MANDATE: If file is missing or unreadable, returns empty set(). Every route is 100% authenticated.
+    FAIL CLOSED MANDATE: If file is missing, unreadable, or contains corrupt/fused lines, fails closed.
     """
     if not os.path.exists(SECURE_PUBLIC_ROUTES_PATH):
         print(f"[SECURITY WARNING]: External public routes file '{SECURE_PUBLIC_ROUTES_PATH}' missing. FAILING CLOSED: All routes authenticated.")
         return set()
     try:
         allowlist = set()
+        total_lines = 0
         with open(SECURE_PUBLIC_ROUTES_PATH, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
+            for idx, raw in enumerate(f, start=1):
+                total_lines = idx
+                line = raw.strip()
                 if not line or line.startswith("#"):
                     continue
+                # Fused Line Detection: Multiple methods on one line or missing space
+                methods_count = len(re.findall(r'\b(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD)\b', line, re.IGNORECASE))
+                if methods_count > 1:
+                    print(f"[SECURITY HARDENING ERROR]: Fused public route line detected in '{SECURE_PUBLIC_ROUTES_PATH}:{idx}': '{line}'. FAILING CLOSED.")
+                    return set()
                 parts = line.split(maxsplit=1)
-                if len(parts) == 2:
-                    method, route_path = parts[0].upper(), parts[1]
-                    allowlist.add((method, route_path))
+                if len(parts) == 2 and parts[0].upper() in {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"}:
+                    allowlist.add((parts[0].upper(), parts[1]))
+                else:
+                    print(f"[SECURITY HARDENING ERROR]: Malformed route entry in '{SECURE_PUBLIC_ROUTES_PATH}:{idx}': '{line}'. FAILING CLOSED.")
+                    return set()
+        print(f"[SECURITY INFO]: Read {len(allowlist)} valid public route entries from {total_lines} lines in '{SECURE_PUBLIC_ROUTES_PATH}'.")
         return allowlist
     except Exception as e:
         print(f"[SECURITY WARNING]: Failed to read '{SECURE_PUBLIC_ROUTES_PATH}': {e}. FAILING CLOSED: All routes authenticated.")

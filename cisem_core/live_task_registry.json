@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-08-27T16:15:00Z",
+  "active_governor_plan": "CISEM-IP-20260826-SECURITY-ISOLATION-V1.0",
+  "tasks": [
+    {
+      "task_id": "TASK-001",
+      "title": "Default-Deny FastAPI Auth Middleware & External Public Allowlist",
+      "status": "VALIDATED_IMPACT",
+      "owner": "ANTIGRAVITY",
+      "unblocks_count": 10,
+      "defeat_vector": "Defused via external Governor file C:\\Users\\finky\\secure\\cisem_public_routes.txt",
+      "evidence": "Git commit 018dd04, main.py:187-209"
+    },
+    {
+      "task_id": "TASK-002",
+      "title": "Phase 38 Cumulative Route Surface & Door-Knocking Gate",
+      "status": "VALIDATED_IMPACT",
+      "owner": "ANTIGRAVITY",
+      "unblocks_count": 8,
+      "defeat_vector": "Defused via live HTTP 401 door-knocking assertions in cisem_gate.py",
+      "evidence": "cisem_gate.py:2500-2560, all 38 phases green"
+    },
+    {
+      "task_id": "TASK-003",
+      "title": "Consolidated Turn Template V8 Ritual Purge",
+      "status": "VALIDATED_IMPACT",
+      "owner": "ANTIGRAVITY",
+      "unblocks_count": 6,
+      "defeat_vector": "Consolidated 30+ redundant fields into 7 high-signal fields",
+      "evidence": "Turn Template V8 ratified"
+    },
+    {
+      "task_id": "TASK-004",
+      "title": "Phase A: FastAPI Tenant Context Injection (SET LOCAL app.current_tenant_id)",
+      "status": "PENDING",
+      "owner": "ANTIGRAVITY",
+      "unblocks_count": 12,
+      "defeat_vector": "Ensures FastAPI requests pass cryptographically signed tenant context to PostgreSQL session",
+      "evidence": "Queued for execution"
+    },
+    {
+      "task_id": "TASK-005",
+      "title": "Phase B: RLS Policy Service-Role Overrides",
+      "status": "PENDING",
+      "owner": "ANTIGRAVITY",
+      "unblocks_count": 15,
+      "defeat_vector": "Ensures service-role queries observe current_tenant_id() unless explicit service_role override is active",
+      "evidence": "Queued after Phase A"
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "Phase C: Batch ALTER TABLE FORCE ROW LEVEL SECURITY Across All 65 Tables",
+      "status": "PENDING",
+      "owner": "GOVERNOR",
+      "unblocks_count": 65,
+      "defeat_vector": "Forces RLS policy evaluation even for table owners and service-role connections",
+      "evidence": "Awaiting Governor DDL authorization"
+    },
+    {
+      "task_id": "TASK-007",
+      "title": "Phase 39: Secondary Framework AST Scanner (Defeat Vector 2 Protection)",
+      "status": "PENDING",
+      "owner": "ANTIGRAVITY",
+      "unblocks_count": 5,
+      "defeat_vector": "Scans workspace for raw http.server, Flask, or sidecar instantiations that bypass FastAPI app.routes",
+      "evidence": "Queued in backlog"
+    }
+  ]
+}
