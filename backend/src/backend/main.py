@@ -134,33 +134,24 @@ def rfc_7807_error(type_url: str, title: str, status: int, detail: str, instance
         }
     )
 
-def extract_tenant_from_request(request: Request) -> str:
+def extract_tenant_from_request(request: Request) -> Optional[str]:
     """
-    Extracts tenant_id strictly from request.state (set by authenticated JWT middleware)
-    or decodes JWT token claims directly. Never reads unverified raw client headers.
+    STRICT SECURITY HARDENING (RATIFIED STEP 3 PASS-THROUGH ISOLATION):
+    Extracts active_tenant_id strictly from request.state (set by authenticated JWT middleware).
+    Returns None if unauthenticated or missing verified tenant context (FAIL CLOSED).
+    Never decodes unverified raw tokens from headers.
     """
     tenant_id = getattr(request.state, "tenant_id", None)
     if tenant_id and tenant_id != "default-tenant":
         return tenant_id
-    auth_hdr = request.headers.get("Authorization")
-    if auth_hdr and "Bearer " in auth_hdr:
-        try:
-            token = auth_hdr.split("Bearer ", 1)[1]
-            unverified = jwt.decode(token, options={"verify_signature": False})
-            app_meta = unverified.get("app_metadata") or {}
-            res_id = app_meta.get("active_tenant_id") or app_meta.get("tenant_id")
-            if res_id:
-                return res_id
-        except Exception:
-            pass
-    return "5f2bfda8-6ff1-483d-870e-14335a59915c"
+    return None
 
 # ---------------------------------------------------------------------------
 # Tenant Context Middleware — local ES256 JWT verification
 #
 # Ratified plan : CISEM-IP-20260814-SECURITY-HARDENING v1.0 (Task 4)
 # Replaces      : Remote GoTrue round-trip (supabase.auth.get_user)
-# Claim source  : app_metadata.tenant_id ONLY. user_metadata is NEVER read.
+# Claim source  : app_metadata.active_tenant_id ONLY. user_metadata is NEVER read.
 #                 Three prior regressions on this field are on record.
 # Exception order: PyJWKClientError FIRST — it is not a subclass of
 #                  jwt.InvalidTokenError. Unknown kid / JWKS fetch failure
@@ -259,28 +250,50 @@ async def auth_middleware(request: Request, call_next):
                 algorithms=["ES256"],
                 options={"verify_aud": False},
             )
-        except PyJWKClientError:
-            return rfc_7807_error(
-                type_url="about:blank",
-                title="Unauthorized",
-                status=401,
-                detail="JWT signing key could not be resolved. Key may be rotating — retry shortly.",
-                instance=path
-            )
         except jwt.ExpiredSignatureError:
+            print(f"[AUTH VERIFICATION]: Expired token for path {path}")
             return rfc_7807_error(
                 type_url="about:blank",
                 title="Unauthorized",
                 status=401,
-                detail="Authentication token has expired.",
+                detail="Session expired. Please sign in again.",
                 instance=path
             )
-        except jwt.InvalidTokenError:
+        except (jwt.InvalidTokenError, jwt.DecodeError, jwt.InvalidSignatureError):
+            print(f"[AUTH VERIFICATION]: Malformed or invalid JWT signature for path {path}")
             return rfc_7807_error(
                 type_url="about:blank",
                 title="Unauthorized",
                 status=401,
-                detail="Invalid authentication token.",
+                detail="Authentication failed.",
+                instance=path
+            )
+        except PyJWKClientError as e:
+            err_str = str(e).lower()
+            if "unable to find a key" in err_str or "unresolvable" in err_str:
+                print(f"[AUTH VERIFICATION]: JWKS key resolution gap: {e}")
+                return rfc_7807_error(
+                    type_url="about:blank",
+                    title="Unauthorized",
+                    status=401,
+                    detail="Authentication service temporarily unavailable. Please retry shortly.",
+                    instance=path
+                )
+            print(f"[AUTH VERIFICATION]: Malformed token header: {e}")
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Unauthorized",
+                status=401,
+                detail="Authentication failed.",
+                instance=path
+            )
+        except Exception as e:
+            print(f"[AUTH VERIFICATION UNEXPECTED EXCEPTION]: {e}")
+            return rfc_7807_error(
+                type_url="about:blank",
+                title="Unauthorized",
+                status=401,
+                detail="Authentication failed.",
                 instance=path
             )
 
@@ -1343,7 +1356,6 @@ def get_system_health():
         "service": "CISEM Backend Platform",
         "version": "1.9",
         "database": db_status,
-        "rls_isolation": "ENFORCED",
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 

@@ -1,7 +1,7 @@
 # CISEM ACTIVE GOVERNANCE STATE
 
 ## Turn Counter State
-- **Current Turn**: 11
+- **Current Turn**: 12
 - **Turn Limit Ceiling**: 15
 - **Audit Due**: False
 - **Active Ratified Plan**: `CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0`
@@ -12,10 +12,10 @@
 - **Last Heartbeat**: `2026-08-08T04:52:29.359920Z`
 
 ### Activated Mechanisms
-- `CISEM-GATE-V2`: status=VALIDATED, triggers=464/20
-- `CISEM-SYNC-V1.1`: status=VALIDATED, triggers=2359/16
+- `CISEM-GATE-V2`: status=VALIDATED, triggers=467/20
+- `CISEM-SYNC-V1.1`: status=VALIDATED, triggers=2374/16
 - `CISEM-WATCHER-LOCK`: status=VALIDATED, triggers=6788/8
-- `CISEM-ATV-V1`: status=VALIDATED, triggers=1637/4
-- `CISEM-TURN-COUNTER`: status=VALIDATED, triggers=835/4
-- `CISEM-PERSONA-AUDITOR`: status=VALIDATED, triggers=1615/4
+- `CISEM-ATV-V1`: status=VALIDATED, triggers=1638/4
+- `CISEM-TURN-COUNTER`: status=VALIDATED, triggers=851/4
+- `CISEM-PERSONA-AUDITOR`: status=VALIDATED, triggers=1616/4
 - `CISEM-GRAPHIFY`: status=VALIDATED, triggers=8/4

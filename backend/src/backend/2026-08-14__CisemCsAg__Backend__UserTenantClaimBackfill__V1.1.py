@@ -27,16 +27,33 @@ import argparse
 import os
 import sys
 import httpx
+from dotenv import load_dotenv
 from supabase import create_client, Client
 from supabase.lib.client_options import SyncClientOptions
 
+# Load environment variables from .env.local, .env, and secure directory files
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(backend_dir))
+load_dotenv(os.path.join(root_dir, ".env.local"))
+load_dotenv(os.path.join(root_dir, ".env"))
+load_dotenv(os.path.join(backend_dir, ".env"))
+load_dotenv(r"C:\Users\finky\secure\.env")
+load_dotenv(os.path.expanduser("~\\.env"))
+load_dotenv()
+
 
 def build_admin_client() -> Client:
-    url = os.environ.get("SUPABASE_URL")
-    service_key = os.environ.get("SUPABASE_KEY")
-    if not url or not service_key:
-        print("ERROR: SUPABASE_URL and SUPABASE_KEY must be set as environment variables.")
+    url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
+    service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+
+    if not url or "your-project" in url or "your-actual" in url:
+        print("[FAIL CLOSED]: SUPABASE_URL environment variable is missing or placeholder. Provide valid URL via shell or .env file.")
         sys.exit(1)
+
+    if not service_key or "your-service" in service_key:
+        print("[FAIL CLOSED]: SUPABASE_SERVICE_ROLE_KEY environment variable is missing or placeholder. Provide valid Key via shell or .env file.")
+        sys.exit(1)
+
     http_client = httpx.Client(verify=False)
     opts = SyncClientOptions(httpx_client=http_client)
     return create_client(url, service_key, options=opts)
@@ -47,12 +64,13 @@ def run_backfill(dry_run: bool) -> None:
     prefix = "[DRY RUN] " if dry_run else ""
     print(f"{prefix}Starting tenant claim backfill...")
 
-    page_size    = 1000
-    offset       = 0
-    total_written     = 0
-    total_already_set = 0
-    total_data_errors = 0
-    total_errors      = 0
+    page_size                   = 1000
+    offset                      = 0
+    total_written               = 0
+    total_already_set           = 0
+    total_skipped_no_auth       = 0
+    total_data_errors           = 0
+    total_errors                = 0
 
     # All user_ids that appear in user_account_roles — used for orphan detection.
     membership_user_ids: set = set()
@@ -61,6 +79,8 @@ def run_backfill(dry_run: bool) -> None:
     # PHASE 1 — Main backfill loop across user_account_roles
     # -----------------------------------------------------------------------
     print(f"\n{prefix}[PHASE 1] Reading user_account_roles and writing claims...")
+    # Fetch all user_account_roles rows and group by user_id
+    user_memberships: dict = {} # user_id -> list of customer_account_id
     while True:
         res = admin.table("user_account_roles") \
             .select("user_id, customer_account_id") \
@@ -70,91 +90,149 @@ def run_backfill(dry_run: bool) -> None:
         if not rows:
             break
         for row in rows:
-            user_id   = row.get("user_id")
-            tenant_id = row.get("customer_account_id")
-            if not user_id or not tenant_id:
+            uid = row.get("user_id")
+            cid = row.get("customer_account_id")
+            if not uid or not cid:
                 print(f"  DATA_ERROR (missing fields): row={row}")
                 total_data_errors += 1
                 continue
-
-            membership_user_ids.add(user_id)
-
-            try:
-                user_res = admin.auth.admin.get_user_by_id(user_id)
-                current_app_metadata = (
-                    user_res.user.app_metadata or {}
-                ) if user_res.user else {}
-            except Exception as e:
-                print(f"  ERROR fetching user {user_id}: {e}")
-                total_errors += 1
-                continue
-
-            existing = current_app_metadata.get("tenant_id")
-            if existing == tenant_id:
-                print(f"  ALREADY_SET: user_id={user_id} tenant_id={tenant_id}")
-                total_already_set += 1
-                continue
-            if existing and existing != tenant_id:
-                print(
-                    f"  WARNING (mismatch): user_id={user_id} "
-                    f"existing={existing} new={tenant_id} -- will overwrite"
-                )
-            if dry_run:
-                print(f"  [DRY RUN] WOULD WRITE: user_id={user_id} tenant_id={tenant_id}")
-                total_written += 1
-                continue
-            try:
-                admin.auth.admin.update_user_by_id(
-                    user_id,
-                    {"app_metadata": {**current_app_metadata, "active_tenant_id": tenant_id, "tenant_id": tenant_id}},
-                )
-                print(f"  WRITTEN: user_id={user_id} tenant_id={tenant_id}")
-                total_written += 1
-            except Exception as e:
-                print(f"  ERROR writing user {user_id}: {e}")
-                total_errors += 1
+            membership_user_ids.add(uid)
+            if uid not in user_memberships:
+                user_memberships[uid] = []
+            if cid not in user_memberships[uid]:
+                user_memberships[uid].append(cid)
 
         offset += page_size
         if len(rows) < page_size:
             break
 
+    # Process each user derived directly from user_account_roles
+    for user_id, roles in user_memberships.items():
+        if not roles:
+            print(f"  SKIPPED (no role row): user_id={user_id}")
+            continue
+
+        primary_tenant_id = roles[0] # Deterministic selection: first role row in user_account_roles
+        if len(roles) > 1:
+            print(f"  MULTI_MEMBERSHIP NOTICE: user_id={user_id} has {len(roles)} roles {roles} -> selecting primary_tenant_id={primary_tenant_id}")
+
+        try:
+            user_res = admin.auth.admin.get_user_by_id(user_id)
+            if not user_res or not user_res.user:
+                print(f"  SKIPPED_NO_AUTH_ACCOUNT: user_id={user_id} (seeded in user_account_roles, no auth account created yet)")
+                total_skipped_no_auth += 1
+                continue
+            current_app_metadata = user_res.user.app_metadata or {}
+        except Exception as e:
+            err_msg = str(e).lower()
+            if "not found" in err_msg or "404" in err_msg or "user_not_found" in err_msg:
+                print(f"  SKIPPED_NO_AUTH_ACCOUNT: user_id={user_id} (seeded in user_account_roles, no auth account created yet)")
+                total_skipped_no_auth += 1
+            else:
+                print(f"  ERROR fetching user {user_id}: {e}")
+                total_errors += 1
+            continue
+
+        existing_active = current_app_metadata.get("active_tenant_id")
+        existing_legacy = current_app_metadata.get("tenant_id")
+
+        # Strict Role Check: Ensure existing_active is in valid memberships for this user
+        if existing_active in roles and existing_legacy is None:
+            print(f"  ALREADY_SET: user_id={user_id} active_tenant_id={existing_active} (verified in user_account_roles, legacy tenant_id absent)")
+            total_already_set += 1
+            continue
+
+        if existing_legacy is not None:
+            print(
+                f"  MIGRATING LEGACY CLAIM: user_id={user_id} "
+                f"removing legacy tenant_id={existing_legacy} -> setting active_tenant_id={primary_tenant_id}"
+            )
+        elif existing_active and existing_active not in roles:
+            print(
+                f"  WARNING (INVALID ROLE CLAIM OVERWRITE): user_id={user_id} "
+                f"existing_active={existing_active} NOT IN ROLES {roles} -> resetting to primary_tenant_id={primary_tenant_id}"
+            )
+
+        target_active = primary_tenant_id if (existing_active not in roles) else existing_active
+        new_app_metadata = {**current_app_metadata, "active_tenant_id": target_active, "tenant_id": None}
+
+        if dry_run:
+            print(f"  [DRY RUN] WOULD WRITE: user_id={user_id} active_tenant_id={target_active} tenant_id=None (explicit deletion)")
+            total_written += 1
+            continue
+        try:
+            admin.auth.admin.update_user_by_id(
+                user_id,
+                {"app_metadata": new_app_metadata},
+            )
+            # Post-Write Read-Back Verification (Verify Reality Before Claiming)
+            verify_res = admin.auth.admin.get_user_by_id(user_id)
+            verified_meta = (verify_res.user.app_metadata or {}) if (verify_res and verify_res.user) else {}
+            v_active = verified_meta.get("active_tenant_id")
+            v_legacy = verified_meta.get("tenant_id")
+
+            if v_active == target_active and (v_legacy is None or v_legacy == ""):
+                print(f"  WRITTEN & VERIFIED: user_id={user_id} active_tenant_id={v_active} (legacy tenant_id successfully deleted)")
+                total_written += 1
+            else:
+                print(f"  [VERIFICATION FAILED]: user_id={user_id} expected active={target_active} (got {v_active}), legacy tenant_id remains {v_legacy}")
+                total_errors += 1
+        except Exception as e:
+            print(f"  ERROR writing user {user_id}: {e}")
+            total_errors += 1
+
     # -----------------------------------------------------------------------
     # PHASE 2 — Orphan detection: auth.users minus user_account_roles
     # Users with no membership row cannot receive a claim. They will 401
-    # permanently on any request that requires tenant context. This is
-    # indistinguishable from an expired or invalid token at the client.
+    # permanently on any request that requires tenant context.
     # -----------------------------------------------------------------------
     print(f"\n{prefix}[PHASE 2] Orphan detection — auth users with no membership row...")
-    auth_page    = 1
-    per_page     = 1000
-    all_auth_ids: set = set()
+    auth_page           = 1
+    per_page            = 1000
+    all_auth_ids: set   = set()
+    orphan_check_failed = False
 
     while True:
         try:
-            list_res = admin.auth.admin.list_users(page=auth_page, per_page=per_page)
-            if not list_res or not list_res.users:
+            raw_users = admin.auth.admin.list_users(page=auth_page, per_page=per_page)
+            if isinstance(raw_users, list):
+                users_list = raw_users
+            elif hasattr(raw_users, "users"):
+                users_list = raw_users.users or []
+            else:
+                users_list = []
+
+            if not users_list:
                 break
-            for u in list_res.users:
-                all_auth_ids.add(u.id)
-            if len(list_res.users) < per_page:
+            for u in users_list:
+                uid = getattr(u, "id", None) or (u.get("id") if isinstance(u, dict) else None)
+                if uid:
+                    all_auth_ids.add(uid)
+            if len(users_list) < per_page:
                 break
             auth_page += 1
         except Exception as e:
-            print(f"  ERROR listing auth users (page {auth_page}): {e}")
+            print(f"  [GATE FAILED] ERROR listing auth users (page {auth_page}): {e}")
+            orphan_check_failed = True
+            total_errors += 1
             break
 
-    orphans = all_auth_ids - membership_user_ids
-    total_no_membership = len(orphans)
-
-    if orphans:
-        print(
-            f"  WARNING: {total_no_membership} auth user(s) have no row in "
-            f"user_account_roles. They will 401 permanently on any tenant-scoped request."
-        )
-        for uid in sorted(orphans):
-            print(f"  NO_MEMBERSHIP: user_id={uid}")
+    if orphan_check_failed:
+        print("  [CANNOT VERIFY] Orphan detection failed due to API exception. DO NOT PROCEED.")
+        total_no_membership = -1
     else:
-        print("  OK: all auth users have at least one membership row.")
+        orphans = all_auth_ids - membership_user_ids
+        total_no_membership = len(orphans)
+
+        if orphans:
+            print(
+                f"  WARNING: {total_no_membership} auth user(s) have no row in "
+                f"user_account_roles. They will 401 permanently on any tenant-scoped request."
+            )
+            for uid in sorted(orphans):
+                print(f"  NO_MEMBERSHIP: user_id={uid}")
+        else:
+            print("  OK: all active auth users have at least one membership row.")
 
     # -----------------------------------------------------------------------
     # Summary
@@ -162,18 +240,15 @@ def run_backfill(dry_run: bool) -> None:
     print(
         f"\n{prefix}Backfill complete.\n"
         f"  Written={total_written}  AlreadySet={total_already_set}  "
-        f"DataErrors={total_data_errors}  NoMembership={total_no_membership}  "
-        f"Errors={total_errors}"
+        f"SkippedNoAuthAccount={total_skipped_no_auth}  DataErrors={total_data_errors}  "
+        f"NoMembership={total_no_membership}  Errors={total_errors}"
     )
 
-    if total_errors > 0:
-        print("WARNING: Some users failed. Check output above and re-run after fixing.")
+    if total_errors > 0 or orphan_check_failed:
+        print("FAIL: Verification or write errors occurred. Check output above and resolve before proceeding.")
         sys.exit(1)
-    if total_no_membership > 0:
-        print(
-            "NOTICE: NO_MEMBERSHIP users listed above will 401 permanently. "
-            "Investigate and provision membership rows before they log in."
-        )
+    if total_skipped_no_auth > 0:
+        print(f"NOTICE: {total_skipped_no_auth} seeded membership rows have no auth account. Normal state until users sign up.")
 
 
 if __name__ == "__main__":

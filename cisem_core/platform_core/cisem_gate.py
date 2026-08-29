@@ -2610,6 +2610,40 @@ def check_cumulative_route_surface_gate():
     print(f"  Phase 38: PASS. Knocked on {tested_count} live backend doors without token. Verified 100% returned HTTP 401 Unauthorized. Zero stale allowlist entries.")
 
 
+def check_second_framework_gate():
+    """
+    PHASE 39 — Second-Framework Prevention & Anti-Bloat Audit Gate
+    Ensures zero unauthorized second-framework configuration files (Express, Django, Flask, Vue, Angular)
+    exist in the workspace to prevent multi-framework architectural drift.
+    """
+    print("\nPhase 39: Running Second-Framework Anti-Bloat Audit...")
+    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    forbidden_patterns = [
+        ("express", os.path.join(root_dir, "server.js")),
+        ("django", os.path.join(root_dir, "manage.py")),
+        ("flask", os.path.join(root_dir, "app.py")),
+        ("vue", os.path.join(root_dir, "vue.config.js")),
+        ("angular", os.path.join(root_dir, "angular.json")),
+    ]
+
+    detected = []
+    for fw_name, path in forbidden_patterns:
+        if os.path.exists(path):
+            detected.append(f"{fw_name} -> {path}")
+
+    if detected:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 39: Second-Framework Artifact Detected!\n"
+            f"  The following unauthorized second-framework config files were found:\n"
+            f"  " + "\n  ".join(detected) + "\n"
+            f"  Rule: Platform architecture uses Next.js (Frontend) + FastAPI (Backend) ONLY.",
+            phase=39
+        )
+
+    print("  Phase 39: PASS. Zero unauthorized second-framework artifacts detected (Next.js + FastAPI single-stack verified).")
+
+
 def enforce_gate():
     # Detect Vercel build environment
     if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
@@ -2617,17 +2651,13 @@ def enforce_gate():
         sys.exit(0)
 
     print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-38")
-    print("Ratified: GOV-2026-08-15-CTXPACK-02")
+    print("CISEM Local Gateway Gate (LGG) v3.1 > HARDENED + PHASES 21-39")
+    print("Ratified: GOV-2026-08-29-PASS-THROUGH-V38")
     print("=" * 60)
 
     # Determine target file for header check
     target_file = sys.argv[1] if len(sys.argv) > 1 else __file__
 
-    # Ref: PARK-007
-    # Ref: PARK-010
-    # Ref: PARK-011
-    # Ref: PARK-012
     check_turn_counter()            # Phase 0
     increment_turn_counter(target_file)
     check_gate_lock()              # Phase 1
@@ -2670,8 +2700,9 @@ def enforce_gate():
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
     check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
     check_cumulative_route_surface_gate()  # Phase 38 (Cumulative Route Surface & Stale Allowlist Gate)
+    check_second_framework_gate()          # Phase 39 (Second-Framework Anti-Bloat Audit Gate)
 
-    increment_mechanism_trigger("CISEM-GATE-V2")
+    increment_mechanism_trigger("CISEM-GATE-V3.1")
     print()
     print("OK CISEM_GATE: All phases passed. Proceeding to execution.")
     sys.exit(0)
