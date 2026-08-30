@@ -1046,3 +1046,132 @@ Caused by:
   src\utils\treeHelpers.js: Missing mandatory code header block.
   Rule: Cumulative header violations must not increase. The baseline count is 26.
   Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-08-30T14:13:52.245702Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 27!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\lib\tenant_context.ts: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-08-30T14:14:19.150854Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 27!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\lib\tenant_context.ts: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-08-30T14:16:11.078496Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 27!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\lib\tenant_context.ts: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-08-30T14:17:24.812144Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 27!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\lib\tenant_context.ts: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-08-30T14:18:03.611712Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

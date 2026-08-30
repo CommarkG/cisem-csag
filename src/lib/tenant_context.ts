@@ -1,6 +1,7 @@
 /**
  * # CISEM COMPILATION ADAPTER MODULE
- * # ratified_plan: CISEM-IP-20260809-TENANT-CONTEXT-VALIDATION
+ * # ratified_plan: CISEM-IP-20260822-PEOPLE-PLACES-FILES
+ * # governor_signature: GOV-YARIV-20260823-PEOPLE-PLACES-FILES-V19
  * # architectural_reasoning: |
  * #   Implements cryptographically verified multi-tenant context parsing at the API gateway boundary.
  * #   Uses symmetric HMAC-SHA256 signature checking to prevent raw parameter tampering.

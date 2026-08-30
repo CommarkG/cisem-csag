@@ -358,6 +358,7 @@
 | `cisem_core/downloads/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
 | `cisem_core/downloads/Header.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/P1__Pipeline__Intent_to_Sustained__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/QuoteBuilderView.tsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/SignInView.tsx` | `3.0` | `UNVERSIONED` | MISMATCH (3.0 vs UNVERSIONED) |
 | `cisem_core/downloads/TemplateHubView.tsx` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
 | `cisem_core/downloads/UniversalOnboardingViewport.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
@@ -367,7 +368,6 @@
 | `cisem_core/downloads/audit_missing_ratified_docs.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_ui_system.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/check_content.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/check_schema.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/check_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/cisem_gate.py` | `3.1` | `UNVERSIONED` | MISMATCH (3.1 vs UNVERSIONED) |
 | `cisem_core/downloads/debug_gate_phase8.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |

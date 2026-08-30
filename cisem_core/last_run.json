@@ -1,14 +1,6 @@
 [
   {
     "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T22:47:45.934882+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "85f1c9cae07997f0167a1dc6f32275fc42dbf960b862f8540fedd7eb0606d859"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
     "timestamp": "2026-08-29T22:52:39.614269+00:00",
     "exit_code": 0,
     "passed": 6,
@@ -158,5 +150,13 @@
     "passed": 6,
     "failed": 0,
     "output_sha256": "e064d49efcf35b0971a2db44a56a415eaec460216e07570bd765010ecc2c1486"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T14:13:42.025466+00:00",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 1,
+    "output_sha256": "e94fdd70e1810f4b6aea168d335271bf439d610841665c3d3747db9df5283275"
   }
 ]
