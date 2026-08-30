@@ -78,8 +78,7 @@ export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId: propI
         body: JSON.stringify({
           inquiry_id: selectedInquiryId,
           currency,
-          valid_until: validUntil || undefined,
-          notes: notes || undefined
+          valid_until: validUntil || undefined
         })
       });
 

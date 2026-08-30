@@ -61,7 +61,7 @@
 - `ProposalGenerateRequest`: `brief_id`, `catalog_item_skus`, `applied_margin_percent`, `selected_variations`
 - `WizardDuplicatePayload`: `title`, `layout_spec`, `description`
 - `InquiryCreatePayload`: `title`, `description`, `contact_name`, `contact_email`, `contact_phone`, `requirements_summary`, `estimated_budget`, `counterparty_id`
-- `QuoteCreatePayload`: `inquiry_id`, `currency`, `valid_until`, `notes`
+- `QuoteCreatePayload`: `inquiry_id`, `currency`, `valid_until`
 - `QuoteLineCreatePayload`: `description`, `quantity`, `unit_price`
 - `AcceptanceCreatePayload`: `evidence_kind`, `evidence_data`, `accepted_by`
 - `WorkOrderCreatePayload`: `acceptance_record_id`, `notes`

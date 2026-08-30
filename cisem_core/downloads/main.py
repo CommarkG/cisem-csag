@@ -2164,7 +2164,6 @@ class QuoteCreatePayload(BaseModel):
     inquiry_id: str
     currency: Optional[str] = "ILS"
     valid_until: Optional[str] = None
-    notes: Optional[str] = None
 
 class QuoteLineCreatePayload(BaseModel):
     description: str
@@ -2226,7 +2225,6 @@ async def create_quote(payload: QuoteCreatePayload, request: Request):
             "inquiry_id": payload.inquiry_id,
             "currency": payload.currency,
             "valid_until": payload.valid_until,
-            "notes": payload.notes,
             "status_code": "proposal_draft",
             "customer_account_id": tenant_id
         }
@@ -2243,8 +2241,7 @@ async def create_quote(payload: QuoteCreatePayload, request: Request):
             changes_delta={
                 "inquiry_id": {"old": None, "new": payload.inquiry_id},
                 "currency": {"old": None, "new": payload.currency},
-                "valid_until": {"old": None, "new": payload.valid_until},
-                "notes": {"old": None, "new": payload.notes}
+                "valid_until": {"old": None, "new": payload.valid_until}
             }
         )
 
