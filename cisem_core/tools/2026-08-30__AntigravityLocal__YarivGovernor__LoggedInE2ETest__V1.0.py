@@ -254,34 +254,23 @@ def run_e2e_test():
                 passed_assertions.append("Zero forbidden strings in DOM")
 
             # -------------------------------------------------------------------
-            # ASSERTION 6: Anti-Fabrication / Backend Offline Error State
+            # ASSERTION 6: Anti-Fabrication & Unauthenticated Refusal Verification
             # -------------------------------------------------------------------
-            log("\n[TEST 6/6] Checking Anti-Fabrication Backend Offline Error State...")
+            log("\n[TEST 6/6] Checking Anti-Fabrication & Unauthenticated 401 Refusal Assertion...")
             try:
-                api_res = page.request.get(f"{target_base}/api/v1/templates")
-                status = api_res.status
-                body_json = {}
-                try:
-                    body_json = api_res.json()
-                except Exception:
-                    pass
-
-                if status == 200 and body_json.get("mock") is True:
-                    msg = "FAIL: API route /api/v1/templates returned 200 OK with mock fabrication!"
+                # Unauthenticated request to protected route MUST return HTTP 401
+                unauth_res = page.request.get(f"{target_base}/api/v1/tenant/members")
+                if unauth_res.status == 401:
+                    log("  -> PASS: Unauthenticated access correctly refused with HTTP 401 Unauthorized.")
+                    passed_assertions.append("Unauthenticated access correctly refused with HTTP 401 Unauthorized")
+                else:
+                    msg = f"FAIL: Unauthenticated request to /api/v1/tenant/members returned {unauth_res.status} instead of 401!"
                     log(f"  -> {msg}")
                     failed_assertions.append(msg)
-                elif status == 502 or "Backend Unreachable" in str(body_json) or "offline" in str(body_json).lower():
-                    log(f"  -> PASS: Anti-Fabrication verified. Backend offline returned HTTP {status} error state (not fake success).")
-                    passed_assertions.append(f"Anti-Fabrication verified: Backend failure produces HTTP {status} error state")
-                elif status == 200:
-                    log("  -> PASS: Live API returned HTTP 200 OK without mock fabrication.")
-                    passed_assertions.append("Live API returned 200 OK without mock fabrication")
-                else:
-                    log(f"  -> PASS: API returned status {status} (Not fake success).")
-                    passed_assertions.append(f"API returned status {status} (No fake success)")
             except Exception as e:
-                log(f"  -> Notice during API anti-fabrication check: {e}")
-                passed_assertions.append("API anti-fabrication check evaluated")
+                msg = f"FAIL: API live assertion exception: {e}"
+                log(f"  -> {msg}")
+                failed_assertions.append(msg)
 
             browser.close()
 

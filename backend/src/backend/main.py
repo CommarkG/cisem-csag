@@ -345,7 +345,7 @@ async def auth_middleware(request: Request, call_next):
             "x-current-user-id": user_id,
             "Authorization": f"Bearer {token}"
         }
-        opt = SyncClientOptions(httpx_client=http_client, headers=headers)
+        opt = SyncClientOptions(headers=headers)
         scoped_client = create_client(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, options=opt)
         token_var = _db_client_context.set(scoped_client)
     except Exception as e:

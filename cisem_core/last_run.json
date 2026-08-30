@@ -1,62 +1,6 @@
 [
   {
     "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T22:52:39.614269+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "13f47850e9b9220cf0606549a446b8f08fdd62730332fa36e3c51798dea6f0da"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T22:58:59.905159+00:00",
-    "exit_code": 1,
-    "passed": 2,
-    "failed": 4,
-    "output_sha256": "e22cd46cd74b0dfbb1726cc30721ea66e5f0c24a5a84b32809a03144ee2713a8"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T23:04:53.422038+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "8f2a80827ae089ec9bd19f5339a57769a60bbfd187be11afb48017759516273f"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T23:06:52.533136+00:00",
-    "exit_code": 1,
-    "passed": 2,
-    "failed": 4,
-    "output_sha256": "a83bff4a055fd0cb12968c11a06683f6038f51f2fae07fe47b4e1e580ed1b29c"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T23:07:14.873086+00:00",
-    "exit_code": 1,
-    "passed": 2,
-    "failed": 4,
-    "output_sha256": "ac4e207fb81608c1ec7ef364cffde641974e9e9622e67ebaf61fb207c66ecffd"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T23:07:30.429312+00:00",
-    "exit_code": 1,
-    "passed": 2,
-    "failed": 4,
-    "output_sha256": "36e65438a1ff49b1b0f3bbd9d49ee47695f6b09b19c43d48e64e61a0fee8a803"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T23:07:51.669918+00:00",
-    "exit_code": 1,
-    "passed": 2,
-    "failed": 4,
-    "output_sha256": "ae4aa309d0e13996a460ba9b9bd0835e0aef0a09c22f213e3a6af6a096dfb45a"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
     "timestamp": "2026-08-29T23:08:22.168979+00:00",
     "exit_code": 1,
     "passed": 2,
@@ -158,5 +102,61 @@
     "passed": 0,
     "failed": 1,
     "output_sha256": "e94fdd70e1810f4b6aea168d335271bf439d610841665c3d3747db9df5283275"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:23:21.554562+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "64d01810dba48f8577e767cd632147f82c823e52054b59aad9b3c1851a23524d"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:30:20.216992+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "328f21beca635ab96d315c3c53d795f4f709b3f8b7df94137c8600b91d50bc27"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:31:09.598777+00:00",
+    "exit_code": 1,
+    "passed": 5,
+    "failed": 1,
+    "output_sha256": "d79089ec48650d3ebfc109bfa87ff455e7dabaeb4f9e18ff3f1540938ce1bb45"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:31:39.062778+00:00",
+    "exit_code": 1,
+    "passed": 5,
+    "failed": 1,
+    "output_sha256": "052c5fb924468bd7e9bd0646d8151447d58ec4989c8b2b6086c7c798faef7c9c"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:32:20.836809+00:00",
+    "exit_code": 1,
+    "passed": 5,
+    "failed": 1,
+    "output_sha256": "c4f91e5252f26c4edf4d414f909d87ba1d67c75d948a95ef551aea03a22412bf"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:33:11.556285+00:00",
+    "exit_code": 1,
+    "passed": 5,
+    "failed": 1,
+    "output_sha256": "35d4f5f6bbc0b9c1b08ca6545a570d6d1cf3ef378818f940ad7ed61b00cf4ded"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T15:34:01.761085+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "a592ee4167f36d884fdd9abb4533ce7042818c4350c5f10774187848b52a17c2"
   }
 ]
