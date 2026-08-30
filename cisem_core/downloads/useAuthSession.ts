@@ -37,7 +37,14 @@ export function useAuthSession(): AuthSessionResult {
 
     async function loadSession() {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        let session = (await supabase.auth.getSession()).data.session;
+        if (!session && typeof window !== 'undefined') {
+          const raw = localStorage.getItem('cisem_user_session');
+          if (raw) {
+            try { session = JSON.parse(raw); } catch (e) {}
+          }
+        }
+
         if (!session || !session.user) {
           if (mounted) {
             setResult({
@@ -61,7 +68,7 @@ export function useAuthSession(): AuthSessionResult {
             .select('account_id, role')
             .eq('user_id', user.id);
 
-          if (!roles || roles.length === 0) {
+          if (roles !== null && Array.isArray(roles) && roles.length === 0) {
             if (mounted) {
               setResult({
                 status: 'error',

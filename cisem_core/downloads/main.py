@@ -2445,9 +2445,10 @@ async def list_tenant_members(request: Request, company_name: str | None = None)
             res = client.table("users").select("id, full_name, email").execute()
             members = [{"id": u["id"], "name": u["full_name"], "email": u["email"], "role": "member", "company_name": "AGN Ltd"} for u in res.data] if res.data else []
 
+        active_id = tenant_id if (tenant_id and tenant_id not in ("default-tenant", "TENANT-SESSION-ACTIVE")) else "5f2bfda8-6ff1-483d-870e-14335a59915c"
         return {
             "status": "success",
-            "active_tenant_id": "5c3e147d-546d-4a65-aec8-5814e9ba09b0",
+            "active_tenant_id": active_id,
             "tenant_name": "AGN Ltd",
             "members": members
         }
@@ -2455,7 +2456,7 @@ async def list_tenant_members(request: Request, company_name: str | None = None)
         print(f"Database query error in list_tenant_members: {e}")
         return {
             "status": "error",
-            "active_tenant_id": "5c3e147d-546d-4a65-aec8-5814e9ba09b0",
+            "active_tenant_id": "5f2bfda8-6ff1-483d-870e-14335a59915c",
             "tenant_name": "AGN Ltd",
             "members": []
         }

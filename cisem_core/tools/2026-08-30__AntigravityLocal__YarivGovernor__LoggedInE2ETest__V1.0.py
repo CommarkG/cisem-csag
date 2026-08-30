@@ -164,13 +164,14 @@ def run_e2e_test():
                     };
                     localStorage.setItem('sb-localhost-auth-token', JSON.stringify(sbSession));
                     localStorage.setItem('cisem_user_session', JSON.stringify(sbSession));
+                    localStorage.setItem('cisem_access_token', sbSession.access_token);
                 }""")
             except Exception as e:
                 log(f"  -> Session injection notice: {e}")
 
             page.goto(f"{target_base}/#/inquiry-intake", timeout=10000, wait_until="domcontentloaded")
             page.reload(wait_until="domcontentloaded")
-            time.sleep(2)
+            time.sleep(4)
 
             try:
                 post_dismiss = page.query_selector("button:has-text('Skip'), button:has-text('Dismiss'), button:has-text('Explore')")

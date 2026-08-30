@@ -219,7 +219,7 @@ export default function Header() {
           lineHeight: 1
         }}>CISEM</div>
         <span style={{ fontSize: '0.52rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase', whiteSpace: 'nowrap', lineHeight: 1 }}>
-          workspace
+          {currentUser?.company || 'AGN LTD'}
         </span>
       </div>
 
@@ -732,7 +732,7 @@ export default function Header() {
 
         <div className="header-user-profile-menu" ref={userMenuRef} style={{ position: 'relative' }}>
           <button 
-            className="btn-icon" 
+            className="btn-icon header-user-profile-btn" 
             onClick={(e) => {
               e.stopPropagation();
               setUserMenuOpen(!userMenuOpen);
@@ -740,14 +740,21 @@ export default function Header() {
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              justifyContent: 'center', 
+              gap: 6,
+              padding: '4px 10px',
               cursor: 'pointer',
-              background: userMenuOpen ? 'var(--accent-glow)' : 'transparent',
-              borderRadius: '50%'
+              background: userMenuOpen ? 'var(--accent-glow)' : 'var(--surface-elevated, transparent)',
+              borderRadius: '9999px',
+              border: '1px solid var(--border)'
             }} 
             title={currentUser?.name || "User Profile"}
           >
-            <User size={20} style={{ color: userMenuOpen ? 'var(--accent)' : 'currentColor' }} />
+            <User size={16} style={{ color: userMenuOpen ? 'var(--accent)' : 'currentColor' }} />
+            {currentUser?.name && (
+              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                {currentUser.name}
+              </span>
+            )}
           </button>
           
           {userMenuOpen && (

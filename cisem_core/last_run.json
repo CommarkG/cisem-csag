@@ -1,46 +1,6 @@
 [
   {
     "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-29T23:35:41.007350+00:00",
-    "exit_code": 1,
-    "passed": 3,
-    "failed": 3,
-    "output_sha256": "4e401ecaef39690c6e83a8b7ef608bb2edd19b8f0ab149a2b6dab160b3dadb05"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T07:30:38.980741+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "152d95f77d41d8b4c0eb10021bf16fb3f2847d33e4cabab4fded2a66b9f5c02e"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T07:52:36.361966+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "a89de4a6895e3736570dbf6c57d065b62fae46e1ea2cb4455920fe626c4916b7"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T07:53:15.139977+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "421010e44f20a06b301c4c3383145d4125d137181a44e1e5cbbac2266d5be3a0"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T08:51:45.440944+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "b17cf9a50760087b4e727e9d751f7a107948761175131b11a29350c4f205590f"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
     "timestamp": "2026-08-30T09:22:03.876402+00:00",
     "exit_code": 0,
     "passed": 6,
@@ -158,5 +118,45 @@
     "passed": 3,
     "failed": 3,
     "output_sha256": "d83052fbd180d0760f440d0e73e9cff9937f386f2a2590430aea1487edcc9639"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T20:04:45.085529+00:00",
+    "exit_code": 1,
+    "passed": 4,
+    "failed": 2,
+    "output_sha256": "fe557367ecf20333bda8da8e285854039947fc82893f1ded6794ca12d88ffc64"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T20:05:37.437744+00:00",
+    "exit_code": 1,
+    "passed": 4,
+    "failed": 2,
+    "output_sha256": "3ecaa966d55eff7d00828571263b6c4d88a0065ea6b2c7197058190e5c5f68e8"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T20:05:58.689092+00:00",
+    "exit_code": 1,
+    "passed": 4,
+    "failed": 2,
+    "output_sha256": "30e76b1594d77c939b14dfa166c16562fc3656b2ac950b50bb31f99d317b28f6"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T20:06:17.216498+00:00",
+    "exit_code": 1,
+    "passed": 4,
+    "failed": 2,
+    "output_sha256": "f9bdb173e2caba9f847143c5997351575c1ad7c382d5b1a244591b757f336aa8"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-08-30T20:06:34.714257+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "d64dd0d8d8e3aa1657c0f200ec9156d88a5f4687bf3f2a914fcdb5e949fdae07"
   }
 ]
