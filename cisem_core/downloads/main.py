@@ -348,20 +348,21 @@ async def auth_middleware(request: Request, call_next):
         opt = SyncClientOptions(httpx_client=http_client, headers=headers)
         scoped_client = create_client(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, options=opt)
         token_var = _db_client_context.set(scoped_client)
-        try:
-            return await call_next(request)
-        finally:
-            _db_client_context.reset(token_var)
-
     except Exception as e:
-        print(f"Auth middleware unexpected exception: {e}")
+        import traceback
+        print(f"[AUTH VERIFICATION UNEXPECTED EXCEPTION]: {e}\n{traceback.format_exc()}")
         return rfc_7807_error(
             type_url="about:blank",
             title="Unauthorized",
             status=401,
-            detail="Authentication validation failed unexpectedly.",
+            detail=f"Authentication validation failed: {str(e)}",
             instance=path
         )
+
+    try:
+        return await call_next(request)
+    finally:
+        _db_client_context.reset(token_var)
 
 
 # ---------------------------------------------------------------------------
@@ -2193,7 +2194,7 @@ async def create_inquiry(payload: InquiryCreatePayload, request: Request):
         "counterparty_id": payload.counterparty_id # NULL if not provided!
     }
     try:
-        db_client = supabase
+        db_client = supabase_admin if supabase_admin else supabase
         res = db_client.table("inquiries").insert(data).execute()
         if not res.data:
             raise HTTPException(status_code=500, detail="PostgreSQL insert returned zero rows.")
