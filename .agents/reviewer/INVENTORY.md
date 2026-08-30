@@ -351,6 +351,7 @@
 | `cisem_core/downloads/2026-08-28__AntigravityLocal__YarivGovernor__Zero_Processing_Connective_Governor_Studio_Specification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py` | `3.0` | `1.0` | MISMATCH (3.0 vs 1.0) |
 | `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__MasterProductAndPricingEngineBlueprint__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__OptimalFileLengthResearch__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__WorkspaceArchivingReport__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/AGENTS.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/AdminView.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
@@ -378,7 +379,6 @@
 | `cisem_core/downloads/find_offending_file.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/fix_and_gate.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/fix_and_test.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/fix_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
