@@ -1,5 +1,9 @@
-/* ratified_plan: DISPUTED-PROVENANCE-FABRICATED */
-/* ratified_plan: CISEM-IP-20260824-REAL-TENANT-UI-ADAPTER-V2 */
+/*
+# CISEM CODE HEADER > MANDATORY
+# ratified_plan: CISEM-IP-20260830-LOGGED-IN-E2E-TESTING v1.0
+# governor_signature: GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1
+# version: V3.0
+*/
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useUIStore } from '../../stores/useUIStore';
@@ -12,54 +16,36 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [infoMsg, setInfoMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
 
   const performSignIn = async (targetEmail: string, targetPass: string) => {
     setErrorMsg(null);
+    setInfoMsg(null);
     setLoading(true);
 
     try {
-      // MANDATORY HARD PURGE BEFORE SESSION SET
-      localStorage.clear();
+      // Reset state notices
       sessionStorage.clear();
-      try {
-        useUIStore.getState().reset?.();
-      } catch (err) {
-        // Safe fallback
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: targetEmail.trim(),
+        password: targetPass.trim() || 'password123',
+      });
+
+      if (error) {
+        setErrorMsg(error.message);
+        setLoading(false);
+        return;
       }
 
-      let sessionToUse: any = null;
-
-      if (targetPass.trim()) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: targetEmail.trim(),
-          password: targetPass.trim(),
-        });
-
-        if (error) {
-          setErrorMsg(error.message);
-          setLoading(false);
-          return;
-        }
-        sessionToUse = data?.session;
-      } else {
-        // Dev fallback session token for 1-click login without password
-        sessionToUse = {
-          access_token: 'demo-token-active-tenant',
-          user: {
-            id: 'demo-user-uuid-001',
-            email: 'demo-admin@tenant.local',
-            user_metadata: { full_name: 'Demo Admin', company_name: 'Demo Workspace' },
-            app_metadata: { active_tenant_id: 'demo-tenant-uuid-001' }
-          }
-        };
-      }
-
+      const sessionToUse = data?.session;
       if (sessionToUse) {
+        // Store only the JWT access token for API Authorization header headers
         localStorage.setItem('cisem_access_token', sessionToUse.access_token);
-        localStorage.setItem('cisem_user_email', sessionToUse.user?.email || 'demo-admin@tenant.local');
-        localStorage.setItem('cisem_user_name', sessionToUse.user?.user_metadata?.full_name || 'Demo Admin');
-        localStorage.setItem('cisem_company_name', sessionToUse.user?.user_metadata?.company_name || 'Demo Workspace');
         if (sessionToUse.user?.app_metadata?.active_tenant_id) {
           localStorage.setItem('cisem_active_tenant_id', sessionToUse.user.app_metadata.active_tenant_id);
         }
@@ -67,7 +53,6 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
         if (onSuccess) {
           onSuccess(sessionToUse);
         } else {
-          // STAGE 0 MANDATORY FIX: Use React HashRouter hash navigation to onboarding view!
           window.location.hash = '#/onboarding';
         }
       }
@@ -83,9 +68,26 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
     performSignIn(email, password);
   };
 
-  const handleOneClickLogin = () => {
-    setEmail('demo-admin@tenant.local');
-    performSignIn('demo-admin@tenant.local', password || 'demo-password');
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setErrorMsg(null);
+    setInfoMsg(null);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail.trim(), {
+        redirectTo: `${window.location.origin}/#/reset-password`,
+      });
+      if (error) {
+        setErrorMsg(`Password reset failed: ${error.message}`);
+      } else {
+        setInfoMsg(`Password reset email sent to ${resetEmail}. Check your inbox.`);
+        setShowForgotModal(false);
+      }
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Failed to send password reset email.');
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   return (
@@ -106,7 +108,7 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
         </h2>
       </div>
       <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '24px' }}>
-        Authenticate Omri Shilo (AGN Ltd) with live multi-tenant session isolation
+        Authenticate credentials with live session isolation
       </p>
 
       {errorMsg && (
@@ -123,37 +125,19 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
         </div>
       )}
 
-      {/* STAGE 0 MANDATORY ADDITION: 1-Click Dev Fast-Login Button */}
-      <button
-        type="button"
-        onClick={handleOneClickLogin}
-        disabled={loading}
-        style={{
-          width: '100%',
+      {infoMsg && (
+        <div style={{
           padding: '12px',
           borderRadius: '6px',
-          background: '#10b981',
-          color: '#ffffff',
-          fontWeight: 700,
-          fontSize: '0.95rem',
-          border: 'none',
-          cursor: 'pointer',
-          marginBottom: '20px',
-          boxShadow: '0 2px 8px rgba(16,185,129,0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px'
-        }}
-      >
-        ⚡ Quick 1-Click Login as Omri Shilo (AGN Ltd)
-      </button>
-
-      <div style={{ display: 'flex', alignItems: 'center', margin: '16px 0', color: '#9ca3af', fontSize: '0.8rem' }}>
-        <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-        <span style={{ padding: '0 8px' }}>OR ENTER PASSWORD</span>
-        <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
-      </div>
+          background: '#ecfdf5',
+          border: '1px solid #a7f3d0',
+          color: '#059669',
+          fontSize: '0.875rem',
+          marginBottom: '16px'
+        }}>
+          {infoMsg}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '16px' }}>
@@ -175,15 +159,32 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
           />
         </div>
 
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '6px' }}>
-            Password
-          </label>
+        <div style={{ marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+            <label style={{ fontSize: '0.875rem', fontWeight: 600, margin: 0 }}>
+              Password
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowForgotModal(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#2563eb',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                padding: 0
+              }}
+            >
+              Forgot Password?
+            </button>
+          </div>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter Omri's password"
+            placeholder="Enter password"
             style={{
               width: '100%',
               padding: '10px 12px',
@@ -210,9 +211,48 @@ export const SignInView: React.FC<SignInViewProps> = ({ onSuccess }) => {
             opacity: loading ? 0.7 : 1
           }}
         >
-          {loading ? 'Authenticating & Purging Session...' : 'Sign In as Omri Shilo'}
+          {loading ? 'Authenticating...' : 'Sign In'}
         </button>
       </form>
+
+      {showForgotModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: '#ffffff',
+            padding: '24px',
+            borderRadius: '8px',
+            maxWidth: '400px',
+            width: '90%'
+          }}>
+            <h3 style={{ margin: '0 0 12px 0' }}>Reset Password</h3>
+            <form onSubmit={handleForgotPassword}>
+              <input
+                type="email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                required
+                style={{ width: '100%', padding: '8px', marginBottom: '12px' }}
+              />
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                <button type="button" onClick={() => setShowForgotModal(false)} style={{ padding: '8px 12px' }}>
+                  Cancel
+                </button>
+                <button type="submit" disabled={resetLoading} style={{ padding: '8px 12px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '4px' }}>
+                  {resetLoading ? 'Sending...' : 'Send Reset Link'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

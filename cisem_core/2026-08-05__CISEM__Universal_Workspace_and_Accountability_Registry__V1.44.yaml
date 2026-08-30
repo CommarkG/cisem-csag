@@ -464,7 +464,7 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: 8cfe39b30ae8edf63cbf02a6dec53abc1465407aa06e23f06aacbe564a62edb5
+      sha256: bc8ce7729edf365209103cca10db34326d23b929961289a8e16d9ec1be51a324
     2026_08_22__AntigravityLocal__NoUnpartitionedStorageLinter__V1_0_mjs:
       path: linters/no_unpartitioned_storage.mjs
       version: '1.0'

@@ -15,6 +15,7 @@
 #     reasoning: "Governor mandate: Enforce 100% visual consistency with platform light glassmorphism theme."
 # */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageGreetingBanner from '../shared/PageGreetingBanner';
 
 export interface InquiryIntakeProps {
@@ -22,6 +23,7 @@ export interface InquiryIntakeProps {
 }
 
 export const InquiryIntakeView: React.FC<InquiryIntakeProps> = ({ onInquiryCreated }) => {
+  const navigate = useNavigate();
   const [intentText, setIntentText] = useState('');
   const [loading, setLoading] = useState(false);
   const [inquiries, setInquiries] = useState<any[]>([]);
@@ -256,16 +258,30 @@ export const InquiryIntakeView: React.FC<InquiryIntakeProps> = ({ onInquiryCreat
                       Submitted {inq.created_at ? new Date(inq.created_at).toLocaleDateString() : 'recently'}
                     </div>
                   </div>
-                  <span
-                    className="px-3 py-1 text-xs font-semibold rounded-full border"
-                    style={{
-                      background: 'var(--accent-subtle)',
-                      color: 'var(--accent)',
-                      borderColor: 'var(--border-light)'
-                    }}
-                  >
-                    Draft
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span
+                      className="px-3 py-1 text-xs font-semibold rounded-full border"
+                      style={{
+                        background: 'var(--surface)',
+                        color: 'var(--text-secondary)',
+                        borderColor: 'var(--border)'
+                      }}
+                    >
+                      Draft
+                    </span>
+                    <button
+                      onClick={() => navigate(`/quote-builder?inquiry_id=${inq.id}`)}
+                      className="px-3 py-1 text-xs font-semibold rounded-full border hover:bg-[var(--accent)] hover:text-white transition"
+                      style={{
+                        background: 'var(--accent-subtle)',
+                        color: 'var(--accent)',
+                        borderColor: 'var(--border-light)',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Create Quote
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

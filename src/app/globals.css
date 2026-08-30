@@ -1341,6 +1341,14 @@ body {
   border-bottom-right-radius: 2px;
 }
 
+.whatsapp-bubble.failed {
+  align-self: flex-end;
+  background: #fee2e2;
+  color: #991b1b;
+  border-bottom-right-radius: 2px;
+  border: 1px solid #fca5a5;
+}
+
 .whatsapp-bubble.received {
   align-self: flex-start;
   background: var(--surface);

@@ -126,6 +126,18 @@ export const useNotificationStore = create((set, get) => {
         saveNotifications({ log: state.log, rules: state.rules, whatsappLog });
         return { whatsappLog };
       });
+      return entry.id;
+    },
+
+    // Update WhatsApp log entry status/direction
+    updateWhatsAppMessage: (id, updates) => {
+      set((state) => {
+        const whatsappLog = state.whatsappLog.map((msg) =>
+          msg.id === id ? { ...msg, ...updates } : msg
+        );
+        saveNotifications({ log: state.log, rules: state.rules, whatsappLog });
+        return { whatsappLog };
+      });
     },
 
     // Fire notification based on event
@@ -162,7 +174,7 @@ export const useNotificationStore = create((set, get) => {
           const text = data.message || `${rule.label}: ${data.title || ''}`;
           const to = data.to || '';
           
-          state.addWhatsAppMessage({
+          const msgId = state.addWhatsAppMessage({
             to: to,
             text: text,
             direction: 'sent',
@@ -182,6 +194,7 @@ export const useNotificationStore = create((set, get) => {
             body: JSON.stringify({ to, text, idInstance, apiTokenInstance })
           }).then(res => {
             if (!res.ok) {
+              state.updateWhatsAppMessage(msgId, { direction: 'failed' });
               res.json().then(err => {
                 state.showToast({
                   title: 'WhatsApp Dispatch Failed',
@@ -190,7 +203,9 @@ export const useNotificationStore = create((set, get) => {
                 });
               });
             }
-          }).catch(() => {});
+          }).catch(() => {
+            state.updateWhatsAppMessage(msgId, { direction: 'failed' });
+          });
         }
       });
     },

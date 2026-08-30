@@ -15,8 +15,7 @@ import { useAdminStore } from '../../stores/useAdminStore';
 import { translations } from '../../utils/translations';
 import AdminTable from '../shared/AdminTable';
 import PageGreetingBanner from '../shared/PageGreetingBanner';
-import { FolderKanban, Users, ShieldAlert, Truck, UserCheck, Search, Download, Upload, Check, ShoppingBag, FileText } from 'lucide-react';
-import { fetchMedusaProducts, fetchMedusaQuotes, syncMedusaProduct, createMedusaQuote } from '../../lib/2026-08-11__AntigravityLocal__YarivHuman__MedusaClientAdapter__V1.0';
+import { FolderKanban, Users, ShieldAlert, Truck, UserCheck, Search, Download, Upload, Check } from 'lucide-react';
 import { useNotificationStore } from '../../stores/useNotificationStore';
 
 export default function AdminView() {
@@ -28,56 +27,8 @@ export default function AdminView() {
 
   const { items: tasks, addItem, updateItem, deleteItem, addComment } = useTaskStore();
 
-  const [medusaProducts, setMedusaProducts] = useState([]);
-  const [medusaQuotes, setMedusaQuotes] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (currentTab === 'products') {
-      setLoading(true);
-      fetchMedusaProducts()
-        .then(data => setMedusaProducts(data))
-        .finally(() => setLoading(false));
-    } else if (currentTab === 'quotes') {
-      setLoading(true);
-      fetchMedusaQuotes()
-        .then(data => setMedusaQuotes(data))
-        .finally(() => setLoading(false));
-    }
-  }, [currentTab]);
-
-  const productsColumns = React.useMemo(() => {
-    return [
-      { field: 'title', label: 'Title', type: 'text', width: '25%' },
-      { field: 'handle', label: 'Handle', type: 'text', width: '20%' },
-      { field: 'sku', label: 'SKU', type: 'text', width: '15%' },
-      { field: 'price', label: 'Price', type: 'currency', width: '15%' },
-      { field: 'inventoryQuantity', label: 'Stock', type: 'number', width: '15%' },
-      { field: 'description', label: 'Description', type: 'text', width: '25%' },
-      { field: 'actions', label: '', type: 'custom', width: '5%', sortable: false }
-    ];
-  }, []);
-
-  const quotesColumns = React.useMemo(() => {
-    return [
-      { field: 'id', label: 'Quote ID', type: 'text', width: '20%' },
-      { field: 'customerId', label: 'Customer ID', type: 'text', width: '20%' },
-      { field: 'total', label: 'Total', type: 'currency', width: '20%' },
-      { 
-        field: 'status', 
-        label: 'Status', 
-        type: 'select', 
-        options: [
-          { value: 'draft', label: 'Draft' },
-          { value: 'sent', label: 'Sent' },
-          { value: 'accepted', label: 'Accepted' },
-          { value: 'declined', label: 'Declined' }
-        ],
-        width: '15%'
-      },
-      { field: 'actions', label: '', type: 'custom', width: '5%', sortable: false }
-    ];
-  }, []);
   const { members, addMember, updateMember, removeMember, addMemberComment } = useCollabStore();
   const { 
     clients, addClient, updateClient, deleteClient, addClientComment, importClients,
@@ -112,22 +63,18 @@ export default function AdminView() {
     const tabs = [];
     
     if (role === 'viewer' || (!rolesConfig[role])) {
-      return ['projects', 'clients', 'suppliers', 'team', 'products', 'quotes'];
+      return ['projects', 'clients', 'suppliers', 'team'];
     }
     
     if (hasPermission(role, 'settings') || hasPermission(role, '*')) {
-      tabs.push('projects', 'clients', 'suppliers', 'team', 'products');
+      tabs.push('projects', 'clients', 'suppliers', 'team');
     } else {
       if (hasPermission(role, 'finance')) {
-        tabs.push('projects', 'quotes');
+        tabs.push('projects');
       }
       if (hasPermission(role, 'crm')) {
-        tabs.push('clients', 'products');
+        tabs.push('clients');
       }
-    }
-    
-    if (hasPermission(role, '*')) {
-      tabs.push('quotes');
     }
     
     return tabs;
@@ -276,14 +223,10 @@ export default function AdminView() {
   const handleExportCsv = () => {
     const currentData = currentTab === 'projects' ? projectsData :
                        currentTab === 'clients' ? clients :
-                       currentTab === 'suppliers' ? suppliers :
-                       currentTab === 'products' ? medusaProducts :
-                       currentTab === 'quotes' ? medusaQuotes : members;
+                       currentTab === 'suppliers' ? suppliers : members;
     const currentCols = currentTab === 'projects' ? projectsColumns :
                        currentTab === 'clients' ? clientsColumns :
-                       currentTab === 'suppliers' ? suppliersColumns :
-                       currentTab === 'products' ? productsColumns :
-                       currentTab === 'quotes' ? quotesColumns : teamColumns;
+                       currentTab === 'suppliers' ? suppliersColumns : teamColumns;
     if (currentData.length === 0) return;
 
     const fields = currentCols.filter(col => col.field !== 'actions' && col.field !== 'comments').map(col => col.field);
@@ -314,14 +257,10 @@ export default function AdminView() {
   const handleExportMd = () => {
     const currentData = currentTab === 'projects' ? projectsData :
                        currentTab === 'clients' ? clients :
-                       currentTab === 'suppliers' ? suppliers :
-                       currentTab === 'products' ? medusaProducts :
-                       currentTab === 'quotes' ? medusaQuotes : members;
+                       currentTab === 'suppliers' ? suppliers : members;
     const currentCols = currentTab === 'projects' ? projectsColumns :
                        currentTab === 'clients' ? clientsColumns :
-                       currentTab === 'suppliers' ? suppliersColumns :
-                       currentTab === 'products' ? productsColumns :
-                       currentTab === 'quotes' ? quotesColumns : teamColumns;
+                       currentTab === 'suppliers' ? suppliersColumns : teamColumns;
     if (currentData.length === 0) return;
 
     const fields = currentCols.filter(col => col.field !== 'actions' && col.field !== 'comments').map(col => col.field);
@@ -424,9 +363,7 @@ export default function AdminView() {
     // Build the report content
     const currentData = currentTab === 'projects' ? projectsData :
                        currentTab === 'clients' ? clients :
-                       currentTab === 'suppliers' ? suppliers :
-                       currentTab === 'products' ? medusaProducts :
-                       currentTab === 'quotes' ? medusaQuotes : members;
+                       currentTab === 'suppliers' ? suppliers : members;
 
     let html = `
       <div style="font-family: Arial, sans-serif;">
@@ -482,15 +419,11 @@ export default function AdminView() {
     
     const currentData = currentTab === 'projects' ? projectsData :
                        currentTab === 'clients' ? clients :
-                       currentTab === 'suppliers' ? suppliers :
-                       currentTab === 'products' ? medusaProducts :
-                       currentTab === 'quotes' ? medusaQuotes : members;
+                       currentTab === 'suppliers' ? suppliers : members;
                        
     const currentCols = currentTab === 'projects' ? projectsColumns :
                        currentTab === 'clients' ? clientsColumns :
-                       currentTab === 'suppliers' ? suppliersColumns :
-                       currentTab === 'products' ? productsColumns :
-                       currentTab === 'quotes' ? quotesColumns : teamColumns;
+                       currentTab === 'suppliers' ? suppliersColumns : teamColumns;
 
     const fields = currentCols.filter(col => col.field !== 'actions' && col.field !== 'comments').map(col => col.field);
     const labels = currentCols.filter(col => col.field !== 'actions' && col.field !== 'comments').map(col => col.label || col.field);
@@ -673,26 +606,6 @@ export default function AdminView() {
             >
               <UserCheck size={15} />
               {t.teamMembersTab}
-            </button>
-          )}
-          {allowedTabs.includes('products') && (
-            <button
-              onClick={() => handleTabChange('products')}
-              className={`view-tab ${currentTab === 'products' ? 'active' : ''}`}
-              style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-            >
-              <ShoppingBag size={15} />
-              Products
-            </button>
-          )}
-          {allowedTabs.includes('quotes') && (
-            <button
-              onClick={() => handleTabChange('quotes')}
-              className={`view-tab ${currentTab === 'quotes' ? 'active' : ''}`}
-              style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-            >
-              <FileText size={15} />
-              Quotes
             </button>
           )}
         </div>
@@ -1000,120 +913,7 @@ export default function AdminView() {
           />
         )}
 
-        {currentTab === 'products' && allowedTabs.includes('products') && (
-          <AdminTable
-            type="products"
-            data={medusaProducts}
-            columns={productsColumns}
-            groupByField="sku"
-            searchTerm={searchTerm}
-            maxColWidth={maxColWidth}
-            readOnly={isReadOnly}
-            onAddRow={() => {
-              const newProd = {
-                title: 'New Product',
-                handle: 'new-product-' + Date.now(),
-                sku: 'MOCK-SKU-' + Math.floor(Math.random() * 10000),
-                price: 0,
-                inventoryQuantity: 10,
-                description: 'Newly created Medusa item'
-              };
-              syncMedusaProduct(newProd).then(res => {
-                setMedusaProducts(prev => [...prev, { ...newProd, id: res.product_id || 'prod_' + Date.now() }]);
-                useNotificationStore.getState().fireEvent('product_created', {
-                  title: 'Medusa Product Synced',
-                  message: `Registered catalog item: "${newProd.title}" (SKU: ${newProd.sku})`,
-                  type: 'info'
-                });
-              });
-            }}
-            onUpdateRow={(id, updates) => {
-              setMedusaProducts(prev => prev.map(p => {
-                if (p.id === id) {
-                  const updated = { ...p, ...updates };
-                  syncMedusaProduct(updated).then(() => {
-                    useNotificationStore.getState().fireEvent('product_updated', {
-                      title: 'Medusa Catalog Sync',
-                      message: `Synchronized updates for: "${updated.title}"`,
-                      type: 'warning'
-                    });
-                  });
-                  return updated;
-                }
-                return p;
-              }));
-            }}
-            onDeleteRow={(id) => {
-              const target = medusaProducts.find(p => p.id === id);
-              setMedusaProducts(prev => prev.filter(p => p.id !== id));
-              useNotificationStore.getState().fireEvent('product_deleted', {
-                title: 'Medusa Product Removed',
-                message: `Deregistered product item: "${target?.title || 'Catalog item'}"`,
-                type: 'danger'
-              });
-            }}
-            onAddComment={(id, text, author) => {
-              alert(`Comments not supported on Medusa catalog schemas directly yet.`);
-            }}
-          />
-        )}
 
-        {currentTab === 'quotes' && allowedTabs.includes('quotes') && (
-          <AdminTable
-            type="quotes"
-            data={medusaQuotes}
-            columns={quotesColumns}
-            groupByField="status"
-            searchTerm={searchTerm}
-            maxColWidth={maxColWidth}
-            readOnly={isReadOnly}
-            onAddRow={() => {
-              const newQuote = {
-                customerId: 'client_mock_new',
-                items: [{ title: 'Services', quantity: 1, unitPrice: 500 }],
-                taxRate: 0.17,
-                total: 585,
-                status: 'draft'
-              };
-              createMedusaQuote(newQuote).then(res => {
-                setMedusaQuotes(prev => [...prev, { ...newQuote, id: res.quote_id || 'quote_' + Date.now() }]);
-                useNotificationStore.getState().fireEvent('quote_created', {
-                  title: 'Medusa Quote Synced',
-                  message: `Registered headless sales quote for Customer: "${newQuote.customerId}"`,
-                  type: 'info'
-                });
-              });
-            }}
-            onUpdateRow={(id, updates) => {
-              setMedusaQuotes(prev => prev.map(q => {
-                if (q.id === id) {
-                  const updated = { ...q, ...updates };
-                  createMedusaQuote(updated).then(() => {
-                    useNotificationStore.getState().fireEvent('quote_updated', {
-                      title: 'Medusa Quote Sync',
-                      message: `Synchronized quote updates (Status: ${updated.status.toUpperCase()})`,
-                      type: 'warning'
-                    });
-                  });
-                  return updated;
-                }
-                return q;
-              }));
-            }}
-            onDeleteRow={(id) => {
-              const target = medusaQuotes.find(q => q.id === id);
-              setMedusaQuotes(prev => prev.filter(q => q.id !== id));
-              useNotificationStore.getState().fireEvent('quote_deleted', {
-                title: 'Medusa Quote Removed',
-                message: `Deregistered quote item ID: "${target?.id || id}"`,
-                type: 'danger'
-              });
-            }}
-            onAddComment={(id, text, author) => {
-              alert(`Comments not supported on Medusa quote schemas directly yet.`);
-            }}
-          />
-        )}
       </div>
     </div>
   );

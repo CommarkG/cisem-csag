@@ -19,13 +19,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required message parameters' }, { status: 400 });
     }
 
-    // Fall back to mock simulation mode when instances are omitted
+    // Require credentials for Green API dispatch
     if (!idInstance || !apiTokenInstance) {
       return NextResponse.json({ 
-        success: true, 
-        mock: true, 
-        message: 'Simulation log record spawned successfully.' 
-      });
+        error: 'Missing Green API credentials (idInstance / apiTokenInstance required)' 
+      }, { status: 400 });
     }
 
     // Format phone contact

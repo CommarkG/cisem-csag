@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthSession } from '../../hooks/useAuthSession';
 import DefineFieldsModal from './DefineFieldsModal';
 import { useUIStore } from '../../stores/useUIStore';
 import { useTenantSessionStore } from '../../stores/useTenantSessionStore';
@@ -36,14 +37,16 @@ const ZapIcon = () => (
 export default function PageGreetingBanner({ view }) {
   const navigate = useNavigate();
   const language = useUIStore((s) => s.language);
-  const activeUserId = useTenantSessionStore((s) => s.userId);
-  const setActiveUserId = useTenantSessionStore((s) => s.setActiveUserId);
-  const setFilter = useUIStore((s) => s.setFilter);
-  const clearFilters = useUIStore((s) => s.clearFilters);
-  const openAddItemModal = useUIStore((s) => s.openAddItemModal);
   const selectedNodeId = useUIStore((s) => s.selectedNodeId);
   const setActiveView = useUIStore((s) => s.setActiveView);
-  
+  const openAddItemModal = useUIStore((s) => s.openAddItemModal);
+  const setFilter = useUIStore((s) => s.setFilter);
+  const clearFilters = useUIStore((s) => s.clearFilters);
+  const activeUserId = useTenantSessionStore((s) => s.userId);
+  const setActiveUserId = useTenantSessionStore((s) => s.setActiveUserId);
+  const { userName, companyName } = useAuthSession();
+  const t = translations[language] || translations.en;
+
   const [defineFieldsType, setDefineFieldsType] = useState(null);
   
   const { members, addMember } = useCollabStore();
@@ -51,17 +54,9 @@ export default function PageGreetingBanner({ view }) {
   const { addClient, addSupplier } = useAdminStore();
   const { showToast } = useNotificationStore();
 
-  const t = translations[language] || translations.en;
-
-  const sessionToken = typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') : null;
-  const sessionName = typeof window !== 'undefined' ? localStorage.getItem('cisem_user_name') : null;
-
   const currentUser = useMemo(() => {
-    if (sessionToken) {
-      return { id: 'auth-user', name: sessionName || 'Authenticated User', role: 'account_admin' };
-    }
-    return { id: 'guest-user', name: 'Guest User', role: 'viewer' };
-  }, [sessionToken, sessionName]);
+    return { id: 'auth-user', name: userName || 'Omri', company: companyName || 'AGN Ltd' };
+  }, [userName, companyName]);
 
   const handleUserSwap = (e) => {
     setActiveUserId(e.target.value);

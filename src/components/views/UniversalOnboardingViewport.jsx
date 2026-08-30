@@ -62,8 +62,8 @@ export default function UniversalOnboardingViewport() {
           
           setSessionUser({
             name: currentUser?.name || storedUserName || (isAuthenticated ? 'Authenticated User' : 'Guest User'),
-            role: currentUser?.role || (isAuthenticated ? 'account_admin' : 'guest'),
-            email: currentUser?.email || storedEmail || (isAuthenticated ? 'user@tenant.local' : 'guest@platform.local')
+            role: currentUser?.role || (isAuthenticated ? 'tenant_admin' : 'guest'),
+            email: currentUser?.email || storedEmail || (isAuthenticated ? 'user@company.local' : 'guest@platform.local')
           });
           setTenantConfig({
             companyName: storedCompany || data.company_name || (isAuthenticated ? 'Active Workspace' : 'Public Workspace'),
@@ -83,8 +83,8 @@ export default function UniversalOnboardingViewport() {
         const isAuthenticated = Boolean(storedUserName || storedEmail || (typeof window !== 'undefined' && localStorage.getItem('cisem_access_token')));
         setSessionUser({
           name: isAuthenticated ? (storedUserName || 'Authenticated User') : 'Guest User',
-          role: isAuthenticated ? 'account_admin' : 'guest',
-          email: isAuthenticated ? (storedEmail || 'user@tenant.local') : 'guest@platform.local'
+          role: isAuthenticated ? 'tenant_admin' : 'guest',
+          email: isAuthenticated ? (storedEmail || 'user@company.local') : 'guest@platform.local'
         });
         setTenantConfig({
           companyName: isAuthenticated ? (storedCompany || 'Active Workspace') : 'Public Workspace',

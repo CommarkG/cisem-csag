@@ -49,6 +49,18 @@
         "cisem_core"
       ],
       "status": "ACTIVE_RATIFIED"
+    },
+    {
+      "plan_id": "CISEM-IP-20260830-LOGGED-IN-E2E-TESTING",
+      "governor_signature": "GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1",
+      "ratified_at": "2026-08-30",
+      "authorized_directories": [
+        "src/components",
+        "src/app",
+        "backend/src/backend",
+        "cisem_core"
+      ],
+      "status": "ACTIVE_RATIFIED"
     }
   ]
 }

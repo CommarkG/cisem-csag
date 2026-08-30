@@ -49,6 +49,7 @@ export default function SettingsView() {
 
   const whatsappLog = useNotificationStore((s) => s.whatsappLog);
   const addWhatsAppMessage = useNotificationStore((s) => s.addWhatsAppMessage);
+  const updateWhatsAppMessage = useNotificationStore((s) => s.updateWhatsAppMessage);
   const members = useCollabStore((s) => s.members);
 
   const clientCustomFields = useAdminStore((s) => s.clientCustomFields);
@@ -223,7 +224,7 @@ export default function SettingsView() {
     const targetMember = members.find(m => m.name === waRecipient);
     const toPhone = targetMember?.phone || '+972541234567';
 
-    addWhatsAppMessage({
+    const msgId = addWhatsAppMessage({
       to: waRecipient,
       text: waMessage,
       direction: 'sent',
@@ -251,6 +252,7 @@ export default function SettingsView() {
     }).then(async (res) => {
       const respData = await res.json();
       if (!res.ok) {
+        updateWhatsAppMessage(msgId, { direction: 'failed' });
         showToast({
           title: 'WhatsApp Dispatch Failed',
           message: respData.error || 'Server error',
@@ -270,6 +272,7 @@ export default function SettingsView() {
         });
       }
     }).catch(() => {
+      updateWhatsAppMessage(msgId, { direction: 'failed' });
       showToast({
         title: 'Connection Failed',
         message: 'Could not connect to proxy gateway.',

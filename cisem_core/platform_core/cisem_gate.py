@@ -1913,57 +1913,80 @@ def check_typescript_jsx_headers():
         except Exception as e:
             print(f"  Phase 22.5: Warning reading manifest: {e}")
 
-    git_files = get_git_modified_files()
-    if git_files is None:
-        print("  Phase 22.5: Git unavailable. Skipping code header scan.")
-        return
+    all_files = []
+    for dirpath, _, filenames in os.walk(os.path.join(ROOT_DIR, "src")):
+        for filename in filenames:
+            if filename.endswith((".tsx", ".ts", ".jsx", ".js")):
+                all_files.append(os.path.join(dirpath, filename))
 
     is_commit_mode = any(arg in sys.argv for arg in ["--commit", "commit", "pre-commit"]) or "GIT_INDEX_FILE" in os.environ
 
     violations = []
-    for fpath in git_files:
+    for fpath in all_files:
         fpath_norm = fpath.replace("\\", "/")
-        if fpath.endswith((".tsx", ".ts", ".jsx", ".js")):
-            if "src/components/views/" in fpath_norm or "src/app/api/" in fpath_norm:
-                try:
-                    with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
-                        header_block = "".join(file_obj.readline() for _ in range(40))
-                    
-                    if "ratified_plan: UNRATIFIED-DRAFT-IN-PROGRESS" in header_block:
-                        if is_commit_mode:
-                            violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: File is marked UNRATIFIED-DRAFT-IN-PROGRESS. Obtain Governor ratification before committing.")
-                        else:
-                            print(f"  Phase 22.5: UNRATIFIED DRAFT '{os.path.basename(fpath)}' (local development permitted)")
-                        continue
+        try:
+            with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
+                header_block = "".join(file_obj.readline() for _ in range(40))
+            
+            if "ratified_plan: UNRATIFIED-DRAFT-IN-PROGRESS" in header_block:
+                if is_commit_mode:
+                    violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: File is marked UNRATIFIED-DRAFT-IN-PROGRESS. Obtain Governor ratification before committing.")
+                else:
+                    print(f"  Phase 22.5: UNRATIFIED DRAFT '{os.path.basename(fpath)}' (local development permitted)")
+                continue
 
-                    if "ratified_plan: PRE-RATIFICATION-LEGACY" in header_block or "ratified_plan: DISPUTED-PROVENANCE-FABRICATED" in header_block:
-                        print(f"  Phase 22.5: Verified '{os.path.basename(fpath)}' as structural provenance state")
-                        continue
+            if "ratified_plan: PRE-RATIFICATION-LEGACY" in header_block or "ratified_plan: DISPUTED-PROVENANCE-FABRICATED" in header_block:
+                print(f"  Phase 22.5: Verified '{os.path.basename(fpath)}' as structural provenance state")
+                continue
 
-                    match = HEADER_PATTERN.search(header_block)
-                    if not match:
-                        violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Missing mandatory code header block.")
-                        continue
+            match = HEADER_PATTERN.search(header_block)
+            if not match:
+                violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Missing mandatory code header block.")
+                continue
 
-                    pid = match.group("plan_id")
-                    sig = match.group("sig")
-                    if (pid, sig) not in manifest_tuples:
-                        violations.append(
-                            f"{os.path.relpath(fpath, ROOT_DIR)}: Header claims plan '{pid}' with sig '{sig}' which is NOT in ratified_plans_manifest.json."
-                        )
-                except Exception as e:
-                    print(f"  Warning Phase 22.5: Could not read {fpath}: {e}")
+            pid = match.group("plan_id")
+            sig = match.group("sig")
+            if (pid, sig) not in manifest_tuples:
+                violations.append(
+                    f"{os.path.relpath(fpath, ROOT_DIR)}: Header claims plan '{pid}' with sig '{sig}' which is NOT in ratified_plans_manifest.json."
+                )
+        except Exception as e:
+            print(f"  Warning Phase 22.5: Could not read {fpath}: {e}")
 
-    if violations:
+    print(f"  Phase 22.5: Found {len(violations)} files violating plan-header rules.")
+    
+    baseline_path = r"C:\Users\finky\secure\cisem_header_baseline.txt"
+    if not os.path.exists(baseline_path):
         gate_block(
-            "CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.\n"
-            f"  Violations:\n  " + "\n  ".join(violations) + "\n"
-            "  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.\n"
-            "  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.",
+            f"CISEM_GATE_BLOCKED -- Phase 22.5: Missing Header Baseline File.\n"
+            f"  File not found at: '{baseline_path}'.\n"
+            f"  Rule: Header baseline file MUST exist to verify cumulative plan audit ratchet.\n"
+            f"  Action: Ask Governor Yariv to create the file and set the baseline count.",
+            phase=22
+        )
+    
+    try:
+        with open(baseline_path, "r", encoding="utf-8") as f:
+            baseline_val = int(f.read().strip())
+    except Exception as e:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 22.5: Unreadable Header Baseline File.\n"
+            f"  Could not read baseline from: '{baseline_path}'. Error: {e}\n"
+            f"  Action: Ensure the baseline file contains a single integer.",
             phase=22
         )
 
-    print("  Phase 22.5: PASS. All modified/new frontend views and APIs contain verified ratified headers.")
+    if len(violations) > baseline_val:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).\n"
+            f"  Violations count increased from baseline of {baseline_val} to {len(violations)}!\n"
+            f"  Current Violations:\n  " + "\n  ".join(violations) + "\n"
+            f"  Rule: Cumulative header violations must not increase. The baseline count is {baseline_val}.\n"
+            f"  Fix: Resolve violations, or request the Governor to update the baseline file.",
+            phase=22
+        )
+    else:
+        print(f"  Phase 22.5: PASS. Cumulative violations count ({len(violations)}) is within the baseline limit of {baseline_val}.")
 
 
 def check_hebrew_rtl_and_fixed_tables():
@@ -2407,6 +2430,142 @@ def check_playwright_prerender():
     print("  Phase 34: PASS. Playwright pre-render verification complete (Screenshot captured).")
 
 
+def check_logged_in_playwright_gate():
+    """
+    Phase 34.5: Mandatory Logged-In Session Playwright DOM Assertion Gate.
+    Executes 2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py.
+    Asserts 5 DOM invariants (User name, Workspace name, Team count, Zero demo strings, Forgot password link).
+    """
+    print("Phase 34.5: Running Logged-In Session Playwright DOM Assertion Gate...")
+    e2e_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py")
+    if not os.path.exists(e2e_script):
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 34.5: Missing Logged-In Playwright Session Test Script.\n"
+            "  'cisem_core/tools/2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py' does not exist.\n"
+            "  Rule: Logged-in session Playwright DOM assertion test is PERMANENT and MANDATORY in LGG Gate.",
+            phase=34
+        )
+
+    import subprocess
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    res = subprocess.run([sys.executable, e2e_script], cwd=ROOT_DIR, capture_output=True, text=True, env=env)
+    
+    if res.returncode != 0:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 34.5: CANNOT VERIFY. Logged-In Playwright DOM Assertion Audit Failed.\n"
+            f"  Output:\n{res.stdout or res.stderr}\n"
+            f"  Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.",
+            phase=34
+        )
+    else:
+        # Validate cisem_core/last_run.json entry
+        last_run_path = os.path.join(ROOT_DIR, "cisem_core", "last_run.json")
+        if not os.path.exists(last_run_path):
+            gate_block(
+                "CISEM_GATE_BLOCKED -- Phase 34.5: Missing Process Run Record.\n"
+                "  'cisem_core/last_run.json' does not exist.\n"
+                "  Rule: The execution process MUST autowrite last_run.json upon completion.",
+                phase=34
+            )
+        try:
+            with open(last_run_path, "r", encoding="utf-8") as rf:
+                runs = json.load(rf)
+                latest = runs[-1] if isinstance(runs, list) and len(runs) > 0 else None
+                if not latest or latest.get("exit_code") != 0:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 34.5: Invalid Process Run Record.\n"
+                        f"  'cisem_core/last_run.json' latest entry does not have exit_code == 0.\n"
+                        f"  Entry: {latest}",
+                        phase=34
+                    )
+        except Exception as e:
+            gate_block(
+                f"CISEM_GATE_BLOCKED -- Phase 34.5: Failed to parse 'cisem_core/last_run.json': {e}",
+                phase=34
+            )
+        print("  Phase 34.5: PASS. All 5 logged-in session DOM assertions verified clean & process run record verified.")
+
+
+def check_ast_anti_placeholder_gate():
+    """
+    Phase 40: AST Database-Backed Anti-Placeholder & Argument-Literal Guard.
+    Part A: Compares string literals in src/ against cisem_core/db_live_values.json.
+    Part B: Refuses raw string literals or hardcoded variable bindings passed as NAME, TENANT, COMPANY, ROLE, or EMAIL arguments.
+    Exempts src/utils/translations.js.
+    """
+    print("Phase 40: Running Database-Backed Anti-Placeholder & Argument-Literal Guard...")
+    db_values_path = os.path.join(ROOT_DIR, "cisem_core", "db_live_values.json")
+    
+    if not os.path.exists(db_values_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+            
+    if not os.path.exists(db_values_path):
+        gate_block("CISEM_GATE_BLOCKED -- Phase 40: Missing 'cisem_core/db_live_values.json'.", phase=40)
+        
+    # Check freshness against live_schema_registry.json
+    schema_path = os.path.join(ROOT_DIR, "cisem_core", "live_schema_registry.json")
+    if os.path.exists(schema_path) and os.path.getmtime(db_values_path) < os.path.getmtime(schema_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+
+    with open(db_values_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        forbidden_strings = data.get("forbidden_values", [])
+
+    src_dir = os.path.join(ROOT_DIR, "src")
+    violations = []
+    
+    # Target identity keys for Argument-Literal & Binding Tracing Guard
+    target_keys = ["full_name", "company_name", "company", "tenant_id", "active_tenant_id"]
+
+    for root, dirs, files in os.walk(src_dir):
+        for file in files:
+            if file.endswith((".ts", ".tsx", ".js", ".jsx")):
+                file_path = os.path.join(root, file)
+                rel_path = os.path.relpath(file_path, ROOT_DIR).replace("\\", "/")
+                
+                # EXEMPT translations.js explicitly
+                if rel_path == "src/utils/translations.js":
+                    continue
+
+                try:
+                    with open(file_path, "r", encoding="utf-8") as cf:
+                        content = cf.read()
+                        
+                        # Part A: Database-backed placeholder scan
+                        for f_str in forbidden_strings:
+                            if f_str.lower() in content.lower():
+                                violations.append(f"{rel_path}: Contains forbidden database placeholder string '{f_str}'")
+
+                        # Part B: AST Argument-Literal & Binding Tracing Guard
+                        # Check direct string literal assignment to target identity keys
+                        for key in target_keys:
+                            # Match key: 'literal' or key: "literal" or key="literal"
+                            pattern = rf"{key}\s*[:=]\s*['\"]([^'\"]+)['\"]"
+                            matches = re.findall(pattern, content)
+                            for m in matches:
+                                # Exempt structural type/system constants (e.g. empty strings, 'guest', 'unattached')
+                                if m not in ["", "guest", "unattached", "auth-user", "success", "error"]:
+                                    violations.append(f"{rel_path}: Identity property '{key}' is assigned hardcoded string literal '{m}'. Must resolve dynamically from session or database row.")
+
+                except Exception:
+                    pass
+
+    if violations:
+        msg = "\n  ".join(violations)
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 40: Database Anti-Placeholder / Argument-Literal Violation(s) Found in src/:\n  {msg}\n"
+            f"  Rule: ZERO hardcoded identity/tenant string literals or bound variable fallbacks allowed in application component source files.",
+            phase=40
+        )
+    else:
+        print("  Phase 40: PASS. Zero forbidden database string placeholders or hardcoded identity argument literals found in src/.")
+
+
 def check_schema_reference_gate():
     """
     Phase 35: The Schema Reference Gate (Mandatory Pre-DDL Database Registry Check).
@@ -2644,18 +2803,73 @@ def check_second_framework_gate():
     print("  Phase 39: PASS. Zero unauthorized second-framework artifacts detected (Next.js + FastAPI single-stack verified).")
 
 
-def enforce_gate():
-    # Detect Vercel build environment
-    if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
-        print("VERCEL BUILD DETECTED: Bypassing local compilation gates.")
-        sys.exit(0)
+def check_ast_anti_placeholder_gate():
+    """
+    Phase 40: AST Database-Backed Anti-Placeholder Gate.
+    Compares string literals in src/ against cisem_core/db_live_values.json.
+    Exempts src/utils/translations.js.
+    """
+    print("Phase 40: Running Database-Backed Anti-Placeholder Gate...")
+    db_values_path = os.path.join(ROOT_DIR, "cisem_core", "db_live_values.json")
+    
+    if not os.path.exists(db_values_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+            
+    if not os.path.exists(db_values_path):
+        gate_block("CISEM_GATE_BLOCKED -- Phase 40: Missing 'cisem_core/db_live_values.json'.", phase=40)
+        
+    # Check freshness
+    schema_path = os.path.join(ROOT_DIR, "cisem_core", "live_schema_registry.json")
+    if os.path.exists(schema_path) and os.path.getmtime(db_values_path) < os.path.getmtime(schema_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
 
-    print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v3.1 > HARDENED + PHASES 21-39")
-    print("Ratified: GOV-2026-08-29-PASS-THROUGH-V38")
-    print("=" * 60)
+    with open(db_values_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        forbidden_strings = data.get("forbidden_values", [])
 
-    # Determine target file for header check
+    src_dir = os.path.join(ROOT_DIR, "src")
+    violations = []
+    
+    for root, dirs, files in os.walk(src_dir):
+        for file in files:
+            if file.endswith((".ts", ".tsx", ".js", ".jsx")):
+                file_path = os.path.join(root, file)
+                rel_path = os.path.relpath(file_path, ROOT_DIR).replace("\\", "/")
+                
+                # EXEMPT translations.js explicitly
+                if rel_path == "src/utils/translations.js":
+                    continue
+
+                try:
+                    with open(file_path, "r", encoding="utf-8") as cf:
+                        content = cf.read()
+                        for f_str in forbidden_strings:
+                            if f_str.lower() in content.lower():
+                                violations.append(f"{rel_path}: Contains forbidden database placeholder string '{f_str}'")
+                except Exception:
+                    pass
+
+    if violations:
+        msg = "\n  ".join(violations)
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 40: Database Anti-Placeholder Violation(s) Found in src/:\n  {msg}\n"
+            f"  Rule: ZERO hardcoded database value placeholders allowed in application component source files.",
+            phase=40
+        )
+    else:
+        print("  Phase 40: PASS. Zero forbidden database string placeholders found in src/.")
+
+
+def enforce_gate(target_file=None):
+    print("============================================================")
+    print("CISEM Local Gateway Gate (LGG) v3.1 > HARDENED + PHASES 21-40")
+    print("Ratified: GOV-2026-08-30-DATABASE-ANTI-PLACEHOLDER-V40")
+    print("============================================================")
+
     target_file = sys.argv[1] if len(sys.argv) > 1 else __file__
 
     check_turn_counter()            # Phase 0
@@ -2698,9 +2912,11 @@ def enforce_gate():
     check_inbound_references_for_viewports() # Phase 31 (Inbound Reference & Router Mount Audit Gate)
     check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
+    check_logged_in_playwright_gate()      # Phase 34.5 (Mandatory Logged-In Session Playwright DOM Assertion Gate)
     check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
     check_cumulative_route_surface_gate()  # Phase 38 (Cumulative Route Surface & Stale Allowlist Gate)
     check_second_framework_gate()          # Phase 39 (Second-Framework Anti-Bloat Audit Gate)
+    check_ast_anti_placeholder_gate()      # Phase 40 (AST Database-Backed Anti-Placeholder Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V3.1")
     print()

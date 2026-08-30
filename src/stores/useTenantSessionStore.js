@@ -17,24 +17,22 @@ const generateGuestSessionId = () => {
 
 export const useTenantSessionStore = create((set, get) => ({
   tenantId: null,
-  userId: 'user-operator',
-  simulatedRole: 'platform_admin',
+  userId: null,
+  role: 'tenant_admin',
   guestSessionId: generateGuestSessionId(),
 
   setSession: (tenantId, userId, role) => set({
     tenantId,
     userId,
-    simulatedRole: role || 'platform_admin'
+    role: role || 'tenant_admin'
   }),
-
-  setSimulatedRole: (role) => set({ simulatedRole: role }),
 
   setActiveUserId: (userId) => set({ userId }),
 
   resetSession: () => set({
     tenantId: null,
-    userId: 'user-operator',
-    simulatedRole: 'platform_admin',
+    userId: null,
+    role: 'tenant_admin',
     guestSessionId: generateGuestSessionId()
   })
 }));

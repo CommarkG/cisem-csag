@@ -1,12 +1,18 @@
 import { useOnboardingStore } from '../../stores/useOnboardingStore';
 import { useUIStore } from '../../stores/useUIStore';
+import { useAuthSession } from '../../hooks/useAuthSession';
 import { translations } from '../../utils/translations';
 import { Sparkles } from 'lucide-react';
 
 export default function WelcomeModal() {
+  const { session } = useAuthSession();
   const startTour = useOnboardingStore((s) => s.startTour);
   const skipTour = useOnboardingStore((s) => s.skipTour);
   const language = useUIStore((s) => s.language);
+
+  if (!session || (typeof window !== 'undefined' && window.location.hash.includes('signin'))) {
+    return null;
+  }
 
   const t = translations[language] || translations.en;
 

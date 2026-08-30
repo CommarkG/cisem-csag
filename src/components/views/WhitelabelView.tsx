@@ -116,99 +116,18 @@ export default function WhitelabelView({ isDarkMode, locale, dict }: WhitelabelV
         )}
 
         {/* Sync Settings and Console Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-right">
-          {/* Settings Form */}
-          <div className="space-y-6">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
-              {isRTL ? "הגדרות מותג לבן" : "Whitelabel Config"}
-            </h2>
-
-            {whitelabelError && (
-              <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/5 text-red-500 text-xs">
-                ⚠️ {whitelabelError}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">
-                  {isRTL ? "דומיין מותאם אישית (Custom Domain)" : "Custom Domain (CNAME)"}
-                </label>
-                <input
-                  type="text"
-                  value={whitelabelDomain}
-                  onChange={(e) => setWhitelabelDomain(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3 text-sm outline-none focus:border-amber-500 font-mono text-left"
-                  dir="ltr"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">
-                  {isRTL ? "כתובת מאגר Git יעד (Git Repository)" : "Git Repository SSH/HTTPS URL"}
-                </label>
-                <input
-                  type="text"
-                  value={whitelabelGitUrl}
-                  onChange={(e) => setWhitelabelGitUrl(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3 text-sm outline-none focus:border-amber-500 font-mono text-left"
-                  dir="ltr"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-400 mb-2">
-                  {isRTL ? "מפתח Deploy Secret" : "Deploy Secret Hook Token"}
-                </label>
-                <input
-                  type="password"
-                  value={whitelabelSecret}
-                  onChange={(e) => setWhitelabelSecret(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3 text-sm outline-none focus:border-amber-500 font-mono text-left"
-                  dir="ltr"
-                />
-              </div>
-            </div>
-
-            <div className="flex gap-3 pt-4 justify-start">
-              <button
-                onClick={handleSaveWhitelabel}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-all shadow-md"
-              >
-                💾 {isRTL ? "שמור הגדרות" : "Save Settings"}
-              </button>
-              <button
-                onClick={handleSyncWhitelabel}
-                disabled={isSyncingWhitelabel}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-md flex items-center gap-2"
-              >
-                {isSyncingWhitelabel ? "🔄 ..." : (isRTL ? "🚀 סנכרן מאגר כעת" : "🚀 Sync Repo Now")}
-              </button>
-            </div>
+        <div className="flex flex-col items-center justify-center p-12 text-center">
+          <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 text-3xl mb-4">
+            🔌
           </div>
-
-          {/* Console Output */}
-          <div className="flex flex-col h-full space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-amber-400 font-mono">
-                git-sync-terminal
-              </span>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                {isRTL ? "פלט תהליך סנכרון (Git Push)" : "Git Push Console output"}
-              </h3>
-            </div>
-
-            <div className="flex-1 min-h-[280px] rounded-2xl bg-slate-950 p-5 font-mono text-[11px] text-slate-350 border border-slate-800 overflow-y-auto space-y-2 text-left" dir="ltr">
-              {whitelabelLogs.map((log, idx) => (
-                <div key={idx} className="leading-relaxed">
-                  $ {log}
-                </div>
-              ))}
-              {isSyncingWhitelabel && (
-                <div className="text-indigo-400 animate-pulse">$ uploading codebase changesets to main branch...</div>
-              )}
-            </div>
-          </div>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+            {isRTL ? "חיבור מותג לבן וסנכרון מאגרים אינו מותקן" : "Whitelabel & Git-Sync Module Not Installed"}
+          </h2>
+          <p className="max-w-md text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+            {isRTL 
+              ? "רכיב סנכרון מאגרי קוד ל-Git וניתוב דומיינים אינו מותקן בשרת זה. אנא פנה למנהל המערכת לחיבור מאגרים חיצוניים."
+              : "The codebase repository synchronization and CNAME domain mapping service is not installed on this server. Contact your administrator to configure external Git endpoints."}
+          </p>
         </div>
       </div>
     </div>

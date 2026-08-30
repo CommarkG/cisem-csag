@@ -111,7 +111,7 @@ This is the core of the playbook. Every rule below was written after a specific 
 
 1. **No secret on any disk the agent can reach.** Launchers live in `C:\Users\finky\secure\`, outside the project. This is structural, not procedural.
 2. **No secret passes through an agent turn.** Rotation is GOVERNOR-only, dashboard → editor, by hand.
-3. **Confirm by prefix and length, never by value.** `sb_secret_qCw…`, 38 chars. Never the string.
+3. **Confirm by prefix and length, never by value.** `REDACTED_ROTATED_KEY…`, 38 chars. Never the string.
 4. **Copy at creation.** Supabase shows a secret once; the later preview is truncated and looks valid but is not.
 5. **Assume any secret an agent could read is already leaked.** Rotate on that assumption, not on evidence of misuse.
 

@@ -1,12 +1,17 @@
 /* ratified_plan: DISPUTED-PROVENANCE-FABRICATED */
 import React, { useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export interface QuoteBuilderProps {
-  inquiryId: string;
+  inquiryId?: string;
   onQuoteCreated?: (quote: any) => void;
 }
 
-export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId, onQuoteCreated }) => {
+export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId: propInquiryId, onQuoteCreated }) => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const inquiryId = propInquiryId || searchParams.get('inquiry_id') || '';
+
   const [currency, setCurrency] = useState('ILS');
   const [validUntil, setValidUntil] = useState('');
   const [notes, setNotes] = useState('');
@@ -60,7 +65,11 @@ export const QuoteBuilderView: React.FC<QuoteBuilderProps> = ({ inquiryId, onQuo
             });
           }
         }
-        if (onQuoteCreated) onQuoteCreated(data.quote);
+        if (onQuoteCreated) {
+          onQuoteCreated(data.quote);
+        } else {
+          navigate('/inquiry-intake');
+        }
       }
     } catch (err) {
       console.error('Error creating quote:', err);

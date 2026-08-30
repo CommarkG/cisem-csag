@@ -121,12 +121,9 @@ async function executeTwentyTool(name: string, args: Record<string, any>) {
       
       return { success: true, personId: data?.id || 'twenty-person-id', raw: data }
     } catch (e: any) {
-      console.warn('[Twenty CRM Connection Fail] Fallback to local storage registry:', e.message)
       return { 
         success: false, 
-        personId: 'local-backup-id', 
-        notice: 'Twenty CRM unreachable. Saved lead in local database backup.',
-        backupSaved: true,
+        error: `CRM Unreachable: ${e.message}`,
         details: { firstName: args.firstName, lastName: args.lastName, email: args.email }
       }
     }
@@ -155,12 +152,9 @@ async function executeTwentyTool(name: string, args: Record<string, any>) {
       
       return { success: true, opportunityId: data?.id || 'twenty-opp-id', raw: data }
     } catch (e: any) {
-      console.warn('[Twenty CRM Connection Fail] Fallback to local opportunity registry:', e.message)
       return { 
         success: false, 
-        opportunityId: 'local-opp-backup-id', 
-        notice: 'Twenty CRM unreachable. Opportunity registered in local backup DB.',
-        backupSaved: true,
+        error: `CRM Unreachable: ${e.message}`,
         details: { name: args.name, amount: args.amount }
       }
     }

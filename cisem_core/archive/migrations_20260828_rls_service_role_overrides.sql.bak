@@ -1,0 +1,106 @@
+-- ==========================================================================================
+-- CISEM CORECYCLE 1 PHASE B & C: RLS SERVICE-ROLE OVERRIDES & BATCH FORCE RLS MIGRATION
+-- Ratified Plan: Master CoreSpiral Architecture Blueprint V1.0 (CoreCycle 1)
+-- Target Authority: Governor Yariv (Live Supabase PostgreSQL Execution)
+-- Purpose: 
+--   1. Phase B: Apply RLS Policy Service-Role Overrides (OR auth.role() = 'service_role')
+--   2. Phase C: Batch ALTER TABLE <table> FORCE ROW LEVEL SECURITY across all 65 tables
+-- ==========================================================================================
+
+BEGIN;
+
+-- ------------------------------------------------------------------------------------------
+-- 1. DEFINE TENANT RESOLUTION FUNCTION WITH SERVICE ROLE FALLBACK
+-- ------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION current_tenant_id() RETURNS UUID AS $$
+BEGIN
+    RETURN NULLIF(current_setting('app.current_tenant_id', true), '')::UUID;
+EXCEPTION WHEN OTHERS THEN
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
+
+-- ------------------------------------------------------------------------------------------
+-- 2. CORE TENANT & USER ISOLATION POLICIES (PHASE B OVERRIDES)
+-- ------------------------------------------------------------------------------------------
+
+-- customer_accounts
+ALTER TABLE customer_accounts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON customer_accounts;
+CREATE POLICY tenant_isolation_policy ON customer_accounts
+    FOR ALL USING (id = current_tenant_id() OR auth.role() = 'service_role');
+
+-- tenant_users
+ALTER TABLE tenant_users ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON tenant_users;
+CREATE POLICY tenant_isolation_policy ON tenant_users
+    FOR ALL USING (customer_account_id = current_tenant_id() OR auth.role() = 'service_role');
+
+-- contacts
+ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON contacts;
+CREATE POLICY tenant_isolation_policy ON contacts
+    FOR ALL USING (customer_account_id = current_tenant_id() OR auth.role() = 'service_role');
+
+-- inquiries
+ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON inquiries;
+CREATE POLICY tenant_isolation_policy ON inquiries
+    FOR ALL USING (customer_account_id = current_tenant_id() OR auth.role() = 'service_role');
+
+-- inquiry_contacts
+ALTER TABLE inquiry_contacts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON inquiry_contacts;
+CREATE POLICY tenant_isolation_policy ON inquiry_contacts
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM inquiries i 
+            WHERE i.id = inquiry_contacts.inquiry_id 
+              AND (i.customer_account_id = current_tenant_id() OR auth.role() = 'service_role')
+        )
+    );
+
+-- tenant_sequence_counters
+ALTER TABLE tenant_sequence_counters ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON tenant_sequence_counters;
+CREATE POLICY tenant_isolation_policy ON tenant_sequence_counters
+    FOR ALL USING (customer_account_id = current_tenant_id() OR auth.role() = 'service_role');
+
+-- catalog_items
+ALTER TABLE catalog_items ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON catalog_items;
+CREATE POLICY tenant_isolation_policy ON catalog_items
+    FOR ALL USING (customer_account_id = current_tenant_id() OR is_public = true OR auth.role() = 'service_role');
+
+-- product_groups
+ALTER TABLE product_groups ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON product_groups;
+CREATE POLICY tenant_isolation_policy ON product_groups
+    FOR ALL USING (customer_account_id = current_tenant_id() OR is_public = true OR auth.role() = 'service_role');
+
+-- product_variations
+ALTER TABLE product_variations ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS tenant_isolation_policy ON product_variations;
+CREATE POLICY tenant_isolation_policy ON product_variations
+    FOR ALL USING (customer_account_id = current_tenant_id() OR is_public = true OR auth.role() = 'service_role');
+
+
+-- ------------------------------------------------------------------------------------------
+-- 3. PHASE C: BATCH FORCE ROW LEVEL SECURITY ACROSS ALL 65 TABLES
+-- (Enforces RLS evaluation even for table owners and service-role connections)
+-- ------------------------------------------------------------------------------------------
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT tablename 
+        FROM pg_tables 
+        WHERE schemaname = 'public' 
+          AND tablename NOT IN ('_migration_ledger')
+    ) LOOP
+        EXECUTE format('ALTER TABLE public.%I FORCE ROW LEVEL SECURITY;', r.tablename);
+    END LOOP;
+END $$;
+
+COMMIT;

@@ -29,8 +29,8 @@ export const createSeedData = () => {
       id: topicId,
       type: 'topic',
       parentId: null,
-      title: 'Product Development',
-      description: 'Main product development initiatives',
+      title: 'AGN Core Initiatives',
+      description: 'Main AGN Ltd initiatives',
       status: 'in_progress',
       priority: 'high',
       assigneeId: 'user-operator',
@@ -231,10 +231,7 @@ export const createSeedData = () => {
   ];
 };
 
-export const defaultTeamMembers = [
-  { id: "demo-user-001", name: "Demo Admin", email: "demo-admin@tenant.local", role: "account_owner", company: "Demo Workspace", avatar: "#6c5ce7", initials: "DA" },
-  { id: "demo-user-002", name: "Demo Manager", email: "demo-manager@tenant.local", role: "account_admin", company: "Demo Workspace", avatar: "#00cec9", initials: "DM" }
-];
+export const defaultTeamMembers = [];
 
 export const defaultNotificationRules = [
   { id: generateId(), event: 'status_change', label: 'Task status changed', channel: 'in_app', enabled: true, quietHours: true, leadTimeDays: 0 },

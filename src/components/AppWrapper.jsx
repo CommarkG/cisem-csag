@@ -186,9 +186,9 @@ function AppContent() {
       {addItemModal && <AddItemModal />}
       <ToastContainer />
 
-      {/* Onboarding */}
-      {showWelcome && location.pathname !== '/signin' && <WelcomeModal />}
-      {onboardingActive && location.pathname !== '/signin' && <OnboardingTour />}
+      {/* Onboarding - Session & Hash Guarded */}
+      {showWelcome && !window.location.hash.includes('signin') && location.pathname !== '/signin' && <WelcomeModal />}
+      {onboardingActive && !window.location.hash.includes('signin') && location.pathname !== '/signin' && <OnboardingTour />}
     </div>
   );
 }

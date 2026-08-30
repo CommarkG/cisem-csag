@@ -1,5 +1,6 @@
 // Scope          : @store_scope: tenant
 import { create } from 'zustand';
+import { apiClient } from '../utils/apiClient';
 import { defaultTeamMembers } from '../utils/seedData';
 import { tenantStorageAdapter } from '../utils/tenantStorageAdapter';
 
@@ -32,6 +33,26 @@ export const useCollabStore = create((set, get) => {
   return {
     members: initial.members || defaultTeamMembers,
     activityFeed: initial.activityFeed || [],
+
+    fetchMembers: async () => {
+      try {
+        const data = await apiClient('/api/v1/tenant/members');
+        if (data.members && Array.isArray(data.members) && data.members.length > 0) {
+          const mapped = data.members.map((m) => ({
+            id: m.id || m.user_id,
+            name: m.name || m.email?.split('@')[0] || 'Omri Shilo',
+            role: m.role || m.role_code || 'member',
+            email: m.email || '',
+            company: m.company || m.company_name || 'AGN Ltd',
+            initials: (m.name || m.email || 'OM').slice(0, 2).toUpperCase(),
+            avatar: AVATAR_COLORS[0]
+          }));
+          set({ members: mapped });
+        }
+      } catch (err) {
+        console.error('API Error fetching live team members:', err);
+      }
+    },
 
     // Add a new team member
     addMember: (name, role = 'colleague', email = '', phone = '', company = '', tags = []) => {

@@ -1597,8 +1597,8 @@ def get_catalog_item_detail(sku: str, request: Request):
             raise HTTPException(status_code=404, detail="Catalog product not found")
         product = prod_res.data[0]
         
-        # Determine whether to show costs based on role context
-        user_role = getattr(request.state, "role", None) or request.headers.get("x-user-role")
+        # Determine whether to show costs based on role context from JWT session claim
+        user_role = getattr(request.state, "role", None)
         is_admin = (user_role == "platform_admin")
         
         # Build variations
@@ -2209,7 +2209,7 @@ async def list_inquiries(request: Request):
     """Lists inquiries for the active tenant context only."""
     tenant_id = extract_tenant_from_request(request)
     try:
-        db_client = supabase_admin if supabase_admin else supabase
+        db_client = supabase
         res = db_client.table("inquiries").select("*").eq("customer_account_id", tenant_id).execute()
         return {"inquiries": res.data if res.data else []}
     except Exception as e:
@@ -2399,7 +2399,7 @@ async def list_tenant_members(request: Request, company_name: str | None = None)
     Zero synthetic fallbacks.
     """
     tenant_id = extract_tenant_from_request(request)
-    client = supabase_admin or supabase
+    client = supabase
     try:
         target_account_ids = []
         if company_name:
@@ -2469,7 +2469,7 @@ def get_tenant_vocabulary(request: Request):
     Reads vocabulary_terms (92 rows) and translations (74 rows) from live database with fallback.
     """
     tenant_id = extract_tenant_from_request(request)
-    client = supabase_admin or supabase
+    client = supabase
     try:
         res = client.table("vocabulary_terms").select("*").execute()
         terms = {row["code"]: row.get("label") or row.get("code") for row in (res.data or [])}

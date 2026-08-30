@@ -560,3 +560,489 @@ Call log:
 
   Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
 [2026-08-27T12:44:14.786637Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-28T05:29:57.551734Z] [Phase 26] [BLOCK] CISEM_GATE_BLOCKED -- Phase 26: Corrupted / Fused Line Detected in Allowlist File!
+  File      : C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\allowed_additions.txt
+  Line :6  : '.agents/reviewer/*'
+  Error     : Fused file path detected! Extension or path concatenated without newline.
+  Rule      : Every path must be on its own standalone line. Fused lines destroy authorizations silently.
+[2026-08-28T05:30:21.537568Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-28T05:30:40.545509Z] [Phase 26] [BLOCK] CISEM_GATE_BLOCKED -- Phase 26: Corrupted / Fused Line Detected in Allowlist File!
+  File      : C:\Users\finky\secure\cisem_allowed_additions.txt
+  Line :14  : 'src/app/saas-hub/page.tsx'
+  Error     : Fused file path detected! Extension or path concatenated without newline.
+  Rule      : Every path must be on its own standalone line. Fused lines destroy authorizations silently.
+[2026-08-29T17:35:38.574099Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-29T18:41:12.640572Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T19:03:45.189344Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 8cfe39b30ae8edf63cbf02a6dec53abc1465407aa06e23f06aacbe564a62edb5
+  Registered hash: e1a92588a154baabff680503cc20bf422baf5966e9be0b69534e54f3235f749e
+[2026-08-29T19:05:49.233058Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T19:07:25.046807Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:12:48.207077Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\SignInView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  src\components\views\ResetPasswordView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-29T21:13:30.239310Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\SignInView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  src\components\views\ResetPasswordView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-29T21:13:48.259242Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\SignInView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  src\components\views\ResetPasswordView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-29T21:14:19.408927Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\SignInView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  src\components\views\ResetPasswordView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-29T21:14:53.729061Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\SignInView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  src\components\views\ResetPasswordView.tsx: Header claims plan 'CISEM-IP-20260830-LOGGED-IN-E2E-TESTING' with sig 'GOV-YARIV-20260830-E2E-DOM-ASSERTIONS-V1' which is NOT in ratified_plans_manifest.json.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-29T21:15:44.772088Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-29T21:16:29.318987Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[UNCAUGHT PAGE ERROR DETECTED]: selectedNodeId is not defined
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - PAGE_ERROR: selectedNodeId is not defined
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:17:17.528339Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[UNCAUGHT PAGE ERROR DETECTED]: t is not defined
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - PAGE_ERROR: t is not defined
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:17:55.891981Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[UNCAUGHT PAGE ERROR DETECTED]: setActiveView is not defined
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - PAGE_ERROR: setActiveView is not defined
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:18:41.304590Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[UNCAUGHT PAGE ERROR DETECTED]: openAddItemModal is not defined
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - PAGE_ERROR: openAddItemModal is not defined
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:19:21.571004Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[UNCAUGHT PAGE ERROR DETECTED]: clearFilters is not defined
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - PAGE_ERROR: clearFilters is not defined
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:20:03.643795Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[UNCAUGHT PAGE ERROR DETECTED]: addClient is not defined
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - PAGE_ERROR: addClient is not defined
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T21:20:59.966795Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34.5: CANNOT VERIFY. Logged-In Playwright DOM Assertion Audit Failed.
+  Output:
+==========================================================================
+CISEM LOGGED-IN SESSION PLAYWRIGHT E2E TEST > V3.0
+Target URL: http://localhost:4321/#/signin
+==========================================================================
+
+[TARGET CHECK] Connecting to application target URL...
+
+[OVERLAY STEP] Checking for blocking modals or overlays...
+
+[TEST 1/5] Checking sign-in page for 'Forgot Password' link...
+  -> PASS: 'Forgot password' link found on sign-in page.
+
+[LOGIN PHASE] Attempting automated sign-in as omri@agn.co.il...
+  -> Screenshot Artifact Saved: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\cisem_core\downloads\2026-08-30__LoggedInSessionDOMScreenshot.png
+
+[TEST 2/5] Checking Header user name...
+  -> PASS: Header correctly displays 'Omri'
+
+[TEST 3/5] Checking Workspace label...
+  -> PASS: Workspace label contains 'AGN'
+
+[TEST 4/5] Checking Team Member database roster (Names + Count)...
+  -> FAIL: Team member names missing from DOM (Found: ['Omri'], Expected live database roster)
+
+[TEST 5/5] Checking forbidden placeholder strings in DOM...
+  -> PASS: Zero forbidden placeholder strings found in DOM.
+
+==========================================================================
+E2E TEST RESULT SUMMARY
+==========================================================================
+Passed Assertions : 4
+Failed Assertions : 1
+Screenshot Artifact Path : file:///C:/Users/finky/Desktop/AntiGravity/Cisem CsAg/cisem_core/downloads/2026-08-30__LoggedInSessionDOMScreenshot.png
+
+[PROCESS RECORD WRITTEN] cisem_core/last_run.json (SHA256: 17ce490c237c)
+
+FAILED ASSERTION DETAILS:
+  [X] FAIL: Team member names missing from DOM (Found: ['Omri'], Expected live database roster)
+
+  Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.
+[2026-08-29T21:21:42.780412Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-29T21:26:03.213902Z] [Phase 40] [BLOCK] CISEM_GATE_BLOCKED -- Phase 40: Database Anti-Placeholder Violation(s) Found in src/:
+  src/app/api/v1/[...path]/route.ts: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  src/components/layout/Header.jsx: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  src/components/views/UniversalOnboardingViewport.jsx: Contains forbidden database placeholder string 'USER@TENANT.LOCAL'
+  src/components/views/UniversalOnboardingViewport.jsx: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  src/hooks/useAuthSession.ts: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  src/stores/useTenantSessionStore.js: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  src/utils/seedData.js: Contains forbidden database placeholder string 'Demo Admin'
+  src/utils/seedData.js: Contains forbidden database placeholder string 'demo-admin@tenant.local'
+  src/utils/seedData.js: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  src/utils/seedData.js: Contains forbidden database placeholder string 'Demo Workspace'
+  Rule: ZERO hardcoded database value placeholders allowed in application component source files.
+[2026-08-29T21:27:14.243407Z] [Phase 40] [BLOCK] CISEM_GATE_BLOCKED -- Phase 40: Database Anti-Placeholder Violation(s) Found in src/:
+  src/stores/useTenantSessionStore.js: Contains forbidden database placeholder string 'ACCOUNT_ADMIN'
+  Rule: ZERO hardcoded database value placeholders allowed in application component source files.
+[2026-08-29T22:18:23.976340Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[UNCAUGHT PAGE ERROR DETECTED]: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   ֳ— Expected '</', got '{'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\layout\Header.jsx:793:1]
+ 790 ג”‚               </div>
+ 791 ג”‚               </div>
+ 792 ג”‚ 
+ 793 ג”‚               {/* Log Out & Session Actions */}
+     ֲ·               ג”€
+ 794 ג”‚               <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+ 795 ג”‚                 <div 
+ 795 ג”‚                   className="admin-dropdown-item" 
+     ג•°ג”€ג”€ג”€ג”€
+
+
+Caused by:
+    Syntax Error
+[CONSOLE ERROR DETECTED]: ./src/components/layout/Header.jsx
+Error:   ֳ— Expected '</', got '{'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\layout\Header.jsx:793:1]
+ 790 ג”‚               </div>
+ 791 ג”‚               </div>
+ 792 ג”‚ 
+ 793 ג”‚               {/* Log Out & Session Actions */}
+     ֲ·               ג”€
+ 794 ג”‚               <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+ 795 ג”‚                 <div 
+ 795 ג”‚                   className="admin-dropdown-item" 
+     ג•°ג”€ג”€ג”€ג”€
+
+Caused by:
+    Syntax Error
+[CONSOLE ERROR DETECTED]: ./src/components/layout/Header.jsx
+Error:   ֳ— Expected '</', got '{'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\layout\Header.jsx:793:1]
+ 790 ג”‚               </div>
+ 791 ג”‚               </div>
+ 792 ג”‚ 
+ 793 ג”‚               {/* Log Out & Session Actions */}
+     ֲ·               ג”€
+ 794 ג”‚               <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+ 795 ג”‚                 <div 
+ 795 ג”‚                   className="admin-dropdown-item" 
+     ג•°ג”€ג”€ג”€ג”€
+
+Caused by:
+    Syntax Error
+
+[CRITICAL FAILURE]: Playwright detected 4 uncaught console or dead script errors!
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+  - PAGE_ERROR: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   ֳ— Expected '</', got '{'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\layout\Header.jsx:793:1]
+ 790 ג”‚               </div>
+ 791 ג”‚               </div>
+ 792 ג”‚ 
+ 793 ג”‚               {/* Log Out & Session Actions */}
+     ֲ·               ג”€
+ 794 ג”‚               <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+ 795 ג”‚                 <div 
+ 795 ג”‚                   className="admin-dropdown-item" 
+     ג•°ג”€ג”€ג”€ג”€
+
+
+Caused by:
+    Syntax Error
+  - CONSOLE_ERROR: ./src/components/layout/Header.jsx
+Error:   ֳ— Expected '</', got '{'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\layout\Header.jsx:793:1]
+ 790 ג”‚               </div>
+ 791 ג”‚               </div>
+ 792 ג”‚ 
+ 793 ג”‚               {/* Log Out & Session Actions */}
+     ֲ·               ג”€
+ 794 ג”‚               <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+ 795 ג”‚                 <div 
+ 795 ג”‚                   className="admin-dropdown-item" 
+     ג•°ג”€ג”€ג”€ג”€
+
+Caused by:
+    Syntax Error
+  - CONSOLE_ERROR: ./src/components/layout/Header.jsx
+Error:   ֳ— Expected '</', got '{'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\layout\Header.jsx:793:1]
+ 790 ג”‚               </div>
+ 791 ג”‚               </div>
+ 792 ג”‚ 
+ 793 ג”‚               {/* Log Out & Session Actions */}
+     ֲ·               ג”€
+ 794 ג”‚               <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid var(--border-light)' }}>
+ 795 ג”‚                 <div 
+ 795 ג”‚                   className="admin-dropdown-item" 
+     ג•°ג”€ג”€ג”€ג”€
+
+Caused by:
+    Syntax Error
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-29T23:13:18.388506Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[UNCAUGHT PAGE ERROR DETECTED]: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   ֳ— Expected ',', got 'const'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\app\api\v1\[...path]\route.ts:155:1]
+ 152 ג”‚   }
+ 153 ג”‚ 
+ 154 ג”‚   // Proxy to FastAPI backend
+ 155 ג”‚   const targetUrl = `${BACKEND_URL}/${pathStr}`;
+     ֲ·   ג”€ג”€ג”€ג”€ג”€
+ 156 ג”‚   const forwardHeaders: Record<string, string> = {
+ 157 ג”‚     "Content-Type": "application/json",
+ 157 ג”‚   };
+     ג•°ג”€ג”€ג”€ג”€
+
+
+Caused by:
+    Syntax Error
+[CONSOLE ERROR DETECTED]: ./src/app/api/v1/[...path]/route.ts
+Error:   ֳ— Expected ',', got 'const'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\app\api\v1\[...path]\route.ts:155:1]
+ 152 ג”‚   }
+ 153 ג”‚ 
+ 154 ג”‚   // Proxy to FastAPI backend
+ 155 ג”‚   const targetUrl = `${BACKEND_URL}/${pathStr}`;
+     ֲ·   ג”€ג”€ג”€ג”€ג”€
+ 156 ג”‚   const forwardHeaders: Record<string, string> = {
+ 157 ג”‚     "Content-Type": "application/json",
+ 157 ג”‚   };
+     ג•°ג”€ג”€ג”€ג”€
+
+Caused by:
+    Syntax Error
+
+[CRITICAL FAILURE]: Playwright detected 3 uncaught console or dead script errors!
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+  - PAGE_ERROR: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   ֳ— Expected ',', got 'const'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\app\api\v1\[...path]\route.ts:155:1]
+ 152 ג”‚   }
+ 153 ג”‚ 
+ 154 ג”‚   // Proxy to FastAPI backend
+ 155 ג”‚   const targetUrl = `${BACKEND_URL}/${pathStr}`;
+     ֲ·   ג”€ג”€ג”€ג”€ג”€
+ 156 ג”‚   const forwardHeaders: Record<string, string> = {
+ 157 ג”‚     "Content-Type": "application/json",
+ 157 ג”‚   };
+     ג•°ג”€ג”€ג”€ג”€
+
+
+Caused by:
+    Syntax Error
+  - CONSOLE_ERROR: ./src/app/api/v1/[...path]/route.ts
+Error:   ֳ— Expected ',', got 'const'
+     ג•­ג”€[C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\app\api\v1\[...path]\route.ts:155:1]
+ 152 ג”‚   }
+ 153 ג”‚ 
+ 154 ג”‚   // Proxy to FastAPI backend
+ 155 ג”‚   const targetUrl = `${BACKEND_URL}/${pathStr}`;
+     ֲ·   ג”€ג”€ג”€ג”€ג”€
+ 156 ג”‚   const forwardHeaders: Record<string, string> = {
+ 157 ג”‚     "Content-Type": "application/json",
+ 157 ג”‚   };
+     ג•°ג”€ג”€ג”€ג”€
+
+Caused by:
+    Syntax Error
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-30T00:45:29.600090Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-30T00:46:40.550807Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: Timeout 5000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: Timeout 5000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-30T08:50:34.823434Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\components\views\QuoteBuilderView.tsx: Missing mandatory code header block.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-30T08:51:07.286933Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-30T09:00:26.874992Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 906c8566f665c749a131503d6b3611a76c1a949c2577472505209cfc8337e567
+  Registered hash: 64438075f76ba7d11fb5b78a3b1430ac02e88b804291e36a1b51f6ae54a8e416
+[2026-08-30T09:00:35.295997Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.
+  Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\agent_chat_widget.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\lib\2026-08-11__AntigravityLocal__YarivHuman__MedusaClientAdapter__V1.0.ts: Missing mandatory code header block.
+  src\lib\tenant_context.ts: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.
+  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.
+[2026-08-30T09:20:09.627593Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-30T09:20:43.200277Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[CONSOLE ERROR DETECTED]: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[UNCAUGHT PAGE ERROR DETECTED]: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error: 
+
+Caused by:
+    0: Failed to read source code from C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\shared\DefineFieldsModal.jsx
+    1: The system cannot find the file specified. (os error 2)
+[CONSOLE ERROR DETECTED]: ./src/components/shared/DefineFieldsModal.jsx
+Error: 
+
+Caused by:
+    0: Failed to read source code from C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\shared\DefineFieldsModal.jsx
+    1: The system cannot find the file specified. (os error 2)
+
+[CRITICAL FAILURE]: Playwright detected 3 uncaught console or dead script errors!
+  - CONSOLE_ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+  - PAGE_ERROR: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error: 
+
+Caused by:
+    0: Failed to read source code from C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\shared\DefineFieldsModal.jsx
+    1: The system cannot find the file specified. (os error 2)
+  - CONSOLE_ERROR: ./src/components/shared/DefineFieldsModal.jsx
+Error: 
+
+Caused by:
+    0: Failed to read source code from C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components\shared\DefineFieldsModal.jsx
+    1: The system cannot find the file specified. (os error 2)
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-30T09:21:26.562930Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 27!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\lib\tenant_context.ts: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.

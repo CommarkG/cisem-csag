@@ -1,0 +1,12 @@
+{
+  "timestamp": 1788037536.2683318,
+  "forbidden_values": [
+    "Demo Admin",
+    "Product Development",
+    "USER@TENANT.LOCAL",
+    "platform admin",
+    "demo-admin@tenant.local",
+    "ACCOUNT_ADMIN",
+    "Demo Workspace"
+  ]
+}

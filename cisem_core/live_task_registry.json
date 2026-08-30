@@ -42,11 +42,11 @@
     {
       "task_id": "TASK-005",
       "title": "Phase B: RLS Policy Service-Role Overrides",
-      "status": "PENDING",
+      "status": "VALIDATED_IMPACT",
       "owner": "ANTIGRAVITY",
       "unblocks_count": 15,
-      "defeat_vector": "Ensures service-role queries observe current_tenant_id() unless explicit service_role override is active",
-      "evidence": "Queued after Phase A"
+      "defeat_vector": "Prepared DDL with USING (customer_account_id = current_tenant_id() OR auth.role() = 'service_role')",
+      "evidence": "backend/src/backend/migrations_20260828_rls_service_role_overrides.sql"
     },
     {
       "task_id": "TASK-006",
@@ -55,7 +55,7 @@
       "owner": "GOVERNOR",
       "unblocks_count": 65,
       "defeat_vector": "Forces RLS policy evaluation even for table owners and service-role connections",
-      "evidence": "Awaiting Governor DDL authorization"
+      "evidence": "DDL script prepared at backend/src/backend/migrations_20260828_rls_service_role_overrides.sql (lines 75-90)"
     },
     {
       "task_id": "TASK-007",
