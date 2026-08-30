@@ -12,28 +12,25 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useCollabStore } from '../stores/useCollabStore';
 
-export interface AuthSessionState {
-  user: any | null;
-  session: any | null;
-  loading: boolean;
-  userName: string;
-  companyName: string;
-  tenantId: string | null;
+export interface SessionUser {
+  id: string;
+  email: string;
+  name: string;
   role: string;
-  unattachedError?: string | null;
 }
 
-export function useAuthSession(): AuthSessionState {
-  const [state, setState] = useState<AuthSessionState>({
-    user: null,
-    session: null,
-    loading: true,
-    userName: '',
-    companyName: '',
-    tenantId: null,
-    role: 'tenant_admin',
-    unattachedError: null
-  });
+export interface Tenant {
+  id: string;
+  companyName: string;
+}
+
+export type AuthSessionResult =
+  | { status: 'loading' }
+  | { status: 'error'; error: Error; unattachedError?: string }
+  | { status: 'ready'; user: SessionUser; tenant: Tenant; session: any };
+
+export function useAuthSession(): AuthSessionResult {
+  const [result, setResult] = useState<AuthSessionResult>({ status: 'loading' });
 
   useEffect(() => {
     let mounted = true;
@@ -43,15 +40,9 @@ export function useAuthSession(): AuthSessionState {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session || !session.user) {
           if (mounted) {
-            setState({
-              user: null,
-              session: null,
-              loading: false,
-              userName: '',
-              companyName: '',
-              tenantId: null,
-              role: 'guest',
-              unattachedError: null
+            setResult({
+              status: 'error',
+              error: new Error('UNAUTHENTICATED: No active Supabase session.')
             });
           }
           return;
@@ -70,23 +61,18 @@ export function useAuthSession(): AuthSessionState {
             .select('account_id, role')
             .eq('user_id', user.id);
 
-          if (user.email !== 'omri@agn.co.il' && (!roles || roles.length === 0)) {
+          if (!roles || roles.length === 0) {
             if (mounted) {
-              setState({
-                user,
-                session,
-                loading: false,
-                userName: '',
-                companyName: '',
-                tenantId: null,
-                role: 'unattached',
+              setResult({
+                status: 'error',
+                error: new Error('UNATTACHED: Account is not attached to an active tenant organisation.'),
                 unattachedError: 'Your account is not attached to an organisation.'
               });
             }
             return;
           }
         } catch (e) {
-          // ignore database query error in offline mode
+          // ignore DB error in offline mode
         }
 
         // Tier 1: Query public.users for full_name
@@ -103,15 +89,19 @@ export function useAuthSession(): AuthSessionState {
         }
 
         if (mounted) {
-          setState({
-            user,
-            session,
-            loading: false,
-            userName,
-            companyName,
-            tenantId,
-            role: 'tenant_admin',
-            unattachedError: null
+          setResult({
+            status: 'ready',
+            user: {
+              id: user.id,
+              email: user.email || '',
+              name: userName || user.email || 'User',
+              role: 'tenant_admin'
+            },
+            tenant: {
+              id: tenantId || '5f2bfda8-6ff1-483d-870e-14335a59915c',
+              companyName: companyName || 'AGN Ltd'
+            },
+            session
           });
         }
 
@@ -122,16 +112,11 @@ export function useAuthSession(): AuthSessionState {
           // ignore
         }
 
-      } catch (err) {
+      } catch (err: any) {
         if (mounted) {
-          setState({
-            user: null,
-            session: null,
-            loading: false,
-            userName: '',
-            companyName: '',
-            tenantId: null,
-            role: 'guest'
+          setResult({
+            status: 'error',
+            error: err instanceof Error ? err : new Error(String(err))
           });
         }
       }
@@ -151,5 +136,5 @@ export function useAuthSession(): AuthSessionState {
     };
   }, []);
 
-  return state;
+  return result;
 }

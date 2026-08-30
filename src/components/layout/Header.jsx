@@ -52,12 +52,15 @@ export default function Header() {
   
   const activeUserId = useTenantSessionStore(state => state.userId);
   const members = useCollabStore(state => state.members);
-  const { userName, companyName, loading: authLoading } = useAuthSession();
-
-  const currentUser = {
-    name: userName || 'Omri Shilo',
-    role: 'tenant_admin',
-    company: companyName || 'AGN Ltd'
+  const authSession = useAuthSession();
+  const currentUser = authSession.status === 'ready' ? {
+    name: authSession.user.name,
+    role: authSession.user.role,
+    company: authSession.tenant.companyName
+  } : {
+    name: '',
+    role: 'guest',
+    company: ''
   };
   
   const [isDark, setIsDark] = useState(() => {

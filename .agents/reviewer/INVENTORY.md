@@ -359,12 +359,14 @@
 | `cisem_core/downloads/CollaborationHub.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/Header.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/P1__Pipeline__Intent_to_Sustained__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/PageGreetingBanner.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/QuoteBuilderView.tsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/Sidebar.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/SignInView.tsx` | `3.0` | `UNVERSIONED` | MISMATCH (3.0 vs UNVERSIONED) |
 | `cisem_core/downloads/TemplateHubView.tsx` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
 | `cisem_core/downloads/UniversalOnboardingViewport.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/ViciousWiringAuditor.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/downloads/WelcomeModal.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_all_references.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_infrastructure_code.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/audit_missing_ratified_docs.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
@@ -377,8 +379,6 @@
 | `cisem_core/downloads/fix_and_gate.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/fix_and_test.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/fix_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/generate_backlog_seed.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/generate_deduplicated_seed.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |

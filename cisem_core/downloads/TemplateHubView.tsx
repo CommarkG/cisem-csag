@@ -104,7 +104,8 @@ import { useAuthSession } from '../../hooks/useAuthSession';
 
 /* ========== MAIN COMPONENT ========== */
 export default function TemplateHubView() {
-  const { role } = useAuthSession();
+  const authSession = useAuthSession();
+  const role = authSession.status === 'ready' ? authSession.user.role : 'guest';
   const [activeTab, setActiveTab] = useState<'templates' | 'pages'>('templates');
   const [registry] = useState<Registry>(MOCK_REGISTRY);
   const [duplicateTarget, setDuplicateTarget] = useState<Template | null>(null);
