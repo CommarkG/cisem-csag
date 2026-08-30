@@ -356,6 +356,7 @@
 | `cisem_core/downloads/AdminView.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/CisemATV.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/downloads/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
+| `cisem_core/downloads/CollaborationHub.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/Header.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/P1__Pipeline__Intent_to_Sustained__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/QuoteBuilderView.tsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
@@ -378,7 +379,6 @@
 | `cisem_core/downloads/fix_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/generate_backlog_seed.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/generate_deduplicated_seed.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/implementation_plan.md` | `2.0` | `UNVERSIONED` | MISMATCH (2.0 vs UNVERSIONED) |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |

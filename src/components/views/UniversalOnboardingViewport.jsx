@@ -61,18 +61,18 @@ export default function UniversalOnboardingViewport() {
           const currentUser = (isAuthenticated && storedEmail) ? membersList.find(m => m.email === storedEmail) : null;
           
           setSessionUser({
-            name: currentUser?.name || storedUserName || (isAuthenticated ? 'Authenticated User' : 'Guest User'),
+            name: currentUser?.name || storedUserName || (isAuthenticated ? '' : ''),
             role: currentUser?.role || (isAuthenticated ? 'tenant_admin' : 'guest'),
-            email: currentUser?.email || storedEmail || (isAuthenticated ? 'user@company.local' : 'guest@platform.local')
+            email: currentUser?.email || storedEmail || ''
           });
           setTenantConfig({
-            companyName: storedCompany || data.company_name || (isAuthenticated ? 'Active Workspace' : 'Public Workspace'),
+            companyName: storedCompany || data.company_name || '',
             tenantId: isAuthenticated ? (data.active_tenant_id || null) : null,
             status: isAuthenticated ? 'ACTIVE' : 'UNAUTHENTICATED',
             capabilities: isAuthenticated ? ['inquiries.create', 'quotes.accept', 'team.manage', 'analytics.view'] : ['inquiries.create']
           });
         } else {
-          throw new Error('Fallback trigger');
+          throw new Error('Tenant session claim lookup failed');
         }
       } catch (err) {
         console.warn('Tenant session claim lookup error:', err);
@@ -82,17 +82,17 @@ export default function UniversalOnboardingViewport() {
 
         const isAuthenticated = Boolean(storedUserName || storedEmail || (typeof window !== 'undefined' && localStorage.getItem('cisem_access_token')));
         setSessionUser({
-          name: isAuthenticated ? (storedUserName || 'Authenticated User') : 'Guest User',
+          name: storedUserName || '',
           role: isAuthenticated ? 'tenant_admin' : 'guest',
-          email: isAuthenticated ? (storedEmail || 'user@company.local') : 'guest@platform.local'
+          email: storedEmail || ''
         });
         setTenantConfig({
-          companyName: isAuthenticated ? (storedCompany || 'Active Workspace') : 'Public Workspace',
+          companyName: storedCompany || '',
           tenantId: null,
-          status: isAuthenticated ? 'ACTIVE' : 'UNAUTHENTICATED',
+          status: isAuthenticated ? 'ERROR' : 'UNAUTHENTICATED',
           capabilities: isAuthenticated ? ['inquiries.create', 'quotes.accept', 'team.manage'] : ['inquiries.create']
         });
-        // NO SESSION MUST MEAN NO ROSTER
+        // NO SESSION OR ERROR MUST MEAN NO ROSTER
         setTeamMembers([]);
       } finally {
         setLoading(false);
