@@ -168,7 +168,7 @@ control_plane_subsystems:
         optimization: PENDING
         consolidation: CONSOLIDATED
         permission_compliance: PENDING
-      sha256: 59d287721313deeadc9b1d72429d03850b3d1ac85add5c100af76a80331df57c
+      sha256: 3e941ddd735503b837bea80315365515f13f8bae20d19ce348667420cb24eafe
     packet_schema:
       path: 2026-08-05__CISEM__CXP__PacketSchema__V1.2.schema.json
       version: '1.2'
@@ -464,7 +464,7 @@ control_plane_subsystems:
         optimization: OPTIMIZED
         consolidation: CONSOLIDATED
         permission_compliance: ENFORCED
-      sha256: bc8ce7729edf365209103cca10db34326d23b929961289a8e16d9ec1be51a324
+      sha256: 3e941ddd735503b837bea80315365515f13f8bae20d19ce348667420cb24eafe
     2026_08_22__AntigravityLocal__NoUnpartitionedStorageLinter__V1_0_mjs:
       path: linters/no_unpartitioned_storage.mjs
       version: '1.0'

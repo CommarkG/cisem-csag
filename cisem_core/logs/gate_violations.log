@@ -1175,3 +1175,43 @@ Caused by:
   Rule: Cumulative header violations must not increase. The baseline count is 26.
   Fix: Resolve violations, or request the Governor to update the baseline file.
 [2026-08-30T14:18:03.611712Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-30T14:18:45.109601Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-08-30T21:39:41.119712Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-30T21:41:14.642738Z] [Phase 4] [BLOCK] CISEM_GATE_BLOCKED -- Phase 4: plan_id 'FAKE-GHOST-PLAN-999' is NOT in Parking Vault or ratified_plans_manifest.json.
+  Rule: Un-ratified plan IDs are strictly prohibited. The GOV- string escape valve is CLOSED.
+  Fix: Obtain formal Governor ratification to add plan to ratified_plans_manifest.json.
+[2026-08-30T21:41:52.169814Z] [Phase 16] [BLOCK] CISEM_GATE_BLOCKED -- Phase 16: DDL integrity violation in migrations_test_jsonb.sql:L1.
+  Line: 'CREATE TABLE test (credentials JSONB);'
+  Rule: Credentials, roles, permissions, and feature flags must be modeled as relational tables, NOT JSONB columns.
+[2026-08-30T21:43:00.685640Z] [Phase 21] [BLOCK] CISEM_GATE_BLOCKED -- Phase 21: External Page Coding Lock violation.
+  Violated pages: ['page-global-electronics-supplier']
+  Rule: Governor-locked client pages may not have custom_coding_allowed=True
+  without a governor ratification file in cisem_core/planning/<page_id>__governor_ratification.json.
+  Resolution: Set custom_coding_allowed=false, or obtain Governor ratification.
+[2026-08-30T21:57:35.359394Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 56bc471182e351f652e741f27ae82e503f6d2abdf35893f2c5403c33b743e970
+  Registered hash: bc8ce7729edf365209103cca10db34326d23b929961289a8e16d9ec1be51a324
+[2026-08-30T21:57:49.309337Z] [Phase 13] [BLOCK] CISEM_GATE_BLOCKED -- Phase 13: Fabricated or placeholder environment variables detected:
+    - ANTIGRAVITY_SOURCE_METADATA='{"tool":{"conversationId":"f9d83031-b7e1-42a3-adc3-5130cf5cb069","stepIndex":21587,"toolCall":{"id":"call_1562811","name":"run_command","argumentsJson":"{\"CommandLine\":\"python \\\"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\\\\cisem_core\\\\platform_core\\\\cisem_gate.py\\\"\",\"Cwd\":\"C:\\\\Users\\\\finky\\\\Desktop\\\\AntiGravity\\\\Cisem CsAg\",\"IsDaemon\":false,\"WaitMsBeforeAsync\":5000,\"toolAction\":\"Running cisem_gate.py for Phase 13 empirical attack test\",\"toolSummary\":\"Run cisem_gate.py for Phase 13 empirical attack test\"}","thinkingSignature":"EoQCCoECARFNMg8N9foLOIylESl+fFlSrl5jb17tQfaes/5XJCZpdaWOaow0tl55S6+9OhgYWWRABWq/66D3/vhNgMD5ccHaISkmYZKLIrGEnOw90UlRd7CzrvhNPODyRKpaoE+FcpyjBfWyIbGtzQCDWMZaA9pDHcY1IXHKO9FwFQeYAAeevgR/+tTGfWaRN7J4syCxKirYv/B+XwHY1MNJd9IDYrpwHMiulCc6aEByHja6LYrXIt5wf/nGyyqOeRVDhyVX63c3WXH/r36ExW0f8eZ+80ufye3Nns/v1R2rBT+e9ixICrBW9YZyj9iSMSiCOAqEA5hvDj7XI/NfXnFf9qcshwo="}}}' (Contains forbidden placeholder pattern)
+  Rule: Absence of secrets is an honest pass in local dev, but supplying fake/placeholder values is prohibited.
+[2026-08-30T21:58:06.333693Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 3e941ddd735503b837bea80315365515f13f8bae20d19ce348667420cb24eafe
+  Registered hash: 56bc471182e351f652e741f27ae82e503f6d2abdf35893f2c5403c33b743e970
+[2026-08-30T21:58:28.703890Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-08-30T21:58:32.984975Z] [Phase 13] [BLOCK] CISEM_GATE_BLOCKED -- Phase 13: Hardcoded secret-shaped string literals detected in source code:
+    - backend\src\backend\test_dummy_secret.py: Found hardcoded Secret Key (sk-...) literal ('sk-proj-...')
+  Rule: Hardcoding secret keys or API tokens in source code files is strictly prohibited.
+  Fix: Store secrets in environment variables or resolve dynamically from secure key vault.

@@ -376,9 +376,9 @@
 | `cisem_core/downloads/check_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/cisem_gate.py` | `3.1` | `UNVERSIONED` | MISMATCH (3.1 vs UNVERSIONED) |
 | `cisem_core/downloads/debug_gate_phase8.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/downloads/extract_verification_manifest.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/find_offending_file.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/downloads/fix_and_gate.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/fix_and_test.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |

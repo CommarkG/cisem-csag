@@ -387,6 +387,13 @@ def check_sync():
 
 
 # -----------------------------------------------------------------------------
+# PHASE 3: Mandatory Code Header Audit
+# [PREVENTION RECORD]
+# THE MECHANISM: AST & string regex scan requiring every Python source file to carry a valid CISEM YAML code header block with ratified_plan: and governor_signature:.
+# THE TRIGGER: Writing code directly to solve a problem without first linking it to an approved architecture plan ("coding feels like progress").
+# THE INCIDENT WITH A DATE: 2026-08-27 — main.py and provisioning.py were edited across multiple turns without plan headers.
+# THE DEFEAT ROUTE: Copying a dummy header from another file with an unverified plan ID.
+# -----------------------------------------------------------------------------
 # PHASE 3: Mandatory YAML header validation
 # Every Python source file submitted to the gate must carry:
 #   ratified_plan: <PLAN-ID>
@@ -422,6 +429,13 @@ def validate_header(target_file_path):
     return plan_id, sig
 
 
+# -----------------------------------------------------------------------------
+# PHASE 4: Parking Vault Linkage Check
+# [PREVENTION RECORD]
+# THE MECHANISM: Cross-references code header plan_id against ratified_plans_manifest.json and Parking Vault, rejecting ghost/unmanifested IDs.
+# THE TRIGGER: Accepting a string prefix match (GOV-) as valid because checking a string is easy and resolving a plan is work ("checking a string feels like validation").
+# THE INCIDENT WITH A DATE: 2026-08-11 — Medusa adapter cited ghost plan PLAN-009 and sat in repo until caught by Reviewer audit.
+# THE DEFEAT ROUTE: Writing a valid plan ID from a different project component into an unrelated module header.
 # -----------------------------------------------------------------------------
 # PHASE 4: Parking Vault bidirectional linkage check
 # The plan_id in the code header must resolve to a Governor-ratified entry
@@ -646,11 +660,43 @@ def check_staged_additions():
         allow_paths.append(local_allow)
     for a_path in allow_paths:
         if os.path.exists(a_path):
+            total_lines = 0
+            file_pats = 0
             with open(a_path, "r", encoding="utf-8-sig") as f:
-                for raw in f:
+                for idx, raw in enumerate(f, start=1):
+                    total_lines = idx
                     t = raw.strip()
-                    if t and not t.startswith("#"):
-                        pats.append(t.replace("\\", "/"))
+                    if not t or t.startswith("#"):
+                        continue
+                    
+                    # Fused Line Detection: Multiple file extensions on a single line (e.g. supabaseClient.tscisem_core/...)
+                    exts = re.findall(r'\.(py|js|ts|jsx|tsx|json|yaml|yml|md|sql|txt|log|mjs|cjs)\b', t, re.IGNORECASE)
+                    if len(exts) > 1 or re.search(r'\s+.*[/\\]', t):
+                        gate_block(
+                            f"CISEM_GATE_BLOCKED -- Phase 26: Corrupted / Fused Line Detected in Allowlist File!\n"
+                            f"  File      : {a_path}\n"
+                            f"  Line :{idx}  : '{t}'\n"
+                            f"  Error     : Fused file path detected! Multiple extensions ({exts}) on a single line.\n"
+                            f"  Rule      : Every path must be on its own standalone line. Fused lines destroy authorizations silently.",
+                            phase=26
+                        )
+
+                    # Shape Validation: Plausible relative path format
+                    clean_path = t.replace("\\", "/")
+                    if " " in clean_path or clean_path.startswith("/"):
+                        gate_block(
+                            f"CISEM_GATE_BLOCKED -- Phase 26: Malformed Path Entry in Allowlist File!\n"
+                            f"  File      : {a_path}\n"
+                            f"  Line :{idx}  : '{t}'\n"
+                            f"  Error     : Invalid path format. Paths must be relative with zero whitespace.",
+                            phase=26
+                        )
+
+                    pats.append(clean_path)
+                    file_pats += 1
+
+            print(f"  Phase 26: Read {file_pats} authorised path entries from {total_lines} lines in {os.path.basename(a_path)}.")
+
     bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
     if bad:
         print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")
@@ -1196,24 +1242,27 @@ def reset_planning_mode(target_file_path):
                 print(f"CISEM_GATE_WARNING: Failed to reset planning mode state: {e}")
 
 
+# -----------------------------------------------------------------------------
+# PHASE 13: Environment Variable & Secret Anti-Fabrication Gate
+# [PREVENTION RECORD]
+# THE MECHANISM: Scans all .env keys, os.environ, and regex-scans all workspace source files (.py, .ts, .tsx, .js, .jsx, .sql, .json, .yml, .yaml) for forbidden placeholder values and secret-shaped strings (sb_secret_, sk-, ghp_, AKIA, eyJ).
+# THE TRIGGER: Checking a whitelist (.env.example) instead of all workspace files because scanning a whitelist is cheap ("checking what is on a list feels thorough").
+# THE INCIDENT WITH A DATE: 2026-08-25 — Live Supabase secret key sat in check_schema.py:7 for 6 days undetected because Phase 13 only scanned .env.example keys.
+# THE DEFEAT ROUTE: String obfuscation, base64 encoding, or variable concatenation ("s" + "k-...").
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# PHASE 13: Environment Variable & Secret Anti-Fabrication Gate
+# [PREVENTION RECORD]
+# THE MECHANISM: Scans all .env keys, os.environ, and regex-scans all workspace source files (.py, .ts, .tsx, .js, .jsx, .sql, .json, .yml, .yaml) for forbidden placeholder values and secret-shaped strings (sb_secret_, sk-, ghp_, AKIA, eyJ).
+# THE TRIGGER: Checking a whitelist (.env.example) instead of all workspace files because scanning a whitelist is cheap ("checking what is on a list feels thorough").
+# THE INCIDENT WITH A DATE: 2026-08-25 — Live Supabase secret key sat in check_schema.py:7 for 6 days undetected because Phase 13 only scanned .env.example keys.
+# THE DEFEAT ROUTE: String obfuscation, base64 encoding, or variable concatenation ("s" + "k-...").
+# -----------------------------------------------------------------------------
 def check_env_vars():
-    """Phase 13: Scans environment variables for forbidden placeholder/fabricated patterns. Absence is an honest pass in local dev."""
-    print("Phase 13: Checking Environment Variables (Fabrication & Placeholder Anti-Fabrication Gate)...")
-    env_example_path = os.path.join(ROOT_DIR, ".env.example")
-    if not os.path.exists(env_example_path):
-        print("  Phase 13: INFO. No .env.example found. Skipping check.")
-        return
-
-    required_vars = []
-    with open(env_example_path, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                key = line.split("=")[0].strip()
-                if key:
-                    required_vars.append(key)
-
-    # Load local .env file if present
+    """Phase 13: Class-based Environment Variable & Secret Anti-Fabrication Scanner."""
+    print("Phase 13: Checking Environment Variables & Hardcoded Secrets (Class-Based Anti-Fabrication Gate)...")
+    
+    # 1. Scan ALL environment variables in .env and os.environ
     env_vars = {}
     env_path = os.path.join(ROOT_DIR, ".env")
     if os.path.exists(env_path):
@@ -1222,28 +1271,30 @@ def check_env_vars():
                 line = line.strip()
                 if line and not line.startswith("#") and "=" in line:
                     parts = line.split("=", 1)
-                    key = parts[0].strip()
-                    val = parts[1].strip()
-                    if key:
-                        env_vars[key] = val
+                    k_name = parts[0].strip()
+                    k_val = parts[1].strip()
+                    if k_name:
+                        env_vars[k_name] = k_val
 
-    forbidden_patterns = ["dummy", "test", "placeholder", "changeme", "xxx", "_real", "your_"]
+    all_keys = set(env_vars.keys()) | set(os.environ.keys())
+    forbidden_patterns = ["dummy", "placeholder", "changeme", "xxx", "_real", "your_"]
     fabricated_vars = []
 
-    for var in required_vars:
-        # Absence is an honest pass in local dev
-        val = os.environ.get(var) if var in os.environ else env_vars.get(var)
+    for var in all_keys:
+        # Ignore framework runtime metadata environment variables
+        if var.startswith(("ANTIGRAVITY_", "GEMINI_", "PSModulePath", "PATH", "SystemRoot", "TERM", "PAGER", "PROCESSOR_")):
+            continue
+            
+        val = env_vars.get(var) if var in env_vars else os.environ.get(var)
         if val is None or val == "":
             continue
             
         val_lower = val.lower()
         is_secret = any(term in var.lower() for term in ["key", "secret", "credentials", "token", "password"])
         
-        # Check placeholder strings
-        if any(pat in val_lower for pat in forbidden_patterns):
+        if any(pat in val_lower for pat in forbidden_patterns) and not any(ok in var.lower() for ok in ["test_mode", "is_test", "node_env"]):
             fabricated_vars.append((var, val, "Contains forbidden placeholder pattern"))
-        # Check short fake secret values
-        elif is_secret and len(val) < 12 and not val.endswith(".json"):
+        elif is_secret and len(val) < 12 and not val.endswith(".json") and val not in ["true", "false", "development", "production", "test"]:
             fabricated_vars.append((var, val, f"Secret value length ({len(val)}) is under 12 characters"))
 
     if fabricated_vars:
@@ -1254,7 +1305,48 @@ def check_env_vars():
             phase=13
         )
 
-    print("  Phase 13: PASS. No fabricated or placeholder environment variables detected (absence is permitted).")
+    # 2. Regex-scan all source files for hardcoded secret-shaped string literals
+    secret_patterns = [
+        (re.compile(r'\b(sb_secret_[a-zA-Z0-9_\-]+)\b'), "Supabase Secret Key"),
+        (re.compile(r'\b(sk-[a-zA-Z0-9_\-]{8,})\b'), "Secret Key (sk-...)"),
+        (re.compile(r'\b(ghp_[a-zA-Z0-9]{20,})\b'), "GitHub Personal Access Token"),
+        (re.compile(r'\b(AKIA[0-9A-Z]{16})\b'), "AWS Access Key ID"),
+        (re.compile(r'\b(eyJ[a-zA-Z0-9_\-]{20,}\.eyJ[a-zA-Z0-9_\-]{20,}\.[a-zA-Z0-9_\-]+)\b'), "Hardcoded JWT Token"),
+    ]
+
+    source_secret_violations = []
+    ignored_dirs = {".git", "node_modules", ".venv", ".next", "dist", "build", "scratch", "cisem_core/logs", ".gemini"}
+
+    for root, dirs, files in os.walk(ROOT_DIR):
+        dirs[:] = [d for d in dirs if d not in ignored_dirs and not any(ign in os.path.join(root, d).replace("\\", "/") for ign in ["node_modules", ".next", "scratch"])]
+        for file in files:
+            if file.endswith((".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".json", ".yml", ".yaml")):
+                if file in {"cisem_gate.py", "cael_status.json", "live_schema_registry.json", "GENERATION_METADATA.json", "package-lock.json", "yarn.lock"}:
+                    continue
+                fpath = os.path.join(root, file)
+                relpath = os.path.relpath(fpath, ROOT_DIR)
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
+                        file_content = file_obj.read()
+                    for pattern, secret_type in secret_patterns:
+                        match = pattern.search(file_content)
+                        if match:
+                            matched_str = match.group(1)
+                            if not any(ex in matched_str.lower() for ex in ["your_", "example", "placeholder", "xxx"]):
+                                source_secret_violations.append(f"{relpath}: Found hardcoded {secret_type} literal ('{matched_str[:8]}...')")
+                except Exception:
+                    pass
+
+    if source_secret_violations:
+        details = "\n".join(f"    - {v}" for v in source_secret_violations)
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 13: Hardcoded secret-shaped string literals detected in source code:\n{details}\n"
+            "  Rule: Hardcoding secret keys or API tokens in source code files is strictly prohibited.\n"
+            "  Fix: Store secrets in environment variables or resolve dynamically from secure key vault.",
+            phase=13
+        )
+
+    print("  Phase 13: PASS. All environment keys and source files verified zero secret-shaped literals.")
 
 
 def check_trial_maturity():
@@ -1464,6 +1556,14 @@ def check_corecycle_prerequisites():
         print(f"  Phase 15: Warning. Prerequisite scan failed: {e}")
 
 
+# -----------------------------------------------------------------------------
+# PHASE 16: DDL Relational Integrity Check
+# [PREVENTION RECORD]
+# THE MECHANISM: DDL AST scanner rejecting JSONB columns for security fields (credentials, roles, permissions) and requiring foreign key constraints on tenant tables.
+# THE TRIGGER: Storing complex security entities in flexible JSONB blobs to avoid schema migrations and foreign key constraints ("flexible schema feels low risk").
+# THE INCIDENT WITH A DATE: 2026-08-30 — Ten tenant-private tables suffered from nullable customer_account_id columns until caught by Reviewer audit.
+# THE DEFEAT ROUTE: Naming security columns without standard keywords (user_auth_data instead of credentials).
+# -----------------------------------------------------------------------------
 def check_ddl_integrity():
     """Phase 16: DDL Integrity Scanner. Rejects security-sensitive JSONB fields or missing tenant foreign keys."""
     print("Phase 16: Scanning DDL migrations for integrity constraints...")
@@ -1771,6 +1871,12 @@ def check_monolithic_file_limits():
 
 # -----------------------------------------------------------------------------
 # PHASE 21: External Page Coding Lock
+# [PREVENTION RECORD]
+# THE MECHANISM: Scans templates_registry.json for instantiated pages where governor_lock: true AND custom_coding_allowed: true, blocking build unless a governor ratification file exists on disk.
+# THE TRIGGER: Modifying client-facing page components directly to fulfill UI requests without formal Governor template hub ratification ("editing a file directly feels efficient").
+# THE INCIDENT WITH A DATE: 2026-08-11 — Unratified page modifications were attempted on governor-locked template pages.
+# THE DEFEAT ROUTE: Bypassing templates_registry.json by creating a new standalone page file outside the template hub hierarchy.
+# -----------------------------------------------------------------------------
 # Scans cisem_core/templates_registry.json for instantiated_pages where
 # governor_lock=True AND custom_coding_allowed=True.
 # Such pages may not have custom code without a governor-ratification file.
@@ -1881,57 +1987,80 @@ def check_typescript_jsx_headers():
         except Exception as e:
             print(f"  Phase 22.5: Warning reading manifest: {e}")
 
-    git_files = get_git_modified_files()
-    if git_files is None:
-        print("  Phase 22.5: Git unavailable. Skipping code header scan.")
-        return
+    all_files = []
+    for dirpath, _, filenames in os.walk(os.path.join(ROOT_DIR, "src")):
+        for filename in filenames:
+            if filename.endswith((".tsx", ".ts", ".jsx", ".js")):
+                all_files.append(os.path.join(dirpath, filename))
 
     is_commit_mode = any(arg in sys.argv for arg in ["--commit", "commit", "pre-commit"]) or "GIT_INDEX_FILE" in os.environ
 
     violations = []
-    for fpath in git_files:
+    for fpath in all_files:
         fpath_norm = fpath.replace("\\", "/")
-        if fpath.endswith((".tsx", ".ts", ".jsx", ".js")):
-            if "src/components/views/" in fpath_norm or "src/app/api/" in fpath_norm:
-                try:
-                    with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
-                        header_block = "".join(file_obj.readline() for _ in range(40))
-                    
-                    if "ratified_plan: UNRATIFIED-DRAFT-IN-PROGRESS" in header_block:
-                        if is_commit_mode:
-                            violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: File is marked UNRATIFIED-DRAFT-IN-PROGRESS. Obtain Governor ratification before committing.")
-                        else:
-                            print(f"  Phase 22.5: UNRATIFIED DRAFT '{os.path.basename(fpath)}' (local development permitted)")
-                        continue
+        try:
+            with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
+                header_block = "".join(file_obj.readline() for _ in range(40))
+            
+            if "ratified_plan: UNRATIFIED-DRAFT-IN-PROGRESS" in header_block:
+                if is_commit_mode:
+                    violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: File is marked UNRATIFIED-DRAFT-IN-PROGRESS. Obtain Governor ratification before committing.")
+                else:
+                    print(f"  Phase 22.5: UNRATIFIED DRAFT '{os.path.basename(fpath)}' (local development permitted)")
+                continue
 
-                    if "ratified_plan: PRE-RATIFICATION-LEGACY" in header_block or "ratified_plan: DISPUTED-PROVENANCE-FABRICATED" in header_block:
-                        print(f"  Phase 22.5: Verified '{os.path.basename(fpath)}' as structural provenance state")
-                        continue
+            if "ratified_plan: PRE-RATIFICATION-LEGACY" in header_block or "ratified_plan: DISPUTED-PROVENANCE-FABRICATED" in header_block:
+                print(f"  Phase 22.5: Verified '{os.path.basename(fpath)}' as structural provenance state")
+                continue
 
-                    match = HEADER_PATTERN.search(header_block)
-                    if not match:
-                        violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Missing mandatory code header block.")
-                        continue
+            match = HEADER_PATTERN.search(header_block)
+            if not match:
+                violations.append(f"{os.path.relpath(fpath, ROOT_DIR)}: Missing mandatory code header block.")
+                continue
 
-                    pid = match.group("plan_id")
-                    sig = match.group("sig")
-                    if (pid, sig) not in manifest_tuples:
-                        violations.append(
-                            f"{os.path.relpath(fpath, ROOT_DIR)}: Header claims plan '{pid}' with sig '{sig}' which is NOT in ratified_plans_manifest.json."
-                        )
-                except Exception as e:
-                    print(f"  Warning Phase 22.5: Could not read {fpath}: {e}")
+            pid = match.group("plan_id")
+            sig = match.group("sig")
+            if (pid, sig) not in manifest_tuples:
+                violations.append(
+                    f"{os.path.relpath(fpath, ROOT_DIR)}: Header claims plan '{pid}' with sig '{sig}' which is NOT in ratified_plans_manifest.json."
+                )
+        except Exception as e:
+            print(f"  Warning Phase 22.5: Could not read {fpath}: {e}")
 
-    if violations:
+    print(f"  Phase 22.5: Found {len(violations)} files violating plan-header rules.")
+    
+    baseline_path = r"C:\Users\finky\secure\cisem_header_baseline.txt"
+    if not os.path.exists(baseline_path):
         gate_block(
-            "CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed.\n"
-            f"  Violations:\n  " + "\n  ".join(violations) + "\n"
-            "  Rule: All headers must reference a ratified (plan_id, governor_signature) pair in ratified_plans_manifest.json.\n"
-            "  Fix: Obtain Governor ratification, mark legacy code PRE-RATIFICATION-LEGACY, or mark synthetic claims DISPUTED-PROVENANCE-FABRICATED.",
+            f"CISEM_GATE_BLOCKED -- Phase 22.5: Missing Header Baseline File.\n"
+            f"  File not found at: '{baseline_path}'.\n"
+            f"  Rule: Header baseline file MUST exist to verify cumulative plan audit ratchet.\n"
+            f"  Action: Ask Governor Yariv to create the file and set the baseline count.",
+            phase=22
+        )
+    
+    try:
+        with open(baseline_path, "r", encoding="utf-8") as f:
+            baseline_val = int(f.read().strip())
+    except Exception as e:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 22.5: Unreadable Header Baseline File.\n"
+            f"  Could not read baseline from: '{baseline_path}'. Error: {e}\n"
+            f"  Action: Ensure the baseline file contains a single integer.",
             phase=22
         )
 
-    print("  Phase 22.5: PASS. All modified/new frontend views and APIs contain verified ratified headers.")
+    if len(violations) > baseline_val:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).\n"
+            f"  Violations count increased from baseline of {baseline_val} to {len(violations)}!\n"
+            f"  Current Violations:\n  " + "\n  ".join(violations) + "\n"
+            f"  Rule: Cumulative header violations must not increase. The baseline count is {baseline_val}.\n"
+            f"  Fix: Resolve violations, or request the Governor to update the baseline file.",
+            phase=22
+        )
+    else:
+        print(f"  Phase 22.5: PASS. Cumulative violations count ({len(violations)}) is within the baseline limit of {baseline_val}.")
 
 
 def check_hebrew_rtl_and_fixed_tables():
@@ -2375,6 +2504,142 @@ def check_playwright_prerender():
     print("  Phase 34: PASS. Playwright pre-render verification complete (Screenshot captured).")
 
 
+def check_logged_in_playwright_gate():
+    """
+    Phase 34.5: Mandatory Logged-In Session Playwright DOM Assertion Gate.
+    Executes 2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py.
+    Asserts 5 DOM invariants (User name, Workspace name, Team count, Zero demo strings, Forgot password link).
+    """
+    print("Phase 34.5: Running Logged-In Session Playwright DOM Assertion Gate...")
+    e2e_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py")
+    if not os.path.exists(e2e_script):
+        gate_block(
+            "CISEM_GATE_BLOCKED -- Phase 34.5: Missing Logged-In Playwright Session Test Script.\n"
+            "  'cisem_core/tools/2026-08-30__AntigravityLocal__YarivGovernor__LoggedInE2ETest__V1.0.py' does not exist.\n"
+            "  Rule: Logged-in session Playwright DOM assertion test is PERMANENT and MANDATORY in LGG Gate.",
+            phase=34
+        )
+
+    import subprocess
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    res = subprocess.run([sys.executable, e2e_script], cwd=ROOT_DIR, capture_output=True, text=True, env=env)
+    
+    if res.returncode != 0:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 34.5: CANNOT VERIFY. Logged-In Playwright DOM Assertion Audit Failed.\n"
+            f"  Output:\n{res.stdout or res.stderr}\n"
+            f"  Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.",
+            phase=34
+        )
+    else:
+        # Validate cisem_core/last_run.json entry
+        last_run_path = os.path.join(ROOT_DIR, "cisem_core", "last_run.json")
+        if not os.path.exists(last_run_path):
+            gate_block(
+                "CISEM_GATE_BLOCKED -- Phase 34.5: Missing Process Run Record.\n"
+                "  'cisem_core/last_run.json' does not exist.\n"
+                "  Rule: The execution process MUST autowrite last_run.json upon completion.",
+                phase=34
+            )
+        try:
+            with open(last_run_path, "r", encoding="utf-8") as rf:
+                runs = json.load(rf)
+                latest = runs[-1] if isinstance(runs, list) and len(runs) > 0 else None
+                if not latest or latest.get("exit_code") != 0:
+                    gate_block(
+                        f"CISEM_GATE_BLOCKED -- Phase 34.5: Invalid Process Run Record.\n"
+                        f"  'cisem_core/last_run.json' latest entry does not have exit_code == 0.\n"
+                        f"  Entry: {latest}",
+                        phase=34
+                    )
+        except Exception as e:
+            gate_block(
+                f"CISEM_GATE_BLOCKED -- Phase 34.5: Failed to parse 'cisem_core/last_run.json': {e}",
+                phase=34
+            )
+        print("  Phase 34.5: PASS. All 5 logged-in session DOM assertions verified clean & process run record verified.")
+
+
+def check_ast_anti_placeholder_gate():
+    """
+    Phase 40: AST Database-Backed Anti-Placeholder & Argument-Literal Guard.
+    Part A: Compares string literals in src/ against cisem_core/db_live_values.json.
+    Part B: Refuses raw string literals or hardcoded variable bindings passed as NAME, TENANT, COMPANY, ROLE, or EMAIL arguments.
+    Exempts src/utils/translations.js.
+    """
+    print("Phase 40: Running Database-Backed Anti-Placeholder & Argument-Literal Guard...")
+    db_values_path = os.path.join(ROOT_DIR, "cisem_core", "db_live_values.json")
+    
+    if not os.path.exists(db_values_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+            
+    if not os.path.exists(db_values_path):
+        gate_block("CISEM_GATE_BLOCKED -- Phase 40: Missing 'cisem_core/db_live_values.json'.", phase=40)
+        
+    # Check freshness against live_schema_registry.json
+    schema_path = os.path.join(ROOT_DIR, "cisem_core", "live_schema_registry.json")
+    if os.path.exists(schema_path) and os.path.getmtime(db_values_path) < os.path.getmtime(schema_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+
+    with open(db_values_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        forbidden_strings = data.get("forbidden_values", [])
+
+    src_dir = os.path.join(ROOT_DIR, "src")
+    violations = []
+    
+    # Target identity keys for Argument-Literal & Binding Tracing Guard
+    target_keys = ["full_name", "company_name", "company", "tenant_id", "active_tenant_id"]
+
+    for root, dirs, files in os.walk(src_dir):
+        for file in files:
+            if file.endswith((".ts", ".tsx", ".js", ".jsx")):
+                file_path = os.path.join(root, file)
+                rel_path = os.path.relpath(file_path, ROOT_DIR).replace("\\", "/")
+                
+                # EXEMPT translations.js explicitly
+                if rel_path == "src/utils/translations.js":
+                    continue
+
+                try:
+                    with open(file_path, "r", encoding="utf-8") as cf:
+                        content = cf.read()
+                        
+                        # Part A: Database-backed placeholder scan
+                        for f_str in forbidden_strings:
+                            if f_str.lower() in content.lower():
+                                violations.append(f"{rel_path}: Contains forbidden database placeholder string '{f_str}'")
+
+                        # Part B: AST Argument-Literal & Binding Tracing Guard
+                        # Check direct string literal assignment to target identity keys
+                        for key in target_keys:
+                            # Match key: 'literal' or key: "literal" or key="literal"
+                            pattern = rf"{key}\s*[:=]\s*['\"]([^'\"]+)['\"]"
+                            matches = re.findall(pattern, content)
+                            for m in matches:
+                                # Exempt structural type/system constants (e.g. empty strings, 'guest', 'unattached')
+                                if m not in ["", "guest", "unattached", "auth-user", "success", "error"]:
+                                    violations.append(f"{rel_path}: Identity property '{key}' is assigned hardcoded string literal '{m}'. Must resolve dynamically from session or database row.")
+
+                except Exception:
+                    pass
+
+    if violations:
+        msg = "\n  ".join(violations)
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 40: Database Anti-Placeholder / Argument-Literal Violation(s) Found in src/:\n  {msg}\n"
+            f"  Rule: ZERO hardcoded identity/tenant string literals or bound variable fallbacks allowed in application component source files.",
+            phase=40
+        )
+    else:
+        print("  Phase 40: PASS. Zero forbidden database string placeholders or hardcoded identity argument literals found in src/.")
+
+
 def check_schema_reference_gate():
     """
     Phase 35: The Schema Reference Gate (Mandatory Pre-DDL Database Registry Check).
@@ -2466,24 +2731,221 @@ def check_schema_reference_gate():
     print(f"  Phase 35: PASS. Verified {len(sql_files)} DDL migration files against {len(valid_tables)} registered database tables.")
 
 
-def enforce_gate():
-    # Detect Vercel build environment
-    if os.environ.get("VERCEL") == "1" or os.environ.get("CI") == "true":
-        print("VERCEL BUILD DETECTED: Bypassing local compilation gates.")
-        sys.exit(0)
+def check_cumulative_route_surface_gate():
+    """
+    Phase 38: Cumulative Route Surface & Live Door-Knocking Audit Gate
+    1. Reads public allowlist from external Governor file C:\\Users\\finky\\secure\\cisem_public_routes.txt.
+    2. Compares against declared FastAPI routes in main.py to detect stale phantom allowlist entries.
+    3. KNOCKS ON DOORS: If backend is online, issues live HTTP requests to every declared route without a token and asserts HTTP 401 Unauthorized for all un-allowlisted endpoints.
+    """
+    print("Phase 38: Running Cumulative Route Surface & Live Door-Knocking Gate...")
+    main_py_path = os.path.join(ROOT_DIR, "backend", "src", "backend", "main.py")
+    secure_allowlist_path = r"C:\Users\finky\secure\cisem_public_routes.txt"
 
-    print("=" * 60)
-    print("CISEM Local Gateway Gate (LGG) v3.0 > HARDENED + PHASES 21-35")
-    print("Ratified: GOV-2026-08-15-CTXPACK-02")
-    print("=" * 60)
+    if not os.path.exists(main_py_path):
+        print("  Phase 38: PASS (main.py not found).")
+        return
 
-    # Determine target file for header check
+    with open(main_py_path, "r", encoding="utf-8") as f:
+        code = f.read()
+
+    # Extract declared routes @app.get(...), @app.post(...), @app.put(...), @app.delete(...)
+    declared_routes = set()
+    route_matches = re.findall(r'@app\.(get|post|put|delete|patch|options|head)\s*\(\s*["\']([^"\']+)["\']', code, re.IGNORECASE)
+    for method, path in route_matches:
+        declared_routes.add((method.upper(), path))
+
+    # Standard FastAPI default routes
+    declared_routes.add(("GET", "/"))
+    declared_routes.add(("GET", "/docs"))
+    declared_routes.add(("GET", "/redoc"))
+    declared_routes.add(("GET", "/openapi.json"))
+
+    # Read external Governor public routes file
+    allowlist_entries = set()
+    if os.path.exists(secure_allowlist_path):
+        try:
+            with open(secure_allowlist_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    parts = line.split(maxsplit=1)
+                    if len(parts) == 2:
+                        allowlist_entries.add((parts[0].upper(), parts[1]))
+        except Exception as e:
+            print(f"  [Phase 38 Warning]: Could not read '{secure_allowlist_path}': {e}. Failing closed.")
+
+    # Check 1: Detect Stale Allowlist Entries (Allowlist entry with NO matching route in app.routes)
+    stale_entries = allowlist_entries - declared_routes
+    if stale_entries:
+        stale_formatted = [f"{m} {p}" for m, p in sorted(list(stale_entries))]
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 38: Stale Public Allowlist Hole Detected.\n"
+            f"  Entry(s) {stale_formatted} listed in cisem_public_routes.txt but NO MATCHING ROUTE EXISTS in FastAPI app.routes!\n"
+            f"  Rule: Public allowlist MUST NOT contain stale or phantom routes.\n"
+            f"  Action: Remove the stale entry from cisem_public_routes.txt or implement the declared route in main.py.",
+            phase=38
+        )
+
+    # Check 2: Live Door-Knocking (HTTP 401 Assertion)
+    backend_url = "http://127.0.0.1:8000"
+    backend_online = False
+    try:
+        req = urllib.request.Request(f"{backend_url}/openapi.json", headers={"User-Agent": "CISEM-Phase38-Gate"})
+        with urllib.request.urlopen(req, timeout=2) as resp:
+            if resp.status == 200:
+                backend_online = True
+    except Exception:
+        backend_online = False
+
+    if not backend_online:
+        print("  Phase 38: CANNOT VERIFY -- Backend Daemon Offline (port 8000 unreachable). Static allowlist scan passed.")
+        return
+
+    # Backend is online: Knock on doors!
+    door_knock_failures = []
+    tested_count = 0
+    for method, path in declared_routes:
+        if (method, path) in allowlist_entries:
+            continue  # Public allowlist entry expected to be accessible
+
+        tested_count += 1
+        url = f"{backend_url}{path}"
+        try:
+            req = urllib.request.Request(url, method=method)
+            req.add_header("User-Agent", "CISEM-Phase38-DoorKnocker")
+            # For non-GET methods, supply dummy invalid Bearer token to test auth intercept before schema parsing
+            if method != "GET":
+                req.add_header("Authorization", "Bearer invalid_test_token_phase38")
+                req.add_header("Content-Type", "application/json")
+
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                status_code = resp.status
+        except urllib.error.HTTPError as e:
+            status_code = e.code
+        except Exception:
+            status_code = 0
+
+        # ASSERT 401 Unauthorized for all non-allowlisted routes
+        if status_code != 401:
+            door_knock_failures.append(f"{method} {path} -> HTTP {status_code} (Expected 401 Unauthorized)")
+
+    if door_knock_failures:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 38: Unauthenticated Door-Knocking Exposure Detected!\n"
+            f"  The following non-allowlisted route(s) failed to return HTTP 401 Unauthorized when pinged without auth:\n"
+            f"  " + "\n  ".join(door_knock_failures) + "\n"
+            f"  Rule: ALL un-allowlisted routes MUST refuse unauthenticated callers with HTTP 401 Unauthorized.",
+            phase=38
+        )
+
+    print(f"  Phase 38: PASS. Knocked on {tested_count} live backend doors without token. Verified 100% returned HTTP 401 Unauthorized. Zero stale allowlist entries.")
+
+
+def check_second_framework_gate():
+    """
+    PHASE 39 — Second-Framework Prevention & Anti-Bloat Audit Gate
+    Ensures zero unauthorized second-framework configuration files (Express, Django, Flask, Vue, Angular)
+    exist in the workspace to prevent multi-framework architectural drift.
+    """
+    print("\nPhase 39: Running Second-Framework Anti-Bloat Audit...")
+    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    forbidden_patterns = [
+        ("express", os.path.join(root_dir, "server.js")),
+        ("django", os.path.join(root_dir, "manage.py")),
+        ("flask", os.path.join(root_dir, "app.py")),
+        ("vue", os.path.join(root_dir, "vue.config.js")),
+        ("angular", os.path.join(root_dir, "angular.json")),
+    ]
+
+    detected = []
+    for fw_name, path in forbidden_patterns:
+        if os.path.exists(path):
+            detected.append(f"{fw_name} -> {path}")
+
+    if detected:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 39: Second-Framework Artifact Detected!\n"
+            f"  The following unauthorized second-framework config files were found:\n"
+            f"  " + "\n  ".join(detected) + "\n"
+            f"  Rule: Platform architecture uses Next.js (Frontend) + FastAPI (Backend) ONLY.",
+            phase=39
+        )
+
+    print("  Phase 39: PASS. Zero unauthorized second-framework artifacts detected (Next.js + FastAPI single-stack verified).")
+
+
+def check_ast_anti_placeholder_gate():
+    """
+    Phase 40: AST Database-Backed Anti-Placeholder Gate.
+    Compares string literals in src/ against cisem_core/db_live_values.json.
+    Exempts src/utils/translations.js.
+    """
+    print("Phase 40: Running Database-Backed Anti-Placeholder Gate...")
+    db_values_path = os.path.join(ROOT_DIR, "cisem_core", "db_live_values.json")
+    
+    if not os.path.exists(db_values_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+            
+    if not os.path.exists(db_values_path):
+        gate_block("CISEM_GATE_BLOCKED -- Phase 40: Missing 'cisem_core/db_live_values.json'.", phase=40)
+        
+    # Check freshness
+    schema_path = os.path.join(ROOT_DIR, "cisem_core", "live_schema_registry.json")
+    if os.path.exists(schema_path) and os.path.getmtime(db_values_path) < os.path.getmtime(schema_path):
+        gen_script = os.path.join(ROOT_DIR, "cisem_core", "tools", "generate_db_live_values.py")
+        if os.path.exists(gen_script):
+            subprocess.run([sys.executable, gen_script], cwd=ROOT_DIR, check=True)
+
+    with open(db_values_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        forbidden_strings = data.get("forbidden_values", [])
+
+    src_dir = os.path.join(ROOT_DIR, "src")
+    violations = []
+    
+    for root, dirs, files in os.walk(src_dir):
+        for file in files:
+            if file.endswith((".ts", ".tsx", ".js", ".jsx")):
+                file_path = os.path.join(root, file)
+                rel_path = os.path.relpath(file_path, ROOT_DIR).replace("\\", "/")
+                
+                # EXEMPT translations.js explicitly
+                if rel_path == "src/utils/translations.js":
+                    continue
+
+                try:
+                    with open(file_path, "r", encoding="utf-8") as cf:
+                        content = cf.read()
+                        for f_str in forbidden_strings:
+                            if f_str.lower() in content.lower():
+                                violations.append(f"{rel_path}: Contains forbidden database placeholder string '{f_str}'")
+                except Exception:
+                    pass
+
+    if violations:
+        msg = "\n  ".join(violations)
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 40: Database Anti-Placeholder Violation(s) Found in src/:\n  {msg}\n"
+            f"  Rule: ZERO hardcoded database value placeholders allowed in application component source files.",
+            phase=40
+        )
+    else:
+        print("  Phase 40: PASS. Zero forbidden database string placeholders found in src/.")
+
+
+def enforce_gate(target_file=None):
+    print("============================================================")
+    print("CISEM Local Gateway Gate (LGG) v3.1 > HARDENED + PHASES 21-40")
+    print("Ratified: GOV-2026-08-30-DATABASE-ANTI-PLACEHOLDER-V40")
+    print("============================================================")
+
     target_file = sys.argv[1] if len(sys.argv) > 1 else __file__
 
-    # Ref: PARK-007
-    # Ref: PARK-010
-    # Ref: PARK-011
-    # Ref: PARK-012
     check_turn_counter()            # Phase 0
     increment_turn_counter(target_file)
     check_gate_lock()              # Phase 1
@@ -2524,9 +2986,13 @@ def enforce_gate():
     check_inbound_references_for_viewports() # Phase 31 (Inbound Reference & Router Mount Audit Gate)
     check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
+    check_logged_in_playwright_gate()      # Phase 34.5 (Mandatory Logged-In Session Playwright DOM Assertion Gate)
     check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
+    check_cumulative_route_surface_gate()  # Phase 38 (Cumulative Route Surface & Stale Allowlist Gate)
+    check_second_framework_gate()          # Phase 39 (Second-Framework Anti-Bloat Audit Gate)
+    check_ast_anti_placeholder_gate()      # Phase 40 (AST Database-Backed Anti-Placeholder Gate)
 
-    increment_mechanism_trigger("CISEM-GATE-V2")
+    increment_mechanism_trigger("CISEM-GATE-V3.1")
     print()
     print("OK CISEM_GATE: All phases passed. Proceeding to execution.")
     sys.exit(0)

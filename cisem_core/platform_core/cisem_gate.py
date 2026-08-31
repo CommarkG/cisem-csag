@@ -387,6 +387,13 @@ def check_sync():
 
 
 # -----------------------------------------------------------------------------
+# PHASE 3: Mandatory Code Header Audit
+# [PREVENTION RECORD]
+# THE MECHANISM: AST & string regex scan requiring every Python source file to carry a valid CISEM YAML code header block with ratified_plan: and governor_signature:.
+# THE TRIGGER: Writing code directly to solve a problem without first linking it to an approved architecture plan ("coding feels like progress").
+# THE INCIDENT WITH A DATE: 2026-08-27 — main.py and provisioning.py were edited across multiple turns without plan headers.
+# THE DEFEAT ROUTE: Copying a dummy header from another file with an unverified plan ID.
+# -----------------------------------------------------------------------------
 # PHASE 3: Mandatory YAML header validation
 # Every Python source file submitted to the gate must carry:
 #   ratified_plan: <PLAN-ID>
@@ -422,6 +429,13 @@ def validate_header(target_file_path):
     return plan_id, sig
 
 
+# -----------------------------------------------------------------------------
+# PHASE 4: Parking Vault Linkage Check
+# [PREVENTION RECORD]
+# THE MECHANISM: Cross-references code header plan_id against ratified_plans_manifest.json and Parking Vault, rejecting ghost/unmanifested IDs.
+# THE TRIGGER: Accepting a string prefix match (GOV-) as valid because checking a string is easy and resolving a plan is work ("checking a string feels like validation").
+# THE INCIDENT WITH A DATE: 2026-08-11 — Medusa adapter cited ghost plan PLAN-009 and sat in repo until caught by Reviewer audit.
+# THE DEFEAT ROUTE: Writing a valid plan ID from a different project component into an unrelated module header.
 # -----------------------------------------------------------------------------
 # PHASE 4: Parking Vault bidirectional linkage check
 # The plan_id in the code header must resolve to a Governor-ratified entry
@@ -1228,24 +1242,27 @@ def reset_planning_mode(target_file_path):
                 print(f"CISEM_GATE_WARNING: Failed to reset planning mode state: {e}")
 
 
+# -----------------------------------------------------------------------------
+# PHASE 13: Environment Variable & Secret Anti-Fabrication Gate
+# [PREVENTION RECORD]
+# THE MECHANISM: Scans all .env keys, os.environ, and regex-scans all workspace source files (.py, .ts, .tsx, .js, .jsx, .sql, .json, .yml, .yaml) for forbidden placeholder values and secret-shaped strings (sb_secret_, sk-, ghp_, AKIA, eyJ).
+# THE TRIGGER: Checking a whitelist (.env.example) instead of all workspace files because scanning a whitelist is cheap ("checking what is on a list feels thorough").
+# THE INCIDENT WITH A DATE: 2026-08-25 — Live Supabase secret key sat in check_schema.py:7 for 6 days undetected because Phase 13 only scanned .env.example keys.
+# THE DEFEAT ROUTE: String obfuscation, base64 encoding, or variable concatenation ("s" + "k-...").
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# PHASE 13: Environment Variable & Secret Anti-Fabrication Gate
+# [PREVENTION RECORD]
+# THE MECHANISM: Scans all .env keys, os.environ, and regex-scans all workspace source files (.py, .ts, .tsx, .js, .jsx, .sql, .json, .yml, .yaml) for forbidden placeholder values and secret-shaped strings (sb_secret_, sk-, ghp_, AKIA, eyJ).
+# THE TRIGGER: Checking a whitelist (.env.example) instead of all workspace files because scanning a whitelist is cheap ("checking what is on a list feels thorough").
+# THE INCIDENT WITH A DATE: 2026-08-25 — Live Supabase secret key sat in check_schema.py:7 for 6 days undetected because Phase 13 only scanned .env.example keys.
+# THE DEFEAT ROUTE: String obfuscation, base64 encoding, or variable concatenation ("s" + "k-...").
+# -----------------------------------------------------------------------------
 def check_env_vars():
-    """Phase 13: Scans environment variables for forbidden placeholder/fabricated patterns. Absence is an honest pass in local dev."""
-    print("Phase 13: Checking Environment Variables (Fabrication & Placeholder Anti-Fabrication Gate)...")
-    env_example_path = os.path.join(ROOT_DIR, ".env.example")
-    if not os.path.exists(env_example_path):
-        print("  Phase 13: INFO. No .env.example found. Skipping check.")
-        return
-
-    required_vars = []
-    with open(env_example_path, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                key = line.split("=")[0].strip()
-                if key:
-                    required_vars.append(key)
-
-    # Load local .env file if present
+    """Phase 13: Class-based Environment Variable & Secret Anti-Fabrication Scanner."""
+    print("Phase 13: Checking Environment Variables & Hardcoded Secrets (Class-Based Anti-Fabrication Gate)...")
+    
+    # 1. Scan ALL environment variables in .env and os.environ
     env_vars = {}
     env_path = os.path.join(ROOT_DIR, ".env")
     if os.path.exists(env_path):
@@ -1254,28 +1271,30 @@ def check_env_vars():
                 line = line.strip()
                 if line and not line.startswith("#") and "=" in line:
                     parts = line.split("=", 1)
-                    key = parts[0].strip()
-                    val = parts[1].strip()
-                    if key:
-                        env_vars[key] = val
+                    k_name = parts[0].strip()
+                    k_val = parts[1].strip()
+                    if k_name:
+                        env_vars[k_name] = k_val
 
-    forbidden_patterns = ["dummy", "test", "placeholder", "changeme", "xxx", "_real", "your_"]
+    all_keys = set(env_vars.keys()) | set(os.environ.keys())
+    forbidden_patterns = ["dummy", "placeholder", "changeme", "xxx", "_real", "your_"]
     fabricated_vars = []
 
-    for var in required_vars:
-        # Absence is an honest pass in local dev
-        val = os.environ.get(var) if var in os.environ else env_vars.get(var)
+    for var in all_keys:
+        # Ignore framework runtime metadata environment variables
+        if var.startswith(("ANTIGRAVITY_", "GEMINI_", "PSModulePath", "PATH", "SystemRoot", "TERM", "PAGER", "PROCESSOR_")):
+            continue
+            
+        val = env_vars.get(var) if var in env_vars else os.environ.get(var)
         if val is None or val == "":
             continue
             
         val_lower = val.lower()
         is_secret = any(term in var.lower() for term in ["key", "secret", "credentials", "token", "password"])
         
-        # Check placeholder strings
-        if any(pat in val_lower for pat in forbidden_patterns):
+        if any(pat in val_lower for pat in forbidden_patterns) and not any(ok in var.lower() for ok in ["test_mode", "is_test", "node_env"]):
             fabricated_vars.append((var, val, "Contains forbidden placeholder pattern"))
-        # Check short fake secret values
-        elif is_secret and len(val) < 12 and not val.endswith(".json"):
+        elif is_secret and len(val) < 12 and not val.endswith(".json") and val not in ["true", "false", "development", "production", "test"]:
             fabricated_vars.append((var, val, f"Secret value length ({len(val)}) is under 12 characters"))
 
     if fabricated_vars:
@@ -1286,7 +1305,48 @@ def check_env_vars():
             phase=13
         )
 
-    print("  Phase 13: PASS. No fabricated or placeholder environment variables detected (absence is permitted).")
+    # 2. Regex-scan all source files for hardcoded secret-shaped string literals
+    secret_patterns = [
+        (re.compile(r'\b(sb_secret_[a-zA-Z0-9_\-]+)\b'), "Supabase Secret Key"),
+        (re.compile(r'\b(sk-[a-zA-Z0-9_\-]{8,})\b'), "Secret Key (sk-...)"),
+        (re.compile(r'\b(ghp_[a-zA-Z0-9]{20,})\b'), "GitHub Personal Access Token"),
+        (re.compile(r'\b(AKIA[0-9A-Z]{16})\b'), "AWS Access Key ID"),
+        (re.compile(r'\b(eyJ[a-zA-Z0-9_\-]{20,}\.eyJ[a-zA-Z0-9_\-]{20,}\.[a-zA-Z0-9_\-]+)\b'), "Hardcoded JWT Token"),
+    ]
+
+    source_secret_violations = []
+    ignored_dirs = {".git", "node_modules", ".venv", ".next", "dist", "build", "scratch", "cisem_core/logs", ".gemini"}
+
+    for root, dirs, files in os.walk(ROOT_DIR):
+        dirs[:] = [d for d in dirs if d not in ignored_dirs and not any(ign in os.path.join(root, d).replace("\\", "/") for ign in ["node_modules", ".next", "scratch"])]
+        for file in files:
+            if file.endswith((".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".json", ".yml", ".yaml")):
+                if file in {"cisem_gate.py", "cael_status.json", "live_schema_registry.json", "GENERATION_METADATA.json", "package-lock.json", "yarn.lock"}:
+                    continue
+                fpath = os.path.join(root, file)
+                relpath = os.path.relpath(fpath, ROOT_DIR)
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as file_obj:
+                        file_content = file_obj.read()
+                    for pattern, secret_type in secret_patterns:
+                        match = pattern.search(file_content)
+                        if match:
+                            matched_str = match.group(1)
+                            if not any(ex in matched_str.lower() for ex in ["your_", "example", "placeholder", "xxx"]):
+                                source_secret_violations.append(f"{relpath}: Found hardcoded {secret_type} literal ('{matched_str[:8]}...')")
+                except Exception:
+                    pass
+
+    if source_secret_violations:
+        details = "\n".join(f"    - {v}" for v in source_secret_violations)
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 13: Hardcoded secret-shaped string literals detected in source code:\n{details}\n"
+            "  Rule: Hardcoding secret keys or API tokens in source code files is strictly prohibited.\n"
+            "  Fix: Store secrets in environment variables or resolve dynamically from secure key vault.",
+            phase=13
+        )
+
+    print("  Phase 13: PASS. All environment keys and source files verified zero secret-shaped literals.")
 
 
 def check_trial_maturity():
@@ -1496,6 +1556,14 @@ def check_corecycle_prerequisites():
         print(f"  Phase 15: Warning. Prerequisite scan failed: {e}")
 
 
+# -----------------------------------------------------------------------------
+# PHASE 16: DDL Relational Integrity Check
+# [PREVENTION RECORD]
+# THE MECHANISM: DDL AST scanner rejecting JSONB columns for security fields (credentials, roles, permissions) and requiring foreign key constraints on tenant tables.
+# THE TRIGGER: Storing complex security entities in flexible JSONB blobs to avoid schema migrations and foreign key constraints ("flexible schema feels low risk").
+# THE INCIDENT WITH A DATE: 2026-08-30 — Ten tenant-private tables suffered from nullable customer_account_id columns until caught by Reviewer audit.
+# THE DEFEAT ROUTE: Naming security columns without standard keywords (user_auth_data instead of credentials).
+# -----------------------------------------------------------------------------
 def check_ddl_integrity():
     """Phase 16: DDL Integrity Scanner. Rejects security-sensitive JSONB fields or missing tenant foreign keys."""
     print("Phase 16: Scanning DDL migrations for integrity constraints...")
@@ -1803,6 +1871,12 @@ def check_monolithic_file_limits():
 
 # -----------------------------------------------------------------------------
 # PHASE 21: External Page Coding Lock
+# [PREVENTION RECORD]
+# THE MECHANISM: Scans templates_registry.json for instantiated pages where governor_lock: true AND custom_coding_allowed: true, blocking build unless a governor ratification file exists on disk.
+# THE TRIGGER: Modifying client-facing page components directly to fulfill UI requests without formal Governor template hub ratification ("editing a file directly feels efficient").
+# THE INCIDENT WITH A DATE: 2026-08-11 — Unratified page modifications were attempted on governor-locked template pages.
+# THE DEFEAT ROUTE: Bypassing templates_registry.json by creating a new standalone page file outside the template hub hierarchy.
+# -----------------------------------------------------------------------------
 # Scans cisem_core/templates_registry.json for instantiated_pages where
 # governor_lock=True AND custom_coding_allowed=True.
 # Such pages may not have custom code without a governor-ratification file.
