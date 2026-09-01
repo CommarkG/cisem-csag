@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-CISEM Schema Alias & Column Mapping Pre-Commit Gate
+CISEM Schema Alias, Column, & FK Target Uniqueness Pre-Commit Gate
 Target: cisem_core/tools/gate_schema_alias_map.py
 Authority: Governor Yariv / Reviewer Claude / Antigravity
-Rule: Rule 0 / P10 / Rule 20.5 - Validates both Table Names AND Column Names against live_schema_registry.json.
+Rule: Rule 0 / P10 / Rule 20.5 - Validates Table Names, Column Names, AND FK Target Uniqueness against live schema rules.
 """
 
 import sys
@@ -69,6 +69,22 @@ def run_schema_alias_check(target_input=None):
 
     valid_tables = live_tables.union(registered_aliases)
 
+    # Known unique single columns / primary keys per table
+    known_unique_targets = {
+        "status_library": {"code", "id"},
+        "cr_null_flavors": {"code", "id"},
+        "cr_ext_registry": {"asset_name"},
+        "feature_registry": {"feature_code", "id"},
+        "customer_accounts": {"id"},
+        "quotes": {"id"},
+        "inquiries": {"id"},
+        "catalog_items": {"id"},
+        "users": {"id"},
+        "contacts": {"id"},
+        "packages": {"id"},
+        "vocabulary_terms": {"id"}  # NOT 'code'! 'code' repeats across kinds!
+    }
+
     # Content to scan
     content = ""
     target_name = "Input"
@@ -109,19 +125,32 @@ def run_schema_alias_check(target_input=None):
                     valid_cols = ", ".join(sorted(list(table_columns[t_clean])))
                     violations.append(f"Column Refusal: INSERT into '{t_clean}' specifies non-existent column '{c_clean}'! Valid columns: [{valid_cols}].")
 
+    # 4. Scan for Foreign Key REFERENCES target_table(target_column) uniqueness
+    ref_pattern = re.compile(r'REFERENCES\s+([a-z0-9_.]+)\s*\(\s*([a-z0-9_]+)\s*\)', re.IGNORECASE)
+    for t_raw, c_raw in ref_pattern.findall(content):
+        t_clean = t_raw.split(".")[-1].lower()
+        c_clean = c_raw.lower()
+        
+        # Check single-column FK target uniqueness
+        if t_clean in known_unique_targets:
+            if c_clean not in known_unique_targets[t_clean]:
+                violations.append(
+                    f"Foreign Key Target Refusal: Referenced target column '{t_clean}.{c_clean}' is NOT unique! Foreign key targets MUST carry a PRIMARY KEY or UNIQUE constraint."
+                )
+
     if violations:
         print("============================================================")
-        print("CISEM SCHEMA ALIAS & COLUMN MAP GATE > STATUS: BLOCKED")
+        print("CISEM SCHEMA ALIAS, COLUMN, & FK TARGET GATE > STATUS: BLOCKED")
         print("============================================================")
-        print(f"Found {len(violations)} schema/column violation(s) in {target_name}:")
+        print(f"Found {len(violations)} schema/column/FK target violation(s) in {target_name}:")
         for v in set(violations):
             print(f"  - [RULE VIOLATION]: {v}")
         return False
     else:
         print("============================================================")
-        print("CISEM SCHEMA ALIAS & COLUMN MAP GATE > STATUS: PASSED")
+        print("CISEM SCHEMA ALIAS, COLUMN, & FK TARGET GATE > STATUS: PASSED")
         print("============================================================")
-        print(f"All table and column references in {target_name} resolve cleanly against live schema.")
+        print(f"All table, column, and FK target references in {target_name} resolve cleanly against live schema.")
         return True
 
 if __name__ == "__main__":
