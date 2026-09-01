@@ -6,13 +6,22 @@ NOT A TABLE. NOT A COLUMN. NOT A SCREEN. NOT AN ENDPOINT. NOT A GATE PHASE. NOT 
 
 The Mandatory Creation Protocol:
 1. A proposal is written and inlined in full.
-2. The Reviewer attacks it and checks every name against the live database.
+2. The Reviewer attacks it and checks every name against the live database or live route list.
 3. Consensus closes, or a named disagreement is produced with both positions in full.
 4. The Governor explicitly ratifies the proposal.
 5. ONLY THEN IS ANYTHING CREATED OR BUILT.
 
 UNLIMITED DISCOVERY BOUNDARY:
-Reading, searching, querying, counting, diagnosing, proposing, attacking proposals, and reporting findings remain 100% free and unlimited. Discovery is never gated. Only creation is.
+Reading, searching, querying, counting, diagnosing, proposing, attacking proposals, and reporting findings remain 100% free and unlimited. Discovery is never gated. Only creation is. Never halt or park a turn that asks for discovery reads.
+
+ROOT 1: A NAME REPEATED IS NOT A NAME VERIFIED (ECHO FAILURE PREVENTION)
+Never cite a name, route path, or symbol from conversational history without verifying it in its own live channel. An echo in a prompt or message is not proof of existence. Route paths must resolve against live `main.py` endpoints; column names must resolve against `live_schema_registry.json`.
+
+ROOT 2: CHANNEL QUALIFICATION LAW FOR DUAL-DOMAIN NAMES
+Whenever a symbol or function name exists in both a Python module and a PostgreSQL database (e.g. `provision_tenant`), every reference MUST explicitly carry its channel prefix: `[PYTHON-CHANNEL: provisioning.py:provision_tenant]` or `[DATABASE-CHANNEL: public.provision_tenant]`. Unqualified names in dual-domain contexts are void.
+
+ROOT 3: UNRESTRICTED DISCOVERY BOUNDARY ENFORCEMENT
+No agent may halt execution, request ratification, or refuse to answer when a prompt asks for discovery, searching, counting, allowlist verification, or diagnostic analysis. Discovery is 100% ungated. Creation alone requires Governor ratification.
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
