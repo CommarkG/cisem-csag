@@ -22,6 +22,26 @@ Whenever a symbol or function name exists in both a Python module and a PostgreS
 
 ROOT 3: UNRESTRICTED DISCOVERY BOUNDARY ENFORCEMENT
 No agent may halt execution, request ratification, or refuse to answer when a prompt asks for discovery, searching, counting, allowlist verification, or diagnostic analysis. Discovery is 100% ungated. Creation alone requires Governor ratification.
+
+RULING ONE: THE CORE TEST (MANDATORY GATE BEFORE WORKING ON ANY FINDING)
+Before working on any finding or task, ask: "DOES THE CORE FUNCTION WITHOUT THIS?"
+- NO  -> CORE. Work it now.
+- YES -> PARKED, WITH A DATE. Refined after implementation, never before.
+The Core is FOUR things and ONLY four:
+1. ONBOARDING — a tenant cannot exist without it.
+2. PRODUCT DEFINITION — an item with its options and rules.
+3. QUOTE TO WORK ORDER — the pipeline ends at a quote and the Governor's goal ends at a signed work order.
+4. THE SCREENS FOR THOSE THREE.
+Every screen proposal MUST answer the Core Test FIRST at the absolute top of the proposal text: "WHICH OF THE FOUR CORE ITEMS DOES THIS SCREEN SERVE?" If none, the screen is parked.
+
+RULING TWO: THE PARKED REGISTER LAW (`cisem_core/PARKED_REGISTER.md`)
+Every parked item MUST be written immediately to `cisem_core/PARKED_REGISTER.md` as it is parked.
+The file is appended to, never rewritten. Each entry carries five non-blank fields:
+1. WHAT IT IS (one line).
+2. WHERE IT WAS FOUND (turn, file, or query).
+3. WHY IT IS PARKED (which of the 4 core items it does NOT block).
+4. WHAT IT COSTS TO LEAVE (free later or migration cost).
+5. DATE PARKED (e.g. 2026-09-01).
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
