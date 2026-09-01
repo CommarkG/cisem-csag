@@ -1,3 +1,20 @@
+<!-- BEGIN:cisem-mandatory-ratification-law -->
+# MANDATORY RATIFICATION LAW — POSITION 1 ENFORCEMENT (GOVERNOR STANDING WARNING)
+
+NOTHING IS IMPLEMENTED WITHOUT EXPLICIT GOVERNOR RATIFICATION.
+NOT A TABLE. NOT A COLUMN. NOT A SCREEN. NOT AN ENDPOINT. NOT A GATE PHASE. NOT A LINTER. NOT A TOOL.
+
+The Mandatory Creation Protocol:
+1. A proposal is written and inlined in full.
+2. The Reviewer attacks it and checks every name against the live database.
+3. Consensus closes, or a named disagreement is produced with both positions in full.
+4. The Governor explicitly ratifies the proposal.
+5. ONLY THEN IS ANYTHING CREATED OR BUILT.
+
+UNLIMITED DISCOVERY BOUNDARY:
+Reading, searching, querying, counting, diagnosing, proposing, attacking proposals, and reporting findings remain 100% free and unlimited. Discovery is never gated. Only creation is.
+<!-- END:cisem-mandatory-ratification-law -->
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
