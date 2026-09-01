@@ -1,0 +1,20 @@
+{
+  "cr_null_flavors": {
+    "asset_name": "cr_null_flavors",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "ISO 21090 Null Flavor Table (Stage 1 DDL Target)"
+  },
+  "ext_mto_proofs": {
+    "asset_name": "ext_mto_proofs",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "Made-to-Order Proof Signoff Table (Stage 3 DDL Target)"
+  },
+  "ext_specification_signoffs": {
+    "asset_name": "ext_specification_signoffs",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "Specification Signoff Table (Stage 3 DDL Target)"
+  }
+}
