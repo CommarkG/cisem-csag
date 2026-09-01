@@ -403,5 +403,17 @@
     "layer_code": "CR",
     "domain_code": null,
     "description": "Universal Tenant Archetype Service Model Junction Assignments"
+  },
+  "cr_business_domains": {
+    "asset_name": "cr_business_domains",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Platform Business Domains Lookup Table & Default Archetype Mappings"
+  },
+  "tenant_business_domains": {
+    "asset_name": "tenant_business_domains",
+    "layer_code": "EXT",
+    "domain_code": "TENANCY",
+    "description": "Tenant Selected Business Domains Junction Table"
   }
 }

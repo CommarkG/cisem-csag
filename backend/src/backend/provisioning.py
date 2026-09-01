@@ -85,30 +85,55 @@ def _resolve_package_id(supabase_admin, package_code: str):
 def provision_tenant(
     *,
     auth_user_id: str,
-    company_name,
-    user_email:   str,
+    company_name: str,
+    user_email: str,
+    account_type: str = "company",
+    tax_id: str = None,
+    cell_number: str = None,
+    country_code: str = "IL",
+    currency_code: str = "ILS",
+    domain_code: str = "construction_contractor",
     supabase_admin,
 ) -> ProvisioningResult:
     """
-    Provision a new tenant for auth_user_id.
+    Provision a new tenant for auth_user_id (A5 Step 1 Onboarding Engine).
 
-    D.1/B1 path: company_name provided -> steps 1-3 then step 4.
-    D.1/B3 path: company_name absent  -> steps 1-3 with placeholder, claim withheld.
-
-    Steps:
-      1. INSERT customer_accounts (account_type=TENANT)
-      2. INSERT public.users (mirror auth UUID)
-      3. INSERT user_account_roles (role_code=account_owner)
-      4. admin.update_user_by_id -> app_metadata.tenant_id  [C4: one attempt only]
-
-    C1: Step 5 (verification) lives in middleware on first authenticated request.
+    Payload:
+      account_type: 'company' | 'private'
+      company_name: Legal Name or Full Legal Name
+      tax_id: Business Tax ID (HP) or National ID / Passport
+      domain_code: Primary business domain code (maps to default service models)
+      country_code: IL, US, DE, CN (China supplier hub)
+      currency_code: ILS, USD, EUR
     """
     if not company_name:
         return _provision_pending_onboarding(auth_user_id, user_email, supabase_admin)
-    return _provision_full(auth_user_id, company_name, user_email, supabase_admin)
+    return _provision_full(
+        auth_user_id=auth_user_id,
+        company_name=company_name,
+        user_email=user_email,
+        account_type=account_type,
+        tax_id=tax_id,
+        cell_number=cell_number,
+        country_code=country_code,
+        currency_code=currency_code,
+        domain_code=domain_code,
+        supabase_admin=supabase_admin
+    )
 
 
-def _provision_full(auth_user_id, company_name, user_email, supabase_admin):
+def _provision_full(
+    auth_user_id,
+    company_name,
+    user_email,
+    account_type,
+    tax_id,
+    cell_number,
+    country_code,
+    currency_code,
+    domain_code,
+    supabase_admin
+):
     package_id = _resolve_package_id(supabase_admin, PROVISIONING_PACKAGE)
     if not package_id:
         return ProvisioningResult(
@@ -119,12 +144,25 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_admin):
 
     tenant_id = None
 
-    # Step 1
+    # Step 1: Insert customer_accounts with settings JSONB payload
     try:
+        settings_payload = {
+            "account_mode": account_type or "company",
+            "tax_id": tax_id or "",
+            "cell_number": cell_number or "",
+            "country_code": country_code or "IL",
+            "currency_code": currency_code or "ILS",
+            "primary_email": user_email,
+            "onboarding_step": 1,
+            "onboarding_status": "CONFIRMED"
+        }
+
         ca_res = supabase_admin.table("customer_accounts").insert({
             "company_name": company_name,
-            "account_type": "TENANT",
-            "package_id":   package_id,
+            "account_type": "customer",
+            "tax_id": tax_id or None,
+            "package_id": package_id,
+            "settings": settings_payload
         }).execute()
         if not ca_res.data:
             raise RuntimeError("customer_accounts INSERT returned no data.")
@@ -133,7 +171,7 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_admin):
         return ProvisioningResult(status=ProvisioningStatus.FAILED, user_id=auth_user_id,
                                   error=f"Step 1 (customer_accounts): {exc}")
 
-    # Step 2
+    # Step 2: Insert public.users mirror
     try:
         supabase_admin.table("users").insert({"id": auth_user_id, "email": user_email}).execute()
     except Exception as exc:
@@ -142,7 +180,7 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_admin):
         return ProvisioningResult(status=ProvisioningStatus.PARTIAL_CLAIM_PENDING,
                                   tenant_id=tenant_id, user_id=auth_user_id, error=str(exc))
 
-    # Step 3
+    # Step 3: Insert user_account_roles (role_code=account_owner)
     try:
         supabase_admin.table("user_account_roles").insert({
             "user_id":             auth_user_id,
@@ -156,6 +194,30 @@ def _provision_full(auth_user_id, company_name, user_email, supabase_admin):
                              f"Step 3 (user_account_roles) failed after steps 1-2: {exc}")
         return ProvisioningResult(status=ProvisioningStatus.PARTIAL_CLAIM_PENDING,
                                   tenant_id=tenant_id, user_id=auth_user_id, error=str(exc))
+
+    # Step 3.5: Provision tenant business domain & resolve default archetypes
+    try:
+        domain_key = domain_code or "construction_contractor"
+        supabase_admin.table("tenant_business_domains").insert({
+            "customer_account_id": tenant_id,
+            "domain_code": domain_key,
+            "is_primary": True
+        }).execute()
+
+        # Resolve default service model archetypes for this domain
+        domain_res = supabase_admin.table("cr_business_domains").select("default_service_models").eq("code", domain_key).execute()
+        archetypes = ['SRV', 'MTO']
+        if domain_res.data and domain_res.data[0].get("default_service_models"):
+            archetypes = domain_res.data[0]["default_service_models"]
+
+        for arch_code in archetypes:
+            supabase_admin.table("tenant_service_models").insert({
+                "customer_account_id": tenant_id,
+                "service_model_code": arch_code,
+                "confirmed_at": "NOW()"
+            }).execute()
+    except Exception as exc:
+        print(f"[provisioning] Warning: Domain/Archetype assignment notice: {exc}")
 
     # Step 4 — one attempt, fail-fast (C4)
     try:

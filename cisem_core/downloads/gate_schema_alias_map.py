@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-CISEM Schema Alias, Column, & FK Target Uniqueness Pre-Commit Gate
+CISEM Schema Alias, Column, FK Target Uniqueness, & Route Path Pre-Commit Gate
 Target: cisem_core/tools/gate_schema_alias_map.py
 Authority: Governor Yariv / Reviewer Claude / Antigravity
-Rule: Rule 0 / P10 / Rule 20.5 - Validates Table Names, Column Names, AND FK Target Uniqueness against live schema rules.
+Rule: Rule 0 / P10 / Rule 20.5 / Root 1 - Validates Table Names, Column Names, FK Target Uniqueness, AND FastAPI Route Paths against live main.py endpoints.
 """
 
 import sys
@@ -50,10 +50,28 @@ def load_live_schema(workspace_dir):
 
     return live_tables, table_columns
 
+def load_live_routes(workspace_dir):
+    main_py_path = os.path.join(workspace_dir, "backend", "src", "backend", "main.py")
+    live_routes = set()
+    if os.path.exists(main_py_path):
+        try:
+            with open(main_py_path, "r", encoding="utf-8", errors="ignore") as f:
+                content = f.read()
+                # Find all @app.get("/api/..."), @app.post("/api/..."), etc.
+                route_pattern = re.compile(r'@app\.(get|post|put|delete|patch)\s*\(\s*["\'](/api/[^"\']+)["\']', re.IGNORECASE)
+                for method, path in route_pattern.findall(content):
+                    clean_path = path.strip().lower()
+                    live_routes.add(clean_path)
+                    live_routes.add(f"{method.upper()} {clean_path}")
+        except Exception:
+            pass
+    return live_routes
+
 def run_schema_alias_check(target_input=None):
     workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     live_tables, table_columns = load_live_schema(workspace_dir)
+    live_routes = load_live_routes(workspace_dir)
 
     # Load Metadata Aliases from cr_ext_registry.json
     registry_file = os.path.join(workspace_dir, "cisem_core", "cr_ext_registry.json")
@@ -82,7 +100,10 @@ def run_schema_alias_check(target_input=None):
         "users": {"id"},
         "contacts": {"id"},
         "packages": {"id"},
-        "vocabulary_terms": {"id"}  # NOT 'code'! 'code' repeats across kinds!
+        "vocabulary_terms": {"id"},
+        "cr_account_types": {"code", "id"},
+        "cr_alias_kinds": {"code", "id"},
+        "cr_service_models": {"code", "id"}
     }
 
     # Content to scan
@@ -130,27 +151,34 @@ def run_schema_alias_check(target_input=None):
     for t_raw, c_raw in ref_pattern.findall(content):
         t_clean = t_raw.split(".")[-1].lower()
         c_clean = c_raw.lower()
-        
-        # Check single-column FK target uniqueness
         if t_clean in known_unique_targets:
             if c_clean not in known_unique_targets[t_clean]:
                 violations.append(
                     f"Foreign Key Target Refusal: Referenced target column '{t_clean}.{c_clean}' is NOT unique! Foreign key targets MUST carry a PRIMARY KEY or UNIQUE constraint."
                 )
 
+    # 5. Scan for API route path references (e.g. /api/provision_tenant or POST /api/provision_tenant)
+    route_mention_pattern = re.compile(r'\b(?:GET|POST|PUT|DELETE|PATCH)?\s*(/api/[a-z0-9_/\-]+)\b', re.IGNORECASE)
+    for match_path in set(route_mention_pattern.findall(content)):
+        clean_path = match_path.lower().rstrip('.')
+        if clean_path not in live_routes:
+            violations.append(
+                f"Route Path Refusal (Root 1 Echo Prevention): Referenced API route '{clean_path}' DOES NOT EXIST in live backend/src/backend/main.py endpoints!"
+            )
+
     if violations:
         print("============================================================")
-        print("CISEM SCHEMA ALIAS, COLUMN, & FK TARGET GATE > STATUS: BLOCKED")
+        print("CISEM SCHEMA ALIAS, COLUMN, FK TARGET, & ROUTE GATE > STATUS: BLOCKED")
         print("============================================================")
-        print(f"Found {len(violations)} schema/column/FK target violation(s) in {target_name}:")
+        print(f"Found {len(violations)} schema/column/FK/route violation(s) in {target_name}:")
         for v in set(violations):
             print(f"  - [RULE VIOLATION]: {v}")
         return False
     else:
         print("============================================================")
-        print("CISEM SCHEMA ALIAS, COLUMN, & FK TARGET GATE > STATUS: PASSED")
+        print("CISEM SCHEMA ALIAS, COLUMN, FK TARGET, & ROUTE GATE > STATUS: PASSED")
         print("============================================================")
-        print(f"All table, column, and FK target references in {target_name} resolve cleanly against live schema.")
+        print(f"All table, column, FK target, and route references in {target_name} resolve cleanly against live schema and live main.py routes.")
         return True
 
 if __name__ == "__main__":
