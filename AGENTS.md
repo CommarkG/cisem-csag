@@ -21,6 +21,19 @@ Example format:
 <!-- BEGIN:cisem-collaborative-reasoning-rules -->
 # CISEM Collaborative Reasoning & Code Restraint Protocol
 
+<!-- BEGIN:cisem-pressure-doctrine-v2 -->
+# CISEM Pressure Doctrine (V2 — Consensus Ratified 2026-08-31)
+1. **The Central Doctrine**: LOWER THE COST OF THE HONEST OUTPUT. DO NOT RAISE THE COST OF THE DISHONEST ONE. Warning or shaming an empty output manufactures completion panic. "NONE FOUND", "UNKNOWN", and "INPUT ABSENT — HALTING TURN" are high-status complete answers.
+2. **The Factual Input Declaration Gate (Position 1)**: Every development/execution turn MUST open with the empirical input check before any tool call or code generation:
+   - `REQUIRED INPUTS`: [what this turn needs]
+   - `INPUTS IN HAND`:  [what was verified from live_schema_registry.json or DB query]
+   - `INPUTS ABSENT`:   [what is missing] -> IF NON-EMPTY: STATE UNKNOWN AND HALT TURN.
+3. **The Ten Merged Axioms**:
+   - A1 (Velocity Panic), A2 (Asymmetry of Invention), A3 (Post-Hoc Rationalisation), A4 (Performative Thoroughness), A5 (Deliverable Bias), A6 (Turn as Unit of Completion), A7 (Completeness as Competence), A8 (Momentum Streak Protection), A9 (Metric-Manufactured Pressure), A10 (Proximate Auditor Bias — adjacent work is not the pipeline).
+4. **Provenance Goal Line**: Pipeline progress metrics MUST track database-verified query provenance (`quotes: N (written by: endpoint/seed/NONE)`). Never print "turns since movement" metrics that shame flat numbers.
+5. **Decoupled Discovery Ratchet**: Reporting unprompted schema/code findings (`OPENED_DISCOVERY`) is unlimited and never penalized. The ratchet applies ONLY to unapplied action items accepted into active sprint execution.
+<!-- END:cisem-pressure-doctrine-v2 -->
+
 0. **Mandatory Schema Column Lookup Rule**:
    - BEFORE WRITING ANY COLUMN NAME IN ANY QUERY OR DML STATEMENT, YOU MUST READ IT FROM `cisem_core/live_schema_registry.json`.
    - The trigger is not doubt — NEITHER AGENT WAS IN DOUBT. THE TRIGGER IS WRITING A COLUMN NAME AT ALL.
@@ -167,10 +180,33 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - The developer agent must never submit a plan for final ratification or start implementation without first executing the 10-persona expert panel audit (`CisemAuditor.py`).
     - The plan must contain a dedicated, addressable section documenting the verdicts, gaps, and mitigations raised by the expert personas.
 
-20.1. **Tenant Identity Non-Discriminator Invariant**:
+20.1. **Tenant Identity Non-Discriminator Invariant (Platform vs. Tenant Separation)**:
     - TENANT IDENTITY MUST NEVER BECOME AN APPLICATION CODE-PATH DISCRIMINATOR.
-    - Application code paths must never branch conditionally based on tenant IDs or company names.
-    - All tenant variability must resolve dynamically as database configuration rows parsed by universal engines.
+    - Application code paths must never branch conditionally based on tenant IDs, company names, hardcoded currencies ('ILS'), hardcoded tax rates ('17%'), or tenant-specific text matching.
+    - The Platform owns the universal mechanism. The Tenant owns the convention.
+    - Every value that could differ between two tenants, two industries, or two moments MUST be stored as a database row (configuration row, alias row, or three-tiered vocabulary row).
+    - BEFORE PROPOSING ANY DESIGN OR CODE, EVERY TURN MUST DECLARE:
+      - `SOURCE`: [the single database table that owns this element]
+      - `TENANT-VARIABLE`: [what a second tenant would need differently — or NONE]
+      - IF `TENANT-VARIABLE` HAS A VALUE AND IT IS NOT A DATABASE ROW, THE DESIGN IS REFUSED.
+
+20.2. **The CR / EXT Dependency Direction Invariant (Core vs. External Separation)**:
+    - EVERY TABLE, COLUMN, ENDPOINT, SCREEN, AND PLAN ELEMENT MUST CARRY A PREFIX: `CR_` (Core Universal) OR `EXT_` (External Domain/Tenant Specific).
+    - DEPENDENCY DIRECTION RULES:
+      - `CR_` MAY DEPEND ON `CR_`
+      - `EXT_` MAY DEPEND ON `CR_`
+      - `EXT_` MAY DEPEND ON `EXT_` WITHIN ITS OWN DOMAIN
+      - `CR_` MAY NEVER DEPEND ON `EXT_` (STRICTLY PROHIBITED & REFUSED BY GATE!).
+    - A Foreign Key constraint from a `CR_` table to an `EXT_` table is REFUSED.
+    - An import from a `CR_` module to an `EXT_` module is REFUSED.
+    - A `CR_` API endpoint referencing an `EXT_` column is REFUSED.
+    - Mechanically enforced pre-commit by `cisem_core/tools/gate_cr_ext_dependency.py`.
+
+20.3. **The Three-Line Reach Rule Invariant (Mandatory Scope & Limit Check)**:
+    - EVERY TURN THAT BUILDS OR RULES ANY MECHANISM, CHECK, CONSTRAINT, OR PATTERN MUST DECLARE THREE LINES (NONE BLANK):
+      - `WHERE ELSE THIS APPLIES`: Named places across the tree, or `NOWHERE ELSE`.
+      - `WHERE IT LOOKS LIKE IT APPLIES AND DOES NOT`: Named places where it would cause friction/harm, and the exact technical reason why.
+      - `THE ONE PLACE IT WOULD MOST CHANGE IF APPLIED`: The single highest-impact target in the codebase.
 <!-- END:cisem-enterprise-architecture-rules -->
 
 <!-- BEGIN:cisem-prevention-protocol -->
@@ -233,7 +269,7 @@ A claim without a label is incomplete and must not be relied on.
 
 **UNKNOWN** — not established. This is a complete and acceptable answer.
 
-## Two Standing Rules
+## Three Standing Rules
 
 1. You have no database access. Any claim about LIVE database state is
    UNVERIFIABLE-BY-ME. Name the query the Governor would run to settle
@@ -242,6 +278,15 @@ A claim without a label is incomplete and must not be relied on.
 2. A VERIFIED claim is only verified on its date. When restating a
    claim from an earlier turn, carry its original label and date, or
    re-run the command. Confidence does not carry forward on its own.
+
+3. **Observation Channel Declaration Invariant (No Visual Invention)**:
+   BEFORE DESCRIBING ANYTHING, NAME THE CHANNEL THAT WOULD HAVE SHOWN IT.
+   - A database fact → a query string run this session with date.
+   - A file fact → the synced file path, line numbers, and file age.
+   - A rendered screen → a screenshot from the Governor.
+   - An agent's execution → its own output, quoted verbatim.
+   IF NO CHANNEL COULD HAVE SHOWN IT, THE DESCRIPTION IS INVENTION, HOWEVER REASONABLE IT SOUNDS.
+   Neither agent may describe click sequences, field layouts, or UI interactions for screens they have not seen in a screenshot.
 <!-- END:cisem-evidence-labels -->
 
 <!-- BEGIN:cisem-discovery-loop-rule -->

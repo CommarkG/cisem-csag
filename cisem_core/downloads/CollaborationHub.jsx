@@ -65,7 +65,7 @@ export default function CollaborationHub() {
               name: m.name || m.full_name || m.email,
               email: m.email,
               role: m.role || 'member',
-              company: m.company || 'AGN Ltd',
+              company: m.company || '',
               initials: (m.name || m.email || 'U').substring(0, 2).toUpperCase(),
               avatar: m.avatar || '👨‍💼'
             }));

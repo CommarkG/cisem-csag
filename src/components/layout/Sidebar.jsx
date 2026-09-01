@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard, Columns3, List, Calendar, BarChart3, 
-  Settings, Users, ChevronRight, Plus, 
-  Folder, FileText, CheckCircle2, Box, Layers, Sparkles
+  Inbox, FileText, CheckCircle2, BookOpen, Users, Truck, Shield,
+  Settings, ChevronRight, Plus, Folder, Layers, Box
 } from 'lucide-react';
 import { useUIStore } from '../../stores/useUIStore';
 import { useTaskStore } from '../../stores/useTaskStore';
 import { buildTree } from '../../utils/treeHelpers';
 import { translations, tValue } from '../../utils/translations';
+import { supabase } from '../../lib/supabaseClient';
+
+const CANONICAL_PIPELINE_MENU = [
+  { id: '1', title_en: 'Inquiries', title_he: 'פניות והזמנות', route: '#/inquiry-intake', icon: 'inbox', display_order: 1 },
+  { id: '2', title_en: 'Quote Builder', title_he: 'מחולל הצעות מחיר', route: '#/quote-builder', icon: 'file-text', display_order: 2 },
+  { id: '3', title_en: 'Order Acceptance', title_he: 'אישור והזמנות עבודה', route: '#/work-order-acceptance', icon: 'check-circle', display_order: 3 },
+  { id: '4', title_en: 'Catalog', title_he: 'קטלוג מוצרים', route: '#/catalogue', icon: 'book-open', display_order: 4 },
+  { id: '5', title_en: 'Clients & Counterparties', title_he: 'לקוחות וצדדים שכנגד', route: '#/clients', icon: 'users', display_order: 5 },
+  { id: '6', title_en: 'Suppliers', title_he: 'ספקים וספקים מורשים', route: '#/suppliers', icon: 'truck', display_order: 6 },
+  { id: '7', title_en: 'Team & Access', title_he: 'צוות והרשאות', route: '#/admin', icon: 'shield', display_order: 7 }
+];
+
+const getMenuIcon = (iconName) => {
+  switch (iconName) {
+    case 'inbox': return <Inbox className="item-icon" size={18} />;
+    case 'file-text': return <FileText className="item-icon" size={18} />;
+    case 'check-circle': return <CheckCircle2 className="item-icon" size={18} />;
+    case 'book-open': return <BookOpen className="item-icon" size={18} />;
+    case 'users': return <Users className="item-icon" size={18} />;
+    case 'truck': return <Truck className="item-icon" size={18} />;
+    case 'shield': return <Shield className="item-icon" size={18} />;
+    default: return <FileText className="item-icon" size={18} />;
+  }
+};
 
 const getTypeIcon = (type) => {
   switch(type) {
@@ -76,6 +99,7 @@ const TreeNode = ({ node }) => {
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { 
     activeView, setActiveView, 
     sidebarCollapsed, openAddItemModal,
@@ -83,42 +107,61 @@ export default function Sidebar() {
   } = useUIStore();
   const items = useTaskStore(state => state.items);
   
+  const [navItems, setNavItems] = useState(CANONICAL_PIPELINE_MENU);
   const tree = buildTree(items, null);
   const t = translations[language] || translations.en;
 
-  const handleViewClick = (view, path) => {
-    setActiveView(view);
-    navigate(path);
-  };
+  useEffect(() => {
+    async function fetchDatabaseNavigation() {
+      try {
+        const { data, error } = await supabase
+          .from('navigation_menu_items')
+          .select('*')
+          .order('display_order', { ascending: true });
 
-  const views = [
-    { id: 'dashboard', label: t.dashboard, icon: LayoutDashboard, path: '/dashboard' },
-    { id: 'onboarding', label: language === 'he' ? 'קליטה ארגונית' : 'Onboarding', icon: Sparkles, path: '/onboarding' },
-    { id: 'kanban', label: t.kanban, icon: Columns3, path: '/kanban' },
-    { id: 'list', label: t.list, icon: List, path: '/list' },
-    { id: 'calendar', label: t.calendar, icon: Calendar, path: '/calendar' },
-    { id: 'gantt', label: t.gantt, icon: BarChart3, path: '/gantt' },
-  ];
+        if (data && data.length > 0) {
+          setNavItems(data);
+        }
+      } catch (err) {
+        console.warn('Using canonical pipeline fallback for navigation sidebar:', err);
+      }
+    }
+    fetchDatabaseNavigation();
+  }, []);
+
+  const handleNavClick = (item) => {
+    const cleanPath = item.route.replace(/^#/, '') || '/';
+    const viewName = cleanPath.replace(/^\//, '');
+    setActiveView(viewName);
+    navigate(cleanPath);
+  };
 
   return (
     <div className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-nav" style={{ paddingTop: 12 }}>
-        {!sidebarCollapsed && <div className="sidebar-section-label">{t.views}</div>}
-        {views.map(v => (
-          <div 
-            key={v.id} 
-            className={`sidebar-item ${activeView === v.id ? 'active' : ''}`}
-            onClick={() => handleViewClick(v.id, v.path)}
-          >
-            <v.icon className="item-icon" />
-            {!sidebarCollapsed && <span>{v.label}</span>}
-          </div>
-        ))}
+        {!sidebarCollapsed && <div className="sidebar-section-label">{language === 'he' ? 'ציר פעילות מסחרי' : 'Commercial Pipeline'}</div>}
+        {navItems.map(item => {
+          const cleanPath = item.route.replace(/^#/, '') || '/';
+          const isActive = location.pathname === cleanPath || activeView === cleanPath.replace(/^\//, '');
+          const label = language === 'he' ? (item.title_he || item.title_en) : (item.title_en || item.title_he);
+
+          return (
+            <div 
+              key={item.id || item.route} 
+              className={`sidebar-item ${isActive ? 'active' : ''}`}
+              onClick={() => handleNavClick(item)}
+              title={label}
+            >
+              {getMenuIcon(item.icon)}
+              {!sidebarCollapsed && <span>{label}</span>}
+            </div>
+          );
+        })}
 
         {!sidebarCollapsed && (
           <>
-            <div className="sidebar-section-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>{t.projects}</span>
+            <div className="sidebar-section-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
+              <span>{t.projects || 'Reference Context'}</span>
               <button 
                 className="btn-icon" 
                 style={{ padding: 2 }} 
@@ -138,17 +181,10 @@ export default function Sidebar() {
       <div className="sidebar-nav" style={{ flex: 'none', borderTop: '1px solid var(--border)' }}>
         <div 
           className={`sidebar-item ${activeView === 'settings' ? 'active' : ''}`}
-          onClick={() => handleViewClick('settings', '/settings')}
+          onClick={() => { setActiveView('settings'); navigate('/settings'); }}
         >
           <Settings className="item-icon" />
           {!sidebarCollapsed && <span>{t.settings}</span>}
-        </div>
-        <div 
-          className={`sidebar-item ${activeView === 'collaboration' ? 'active' : ''}`}
-          onClick={() => handleViewClick('collaboration', '/collaboration')}
-        >
-          <Users className="item-icon" />
-          {!sidebarCollapsed && <span>{t.collaboration}</span>}
         </div>
       </div>
     </div>

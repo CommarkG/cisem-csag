@@ -219,7 +219,7 @@ export default function Header() {
           lineHeight: 1
         }}>CISEM</div>
         <span style={{ fontSize: '0.52rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase', whiteSpace: 'nowrap', lineHeight: 1 }}>
-          {currentUser?.company || 'AGN LTD'}
+          {currentUser?.company || ''}
         </span>
       </div>
 

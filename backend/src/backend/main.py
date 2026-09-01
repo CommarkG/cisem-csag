@@ -1168,7 +1168,7 @@ def generate_proposal(payload: ProposalGenerateRequest):
         inquiry_res = supabase.table("inquiries").select("id").eq("id", payload.brief_id).execute()
         if inquiry_res.data:
             supabase.table("inquiries").update({
-                "status_code": "proposal_sent"
+                "status_code": "brief_processed"
             }).eq("id", payload.brief_id).execute()
             
         return {
@@ -2188,7 +2188,7 @@ async def create_inquiry(payload: InquiryCreatePayload, request: Request):
     data = {
         "title": inq_title,
         "description": inq_desc,
-        "status_code": "proposal_draft",
+        "status_code": "brief_raw",
         "customer_account_id": tenant_id, # Extracted strictly from verified request session!
         "counterparty_id": payload.counterparty_id # NULL if not provided!
     }

@@ -111,14 +111,6 @@ export function useAuthSession(): AuthSessionResult {
             session
           });
         }
-
-        // Trigger automatic team member store hydration from /api/v1/tenant/members
-        try {
-          useCollabStore.getState().fetchMembers?.();
-        } catch (e) {
-          // ignore
-        }
-
       } catch (err: any) {
         if (mounted) {
           setResult({

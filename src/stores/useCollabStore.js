@@ -34,8 +34,11 @@ export const useCollabStore = create((set, get) => {
     members: initial.members || [],
     activityFeed: initial.activityFeed || [],
     fetchError: null,
+    isFetching: false,
 
     fetchMembers: async () => {
+      if (get().isFetching) return;
+      set({ isFetching: true });
       try {
         const data = await apiClient('/api/v1/tenant/members');
         if (data && data.members && Array.isArray(data.members) && data.members.length > 0) {
@@ -48,13 +51,13 @@ export const useCollabStore = create((set, get) => {
             initials: (m.name || m.email || 'U').slice(0, 2).toUpperCase(),
             avatar: AVATAR_COLORS[0]
           }));
-          set({ members: mapped, fetchError: null });
+          set({ members: mapped, fetchError: null, isFetching: false });
         } else {
-          set({ members: [], fetchError: null });
+          set({ members: [], fetchError: null, isFetching: false });
         }
       } catch (err) {
         console.error('API Error fetching live team members:', err);
-        set({ members: [], fetchError: err?.message || 'Failed to fetch team members' });
+        set({ members: [], fetchError: err?.message || 'Failed to fetch team members', isFetching: false });
         throw err;
       }
     },

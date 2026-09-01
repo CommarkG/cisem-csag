@@ -165,10 +165,12 @@ export default function TemplateHubView() {
         <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Registry v{registry.version}</span>
         <div style={{ flex: 1 }} />
         {/* Role badge */}
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 8,
-          background: 'var(--accent-glow)', border: '1px solid var(--border-light)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--accent)' }}>
-          <User size={11} /> {(role || 'tenant_admin').replace('_', ' ').toUpperCase()}
-        </span>
+        {role && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 8,
+            background: 'var(--accent-glow)', border: '1px solid var(--border-light)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--accent)' }}>
+            <User size={11} /> {role.replace('_', ' ').toUpperCase()}
+          </span>
+        )}
         {!canDuplicate && (
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 8,
             background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', fontSize: '0.7rem', fontWeight: 700, color: '#f87171' }}>
@@ -371,7 +373,7 @@ export default function TemplateHubView() {
                         <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px',
                           borderRadius: 7, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',
                           fontSize: '0.72rem', color: '#f87171', marginTop: 4 }}>
-                          <ShieldAlert size={12} /> Your role ({role || 'tenant_admin'}) does not have write access to this page.
+                          <ShieldAlert size={12} /> Your role ({role || 'unassigned'}) does not have write access to this page.
                         </div>
                       )}
                     </div>
