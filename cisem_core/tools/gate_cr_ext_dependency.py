@@ -4,6 +4,7 @@ CISEM CR / EXT Dependency Direction Pre-Commit Gate
 Target: cisem_core/tools/gate_cr_ext_dependency.py
 Authority: Governor Yariv / Reviewer Claude / Antigravity
 Rule: Rule 20.2 - CR (Core) assets MUST NEVER depend on EXT (External Domain) assets.
+Refusal: Un-registered or UNCLASSIFIED tables BLOCK THE GATE IMMEDIATELY.
 """
 
 import sys
@@ -14,17 +15,6 @@ import re
 def load_registry_mappings(workspace_dir):
     registry = {}
     
-    # Default baseline live tables mapped to CR layer
-    core_defaults = {
-        "quotes", "quote_lines", "inquiries", "catalog_items", "price_list_lines",
-        "customer_accounts", "vocabulary_terms", "status_library", "attachments",
-        "state_transitions", "backlog_registry", "document_chunks", "cr_null_flavors",
-        "events", "user_roles", "permissions"
-    }
-    for t in core_defaults:
-        registry[t.lower()] = "CR"
-
-    # Load from cisem_core/cr_ext_registry.json if exists
     json_path = os.path.join(workspace_dir, "cisem_core", "cr_ext_registry.json")
     if os.path.exists(json_path):
         try:
@@ -47,16 +37,23 @@ def get_table_layer(table_name, registry):
     clean = table_name.lower()
     if clean in registry:
         return registry[clean]
-    if clean.startswith("ext_"):
-        return "EXT"
-    if clean.startswith("cr_"):
-        return "CR"
-    # Default legacy unprefixed tables to CR
-    return "CR"
+    # Unregistered tables return UNCLASSIFIED (blocks gate)
+    return "UNCLASSIFIED"
 
 def audit_cr_ext_dependencies(sql_content: str, workspace_dir: str) -> list:
     violations = []
     registry = load_registry_mappings(workspace_dir)
+
+    # Check for unclassified / unregistered tables in DDL
+    all_table_refs = set(re.findall(r"\b(?:ALTER\s+TABLE|CREATE\s+TABLE|REFERENCES)\s+([^\s(;]+)", sql_content, re.IGNORECASE))
+    for t_raw in all_table_refs:
+        clean_name = t_raw.split(".")[-1].strip('"`[];()')
+        if clean_name and not clean_name.startswith("fk_") and not clean_name.startswith("idx_"):
+            layer = get_table_layer(clean_name, registry)
+            if layer == "UNCLASSIFIED":
+                violations.append(
+                    f"Orphan Table Refusal: Table '{clean_name}' is UNCLASSIFIED or absent from cr_ext_registry! Register layer code (CR or EXT) before committing DDL."
+                )
 
     # Pattern 1: ALTER TABLE <src_table> ... REFERENCES <target_table>
     fk_matches = re.findall(
