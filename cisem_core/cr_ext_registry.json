@@ -393,5 +393,15 @@
     "layer_code": "CR",
     "domain_code": null,
     "description": "Universal Platform Entity Alias Kinds Infrastructure"
+  },
+  "cr_service_models": {
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Platform Archetype Service Models Infrastructure"
+  },
+  "tenant_service_models": {
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Tenant Archetype Service Model Junction Assignments"
   }
 }
