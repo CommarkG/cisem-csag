@@ -79,3 +79,53 @@ Each entry carries five mandatory non-blank fields:
 - `WHY IT IS PARKED`: Single repo co-evolution is ratified; none of the 4 governance triggers have fired (Does not block Onboarding, Product Definition, or Quote to Work Order).
 - `WHAT IT COSTS TO LEAVE`: Free later (Repo extraction when 4 triggers fire).
 - `DATE PARKED`: 2026-09-01
+
+### 9. City Selection for Shipping Destination
+- `WHAT IT IS`: Granular city level selector for shipping destination during onboarding.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without city level shipping selection (Country and currency suffice for Step 1).
+- `WHAT IT COSTS TO LEAVE`: Free later (Form field addition).
+- `DATE PARKED`: 2026-09-01
+
+### 10. Domain Extraction from Email Address
+- `WHAT IT IS`: Automated parsing of business domain name from email domain extension during signup.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without email domain extraction (Manual domain selection suffices).
+- `WHAT IT COSTS TO LEAVE`: Free later (Helper utility addition).
+- `DATE PARKED`: 2026-09-01
+
+### 11. Additional Contacts with Specific Roles
+- `WHAT IT IS`: Multi-contact management interface for capturing accounting, technical, and shipping contacts during onboarding.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without additional contact management (Primary contact suffices for Step 1).
+- `WHAT IT COSTS TO LEAVE`: Free later (Sub-table form addition).
+- `DATE PARKED`: 2026-09-01
+
+### 12. A/B Testing of Form Layout Styles
+- `WHAT IT IS`: Dynamic A/B testing infrastructure for comparing onboarding form conversions.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without A/B testing infrastructure (Single ratified layout suffices).
+- `WHAT IT COSTS TO LEAVE`: Free later (Analytics feature addition).
+- `DATE PARKED`: 2026-09-01
+
+### 13. Automatic Shipping Rate Calculation
+- `WHAT IT IS`: Automated real-time carrier shipping calculation engine.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without automatic shipping calculation (Manual shipping line items suffice for quotes).
+- `WHAT IT COSTS TO LEAVE`: Free later (External API integration).
+- `DATE PARKED`: 2026-09-01
+
+### 14. AI Pass Completing Missing Onboarding Fields
+- `WHAT IT IS`: LLM auto-enrichment service filling missing company details from web domain inspection.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without AI auto-fill (User input suffices for Step 1).
+- `WHAT IT COSTS TO LEAVE`: Free later (Enrichment API hook addition).
+- `DATE PARKED`: 2026-09-01
+
+### 15. Abandoned Onboarding Automated Recovery Sequences
+- `WHAT IT IS`: Automated email/SMS drip campaign inviting abandoned signups back to complete onboarding.
+- `WHERE IT WAS FOUND`: Turn 280 / Governor Ruling.
+- `WHY IT IS PARKED`: Core functions without drip campaign automation (`UNPROVISIONED_AUTH_USER` state handles return routing).
+- `WHAT IT COSTS TO LEAVE`: Free later (Marketing automation addition).
+- `DATE PARKED`: 2026-09-01
+
