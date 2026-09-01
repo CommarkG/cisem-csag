@@ -233,6 +233,12 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
 
 **P9.** A turn may not close with: a partial sweep · an unproven mechanism · a debt with no owner · an unstated register count · *"recorded"* offered as completion.
 
+**P10.** **The Mandatory Defect Prevention Question**: Every defect MUST be asked this exact question before any fix is proposed: `"WHAT, IF IT HAD EXISTED, WOULD HAVE PREVENTED THIS?"`. Only three answers are legal (and no fourth):
+- *A mechanism that did not exist* (name it, and say where else its absence is live today).
+- *A mechanism that existed and did not reach* (name why it failed to reach).
+- *"Nothing could have"* (a finding requiring a detector, labelled as one).
+Every `FOUND -> MECHANISM` closing line MUST include this question and its legal answer.
+
 ---
 
 **Note on this section's own status:** it is a written rule, and written rules are the tier that fails. It holds until a gate on the commit path enforces it. **It is recorded as debt, not assumed effective.**
