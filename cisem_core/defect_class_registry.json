@@ -1,0 +1,14 @@
+{
+  "total_defect_classes": 1,
+  "recurrent_defect_classes": 1,
+  "defect_recurrence_rate_percent": 100.0,
+  "looping_classes": {
+    "GATE_ERR_FK_NON_UNIQUE": {
+      "recurrence_count": 2,
+      "first_seen": "2026-09-01T10:00:00",
+      "last_seen": "2026-09-01T12:00:00",
+      "status": "LOOPING_DEFECT_CLASS"
+    }
+  },
+  "status": "LOOPING"
+}
