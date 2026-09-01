@@ -1,67 +1,397 @@
 {
-  "account_closure": { "asset_name": "account_closure", "layer_code": "CR", "domain_code": null, "description": "Universal Account Closure Records" },
-  "attachments": { "asset_name": "attachments", "layer_code": "CR", "domain_code": null, "description": "Universal Attachments & Document Storage" },
-  "catalog_item_tags": { "asset_name": "catalog_item_tags", "layer_code": "CR", "domain_code": null, "description": "Universal Catalog Tag Mappings" },
-  "catalog_items": { "asset_name": "catalog_items", "layer_code": "CR", "domain_code": null, "description": "Universal Product & Service Catalog Items" },
-  "contacts": { "asset_name": "contacts", "layer_code": "CR", "domain_code": null, "description": "Universal Contact Persons" },
-  "counterparties": { "asset_name": "counterparties", "layer_code": "CR", "domain_code": null, "description": "Universal Counterparties & Business Partners" },
-  "customer_accounts": { "asset_name": "customer_accounts", "layer_code": "CR", "domain_code": null, "description": "Universal Tenant & Customer Accounts" },
-  "entity_aliases": { "asset_name": "entity_aliases", "layer_code": "CR", "domain_code": null, "description": "Universal Entity Instance Cross-References" },
-  "events": { "asset_name": "events", "layer_code": "CR", "domain_code": null, "description": "Universal System & Audit Event Log" },
-  "exchange_rates": { "asset_name": "exchange_rates", "layer_code": "CR", "domain_code": null, "description": "Universal Currency Exchange Rates" },
-  "feature_registry": { "asset_name": "feature_registry", "layer_code": "CR", "domain_code": null, "description": "Universal Platform Feature Registry" },
-  "inquiries": { "asset_name": "inquiries", "layer_code": "CR", "domain_code": null, "description": "Universal Intake Inquiries & Briefs" },
-  "navigation_menu_items": { "asset_name": "navigation_menu_items", "layer_code": "CR", "domain_code": null, "description": "Universal Navigation Menu Structure" },
-  "package_feature_grants": { "asset_name": "package_feature_grants", "layer_code": "CR", "domain_code": null, "description": "Universal Subscription Package Feature Grants" },
-  "packages": { "asset_name": "packages", "layer_code": "CR", "domain_code": null, "description": "Universal Commercial Subscription Packages" },
-  "participants": { "asset_name": "participants", "layer_code": "CR", "domain_code": null, "description": "Universal Workflow & Project Participants" },
-  "price_list_lines": { "asset_name": "price_list_lines", "layer_code": "CR", "domain_code": null, "description": "Universal Price List Line Items" },
-  "price_lists": { "asset_name": "price_lists", "layer_code": "CR", "domain_code": null, "description": "Universal Commercial Price Lists" },
-  "quote_lines": { "asset_name": "quote_lines", "layer_code": "CR", "domain_code": null, "description": "Universal Quote Line Items" },
-  "quotes": { "asset_name": "quotes", "layer_code": "CR", "domain_code": null, "description": "Universal Commercial Proposals & Quotes" },
-  "role_definitions": { "asset_name": "role_definitions", "layer_code": "CR", "domain_code": null, "description": "Universal Security & Role Definitions" },
-  "shipping_methods": { "asset_name": "shipping_methods", "layer_code": "CR", "domain_code": null, "description": "Universal Logistics Shipping UOM & Methods" },
-  "status_library": { "asset_name": "status_library", "layer_code": "CR", "domain_code": null, "description": "Universal Pipeline Lifecycle State Machine" },
-  "suppliers": { "asset_name": "suppliers", "layer_code": "CR", "domain_code": null, "description": "Universal Supplier Directory" },
-  "tag_library": { "asset_name": "tag_library", "layer_code": "CR", "domain_code": null, "description": "Universal Controlled Tag Vocabulary" },
-  "team_closure": { "asset_name": "team_closure", "layer_code": "CR", "domain_code": null, "description": "Universal Team Hierarchy Graph Closure" },
-  "teams": { "asset_name": "teams", "layer_code": "CR", "domain_code": null, "description": "Universal Organizational Teams" },
-  "translations": { "asset_name": "translations", "layer_code": "CR", "domain_code": null, "description": "Universal Localization Strings" },
-  "user_account_roles": { "asset_name": "user_account_roles", "layer_code": "CR", "domain_code": null, "description": "Universal User Tenant Role Assignments" },
-  "users": { "asset_name": "users", "layer_code": "CR", "domain_code": null, "description": "Universal User Directory" },
-  "vocabulary_terms": { "asset_name": "vocabulary_terms", "layer_code": "CR", "domain_code": null, "description": "Universal 4-Tier Categorical Vocabulary" },
-  "vocabulary_transitions": { "asset_name": "vocabulary_transitions", "layer_code": "CR", "domain_code": null, "description": "Universal Vocabulary State Machine Transitions" },
-  "branding_rate_cards": { "asset_name": "branding_rate_cards", "layer_code": "EXT", "domain_code": "MTO", "description": "External MTO Subcontractor Rate Cards" },
-  "branding_subcontractors": { "asset_name": "branding_subcontractors", "layer_code": "EXT", "domain_code": "MTO", "description": "External MTO Branding Subcontractors" },
-  "product_variations": { "asset_name": "product_variations", "layer_code": "EXT", "domain_code": "MTO,STK", "description": "External MTO & Stock Product Variations" },
-  "product_groups": { "asset_name": "product_groups", "layer_code": "EXT", "domain_code": "MTO,STK", "description": "External Product Category Groups" },
-  "unit_composition": { "asset_name": "unit_composition", "layer_code": "EXT", "domain_code": "MTO", "description": "External Unit Composition Multipliers" },
-  "supply_offers": { "asset_name": "supply_offers", "layer_code": "EXT", "domain_code": "STK,MTO", "description": "External Supplier Stock & Price Offers" },
-  "supplier_mappings": { "asset_name": "supplier_mappings", "layer_code": "EXT", "domain_code": "STK,MTO", "description": "External Supplier Catalog SKU Mappings" },
-  "pdf_queue": { "asset_name": "pdf_queue", "layer_code": "EXT", "domain_code": "DIG,MTO", "description": "External Background PDF Generation Queue" },
-  "inquiry_units": { "asset_name": "inquiry_units", "layer_code": "EXT", "domain_code": "MTO", "description": "External Inquiry Custom Unit Breakdown" },
-  "cr_null_flavors": { "asset_name": "cr_null_flavors", "layer_code": "CR", "domain_code": null, "description": "Core ISO 21090 Null Flavor Table" },
-  "ext_mto_proofs": { "asset_name": "ext_mto_proofs", "layer_code": "EXT", "domain_code": "MTO", "description": "External MTO Proof Signoff Table" },
-  "ext_specification_signoffs": { "asset_name": "ext_specification_signoffs", "layer_code": "EXT", "domain_code": "MTO", "description": "External Specification Signoff Table" },
-  "_migration_ledger": { "asset_name": "_migration_ledger", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "artifacts": { "asset_name": "artifacts", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "backlog_registry": { "asset_name": "backlog_registry", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "catalog_item_sandbox_variants": { "asset_name": "catalog_item_sandbox_variants", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "classification_nodes": { "asset_name": "classification_nodes", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "classification_trees": { "asset_name": "classification_trees", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "crm_customers": { "asset_name": "crm_customers", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "custom_libraries": { "asset_name": "custom_libraries", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "decision_records": { "asset_name": "decision_records", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "document_chunks": { "asset_name": "document_chunks", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "marks": { "asset_name": "marks", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "pack_items": { "asset_name": "pack_items", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "pack_transitions": { "asset_name": "pack_transitions", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "packs": { "asset_name": "packs", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "pending_claims": { "asset_name": "pending_claims", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "platform_change_requests": { "asset_name": "platform_change_requests", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "round_artifacts": { "asset_name": "round_artifacts", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "rounds": { "asset_name": "rounds", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "rules": { "asset_name": "rules", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "state_transitions": { "asset_name": "state_transitions", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" },
-  "template_registry": { "asset_name": "template_registry", "layer_code": "UNCLASSIFIED", "domain_code": null, "description": "Unclassified Table: Awaiting Governor Ruling" }
+  "account_closure": {
+    "asset_name": "account_closure",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Account Closure Records"
+  },
+  "attachments": {
+    "asset_name": "attachments",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Attachments & Document Storage"
+  },
+  "catalog_item_tags": {
+    "asset_name": "catalog_item_tags",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Catalog Tag Mappings"
+  },
+  "catalog_items": {
+    "asset_name": "catalog_items",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Product & Service Catalog Items"
+  },
+  "contacts": {
+    "asset_name": "contacts",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Contact Persons"
+  },
+  "counterparties": {
+    "asset_name": "counterparties",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Counterparties & Business Partners"
+  },
+  "customer_accounts": {
+    "asset_name": "customer_accounts",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Tenant & Customer Accounts"
+  },
+  "entity_aliases": {
+    "asset_name": "entity_aliases",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Entity Instance Cross-References"
+  },
+  "events": {
+    "asset_name": "events",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal System & Audit Event Log"
+  },
+  "exchange_rates": {
+    "asset_name": "exchange_rates",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Currency Exchange Rates"
+  },
+  "feature_registry": {
+    "asset_name": "feature_registry",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Platform Feature Registry"
+  },
+  "inquiries": {
+    "asset_name": "inquiries",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Intake Inquiries & Briefs"
+  },
+  "navigation_menu_items": {
+    "asset_name": "navigation_menu_items",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Navigation Menu Structure"
+  },
+  "package_feature_grants": {
+    "asset_name": "package_feature_grants",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Subscription Package Feature Grants"
+  },
+  "packages": {
+    "asset_name": "packages",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Commercial Subscription Packages"
+  },
+  "participants": {
+    "asset_name": "participants",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Workflow & Project Participants"
+  },
+  "price_list_lines": {
+    "asset_name": "price_list_lines",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Price List Line Items"
+  },
+  "price_lists": {
+    "asset_name": "price_lists",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Commercial Price Lists"
+  },
+  "quote_lines": {
+    "asset_name": "quote_lines",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Quote Line Items"
+  },
+  "quotes": {
+    "asset_name": "quotes",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Commercial Proposals & Quotes"
+  },
+  "role_definitions": {
+    "asset_name": "role_definitions",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Security & Role Definitions"
+  },
+  "shipping_methods": {
+    "asset_name": "shipping_methods",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Logistics Shipping UOM & Methods"
+  },
+  "status_library": {
+    "asset_name": "status_library",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Pipeline Lifecycle State Machine"
+  },
+  "suppliers": {
+    "asset_name": "suppliers",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Supplier Directory"
+  },
+  "tag_library": {
+    "asset_name": "tag_library",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Controlled Tag Vocabulary"
+  },
+  "team_closure": {
+    "asset_name": "team_closure",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Team Hierarchy Graph Closure"
+  },
+  "teams": {
+    "asset_name": "teams",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Organizational Teams"
+  },
+  "translations": {
+    "asset_name": "translations",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Localization Strings"
+  },
+  "user_account_roles": {
+    "asset_name": "user_account_roles",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal User Tenant Role Assignments"
+  },
+  "users": {
+    "asset_name": "users",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal User Directory"
+  },
+  "vocabulary_terms": {
+    "asset_name": "vocabulary_terms",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal 4-Tier Categorical Vocabulary"
+  },
+  "vocabulary_transitions": {
+    "asset_name": "vocabulary_transitions",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Vocabulary State Machine Transitions"
+  },
+  "branding_rate_cards": {
+    "asset_name": "branding_rate_cards",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "External MTO Subcontractor Rate Cards"
+  },
+  "branding_subcontractors": {
+    "asset_name": "branding_subcontractors",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "External MTO Branding Subcontractors"
+  },
+  "product_variations": {
+    "asset_name": "product_variations",
+    "layer_code": "EXT",
+    "domain_code": "MTO,STK",
+    "description": "External MTO & Stock Product Variations"
+  },
+  "product_groups": {
+    "asset_name": "product_groups",
+    "layer_code": "EXT",
+    "domain_code": "MTO,STK",
+    "description": "External Product Category Groups"
+  },
+  "unit_composition": {
+    "asset_name": "unit_composition",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "External Unit Composition Multipliers"
+  },
+  "supply_offers": {
+    "asset_name": "supply_offers",
+    "layer_code": "EXT",
+    "domain_code": "STK,MTO",
+    "description": "External Supplier Stock & Price Offers"
+  },
+  "supplier_mappings": {
+    "asset_name": "supplier_mappings",
+    "layer_code": "EXT",
+    "domain_code": "STK,MTO",
+    "description": "External Supplier Catalog SKU Mappings"
+  },
+  "pdf_queue": {
+    "asset_name": "pdf_queue",
+    "layer_code": "EXT",
+    "domain_code": "DIG,MTO",
+    "description": "External Background PDF Generation Queue"
+  },
+  "inquiry_units": {
+    "asset_name": "inquiry_units",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "External Inquiry Custom Unit Breakdown"
+  },
+  "cr_null_flavors": {
+    "asset_name": "cr_null_flavors",
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Core ISO 21090 Null Flavor Table"
+  },
+  "ext_mto_proofs": {
+    "asset_name": "ext_mto_proofs",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "External MTO Proof Signoff Table"
+  },
+  "ext_specification_signoffs": {
+    "asset_name": "ext_specification_signoffs",
+    "layer_code": "EXT",
+    "domain_code": "MTO",
+    "description": "External Specification Signoff Table"
+  },
+  "_migration_ledger": {
+    "asset_name": "_migration_ledger",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "artifacts": {
+    "asset_name": "artifacts",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "backlog_registry": {
+    "asset_name": "backlog_registry",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "catalog_item_sandbox_variants": {
+    "asset_name": "catalog_item_sandbox_variants",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "classification_nodes": {
+    "asset_name": "classification_nodes",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "classification_trees": {
+    "asset_name": "classification_trees",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "crm_customers": {
+    "asset_name": "crm_customers",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "custom_libraries": {
+    "asset_name": "custom_libraries",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "decision_records": {
+    "asset_name": "decision_records",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "document_chunks": {
+    "asset_name": "document_chunks",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "marks": {
+    "asset_name": "marks",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "pack_items": {
+    "asset_name": "pack_items",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "pack_transitions": {
+    "asset_name": "pack_transitions",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "packs": {
+    "asset_name": "packs",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "pending_claims": {
+    "asset_name": "pending_claims",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "platform_change_requests": {
+    "asset_name": "platform_change_requests",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "round_artifacts": {
+    "asset_name": "round_artifacts",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "rounds": {
+    "asset_name": "rounds",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "rules": {
+    "asset_name": "rules",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "state_transitions": {
+    "asset_name": "state_transitions",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "template_registry": {
+    "asset_name": "template_registry",
+    "layer_code": "UNCLASSIFIED",
+    "domain_code": null,
+    "description": "Unclassified Table: Awaiting Governor Ruling"
+  },
+  "cr_alias_kinds": {
+    "layer_code": "CR",
+    "domain_code": null,
+    "description": "Universal Platform Entity Alias Kinds Infrastructure"
+  }
 }
