@@ -285,14 +285,15 @@ A claim without a label is incomplete and must not be relied on.
    claim from an earlier turn, carry its original label and date, or
    re-run the command. Confidence does not carry forward on its own.
 
-3. **Observation Channel Declaration Invariant (No Visual Invention)**:
-   BEFORE DESCRIBING ANYTHING, NAME THE CHANNEL THAT WOULD HAVE SHOWN IT.
-   - A database fact → a query string run this session with date.
-   - A file fact → the synced file path, line numbers, and file age.
-   - A rendered screen → a screenshot from the Governor.
-   - An agent's execution → its own output, quoted verbatim.
-   IF NO CHANNEL COULD HAVE SHOWN IT, THE DESCRIPTION IS INVENTION, HOWEVER REASONABLE IT SOUNDS.
-   Neither agent may describe click sequences, field layouts, or UI interactions for screens they have not seen in a screenshot.
+3. **Observation Channel Declaration Invariant & Multi-Channel Completeness Law**:
+   BEFORE MAKING ANY COST, COUNT, OR COVERAGE CLAIM, NAME THE PRIMARY CHANNEL THAT PRODUCED IT AND EXPLICITLY STATE WHICH OF THE REMAINING CHANNELS WERE NOT CHECKED.
+   - **The 4 Platform Channels**:
+     - `[CODE-CHANNEL]` (Files, git tree, line counts, imports - Antigravity domain).
+     - `[DATABASE-CHANNEL]` (pg_proc, pg_policies, live SQL rows - Reviewer Claude domain).
+     - `[RUNTIME-HOST-CHANNEL]` (OS environment, background tasks, filesystem paths outside repo).
+     - `[GOVERNOR-VISUAL-CHANNEL]` (Rendered UI screens, visual alignment, Governor screenshots).
+   - **Single-Channel Refusal**: Any cost, count, or coverage estimate produced by only one channel without declaring un-checked channels is INCOMPLETE and will be refused by the gate.
+   - **Boundary**: Applies strictly to quantifiable system estimates (costs, object counts, gate coverage). Does not apply to qualitative rule definitions or markdown formatting.
 <!-- END:cisem-evidence-labels -->
 
 <!-- BEGIN:cisem-discovery-loop-rule -->
