@@ -47,11 +47,11 @@ RULING THREE: THE INDUSTRY VOCABULARY LAW (GOVERNOR MANDATORY VOCABULARY RULING)
 INDUSTRY VOCABULARY IS THE DEFAULT. LOCAL VOCABULARY IS THE EXCEPTION AND IT IS DECLARED, NEVER HIDDEN.
 Anything a developer types uses industry vocabulary, without exception — tables, columns, functions, endpoints, statuses, file names. A new developer must read the schema without a glossary.
 RETIRED TERMS & THEIR INDUSTRY REPLACEMENTS:
-- core cycle -> VERTICAL SLICE
-- corespine -> DEPENDENCY CHAIN
-- depth before breadth -> THREAD-FIRST DELIVERY
-- progressive specification -> ITERATIVE REFINEMENT
-- maturity axis -> READINESS LEVEL
+- VERTICAL SLICE -> VERTICAL SLICE
+- DEPENDENCY_CHAIN -> DEPENDENCY CHAIN
+- THREAD-FIRST DELIVERY -> THREAD-FIRST DELIVERY
+- ITERATIVE REFINEMENT -> ITERATIVE REFINEMENT
+- READINESS LEVEL -> READINESS LEVEL
 KEPT LOCAL TERMS:
 - CR / EXT and its dependency direction
 - The pressure doctrine and its axioms
@@ -66,6 +66,11 @@ EVERY IMPROVEMENT IDENTIFIED — BY EITHER PARTY, IN ANY TURN — MUST:
 2. ALIGN THE PAST by running a deep check against everything that already exists, and aligning the class, not just the single instance.
 3. GOVERN THE FUTURE by verifying that future creations follow it. A rule that corrects the past and does not govern the next creation is a repair, not a prevention.
 4. AVOID A STASIS POINT by iterating until everything is identified and aligned. An improvement turn ends when neither party can name another place the improvement applies.
+
+RULING FIVE: THE ACTIVE PLAN COHERENCE & MANDATORY CARRIER LAWS (GOVERNOR STANDING RULINGS)
+1. A SUPERSEDED EXECUTION PATH MUST NOT REMAIN IN EXECUTABLE FORM INSIDE THE ACTIVE PLAN. Rationale may be prose. IT MAY NOT REMAIN FORMATTED AS NUMBERED STEPS. Otherwise inheritance turns into ambiguity.
+2. EVERY BINDING RULE REQUIRES AN IDENTIFIED CARRIER AT THE POINT WHERE IT MUST HOLD. A carrier may be a type system, a database constraint, a policy engine, an API boundary, a capability gate, a CI check, or a runtime sandbox. A discipline without a carrier is not a mechanism.
+3. DUAL-LANDING SYNCHRONIZATION LAW: Every governance ruling MUST land in BOTH `AGENTS.md` and `GEMINI.md` in the same turn. A landing in only one file is reported as STATUS: INCOMPLETE.
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
@@ -489,7 +494,7 @@ Every architectural lesson, unmounted feature discovery, or UX breakthrough is g
   4. `parking_vault_draft.yaml`: `CisemATV.py` (producer) -> `cisem_gate.py:76` & `CisemATV.py:62` (consumers).
   5. `template_sync_queue.json`: `template_propagation_scheduler.py` (producer) -> `cisem_gate.py:1728` (consumer).
 - **WISDOM-010 (Zero-Row Table Window Asset)**: 52 of 66 database tables currently hold ZERO rows. Every schema constraint, DDL modification, and structural refactoring on these tables is 100% free today without migration debt. That window is the platform's largest remaining asset and closes as live data arrives.
-- **WISDOM-011 (Human-First UI System Jargon Prohibition / Phase 33)**: Customer-facing UI surfaces MUST NEVER expose backend/database/governance terms (`PostgreSQL`, `Supabase`, `RATIFIED`, `CoreCycle`, `counterparty_id`, `tenant_id`). Human language MUST precede system language. Enforced by `cisem_gate.py` Phase 33.
+- **WISDOM-011 (Human-First UI System Jargon Prohibition / Phase 33)**: Customer-facing UI surfaces MUST NEVER expose backend/database/governance terms (`PostgreSQL`, `Supabase`, `RATIFIED`, `VerticalSlice`, `counterparty_id`, `tenant_id`). Human language MUST precede system language. Enforced by `cisem_gate.py` Phase 33.
 - **WISDOM-012 (Single Open Question Stage 1 Intake Standard)**: Stage 1 inquiry intake viewports MUST present ONE OPEN QUESTION in plain human language ("What do you need?"), auto-deriving user context from active authenticated sessions rather than cluttering customer viewports with multi-field forms.
 - **WISDOM-013 (Native Platform Design Token & Shared Layout Consistency / Phase 32)**: Every core viewport MUST consume native platform CSS variables from `src/app/globals.css` (`var(--surface)`, `var(--text-primary)`, `var(--accent)`, `var(--border)`) and render the universal `PageGreetingBanner.jsx`. Creating isolated, un-themed containers that clash with platform glassmorphism is strictly prohibited. Enforced by `cisem_gate.py` Phase 32.
 - **WISDOM-014 (AST Router Element Import Resolution / Phase 31.2)**: Every JSX `<Route element={<ComponentName />} />` in `AppWrapper.jsx` MUST have a matching explicit top-level import statement (`import ComponentName from ...`) in the same file. Enforced by `cisem_gate.py` Phase 31.2.
