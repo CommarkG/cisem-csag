@@ -59,6 +59,13 @@ KEPT LOCAL TERMS:
 - "An implied decision is an invented decision"
 - CoreSpiral (name of the method)
 A new local term is coined ONLY where nothing standard exists. If an industry term is ninety per cent right, adapt the requirement rather than invent a word.
+
+RULING FOUR: THE FOUR STANDING IMPROVEMENT OBLIGATIONS (GOVERNOR MANDATORY IMPROVEMENT RULING)
+EVERY IMPROVEMENT IDENTIFIED — BY EITHER PARTY, IN ANY TURN — MUST:
+1. REACH CONSENSUS between the Reviewer and the Builder before it reaches the Governor. Either the loop closed, or a named disagreement with both positions in full. Neither party decides alone.
+2. ALIGN THE PAST by running a deep check against everything that already exists, and aligning the class, not just the single instance.
+3. GOVERN THE FUTURE by verifying that future creations follow it. A rule that corrects the past and does not govern the next creation is a repair, not a prevention.
+4. AVOID A STASIS POINT by iterating until everything is identified and aligned. An improvement turn ends when neither party can name another place the improvement applies.
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
