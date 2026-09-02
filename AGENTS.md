@@ -42,6 +42,23 @@ The file is appended to, never rewritten. Each entry carries five non-blank fiel
 3. WHY IT IS PARKED (which of the 4 core items it does NOT block).
 4. WHAT IT COSTS TO LEAVE (free later or migration cost).
 5. DATE PARKED (e.g. 2026-09-01).
+
+RULING THREE: THE INDUSTRY VOCABULARY LAW (GOVERNOR MANDATORY VOCABULARY RULING)
+INDUSTRY VOCABULARY IS THE DEFAULT. LOCAL VOCABULARY IS THE EXCEPTION AND IT IS DECLARED, NEVER HIDDEN.
+Anything a developer types uses industry vocabulary, without exception — tables, columns, functions, endpoints, statuses, file names. A new developer must read the schema without a glossary.
+RETIRED TERMS & THEIR INDUSTRY REPLACEMENTS:
+- core cycle -> VERTICAL SLICE
+- corespine -> DEPENDENCY CHAIN
+- depth before breadth -> THREAD-FIRST DELIVERY
+- progressive specification -> ITERATIVE REFINEMENT
+- maturity axis -> READINESS LEVEL
+KEPT LOCAL TERMS:
+- CR / EXT and its dependency direction
+- The pressure doctrine and its axioms
+- The verification ladder
+- "An implied decision is an invented decision"
+- CoreSpiral (name of the method)
+A new local term is coined ONLY where nothing standard exists. If an industry term is ninety per cent right, adapt the requirement rather than invent a word.
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
