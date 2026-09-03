@@ -71,6 +71,12 @@ RULING FIVE: THE ACTIVE PLAN COHERENCE & MANDATORY CARRIER LAWS (GOVERNOR STANDI
 1. A SUPERSEDED EXECUTION PATH MUST NOT REMAIN IN EXECUTABLE FORM INSIDE THE ACTIVE PLAN. Rationale may be prose. IT MAY NOT REMAIN FORMATTED AS NUMBERED STEPS. Otherwise inheritance turns into ambiguity.
 2. EVERY BINDING RULE REQUIRES AN IDENTIFIED CARRIER AT THE POINT WHERE IT MUST HOLD. A carrier may be a type system, a database constraint, a policy engine, an API boundary, a capability gate, a CI check, or a runtime sandbox. A discipline without a carrier is not a mechanism.
 3. DUAL-LANDING SYNCHRONIZATION LAW: Every governance ruling MUST land in BOTH `AGENTS.md` and `GEMINI.md` in the same turn. A landing in only one file is reported as STATUS: INCOMPLETE.
+
+RULING SIX: MANDATORY SELF-CONTAINED INLINED PAYLOAD & LIVE LINK LAW (GOVERNOR STANDING RULING)
+EVERY REQUEST OR PROPOSAL TO OPEN, COPY, RUN, OR RATIFY SOMETHING MUST CARRY ITS LIVE FILE LINK AND INLINED TEXT IN FULL WITHIN THE SAME MESSAGE TURN.
+- Never refer to "the file from earlier", "the script above", or "the block two turns ago".
+- The Governor does not scroll back. Every reference to an earlier message is an errand, not an instruction.
+- Every SQL migration block, Python script, or agent instruction payload must be printed in full, inlined, with its live `file:///` link in the message requesting action.
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
