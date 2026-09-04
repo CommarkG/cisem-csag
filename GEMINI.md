@@ -83,6 +83,16 @@ Every destructive operation (such as deletion, renaming, or file movement) must 
   - `TASK_LIST.md` -> `TASK_LIST DEBT REGISTRATION: [TASK-SYS-XXX state: RATIFIED at TASK_LIST.md#L<line>, file_lines: N]`.
 - **9.5. Canonical Mechanism Design Chain**: `RULE → CARRIER → INVOCATION → RESIDUE → VERIFICATION → COVERAGE → OUTCOME`.
 
+## 10. A Name Is A Carrier Law (Governor Ratified)
+- **10.1. A NAME IS A CARRIER. A RULE IS NOT.**: A rule stated in prose without a mechanical carrier failed 4 out of 4 times in live audits (evidence: 4 rules failed when unbacked by code linters). Every rule MUST be bound to a named mechanical carrier file or lint script (e.g. `cisem_core/platform_core/HabitsCarrierLinter.py`, `cisem_core/platform_core/cisem_gate.py`).
+
+## 11. What Can Be Hard-Coded Must Be Hard-Coded Law (Governor Ratified)
+- **11.1. WHAT CAN BE HARD-CODED MUST BE HARD-CODED.**: System parameters, core schema table names, port defaults, and canonical route paths MUST be locked as hardcoded constants in system registries and linters rather than dynamic or ambiguous variables (evidence: sweep of hardcoded port bounds in Playwright gates).
+
+## 12. The Thread Guard Refusal Law (Governor Ratified)
+- **12.1. THE THREAD GUARD REFUSAL**: The single open thread rule is strictly enforced. When the Governance Thread is open, any attempt to execute pipeline code or proposal work MUST be refused with the exact string: `THREAD GATE REFUSAL — GOVERNOR OPEN THREAD ENFORCEMENT: The Governance Thread is currently OPEN under Governor Yariv's authority. Pipeline execution is PARKED. State your position on the open governance rulings before proposing any code or screen modifications.`
+
+
 ---
 history:
   - timestamp: "2026-09-04T18:32:00Z"

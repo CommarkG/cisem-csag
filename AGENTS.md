@@ -93,11 +93,19 @@ RULING FIVE: THE ACTIVE PLAN COHERENCE & MANDATORY CARRIER LAWS (GOVERNOR STANDI
 2. EVERY BINDING RULE REQUIRES AN IDENTIFIED CARRIER AT THE POINT WHERE IT MUST HOLD. A carrier may be a type system, a database constraint, a policy engine, an API boundary, a capability gate, a CI check, or a runtime sandbox. A discipline without a carrier is not a mechanism.
 3. DUAL-LANDING SYNCHRONIZATION LAW: Every governance ruling MUST land in BOTH `AGENTS.md` and `GEMINI.md` in the same turn. A landing in only one file is reported as STATUS: INCOMPLETE.
 
-RULING SIX: MANDATORY SELF-CONTAINED INLINED PAYLOAD & LIVE LINK LAW (GOVERNOR STANDING RULING)
-EVERY REQUEST OR PROPOSAL TO OPEN, COPY, RUN, OR RATIFY SOMETHING MUST CARRY ITS LIVE FILE LINK AND INLINED TEXT IN FULL WITHIN THE SAME MESSAGE TURN.
-- Never refer to "the file from earlier", "the script above", or "the block two turns ago".
-- The Governor does not scroll back. Every reference to an earlier message is an errand, not an instruction.
-- Every SQL migration block, Python script, or agent instruction payload must be printed in full, inlined, with its live `file:///` link in the message requesting action.
+RULING EIGHT: A NAME IS A CARRIER. A RULE IS NOT. (GOVERNOR MANDATORY RULING)
+A NAME IS A CARRIER. A RULE IS NOT.
+A rule stated in prose without a mechanical carrier failed 4 out of 4 times in live audits (evidence: 4 rules failed when unbacked by code linters). Every rule MUST be bound to a named mechanical carrier file or lint script (e.g. `cisem_core/platform_core/HabitsCarrierLinter.py`, `cisem_core/platform_core/cisem_gate.py`).
+
+RULING NINE: WHAT CAN BE HARD-CODED MUST BE HARD-CODED. (GOVERNOR MANDATORY RULING)
+WHAT CAN BE HARD-CODED MUST BE HARD-CODED.
+System parameters, core schema table names, port defaults, and canonical route paths MUST be locked as hardcoded constants in system registries and linters rather than dynamic or ambiguous variables (evidence: sweep of hardcoded port bounds in Playwright gates).
+
+RULING TEN: THE THREAD GUARD REFUSAL (GOVERNOR MANDATORY RULING)
+THE THREAD GUARD REFUSAL.
+The single open thread rule is strictly enforced. When the Governance Thread is open, any attempt to execute pipeline code or proposal work MUST be refused with the exact string:
+`THREAD GATE REFUSAL — GOVERNOR OPEN THREAD ENFORCEMENT: The Governance Thread is currently OPEN under Governor Yariv's authority. Pipeline execution is PARKED. State your position on the open governance rulings before proposing any code or screen modifications.`
+
 
 RULING SEVEN: THE THREE PARKING REASONS LAW (GOVERNOR MANDATORY PARKING RULING)
 WHAT CAN BE DONE SHOULD BE DONE. PARKING REQUIRES ONE OF EXACTLY THREE REASONS:
