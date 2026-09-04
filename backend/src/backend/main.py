@@ -2225,7 +2225,10 @@ async def issue_inquiry_endpoint(inquiry_id: str, request: Request):
     """
     tenant_id = extract_tenant_from_request(request)
     try:
-        db_client = supabase_admin if supabase_admin else supabase
+        try:
+            db_client = get_db_client()
+        except Exception:
+            db_client = supabase_admin if supabase_admin else supabase
         res = db_client.table("inquiries").update({
             "status_code": "issued"
         }).eq("id", inquiry_id).eq("customer_account_id", tenant_id).execute()
@@ -2343,7 +2346,11 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
     """
     tenant_id = extract_tenant_from_request(request)
     try:
-        db_client = supabase_admin if supabase_admin else supabase
+        try:
+            db_client = get_db_client()
+        except Exception:
+            db_client = supabase_admin if supabase_admin else supabase
+
         quote_res = db_client.table("quotes").select("*").eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
         if not quote_res.data:
             raise HTTPException(status_code=404, detail=f"Quote '{quote_id}' not found.")
