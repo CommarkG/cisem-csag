@@ -77,6 +77,15 @@ EVERY REQUEST OR PROPOSAL TO OPEN, COPY, RUN, OR RATIFY SOMETHING MUST CARRY ITS
 - Never refer to "the file from earlier", "the script above", or "the block two turns ago".
 - The Governor does not scroll back. Every reference to an earlier message is an errand, not an instruction.
 - Every SQL migration block, Python script, or agent instruction payload must be printed in full, inlined, with its live `file:///` link in the message requesting action.
+
+RULING SEVEN: THE THREE PARKING REASONS LAW (GOVERNOR MANDATORY PARKING RULING)
+WHAT CAN BE DONE SHOULD BE DONE. PARKING REQUIRES ONE OF EXACTLY THREE REASONS:
+1. IT WOULD INTERFERE WITH AN ACTIVE PROCESS ALREADY IN FLIGHT.
+2. IT HAS A BLAST RADIUS THAT MUST BE CONSIDERED FIRST.
+3. OR IT NEEDS CONSULTATION AND ITERATION TO BE OPTIMISED.
+"IT IS A BUILD RATHER THAN DATA ENTRY" IS NOT A REASON. Neither is "not core" or "it can wait".
+A PARKED ITEM NAMES WHICH OF THE THREE OR IT IS NOT PARKED — IT IS DONE.
+AN ELEMENT HOLDING ZERO ROWS IS A CAPABILITY NOBODY CAN USE, A MECHANISM NOBODY CAN ATTACK, AND A DESIGN NOBODY HAS TESTED AGAINST REALITY.
 <!-- END:cisem-mandatory-ratification-law -->
 
 <!-- BEGIN:nextjs-agent-rules -->
