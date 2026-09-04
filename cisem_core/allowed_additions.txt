@@ -18,3 +18,4 @@ cisem_core/planning/*
 cisem_core/platform_core/HabitsCarrierLinter.py
 cisem_core/tools/db_read_channel.py
 start-platform.ps1
+hub/*
