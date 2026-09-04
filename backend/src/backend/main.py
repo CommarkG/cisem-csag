@@ -2336,9 +2336,10 @@ async def add_quote_line(quote_id: str, payload: QuoteLineCreatePayload, request
 @app.post("/api/v1/quotes/{quote_id}/issue")
 async def issue_quote_endpoint(quote_id: str, request: Request):
     """
-    Issues a quote reference for the active tenant context.
-    Mints child sequence reference derived from parent inquiry (e.g. INQ-2026-0001-01).
-    Transitions quotes.status_code to 'issued'.
+    Issues a quote reference for the active tenant context (Document Spine Law).
+    Transitions quotes.status_code to 'issued', allowing DB trigger trg_issue_reference_quotes
+    BEFORE UPDATE to invoke public.issue_document_reference('quote', NEW.inquiry_id)
+    and mint INQ-YYYY-XXXX-NN child sequence atomically.
     """
     tenant_id = extract_tenant_from_request(request)
     try:
@@ -2348,28 +2349,18 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
             raise HTTPException(status_code=404, detail=f"Quote '{quote_id}' not found.")
         
         quote = quote_res.data[0]
-        inquiry_id = quote.get("inquiry_id")
-        
-        child_ref = None
-        if inquiry_id:
-            inq_res = db_client.table("inquiries").select("*").eq("id", inquiry_id).execute()
-            if inq_res.data:
-                inq = inq_res.data[0]
-                parent_ref = inq.get("reference") or "INQ-2026-0001"
-                last_seq = inq.get("last_child_sequence") or 0
-                next_seq = last_seq + 1
-                db_client.table("inquiries").update({"last_child_sequence": next_seq}).eq("id", inquiry_id).execute()
-                child_ref = f"{parent_ref}-{str(next_seq).zfill(2)}"
-        
-        if not child_ref:
-            child_ref = f"INQ-2026-0001-01"
 
+        # Transition status_code to 'issued' without passing 'reference' in Python payload.
+        # This delegates 100% of reference generation and last_child_sequence incrementing to DB trigger trg_issue_reference_quotes.
         update_res = db_client.table("quotes").update({
-            "status_code": "issued",
-            "reference": child_ref
+            "status_code": "issued"
         }).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
 
-        updated_quote = update_res.data[0] if update_res.data else {**quote, "reference": child_ref, "status_code": "issued"}
+        if not update_res.data:
+            raise HTTPException(status_code=500, detail=f"Failed to update quote status for '{quote_id}'.")
+
+        updated_quote = update_res.data[0]
+        minted_reference = updated_quote.get("reference")
 
         await record_audit_event(
             request=request,
@@ -2378,14 +2369,14 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
             action="UPDATE",
             changes_delta={
                 "status_code": {"old": quote.get("status_code"), "new": "issued"},
-                "reference": {"old": quote.get("reference"), "new": child_ref}
+                "reference": {"old": quote.get("reference"), "new": minted_reference}
             }
         )
 
         return {
             "status": "issued",
             "id": quote_id,
-            "reference": child_ref,
+            "reference": minted_reference,
             "status_code": "issued",
             "quote": updated_quote
         }
