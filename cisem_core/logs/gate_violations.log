@@ -1514,3 +1514,84 @@ Call log:
   Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.
 [2026-09-04T19:31:54.549524Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-09-04T19:37:43.776029Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T22:54:58.031099Z] [Phase 24] [BLOCK] CISEM_GATE_BLOCKED -- Phase 24: SecretLiteralLinter V1.1 violation.
+CISEM Secret Literal Linter v1.1  Root: C:\Users\finky\Desktop\AntiGravity\Cisem CsAg
+Checks: C=secret-literal(var-name-classified)  A=fail-open-guard  B=header-trust(w=20)
+------------------------------------------------------------------------
+
+[SCRATCH REACHABILITY]
+  cisem_core\scratch\sweep_status.py: isolated
+  cisem_core\scratch\sweep_status_code_exact.py: isolated
+  cisem_core\scratch\test_regex.py: isolated
+  scratch\2026-08-10__AntigravityLocal__LicensingExportTest__V1.0.py: isolated
+  scratch\audit_21_tables.py: isolated
+  scratch\audit_all_references.py: isolated
+  scratch\audit_infrastructure_code.py: isolated
+  scratch\audit_missing_ratified_docs.py: isolated
+  scratch\audit_ui_system.py: isolated
+  scratch\check_content.py: isolated
+  scratch\check_walkthrough.py: isolated
+  scratch\debug_gate_phase8.py: isolated
+  scratch\find_offending_file.py: isolated
+  scratch\fix_and_gate.py: isolated
+  scratch\fix_and_test.py: isolated
+  scratch\fix_walkthrough.py: isolated
+  scratch\generate_backlog_seed.py: isolated
+  scratch\generate_deduplicated_seed.py: isolated
+  scratch\list_walkthroughs.py: isolated
+  scratch\print_atv_results.py: isolated
+  scratch\print_registry_end.py: isolated
+  scratch\promote_walkthrough.py: isolated
+  scratch\simulate_universal_misfits.py: isolated
+  scratch\sweep_silent_fallbacks.py: isolated
+  scratch\sweep_uncalled_routes.py: isolated
+  scratch\test_api.py: isolated
+  scratch\test_gate_regex.py: isolated
+  scratch\test_git_modified.py: isolated
+  scratch\test_hardcoded_secret.py: isolated
+  scratch\test_tenant_blind_state_preventions.py: isolated
+  scratch\verify_viewport_render.js: isolated
+
+[FINDINGS]
+
+  CHECK B - Header trust without HMAC (window=20) (6 finding(s))
+    backend\src\backend\main.py:2226
+      code:   tenant_id = extract_tenant_from_request(request) or request.headers.get("x-current-tenant-id") or request.headers.get("x
+      detail: x-tenant* header read without hmac verification within 20 lines
+    backend\src\backend\main.py:2360
+      code:   tenant_id = extract_tenant_from_request(request) or request.headers.get("x-current-tenant-id") or request.headers.get("x
+      detail: x-tenant* header read without hmac verification within 20 lines
+    backend\src\backend\main.py:2415
+      code:   tenant_id = extract_tenant_from_request(request) or request.headers.get("x-current-tenant-id") or request.headers.get("x
+      detail: x-tenant* header read without hmac verification within 20 lines
+    cisem_core\downloads\main.py:2226
+      code:   tenant_id = extract_tenant_from_request(request) or request.headers.get("x-current-tenant-id") or request.headers.get("x
+      detail: x-tenant* header read without hmac verification within 20 lines
+    cisem_core\downloads\main.py:2360
+      code:   tenant_id = extract_tenant_from_request(request) or request.headers.get("x-current-tenant-id") or request.headers.get("x
+      detail: x-tenant* header read without hmac verification within 20 lines
+    cisem_core\downloads\main.py:2415
+      code:   tenant_id = extract_tenant_from_request(request) or request.headers.get("x-current-tenant-id") or request.headers.get("x
+      detail: x-tenant* header read without hmac verification within 20 lines
+
+[SUMMARY]  6 finding(s) across 295 files scanned
+[2026-09-04T22:56:36.130280Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34.5: CANNOT VERIFY. Logged-In Playwright DOM Assertion Audit Failed.
+  Output:
+==========================================================================
+CISEM LOGGED-IN SESSION PLAYWRIGHT E2E TEST > V3.0
+Target URL: http://localhost:3000/#/signin
+==========================================================================
+
+[TARGET CHECK] Connecting to application target URL...
+
+[CRITICAL ERROR] Application target URL is OFFLINE or UNREACHABLE: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "http://localhost:3000/#/signin", waiting until "domcontentloaded"
+
+  Rule: Connection refusal is NOT a failed assertion -- IT IS A TEST THAT DID NOT RUN.
+  Result: CANNOT VERIFY. Aborting test execution.
+
+[PROCESS RECORD WRITTEN] cisem_core/last_run.json (SHA256: 24ce58a88994)
+
+  Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.
+[2026-09-04T22:57:09.239567Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

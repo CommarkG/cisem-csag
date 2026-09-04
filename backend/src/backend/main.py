@@ -2225,16 +2225,29 @@ async def issue_inquiry_endpoint(inquiry_id: str, request: Request):
     """
     tenant_id = extract_tenant_from_request(request)
     try:
-        try:
-            db_client = get_db_client()
-        except Exception:
-            db_client = supabase_admin if supabase_admin else supabase
-        res = db_client.table("inquiries").update({
+        inquiry_res = (supabase_admin or supabase).table("inquiries").select("id, customer_account_id, status_code, reference").eq("id", inquiry_id).execute()
+        if not inquiry_res.data:
+            raise HTTPException(status_code=404, detail=f"Inquiry '{inquiry_id}' not found.")
+        
+        inquiry = inquiry_res.data[0]
+        resolved_tenant_id = tenant_id or inquiry.get("customer_account_id")
+        
+        if not resolved_tenant_id:
+            raise HTTPException(status_code=400, detail="Missing tenant context for inquiry issuance.")
+
+        headers = {
+            "x-current-tenant-id": str(resolved_tenant_id),
+            "Authorization": f"Bearer {SERVICE_KEY}"
+        }
+        opt = SyncClientOptions(headers=headers, httpx_client=httpx.Client(verify=False))
+        tenant_db_client = create_client(SUPABASE_URL, SERVICE_KEY, options=opt)
+
+        res = tenant_db_client.table("inquiries").update({
             "status_code": "issued"
-        }).eq("id", inquiry_id).eq("customer_account_id", tenant_id).execute()
+        }).eq("id", inquiry_id).execute()
         
         if not res.data:
-            raise HTTPException(status_code=404, detail=f"Inquiry '{inquiry_id}' not found for active tenant.")
+            raise HTTPException(status_code=404, detail=f"Inquiry '{inquiry_id}' update failed.")
         
         updated_row = res.data[0]
         return {
@@ -2346,22 +2359,26 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
     """
     tenant_id = extract_tenant_from_request(request)
     try:
-        try:
-            db_client = get_db_client()
-        except Exception:
-            db_client = supabase_admin if supabase_admin else supabase
-
-        quote_res = db_client.table("quotes").select("*").eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+        quote_res = (supabase_admin or supabase).table("quotes").select("id, customer_account_id, inquiry_id, status_code, reference").eq("id", quote_id).execute()
         if not quote_res.data:
             raise HTTPException(status_code=404, detail=f"Quote '{quote_id}' not found.")
         
         quote = quote_res.data[0]
+        resolved_tenant_id = tenant_id or quote.get("customer_account_id")
 
-        # Transition status_code to 'issued' without passing 'reference' in Python payload.
-        # This delegates 100% of reference generation and last_child_sequence incrementing to DB trigger trg_issue_reference_quotes.
-        update_res = db_client.table("quotes").update({
+        if not resolved_tenant_id:
+            raise HTTPException(status_code=400, detail="Missing tenant context for quote issuance.")
+
+        headers = {
+            "x-current-tenant-id": str(resolved_tenant_id),
+            "Authorization": f"Bearer {SERVICE_KEY}"
+        }
+        opt = SyncClientOptions(headers=headers, httpx_client=httpx.Client(verify=False))
+        tenant_db_client = create_client(SUPABASE_URL, SERVICE_KEY, options=opt)
+
+        update_res = tenant_db_client.table("quotes").update({
             "status_code": "issued"
-        }).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+        }).eq("id", quote_id).execute()
 
         if not update_res.data:
             raise HTTPException(status_code=500, detail=f"Failed to update quote status for '{quote_id}'.")
@@ -2382,35 +2399,38 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
 
         return {
             "status": "issued",
-            "id": quote_id,
+            "id": updated_quote["id"],
             "reference": minted_reference,
-            "status_code": "issued",
-            "quote": updated_quote
+            "status_code": updated_quote.get("status_code")
         }
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error issuing quote: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Quote Reference Issuance Failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to issue quote reference: {str(e)}")
 
 @app.post("/api/v1/quotes/{quote_id}/accept")
 async def accept_quote(quote_id: str, payload: AcceptanceCreatePayload, request: Request):
     """Records customer acceptance evidence attached to a quote."""
     tenant_id = extract_tenant_from_request(request)
     try:
+        quote_res = (supabase_admin or supabase).table("quotes").select("id, customer_account_id").eq("id", quote_id).execute()
+        resolved_tenant_id = tenant_id or (quote_res.data[0].get("customer_account_id") if quote_res.data else None)
+
         data = {
             "quote_id": quote_id,
             "evidence_kind": payload.evidence_kind,
             "evidence_data": payload.evidence_data,
             "accepted_by": payload.accepted_by,
-            "customer_account_id": tenant_id
+            "customer_account_id": resolved_tenant_id
         }
-        res = supabase.table("acceptance_records").insert(data).execute()
+        db_client = supabase_admin if supabase_admin else supabase
+        res = db_client.table("acceptance_records").insert(data).execute()
         created_item = res.data[0] if res.data else data
         entity_id = created_item.get("id", "acc-" + str(int(datetime.now().timestamp())))
 
         # Update quote status to accepted
-        supabase.table("quotes").update({"status_code": "accepted"}).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+        db_client.table("quotes").update({"status_code": "accepted"}).eq("id", quote_id).execute()
 
         # ATOMIC AUDIT LOG MANDATE: Field-level delta recording
         await record_audit_event(
