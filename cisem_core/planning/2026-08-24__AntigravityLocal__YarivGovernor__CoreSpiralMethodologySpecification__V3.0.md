@@ -38,16 +38,15 @@ READ THIS COLD. It assumes nothing about who you are or what you were told.
 
 
 COMPASS
-  WHAT THIS IS FOR: so both agents mean the same thing by corespine, core cycle
+  WHAT THIS IS FOR: so both agents mean the same thing by DEPENDENCY_CHAIN, VERTICAL SLICE
   and spiral, and so a cycle that contradicts something already settled can be
   refused rather than argued about.
   WHAT WOULD MAKE IT WRONG: if it stays prose while being cited as authority ·
   if a new vocabulary is invented beside it · if a property is claimed as
   enforced when nothing enforces it.
 
-WHY IT EXISTS AS A FILE. For four days both agents cited a corespine and a core
-cycle in every exchange. NEITHER HAD EVER BEEN HANDED A DEFINITION. On
-2026-08-24 a full day of work was governed by a named core cycle carrying a
+WHY IT EXISTS AS A FILE. For four days both agents cited a DEPENDENCY_CHAIN and a VERTICAL SLICE in every exchange. NEITHER HAD EVER BEEN HANDED A DEFINITION. On
+2026-08-24 a full day of work was governed by a named VERTICAL SLICE carrying a
 ratification date — AND NO SUCH DOCUMENT EXISTED. It was a header string carried
 across turns. A METHODOLOGY THAT LIVES ONLY IN CITATIONS IS A METHODOLOGY
 ANYBODY CAN INVENT AN INSTANCE OF.
@@ -160,7 +159,7 @@ AND SETTLED MUST BE RECORDED, NOT REMEMBERED. ADDED IN V2 ON ANTIGRAVITY'S
 FINDING. Today the three elements above are settled because two agents and the
 Governor recall them being proven. THAT IS A CLAIM CARRIED IN CONVERSATION, AND
 CONVERSATION IS THE TIER THAT FAILS — a whole mechanism was lost between chats
-on 2026-08-21 for exactly that reason, and a core cycle governed a full day of
+on 2026-08-21 for exactly that reason, and a VERTICAL SLICE governed a full day of
 work while existing only as a header string.
 A COMMITTED RECORD NAMES EACH SETTLED ELEMENT, WHAT PROVED IT, AND WHEN. Until
 it exists, every obligation in this document rests on memory.

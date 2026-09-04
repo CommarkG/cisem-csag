@@ -159,7 +159,7 @@ def validate_plan(plan_path):
     # [MANDATORY GOVERNOR RULE]: Non-trivial plans must implement the CoreSpiral context-adaptive process
     if blast_radius in ("MEDIUM", "HIGH"):
         content_lower = content.lower()
-        if "corespiral" not in content_lower and "corecycle" not in content_lower:
+        if "corespiral" not in content_lower and "VERTICAL_SLICE" not in content_lower:
             return False, (
                 f"Validation Error: Plan '{plan_id}' has a {blast_radius} blast_radius but "
                 f"does not reference the CoreSpiral methodology or define CoreCycles. "

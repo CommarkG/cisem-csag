@@ -21,7 +21,7 @@ metadata:
 # Enterprise Planning Subsystem Consolidated Blueprint: The Inquiry Spine & Corespine Engine
 
 1.1. **Executive Summary & Scope**:
-This document formalizes the **Enterprise Planning Subsystem (`CISEM_ENTERPRISE_PLANNING`)** for the Cisem CsAg platform. It consolidates the architectural synthesis, database schema alignment, priority orchestration, multi-tenant isolation, and CoreSpiral/CoreCycle data structures into a single canonical reference document.
+This document formalizes the **Enterprise Planning Subsystem (`CISEM_ENTERPRISE_PLANNING`)** for the Cisem CsAg platform. It consolidates the architectural synthesis, database schema alignment, priority orchestration, multi-tenant isolation, and CoreSpiral/VerticalSlice data structures into a single canonical reference document.
 
 ---
 
@@ -120,16 +120,16 @@ To prevent manual YAML drafting friction, the CLI utility (`cisem_core/tools/pla
 `account_closure` (`ancestor_id`, `descendant_id`, `depth`) holds ordered ancestry chains in a single query. A Corespine is an ordered Directed Acyclic Graph (DAG) of settled elements where `depth` defines structural lineage.
 
 6.2. **Cycle Inheritance Declaration & Refusal Mechanism**:
-- A CoreCycle declares `inherited_ancestor_ids: [...]`.
+- A VerticalSlice declares `inherited_ancestor_ids: [...]`.
 - **Mandatory Refusal Mechanism (Committed to `cisem_gate.py`):** If a proposed plan artifact modifies an ancestor element where `decision_records.sealed_at IS NOT NULL`, [`cisem_gate.py`](file:///C:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/platform_core/cisem_gate.py) Phase 15 hard-blocks execution:
   ```text
-  CISEM_GATE_BLOCKED -- Phase 15: CoreCycle Inheritance Violation.
+  CISEM_GATE_BLOCKED -- Phase 15: VerticalSlice Inheritance Violation.
     Plan attempts to contradict sealed Corespine ancestor element 'PARK-002'.
     Action: Re-ratify ancestor element or fork a new spiral iteration.
   ```
 
 6.3. **Making Depth Visible (Spiral vs Cycle)**:
-- **CoreCycle (1st Pass):** Initial pass over a Corespine element created with `depth = 1` in `account_closure`.
+- **VerticalSlice (1st Pass):** Initial pass over a Corespine element created with `depth = 1` in `account_closure`.
 - **Spiral (N-th Pass):** Subsequent pass over the same Corespine element created with `depth = N` in `account_closure` and incremented `version` in `artifacts`, distinguishing a multi-pass spiral from single-cycle iteration.
 
 6.4. **Anti-Pattern Defeat Guard**:

@@ -59,7 +59,7 @@ Plan to audit, validate, and verify workspace state, establish a recurring healt
 
 We execute this plan across the following **CoreCycles**:
 
-### CoreCycle 5: Structural Decoupling & Config Implementation
+### VerticalSlice 5: Structural Decoupling & Config Implementation
 - **Path Decoupling**: Build `CisemConfig.py` to resolve path constants dynamically via environment variables (`CISEM_ROOT`, `BRAIN_ROOT`) or fallback CWD anchors.
 - **Exception Conversion**: Refactor `WorkspaceReconciler.py`, `CisemSync.py`, `CisemAuditor.py`, and `CisemATV.py` to raise exceptions instead of calling `sys.exit`.
 - **ATV Refinement**: Update `check_naked_numbers` to bypass markdown code blocks and exempt HTTP status codes (`200`, `201`, `400`, `429`) and standard ports.
@@ -72,7 +72,7 @@ We execute this plan across the following **CoreCycles**:
 
 ---
 
-### CoreCycle 6: Continuous Auditing & Gate Hardening
+### VerticalSlice 6: Continuous Auditing & Gate Hardening
 - **Gate Hardening**: Refactor `cisem_gate.py` to use `CisemConfig` paths. Add **Phase 18 (3-Tier Scope Gate)** to enforce Micro, Macro, and Mega task context parameters.
 - **Continuous Daemon**: Create a long-running, non-blocking Python background service checking file modifications and DB migrations.
 - **Registry Bump**: Bump to `V1.38` registering new python configuration modules.
@@ -83,7 +83,7 @@ We execute this plan across the following **CoreCycles**:
 
 ---
 
-### CoreCycle 7: Native Visual Dependency Mapping
+### VerticalSlice 7: Native Visual Dependency Mapping
 - **AST Dependency Mapper**: Construct a directed acyclic graph mapping system module imports and DB schemas. Output visual Mermaid representations.
 
 #### [NEW] [GraphifyDependencyMapper](file:///c:/Users/finky/Desktop/AntiGravity/Cisem%20CsAg/cisem_core/platform_core/2026-08-10__CISEM__AntigravityLocal__GraphifyDependencyMapper__V1.0.py)

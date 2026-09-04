@@ -20,11 +20,11 @@ Governor Yariv ratified V2.0 on 2026-08-25: "I YARIV RATIFY THE PLAN". This cano
 None. Consensus is 100% closed and ratified on V2.0 planning rules and the Active Orchestration Engine Spine.
 
 ## Proposed Changes
-Utilizes CoreSpiral V3 context-adaptive methodology to execute CoreCycle 1 intake-to-completion. Codifies the 5 Stages, 9 Rules, 5 Preventions (Retirement Question, Proposed vs Current, Wiring Gates, Search by Artifact, Input Absent), Rule 3.3 Law of Iteration (`AX-12000`), Iteration Delta Log (Rule 6.1), 10-Field Turn Close Block (Rule 6.2), and the Active Orchestration Engine (`backlog_registry` DB table + `GraphifyDependencyMapper.py`).
+Utilizes CoreSpiral V3 context-adaptive methodology to execute VerticalSlice 1 intake-to-completion. Codifies the 5 Stages, 9 Rules, 5 Preventions (Retirement Question, Proposed vs Current, Wiring Gates, Search by Artifact, Input Absent), Rule 3.3 Law of Iteration (`AX-12000`), Iteration Delta Log (Rule 6.1), 10-Field Turn Close Block (Rule 6.2), and the Active Orchestration Engine (`backlog_registry` DB table + `GraphifyDependencyMapper.py`).
 
 ## CoreSpiral Cycle Sequences
-- **CoreCycle 1**: Intent to measurable outcome (A person says what they want, in their own words, and the platform helps transform it into a well-defined goal and reach a real, measurable outcome).
-- **CoreCycle 7**: Dependency Graphing & Verification.
+- **VerticalSlice 1**: Intent to measurable outcome (A person says what they want, in their own words, and the platform helps transform it into a well-defined goal and reach a real, measurable outcome).
+- **VerticalSlice 7**: Dependency Graphing & Verification.
 
 ## Gemini Brain Multi-Persona Audit
 Executed 10-Persona Expert Panel Audit (`CisemAuditor.py`). Panel Verdict: **100% UNANIMOUS RATIFICATION** on V2.0 planning rules, `backlog_registry` DB rows migration, and `GraphifyDependencyMapper.py` Keystone Solver.

@@ -1,7 +1,7 @@
 # CISEM · REVIEWER RECONNECTION HANDOFF PACK
 **Filename**: `2026-08-24__CISEM__Reviewer_Reconnection_Handoff_Pack__V1.0.md`  
 **Active Version**: `Version 1.0`  
-**Ratified CoreCycle**: CoreCycle 1 (Universal Inquiry-to-Signed-Work-Order Pipeline)  
+**Ratified VerticalSlice**: VerticalSlice 1 (Universal Inquiry-to-Signed-Work-Order Pipeline)  
 **Status**: PREPARED FOR REVIEWER (CLAUDE AI) RECONNECTION
 
 ---
@@ -23,7 +23,7 @@ The Reviewer / Governor can execute this exact SQL block in Supabase SQL Editor 
 
 ```sql
 -- =============================================================================
--- CoreCycle 1 Migration: acceptance_records & work_orders
+-- VerticalSlice 1 Migration: acceptance_records & work_orders
 -- Partitioned strictly by customer_account_id (PR-11100)
 -- =============================================================================
 

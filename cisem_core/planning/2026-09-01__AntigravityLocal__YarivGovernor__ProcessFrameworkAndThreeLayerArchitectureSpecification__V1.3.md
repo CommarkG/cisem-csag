@@ -30,7 +30,7 @@
   2. Tenancy injected dynamically by session provider (zero hardcoded tenant fallbacks).
   3. Explicit conditional rendering (zero string invention; `NULL` data renders nothing).
 
-1.5. **The Core Cycle Definition of Done**:
+1.5. **The Vertical Slice Definition of Done**:
 - Implementation proceeds in **Sequential Core Cycles**, carrying Schema, Endpoint, and Screen together in one consolidated turn.
 - A cycle is **NOT DONE WHEN THE SCREEN RENDERS**. A cycle is done ONLY when a persistent database row exists that the Governor created on his screen and the Reviewer has queried directly via SQL.
 

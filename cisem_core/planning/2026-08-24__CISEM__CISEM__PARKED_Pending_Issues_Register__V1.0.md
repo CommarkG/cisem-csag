@@ -21,7 +21,7 @@
 - **Established Fact**: `find_by_name` confirms 0 formal integration test files exist in workspace.
 - **Decided By**: Governor Yariv (2026-08-24).
 - **Open Item**: Write `tests/test_tenant_isolation.py` testing HTTP `403/404` on cross-tenant GET.
-- **Reopening Condition**: Before declaring CoreCycle 1 API endpoints complete.
+- **Reopening Condition**: Before declaring VerticalSlice 1 API endpoints complete.
 - **PR-38500 Escalation Dates**: Week 1: 2026-08-31 | Week 2: 2026-09-07 | Week 3: 2026-09-14
 - **Vault Mapping**: New item `PARK-044` (Extends `PARK-001`).
 
@@ -54,27 +54,27 @@
 
 ### P-05 · PR-58900 CisemAuditor Real Engine Implementation
 - **Established**: `CisemAuditor.py` (859 lines) uses keyword substring matching.
-- **Reopens**: CoreCycle 2 (Auditing Automation).
+- **Reopens**: VerticalSlice 2 (Auditing Automation).
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-010` (Duplicate)
 
 ### P-06 · PR-70300 External AI Consultant Layer
 - **Established**: 5 external AI consultant placeholders exist in `cisem_core/platform_core/`, unused.
-- **Reopens**: CoreCycle 4 (External AI Integration).
+- **Reopens**: VerticalSlice 4 (External AI Integration).
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-012` (Duplicate)
 
 ### P-07 · PR-95000 3-Tier Context Boundaries
 - **Established**: Unenforced context scoping led to mega-scope context drift.
-- **Reopens**: Next CoreCycle task packaging.
+- **Reopens**: Next VerticalSlice task packaging.
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-049`
 
 ### P-08 · PR-38500 Escalation Engine Unwired
 - **Established**: `grep_search` on `cisem_gate.py` returns 0 hits for `PR-38500`.
-- **Reopens**: CoreCycle 2 (Parking Vault Automation).
+- **Reopens**: VerticalSlice 2 (Parking Vault Automation).
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-011` (Duplicate)
 
 ### P-09 · PR-83500 Pondering Pause Engine Unwired
 - **Established**: `grep_search` on `cisem_gate.py` returns 0 hits for `PR-83500`.
-- **Reopens**: CoreCycle 2 (Plan Exit Controls).
+- **Reopens**: VerticalSlice 2 (Plan Exit Controls).
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-004` (Duplicate)
 
 ### P-10 · PR-84800 Retrospective Alignment Protocol
@@ -92,7 +92,7 @@
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-007` (Duplicate)
 
 ### P-12 · The Harvest Refactoring (Items A-G)
-- **Established**: Governor parked 7 gate refactoring items to prioritize CoreCycle 1 code.
+- **Established**: Governor parked 7 gate refactoring items to prioritize VerticalSlice 1 code.
 - **Reopens**: With P-11.
 - **PR-38500 Dates**: W1: 2026-08-31 | W2: 2026-09-07 | W3: 2026-09-14 | **Vault**: `PARK-007` (Duplicate)
 
@@ -117,9 +117,9 @@
 - **P-16**: 44 Permissionless Routes | Reopens: Route security cycle | Vault: `PARK-054`
 - **P-17**: Frontend Global Member List Leak | Reopens: UI routing cycle | Vault: `PARK-055`
 - **P-18**: Multi-Tenant Switching Token Reissue | Reopens: Post-B1 landing | Vault: `PARK-018` (Duplicate)
-- **P-19**: Missing Tables (`work_orders`, `acceptance_records`, `evidence_kinds`) | Reopens: CoreCycle 1 plan | Vault: `PARK-056`
-- **P-20**: Database Default Mismatches (`status_code`, `currency`) | Reopens: CoreCycle 1 migration | Vault: `PARK-057`
-- **P-21**: Unwired State Transitions | Reopens: CoreCycle 1 route wiring | Vault: `PARK-058`
+- **P-19**: Missing Tables (`work_orders`, `acceptance_records`, `evidence_kinds`) | Reopens: VerticalSlice 1 plan | Vault: `PARK-056`
+- **P-20**: Database Default Mismatches (`status_code`, `currency`) | Reopens: VerticalSlice 1 migration | Vault: `PARK-057`
+- **P-21**: Unwired State Transitions | Reopens: VerticalSlice 1 route wiring | Vault: `PARK-058`
 - **P-22**: Missing Storage Buckets & Policies | Reopens: File attachment feature | Vault: `PARK-059`
 - **P-23**: Empty Navigation Menu & Feature Registry | Reopens: Tenant onboarding cycle | Vault: `PARK-060`
 - **P-24**: 7 Missing Tables in Proposal Flow | Reopens: Advanced proposal cycle | Vault: `PARK-061`
