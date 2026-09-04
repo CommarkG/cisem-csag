@@ -1,5 +1,5 @@
 {
-  "current_turn": 0,
+  "current_turn": 12,
   "turn_limit_ceiling": 15,
   "turn_minimum_floor": 3,
   "audit_due": false,
@@ -9,11 +9,120 @@
     "high_blast_radius_changes": 0,
     "gate_blocks_encountered": 0,
     "beneficial_drift_detected": 0,
-    "last_maturity_score": null
+    "last_maturity_score": 60
   },
   "maturity_score_threshold": 70,
   "last_reset": "2026-09-04T18:14:58.987873+00:00",
   "ratified_plan": "CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0",
   "governor_signature": "GOV-YARIV-20260806-CONTEXT-ADAPTIVE-V1.0",
-  "turns_log": []
+  "turns_log": [
+    {
+      "timestamp": "2026-09-04T18:15:06.494918Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T18:20:07.624849Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T18:20:14.345401Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T18:20:23.529862Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T18:20:46.468668Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T18:21:57.871081Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:21:48.191843Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:22:27.391946Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:23:04.233298Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:23:35.959148Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:25:46.047556Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:26:29.709844Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:26:55.751789Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:27:40.446577Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:28:06.181793Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:31:40.175781Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:32:08.985001Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:32:44.876977Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:33:22.504678Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:33:53.987751Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:34:25.650656Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:34:56.543672Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:35:34.134105Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:36:25.670763Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:36:55.214266Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:37:25.175528Z",
+      "action": "cisem_gate.py"
+    },
+    {
+      "timestamp": "2026-09-04T19:38:03.293142Z",
+      "action": "cisem_gate.py"
+    }
+  ]
 }

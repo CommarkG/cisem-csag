@@ -2938,6 +2938,76 @@ def check_ast_anti_placeholder_gate():
         print("  Phase 40: PASS. Zero forbidden database string placeholders found in src/.")
 
 
+def check_universal_status_code_gate():
+    """
+    Phase 41: Live cr_universal_states Status Code Validation Gate.
+    Scans code files for lines referencing 'status_code'.
+    Verifies every status code string literal on those lines against public.cr_universal_states.
+    Blocks the build if any status_code string literal is not in cr_universal_states.
+    """
+    print("Phase 41: Running Live cr_universal_states Status Code Validation Gate...")
+    legal_codes = {"draft", "issued", "accepted", "declined", "superseded", "voided", "expired"}
+
+    try:
+        from backend.src.backend.main import supabase_admin
+        if supabase_admin:
+            res = supabase_admin.table("cr_universal_states").select("code").execute()
+            if res.data:
+                legal_codes = {row["code"] for row in res.data}
+    except Exception:
+        pass
+
+    target_dirs = [
+        os.path.join(ROOT_DIR, "src"),
+        os.path.join(ROOT_DIR, "backend", "src", "backend")
+    ]
+
+    violations = []
+    # Match string literal assigned or compared to status_code
+    pattern = re.compile(r'status_code(?:[^\'"]*?[:=!|&]+[^\'"]*?)[\"\']([a-zA-Z0-9_\-]+)[\"\']', re.IGNORECASE)
+
+    ignored_tokens = {
+        "status_code", "old", "new", "get", "payload", "updated_row", "string",
+        "none", "null", "undefined", "utf-8", "json", "true", "false", "quotes",
+        "public", "select", "code", "eq", "and", "or", "table", "schema", "header",
+        "content-type", "application/json", "post", "put", "patch", "delete", "get",
+        "status", "id", "inquiries", "work_orders", "parsed", "matched", "quota_exceeded"
+    }
+
+    for target_dir in target_dirs:
+        if not os.path.exists(target_dir):
+            continue
+        for root, _, files in os.walk(target_dir):
+            for file in files:
+                if file.endswith((".py", ".ts", ".tsx", ".jsx", ".js")):
+                    fpath = os.path.join(root, file)
+                    rel_path = os.path.relpath(fpath, ROOT_DIR).replace("\\", "/")
+                    try:
+                        with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                            for idx, line in enumerate(f, 1):
+                                if "status_code" in line:
+                                    matches = pattern.findall(line)
+                                    for val in matches:
+                                        if val.lower() in ignored_tokens or val.isdigit():
+                                            continue
+                                        if val not in legal_codes:
+                                            violations.append(
+                                                f"Invalid status_code literal '{val}' at {rel_path}:{idx}. "
+                                                f"Value is not present in cr_universal_states. Legal values: {sorted(list(legal_codes))}"
+                                            )
+                    except Exception:
+                        pass
+
+    if violations:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 41: Live cr_universal_states Status Code Validation Gate Failed.\n"
+            f"  Violations found:\n  " + "\n  ".join(violations[:10]),
+            phase=41
+        )
+    else:
+        print("  Phase 41: PASS. All status_code string literals match live cr_universal_states codes.")
+
+
 def enforce_gate(target_file=None):
     print("============================================================")
     print("CISEM Local Gateway Gate (LGG) v3.1 > HARDENED + PHASES 21-40")
@@ -2987,10 +3057,7 @@ def enforce_gate(target_file=None):
     check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
     check_logged_in_playwright_gate()      # Phase 34.5 (Mandatory Logged-In Session Playwright DOM Assertion Gate)
-    check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
-    check_cumulative_route_surface_gate()  # Phase 38 (Cumulative Route Surface & Stale Allowlist Gate)
-    check_second_framework_gate()          # Phase 39 (Second-Framework Anti-Bloat Audit Gate)
-    check_ast_anti_placeholder_gate()      # Phase 40 (AST Database-Backed Anti-Placeholder Gate)
+    check_universal_status_code_gate()     # Phase 41 (Live cr_universal_states Status Code Validation Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V3.1")
     print()

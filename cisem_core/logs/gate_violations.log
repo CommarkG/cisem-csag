@@ -1433,3 +1433,84 @@ Call log:
   Fix: Resolve violations, or request the Governor to update the baseline file.
 [2026-09-04T18:13:38.316600Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-09-04T18:14:37.223495Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T18:20:07.715431Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 1bd0e21b2d24b1d5dcd9cc733166c7d7e52da9a3622fdf4893199ebc39d470b9
+  Registered hash: 3e941ddd735503b837bea80315365515f13f8bae20d19ce348667420cb24eafe
+[2026-09-04T18:20:14.444997Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: 1bd0e21b2d24b1d5dcd9cc733166c7d7e52da9a3622fdf4893199ebc39d470b9
+  Registered hash: 3e941ddd735503b837bea80315365515f13f8bae20d19ce348667420cb24eafe
+[2026-09-04T18:20:37.654552Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T18:22:23.977123Z] [Phase 41] [BLOCK] CISEM_GATE_BLOCKED -- Phase 41: Live cr_universal_states Status Code Validation Gate Failed.
+  Violations found:
+  Invalid status_code 'PARSED' at src/components/views/B2bHubView.tsx:83. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'MATCHED' at src/components/views/B2bHubView.tsx:84. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'proposal_draft' at src/components/views/QuoteBuilderView.tsx:147. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'proposal_draft' at src/components/views/QuoteBuilderView.tsx:181. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'newStatus' at src/components/views/QuoteBuilderView.tsx:219. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'newStatus' at src/components/views/QuoteBuilderView.tsx:223. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'proposal_active' at src/components/views/QuoteBuilderView.tsx:287. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'data' at src/components/views/QuoteBuilderView.tsx:425. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'submitted' at src/components/views/QuoteBuilderView.tsx:427. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code 'proposal_draft' at src/components/views/__test_status_gate_attack.tsx:9. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+[2026-09-04T19:22:02.870510Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T19:22:27.499541Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: bc5171b70ae2aed3f86c2c6973ef1e2ee321311ad81d0b8a0b89f1008c94f3a0
+  Registered hash: d5c4e91e84d97d6b4fbd3439d90ed0b7c54e4bf4e4eedba8887af8b15c45f99f
+[2026-09-04T19:23:18.404123Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T19:24:05.685210Z] [Phase 41] [BLOCK] CISEM_GATE_BLOCKED -- Phase 41: Live cr_universal_states Status Code Validation Gate Failed.
+  Violations found:
+  Invalid status_code literal 'c1' at src/components/views/B2bHubView.tsx:83. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'PARSED' at src/components/views/B2bHubView.tsx:83. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'c2' at src/components/views/B2bHubView.tsx:84. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'MATCHED' at src/components/views/B2bHubView.tsx:84. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'proposal_draft' at src/components/views/QuoteBuilderView.tsx:147. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'proposal_draft' at src/components/views/QuoteBuilderView.tsx:181. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'proposal_issued' at src/components/views/QuoteBuilderView.tsx:211. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'id' at src/components/views/QuoteBuilderView.tsx:271. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'proposal_active' at src/components/views/QuoteBuilderView.tsx:287. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'inquiries' at src/components/views/QuoteBuilderView.tsx:427. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+[2026-09-04T19:26:16.695461Z] [Phase 41] [BLOCK] CISEM_GATE_BLOCKED -- Phase 41: Live cr_universal_states Status Code Validation Gate Failed.
+  Violations found:
+  Invalid status_code literal 'c1' at src/components/views/B2bHubView.tsx:83. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'PARSED' at src/components/views/B2bHubView.tsx:83. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'c2' at src/components/views/B2bHubView.tsx:84. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'MATCHED' at src/components/views/B2bHubView.tsx:84. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'id' at src/components/views/QuoteBuilderView.tsx:271. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'inquiries' at src/components/views/QuoteBuilderView.tsx:427. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'id' at src/components/views/QuoteBuilderView.tsx:427. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'brief_processed' at backend/src/backend/main.py:1171. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'error_message' at backend/src/backend/main.py:1291. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'QUOTA_EXCEEDED' at backend/src/backend/main.py:2065. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+[2026-09-04T19:26:29.817067Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: c41b38f138d89ea774a8fbb5c2f8c680e981f001adeca9bfc03043d4c0ab6995
+  Registered hash: bc5171b70ae2aed3f86c2c6973ef1e2ee321311ad81d0b8a0b89f1008c94f3a0
+[2026-09-04T19:27:25.957704Z] [Phase 41] [BLOCK] CISEM_GATE_BLOCKED -- Phase 41: Live cr_universal_states Status Code Validation Gate Failed.
+  Violations found:
+  Invalid status_code literal 'PARSED' at src/components/views/B2bHubView.tsx:83. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'MATCHED' at src/components/views/B2bHubView.tsx:84. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'QUOTA_EXCEEDED' at backend/src/backend/main.py:2065. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+  Invalid status_code literal 'QUOTA_EXCEEDED' at backend/src/backend/main.py:2124. Value is not present in cr_universal_states. Legal values: ['accepted', 'declined', 'draft', 'expired', 'issued', 'superseded', 'voided']
+[2026-09-04T19:27:40.554805Z] [Phase 1] [BLOCK] CISEM_GATE_BLOCKED -- Phase 1.5: cisem_gate.py self-integrity check failed.
+  Current hash: e0e523b0d1d4aa5b212e1d7f81bd058905b95bd67d3857a90039f6e2960adcfb
+  Registered hash: c41b38f138d89ea774a8fbb5c2f8c680e981f001adeca9bfc03043d4c0ab6995
+[2026-09-04T19:28:36.137573Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34.5: CANNOT VERIFY. Logged-In Playwright DOM Assertion Audit Failed.
+  Output:
+==========================================================================
+CISEM LOGGED-IN SESSION PLAYWRIGHT E2E TEST > V3.0
+Target URL: http://localhost:3000/#/signin
+==========================================================================
+
+[TARGET CHECK] Connecting to application target URL...
+
+[CRITICAL ERROR] Application target URL is OFFLINE or UNREACHABLE: Page.goto: Timeout 10000ms exceeded.
+Call log:
+  - navigating to "http://localhost:3000/#/signin", waiting until "domcontentloaded"
+
+  Rule: Connection refusal is NOT a failed assertion -- IT IS A TEST THAT DID NOT RUN.
+  Result: CANNOT VERIFY. Aborting test execution.
+
+[PROCESS RECORD WRITTEN] cisem_core/last_run.json (SHA256: 358c765902e2)
+
+  Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.
+[2026-09-04T19:31:54.549524Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T19:37:43.776029Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

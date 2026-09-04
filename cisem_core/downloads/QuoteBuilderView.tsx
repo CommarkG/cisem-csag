@@ -144,7 +144,7 @@ export default function QuoteBuilderView() {
           [colCustAcc]: customerAccountId,
           inquiry_id: selectedInquiryId,
           reference: null,
-          status_code: 'proposal_draft',
+          status_code: 'draft',
           currency: 'ILS',
           version: 1,
           subtotal: lineTotal,
@@ -178,7 +178,7 @@ export default function QuoteBuilderView() {
         setActiveQuote({
           id: quoteHeader.id,
           reference: null,
-          status_code: 'proposal_draft'
+          status_code: 'draft'
         });
 
         setStatusMessage({
@@ -208,7 +208,7 @@ export default function QuoteBuilderView() {
       const data = await res.json();
 
       let issuedRef = data.reference;
-      let newStatus = data.status_code || 'proposal_issued';
+      let newStatus = data.status_code || 'issued';
 
       if (!issuedRef) {
         const targetInquiry = inquiries.find(i => i.id === selectedInquiryId);
@@ -234,7 +234,7 @@ export default function QuoteBuilderView() {
     }
   };
 
-  // Phase 3: Accept Quote (Transitions status to 'accepted' / 'proposal_active')
+  // Phase 3: Accept Quote (Transitions status to 'accepted')
   const handleAcceptQuote = async () => {
     if (!activeQuote || !activeQuote.reference) {
       setStatusMessage({ type: 'error', text: 'Quote must be issued with an official reference before customer acceptance.' });
@@ -284,7 +284,7 @@ export default function QuoteBuilderView() {
   const selectedCatalogItem = catalogItems.find(c => c.id === selectedCatalogItemId);
   const runningTotal = quantity * calculatedUnitPrice;
 
-  const isAccepted = activeQuote?.status_code === 'accepted' || activeQuote?.status_code === 'proposal_active';
+  const isAccepted = activeQuote?.status_code === 'accepted';
 
   return (
     <div style={{ padding: 24, maxWidth: 960, margin: '0 auto' }}>
@@ -424,7 +424,7 @@ export default function QuoteBuilderView() {
                               setStatusMessage({ type: 'success', text: `Inquiry Issued! Ref: ${data.reference}` });
                               setInquiries(prev => prev.map(inq => inq.id === selectedInquiryId ? { ...inq, reference: data.reference, status_code: data.status_code } : inq));
                             } else {
-                              const { data: inqRow } = await supabase.from('inquiries').update({ status_code: 'submitted' }).eq('id', selectedInquiryId).select().single();
+                              const { data: inqRow } = await supabase.from('inquiries').update({ status_code: 'issued' }).eq('id', selectedInquiryId).select().single();
                               if (inqRow && inqRow.reference) {
                                 setStatusMessage({ type: 'success', text: `Inquiry Issued! Ref: ${inqRow.reference}` });
                                 setInquiries(prev => prev.map(inq => inq.id === selectedInquiryId ? inqRow : inq));

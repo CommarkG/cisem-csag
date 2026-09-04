@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-27T03:25:13.343106+00:00",
+  "last_updated": "2026-09-04T19:30:19.773551+00:00",
   "registry": [
     {
       "timestamp": "2026-08-06T22:05:40.096028+00:00",
@@ -9681,6 +9681,12 @@
     },
     {
       "timestamp": "2026-08-27T03:25:13.343106+00:00",
+      "scenario": "workspace.diff",
+      "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
+      "root_type": "IMPLEMENTATION_GAP"
+    },
+    {
+      "timestamp": "2026-09-04T19:30:19.773551+00:00",
       "scenario": "workspace.diff",
       "root_cause": "implementation gap -- mechanisms exist but do not fire in real scenarios",
       "root_type": "IMPLEMENTATION_GAP"

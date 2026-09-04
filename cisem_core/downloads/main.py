@@ -2188,7 +2188,7 @@ async def create_inquiry(payload: InquiryCreatePayload, request: Request):
     data = {
         "title": inq_title,
         "description": inq_desc,
-        "status_code": "brief_raw",
+        "status_code": "draft",
         "customer_account_id": tenant_id, # Extracted strictly from verified request session!
         "counterparty_id": payload.counterparty_id # NULL if not provided!
     }
@@ -2220,14 +2220,14 @@ async def list_inquiries(request: Request):
 async def issue_inquiry_endpoint(inquiry_id: str, request: Request):
     """
     Issues an inquiry reference for the active tenant context (Document Spine Pass 1).
-    Transitions inquiries.status_code to 'submitted', triggering trg_issue_reference_inquiries
+    Transitions inquiries.status_code to 'issued', triggering trg_issue_reference_inquiries
     BEFORE UPDATE to invoke issue_document_reference('inquiry', NULL) and mint INQ-YYYY-XXXX.
     """
     tenant_id = extract_tenant_from_request(request)
     try:
         db_client = supabase_admin if supabase_admin else supabase
         res = db_client.table("inquiries").update({
-            "status_code": "submitted"
+            "status_code": "issued"
         }).eq("id", inquiry_id).eq("customer_account_id", tenant_id).execute()
         
         if not res.data:
@@ -2255,7 +2255,7 @@ async def create_quote(payload: QuoteCreatePayload, request: Request):
             "inquiry_id": payload.inquiry_id,
             "currency": payload.currency,
             "valid_until": payload.valid_until,
-            "status_code": "proposal_draft",
+            "status_code": "draft",
             "customer_account_id": tenant_id
         }
         res = supabase.table("quotes").insert(data).execute()
@@ -2338,7 +2338,7 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
     """
     Issues a quote reference for the active tenant context.
     Mints child sequence reference derived from parent inquiry (e.g. INQ-2026-0001-01).
-    Transitions quotes.status_code to 'proposal_issued'.
+    Transitions quotes.status_code to 'issued'.
     """
     tenant_id = extract_tenant_from_request(request)
     try:
@@ -2365,11 +2365,11 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
             child_ref = f"INQ-2026-0001-01"
 
         update_res = db_client.table("quotes").update({
-            "status_code": "proposal_issued",
+            "status_code": "issued",
             "reference": child_ref
         }).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
 
-        updated_quote = update_res.data[0] if update_res.data else {**quote, "reference": child_ref, "status_code": "proposal_issued"}
+        updated_quote = update_res.data[0] if update_res.data else {**quote, "reference": child_ref, "status_code": "issued"}
 
         await record_audit_event(
             request=request,
@@ -2377,7 +2377,7 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
             entity_id=quote_id,
             action="UPDATE",
             changes_delta={
-                "status_code": {"old": quote.get("status_code"), "new": "proposal_issued"},
+                "status_code": {"old": quote.get("status_code"), "new": "issued"},
                 "reference": {"old": quote.get("reference"), "new": child_ref}
             }
         )
@@ -2386,7 +2386,7 @@ async def issue_quote_endpoint(quote_id: str, request: Request):
             "status": "issued",
             "id": quote_id,
             "reference": child_ref,
-            "status_code": "proposal_issued",
+            "status_code": "issued",
             "quote": updated_quote
         }
     except HTTPException:
@@ -2411,8 +2411,8 @@ async def accept_quote(quote_id: str, payload: AcceptanceCreatePayload, request:
         created_item = res.data[0] if res.data else data
         entity_id = created_item.get("id", "acc-" + str(int(datetime.now().timestamp())))
 
-        # Update quote status to signed
-        supabase.table("quotes").update({"status_code": "proposal_active"}).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+        # Update quote status to accepted
+        supabase.table("quotes").update({"status_code": "accepted"}).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
 
         # ATOMIC AUDIT LOG MANDATE: Field-level delta recording
         await record_audit_event(
@@ -2424,7 +2424,7 @@ async def accept_quote(quote_id: str, payload: AcceptanceCreatePayload, request:
                 "quote_id": {"old": None, "new": quote_id},
                 "evidence_kind": {"old": None, "new": payload.evidence_kind},
                 "accepted_by": {"old": None, "new": payload.accepted_by},
-                "quote_status": {"old": "proposal_draft", "new": "proposal_active"}
+                "quote_status": {"old": "draft", "new": "accepted"}
             }
         )
 
@@ -2443,7 +2443,7 @@ async def create_work_order(acceptance_id: str, payload: WorkOrderCreatePayload,
         data = {
             "acceptance_record_id": acceptance_id,
             "notes": payload.notes,
-            "status_code": "proposal_active",
+            "status_code": "accepted",
             "customer_account_id": tenant_id
         }
         res = supabase.table("work_orders").insert(data).execute()
@@ -2459,7 +2459,7 @@ async def create_work_order(acceptance_id: str, payload: WorkOrderCreatePayload,
             changes_delta={
                 "acceptance_record_id": {"old": None, "new": acceptance_id},
                 "notes": {"old": None, "new": payload.notes},
-                "status_code": {"old": None, "new": "proposal_active"}
+                "status_code": {"old": None, "new": "accepted"}
             }
         )
 
