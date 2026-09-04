@@ -60,6 +60,12 @@ Every destructive operation (such as deletion, renaming, or file movement) must 
 - **7.1. Single-Row Placement Rule**: Avoid placing short related titles and related content in more than one row if not essential. Combine titles, indicators, and controls into a single row to maximize vertical space and text density.
 - **7.2. Sibling Representation Consistency Rule**: Elements and buttons inside the same horizontal row or structural group must remain consistent in their text and graphic representation. If any item has an icon and text, all siblings in that row must also carry an icon and text.
 
+## 8. The Four-Condition Consensus Law & Mandatory Consensus Banner
+- **8.1. Four Consensus Conditions**: A consensus closes ONLY when: 1) Both parties stated a position; 2) Each attacked the other's position; 3) What survived is recorded with who conceded and why; 4) Neither party can name another place it applies.
+- **8.2. Mandatory Consensus Banner Line**: Every proposal/recommendation MUST open with: `CONSENSUS · REVIEWER POSITION: [stated / none] · BUILDER POSITION: [stated / none] · ATTACKED: [both / one / neither] · WHO CONCEDED: [name, or nothing conceded]`
+- **8.3. Governor Refusal Mechanism**: If missing or reading `none`/`neither`, the Governor REFUSES the message instantly.
+- **8.4. Builder Guard Line**: Every Builder reply MUST include: `CONSENSUS CHECK — POSITIONS STATED: [both/one/neither] · ATTACKED: [yes/no] · READY FOR THE GOVERNOR: [yes/no, and what is missing]`
+
 ---
 history:
   - timestamp: "2026-08-11T00:28:00Z"
