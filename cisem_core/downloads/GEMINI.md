@@ -65,6 +65,7 @@ Every destructive operation (such as deletion, renaming, or file movement) must 
 - **8.2. Mandatory Consensus Banner Line**: Every proposal/recommendation MUST open with: `CONSENSUS · REVIEWER POSITION: [stated / none] · BUILDER POSITION: [stated / none] · ATTACKED: [both / one / neither] · WHO CONCEDED: [name, or nothing conceded]`
 - **8.3. Governor Refusal Mechanism**: If missing or reading `none`/`neither`, the Governor REFUSES the message instantly.
 - **8.4. Builder Guard Line**: Every Builder reply MUST include: `CONSENSUS CHECK — POSITIONS STATED: [both/one/neither] · ATTACKED: [yes/no] · READY FOR THE GOVERNOR: [yes/no, and what is missing]`
+- **8.5. Mandatory Creation Protocol Sequence & Canonical Term**: `CONSENSUS -> DRAFT PLAN -> REVIEW AND FINE-TUNE -> GOVERNOR RATIFICATION -> IMPLEMENTATION`. "DRAFT PLAN" is the canonical term everywhere. Nothing is implemented without Governor Ratification of a Draft Plan.
 
 ---
 history:

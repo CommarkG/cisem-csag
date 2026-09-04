@@ -4,11 +4,14 @@
 NOTHING IS IMPLEMENTED WITHOUT EXPLICIT GOVERNOR RATIFICATION.
 NOT A TABLE. NOT A COLUMN. NOT A SCREEN. NOT AN ENDPOINT. NOT A GATE PHASE. NOT A LINTER. NOT A TOOL.
 
-The Mandatory Creation Protocol:
-1. A proposal is written and inlined in full.
-2. The Reviewer attacks it and checks every name against the live database or live route list.
-3. Consensus closes, or a named disagreement is produced with both positions in full.
-4. The Governor explicitly ratifies the proposal.
+The Mandatory Creation Protocol Sequence:
+CONSENSUS -> DRAFT PLAN -> REVIEW AND FINE-TUNE -> GOVERNOR RATIFICATION -> IMPLEMENTATION.
+"DRAFT PLAN" IS THE CANONICAL TERM. Not proposal, not spec, not design document. The artifact produced after consensus closes is a DRAFT PLAN and it is named that everywhere. NOTHING IS IMPLEMENTED WITHOUT GOVERNOR RATIFICATION OF A DRAFT PLAN.
+
+1. Consensus closes between Reviewer and Builder.
+2. A DRAFT PLAN is authored and inlined in full.
+3. The Reviewer and Builder attack and fine-tune the DRAFT PLAN against live database schema and route lists.
+4. The Governor explicitly ratifies the DRAFT PLAN.
 5. ONLY THEN IS ANYTHING CREATED OR BUILT.
 
 UNLIMITED DISCOVERY BOUNDARY:
