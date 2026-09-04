@@ -63,7 +63,7 @@ if __name__ == "__main__":
                 print(f"  [X] {v}")
             sys.exit(1)
         else:
-            print("  [✓] Consensus Banner and Builder Guard Line verified successfully.")
+            print("  [OK] Consensus Banner and Builder Guard Line verified successfully.")
             sys.exit(0)
     except Exception as exc:
         print(f"GATE ERROR: {exc}")
