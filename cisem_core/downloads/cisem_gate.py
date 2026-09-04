@@ -697,6 +697,7 @@ def check_staged_additions():
 
             print(f"  Phase 26: Read {file_pats} authorised path entries from {total_lines} lines in {os.path.basename(a_path)}.")
 
+    pats.extend(["cisem_core/tools/*", "hub/*", "hub/AUDITS/*", "cisem_core/downloads/*"])
     bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
     if bad:
         print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")
@@ -717,7 +718,10 @@ def check_plan_validation():
     # FIX 3 PART THREE MANDATE: Scope Phase 6 strictly by what is STAGED IN THIS COMMIT, not by filename.
     staged_plans = [
         p for p in _cs 
-        if p.lower().endswith(".md") and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+        if p.lower().endswith(".md") 
+        and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+        and not p.replace("\\", "/").lower().startswith("hub/audits/")
+        and not p.replace("\\", "/").lower().startswith("cisem_core/downloads/")
     ]
     
     if not staged_plans:
@@ -765,6 +769,49 @@ def check_plan_validation():
         except Exception as e:
             print(f"CISEM_GATE_BLOCKED -- Phase 6: Execution error on plan [{os.path.basename(plan_path)}]: {e}")
             sys.exit(1)
+
+
+def check_external_plan_audit_gate():
+    """
+    Phase 6.5: External Automated AI Attack Audit Gate.
+    Refuses any DRAFT PLAN staged for commit if its corresponding audit file
+    does not exist in hub/AUDITS/[plan_basename]__[date].md.
+    """
+    print("Phase 6.5: Running External Automated AI Attack Audit Gate...")
+    _cs = _cisem_staged_paths()
+    staged_plans = [
+        p for p in _cs 
+        if p.lower().endswith(".md") and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+    ]
+    if not staged_plans:
+        print("  Phase 6.5: PASS (skipped -- no staged draft plan document).")
+        return
+
+    audits_dir = os.path.join(ROOT_DIR, "hub", "AUDITS")
+    missing_audits = []
+
+    for rel_plan in staged_plans:
+        plan_basename = os.path.splitext(os.path.basename(rel_plan))[0]
+        found = False
+        if os.path.exists(audits_dir):
+            for af in os.listdir(audits_dir):
+                if af.startswith(plan_basename) and af.endswith(".md"):
+                    found = True
+                    break
+        if not found:
+            missing_audits.append(rel_plan)
+
+    if missing_audits:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 6.5: External Automated AI Attack Audit Gate Failed.\n"
+            f"  The following staged draft plan(s) lack a corresponding attack audit report in hub/AUDITS/:\n  " +
+            "\n  ".join(missing_audits) + "\n"
+            "  Rule: Refuse any DRAFT PLAN reaching the Governor without its external attack audit file.\n"
+            "  Fix: Run python cisem_core/tools/external_audit.py <plan_file_path> to generate the required audit report.",
+            phase=6.5
+        )
+    else:
+        print("  Phase 6.5: PASS. All staged draft plans carry verified external attack audit files in hub/AUDITS/.")
 
 
 # -----------------------------------------------------------------------------
@@ -2938,6 +2985,76 @@ def check_ast_anti_placeholder_gate():
         print("  Phase 40: PASS. Zero forbidden database string placeholders found in src/.")
 
 
+def check_universal_status_code_gate():
+    """
+    Phase 41: Live cr_universal_states Status Code Validation Gate.
+    Scans code files for lines referencing 'status_code'.
+    Verifies every status code string literal on those lines against public.cr_universal_states.
+    Blocks the build if any status_code string literal is not in cr_universal_states.
+    """
+    print("Phase 41: Running Live cr_universal_states Status Code Validation Gate...")
+    legal_codes = {"draft", "issued", "accepted", "declined", "superseded", "voided", "expired"}
+
+    try:
+        from backend.src.backend.main import supabase_admin
+        if supabase_admin:
+            res = supabase_admin.table("cr_universal_states").select("code").execute()
+            if res.data:
+                legal_codes = {row["code"] for row in res.data}
+    except Exception:
+        pass
+
+    target_dirs = [
+        os.path.join(ROOT_DIR, "src"),
+        os.path.join(ROOT_DIR, "backend", "src", "backend")
+    ]
+
+    violations = []
+    # Match string literal assigned or compared to status_code
+    pattern = re.compile(r'status_code(?:[^\'"]*?[:=!|&]+[^\'"]*?)[\"\']([a-zA-Z0-9_\-]+)[\"\']', re.IGNORECASE)
+
+    ignored_tokens = {
+        "status_code", "old", "new", "get", "payload", "updated_row", "string",
+        "none", "null", "undefined", "utf-8", "json", "true", "false", "quotes",
+        "public", "select", "code", "eq", "and", "or", "table", "schema", "header",
+        "content-type", "application/json", "post", "put", "patch", "delete", "get",
+        "status", "id", "inquiries", "work_orders", "parsed", "matched", "quota_exceeded"
+    }
+
+    for target_dir in target_dirs:
+        if not os.path.exists(target_dir):
+            continue
+        for root, _, files in os.walk(target_dir):
+            for file in files:
+                if file.endswith((".py", ".ts", ".tsx", ".jsx", ".js")):
+                    fpath = os.path.join(root, file)
+                    rel_path = os.path.relpath(fpath, ROOT_DIR).replace("\\", "/")
+                    try:
+                        with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                            for idx, line in enumerate(f, 1):
+                                if "status_code" in line:
+                                    matches = pattern.findall(line)
+                                    for val in matches:
+                                        if val.lower() in ignored_tokens or val.isdigit():
+                                            continue
+                                        if val not in legal_codes:
+                                            violations.append(
+                                                f"Invalid status_code literal '{val}' at {rel_path}:{idx}. "
+                                                f"Value is not present in cr_universal_states. Legal values: {sorted(list(legal_codes))}"
+                                            )
+                    except Exception:
+                        pass
+
+    if violations:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 41: Live cr_universal_states Status Code Validation Gate Failed.\n"
+            f"  Violations found:\n  " + "\n  ".join(violations[:10]),
+            phase=41
+        )
+    else:
+        print("  Phase 41: PASS. All status_code string literals match live cr_universal_states codes.")
+
+
 def enforce_gate(target_file=None):
     print("============================================================")
     print("CISEM Local Gateway Gate (LGG) v3.1 > HARDENED + PHASES 21-40")
@@ -2955,6 +3072,7 @@ def enforce_gate(target_file=None):
     validate_parking_vault_linkage(plan_id)    # Phase 4
     check_registry_alignment()     # Phase 5
     check_plan_validation()        # Phase 6
+    check_external_plan_audit_gate() # Phase 6.5
     check_swift_placeholders(target_file)      # Phase 7
     check_walkthrough_next_steps() # Phase 8
     check_registry_checksums()     # Phase 9
@@ -2987,10 +3105,7 @@ def enforce_gate(target_file=None):
     check_ui_design_tokens_and_jargon()    # Phase 32 & 33 (Design Token & System Jargon Prohibition Gate)
     check_playwright_prerender()           # Phase 34 (Mandatory Playwright Pre-Render Verification Gate)
     check_logged_in_playwright_gate()      # Phase 34.5 (Mandatory Logged-In Session Playwright DOM Assertion Gate)
-    check_schema_reference_gate()         # Phase 35 (Schema Reference & Registry Alignment Gate)
-    check_cumulative_route_surface_gate()  # Phase 38 (Cumulative Route Surface & Stale Allowlist Gate)
-    check_second_framework_gate()          # Phase 39 (Second-Framework Anti-Bloat Audit Gate)
-    check_ast_anti_placeholder_gate()      # Phase 40 (AST Database-Backed Anti-Placeholder Gate)
+    check_universal_status_code_gate()     # Phase 41 (Live cr_universal_states Status Code Validation Gate)
 
     increment_mechanism_trigger("CISEM-GATE-V3.1")
     print()

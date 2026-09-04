@@ -369,7 +369,7 @@ export default function QuoteBuilderView() {
               </span>
             )}
           </div>
-          {/* Proceed to Work Order ONLY rendered when status is accepted/proposal_active */}
+          {/* Proceed to Work Order ONLY rendered when status is accepted */}
           {isAccepted && (
             <button 
               onClick={() => navigate('/work-order-acceptance')} 

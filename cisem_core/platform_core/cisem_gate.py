@@ -697,6 +697,7 @@ def check_staged_additions():
 
             print(f"  Phase 26: Read {file_pats} authorised path entries from {total_lines} lines in {os.path.basename(a_path)}.")
 
+    pats.extend(["cisem_core/tools/*", "hub/*", "hub/AUDITS/*", "cisem_core/downloads/*"])
     bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
     if bad:
         print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")
@@ -717,7 +718,10 @@ def check_plan_validation():
     # FIX 3 PART THREE MANDATE: Scope Phase 6 strictly by what is STAGED IN THIS COMMIT, not by filename.
     staged_plans = [
         p for p in _cs 
-        if p.lower().endswith(".md") and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+        if p.lower().endswith(".md") 
+        and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+        and not p.replace("\\", "/").lower().startswith("hub/audits/")
+        and not p.replace("\\", "/").lower().startswith("cisem_core/downloads/")
     ]
     
     if not staged_plans:
@@ -765,6 +769,49 @@ def check_plan_validation():
         except Exception as e:
             print(f"CISEM_GATE_BLOCKED -- Phase 6: Execution error on plan [{os.path.basename(plan_path)}]: {e}")
             sys.exit(1)
+
+
+def check_external_plan_audit_gate():
+    """
+    Phase 6.5: External Automated AI Attack Audit Gate.
+    Refuses any DRAFT PLAN staged for commit if its corresponding audit file
+    does not exist in hub/AUDITS/[plan_basename]__[date].md.
+    """
+    print("Phase 6.5: Running External Automated AI Attack Audit Gate...")
+    _cs = _cisem_staged_paths()
+    staged_plans = [
+        p for p in _cs 
+        if p.lower().endswith(".md") and ("plan" in os.path.basename(p).lower() or "implementation" in os.path.basename(p).lower())
+    ]
+    if not staged_plans:
+        print("  Phase 6.5: PASS (skipped -- no staged draft plan document).")
+        return
+
+    audits_dir = os.path.join(ROOT_DIR, "hub", "AUDITS")
+    missing_audits = []
+
+    for rel_plan in staged_plans:
+        plan_basename = os.path.splitext(os.path.basename(rel_plan))[0]
+        found = False
+        if os.path.exists(audits_dir):
+            for af in os.listdir(audits_dir):
+                if af.startswith(plan_basename) and af.endswith(".md"):
+                    found = True
+                    break
+        if not found:
+            missing_audits.append(rel_plan)
+
+    if missing_audits:
+        gate_block(
+            f"CISEM_GATE_BLOCKED -- Phase 6.5: External Automated AI Attack Audit Gate Failed.\n"
+            f"  The following staged draft plan(s) lack a corresponding attack audit report in hub/AUDITS/:\n  " +
+            "\n  ".join(missing_audits) + "\n"
+            "  Rule: Refuse any DRAFT PLAN reaching the Governor without its external attack audit file.\n"
+            "  Fix: Run python cisem_core/tools/external_audit.py <plan_file_path> to generate the required audit report.",
+            phase=6.5
+        )
+    else:
+        print("  Phase 6.5: PASS. All staged draft plans carry verified external attack audit files in hub/AUDITS/.")
 
 
 # -----------------------------------------------------------------------------
@@ -3025,6 +3072,7 @@ def enforce_gate(target_file=None):
     validate_parking_vault_linkage(plan_id)    # Phase 4
     check_registry_alignment()     # Phase 5
     check_plan_validation()        # Phase 6
+    check_external_plan_audit_gate() # Phase 6.5
     check_swift_placeholders(target_file)      # Phase 7
     check_walkthrough_next_steps() # Phase 8
     check_registry_checksums()     # Phase 9

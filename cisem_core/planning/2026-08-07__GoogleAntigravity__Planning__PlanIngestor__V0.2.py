@@ -104,8 +104,8 @@ def validate_plan(plan_path):
     except Exception as e:
         return False, f"Failed to parse YAML metadata: {e}"
 
-    if not metadata:
-        return False, "YAML metadata block is empty."
+    if not metadata or not isinstance(metadata, dict):
+        return False, "YAML metadata block is missing or not a key-value dictionary."
 
     # Validate Plan ID Naming Regex
     plan_id = metadata.get("plan_id")
