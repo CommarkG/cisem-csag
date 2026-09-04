@@ -1,46 +1,6 @@
 [
   {
     "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T15:33:11.556285+00:00",
-    "exit_code": 1,
-    "passed": 5,
-    "failed": 1,
-    "output_sha256": "35d4f5f6bbc0b9c1b08ca6545a570d6d1cf3ef378818f940ad7ed61b00cf4ded"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T15:34:01.761085+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "a592ee4167f36d884fdd9abb4533ce7042818c4350c5f10774187848b52a17c2"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T15:54:41.584719+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "13e857e673129e26bb4784423fd76f18f5ecbff98af6a66564bbf9b06040c46e"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T16:14:22.995015+00:00",
-    "exit_code": 0,
-    "passed": 6,
-    "failed": 0,
-    "output_sha256": "e841ac7053e95f46ab660df87c31cba76aa4f6051df5901c51edfcf27587ecc1"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
-    "timestamp": "2026-08-30T19:36:01.225414+00:00",
-    "exit_code": 1,
-    "passed": 0,
-    "failed": 1,
-    "output_sha256": "19a95e71f22c1b850dc34295c8f625771a44ec4b027685808e8bebfa0cbcffe5"
-  },
-  {
-    "script": "LoggedInE2ETest V3.0",
     "timestamp": "2026-08-30T19:37:29.525661+00:00",
     "exit_code": 1,
     "passed": 3,
@@ -158,5 +118,45 @@
     "passed": 6,
     "failed": 0,
     "output_sha256": "1aea35452a1b52fe115db9d7f921c75207d2ba85f32aa753fc89b1ecea98dc34"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-09-04T17:11:43.851525+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "9777a39d585d96feeb877ae873c2625552c3c6a8b705c1b991899e92481c878a"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-09-04T17:48:57.496473+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "916646b8b50a7c40685fb8048bf0a2d107534dd6ca8fc10115de1ffae42b62d1"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-09-04T17:53:36.099617+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "e70643816684006b165f4c13ab2439be0476e7cd1cbcfbe23378e74d562fa05c"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-09-04T18:06:58.210937+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "b950982f72be9136397f8df4773bb2b83cf313a97ecf0db0ce239579ab6f02c6"
+  },
+  {
+    "script": "LoggedInE2ETest V3.0",
+    "timestamp": "2026-09-04T18:14:13.623490+00:00",
+    "exit_code": 0,
+    "passed": 6,
+    "failed": 0,
+    "output_sha256": "d6458dcf0ac8a562298b74473bb56aea7f51e11c656f36470a8cc165ce1e7aa0"
   }
 ]

@@ -1396,3 +1396,40 @@ Call log:
 [2026-09-04T17:04:23.727442Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-09-04T17:05:43.714231Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
 [2026-09-04T17:10:49.230313Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T18:13:14.398973Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 29 to 30!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\StepOneIdentity.tsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\components\views\CatalogueListView.tsx: Missing mandatory code header block.
+  src\components\views\QuoteBuilderView.tsx: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\types\database.types.ts: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 29.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-09-04T18:13:38.316600Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T18:14:37.223495Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

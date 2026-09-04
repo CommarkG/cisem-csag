@@ -1,5 +1,5 @@
 {
-  "current_turn": 6,
+  "current_turn": 0,
   "turn_limit_ceiling": 15,
   "turn_minimum_floor": 3,
   "audit_due": false,
@@ -12,33 +12,8 @@
     "last_maturity_score": null
   },
   "maturity_score_threshold": 70,
-  "last_reset": "2026-09-04T17:05:21.712260+00:00",
+  "last_reset": "2026-09-04T18:14:58.987873+00:00",
   "ratified_plan": "CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0",
   "governor_signature": "GOV-YARIV-20260806-CONTEXT-ADAPTIVE-V1.0",
-  "turns_log": [
-    {
-      "timestamp": "2026-09-04T17:05:23.987271Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-09-04T17:05:51.374933Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-09-04T17:06:03.828755Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-09-04T17:09:52.651710Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-09-04T17:10:22.772927Z",
-      "action": "cisem_gate.py"
-    },
-    {
-      "timestamp": "2026-09-04T17:10:36.207136Z",
-      "action": "cisem_gate.py"
-    }
-  ]
+  "turns_log": []
 }

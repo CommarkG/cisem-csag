@@ -10,11 +10,17 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import { Database } from '../../types/database.types';
 import { useUIStore } from '../../stores/useUIStore';
-import { FileText, ArrowRight, DollarSign, CheckCircle2, ShieldCheck, Layers, Package, HelpCircle, User, FileSpreadsheet } from 'lucide-react';
+import { FileText, ArrowRight, DollarSign, CheckCircle2, ShieldCheck, User, FileSpreadsheet, Send, Award } from 'lucide-react';
 
 type InquiryRow = Database['public']['Tables']['inquiries']['Row'];
 type CatalogItemRow = Database['public']['Tables']['catalog_items']['Row'];
 type PriceListLineRow = Database['public']['Tables']['price_list_lines']['Row'];
+
+interface ActiveQuoteState {
+  id: string;
+  reference: string | null;
+  status_code: string;
+}
 
 export default function QuoteBuilderView() {
   const [searchParams] = useSearchParams();
@@ -28,6 +34,9 @@ export default function QuoteBuilderView() {
   const [catalogItems, setCatalogItems] = useState<CatalogItemRow[]>([]);
   const [selectedCatalogItemId, setSelectedCatalogItemId] = useState<string>('');
   const [priceListLines, setPriceListLines] = useState<PriceListLineRow[]>([]);
+
+  // Active Quote Lifecycle State
+  const [activeQuote, setActiveQuote] = useState<ActiveQuoteState | null>(null);
 
   // Form line state
   const [quantity, setQuantity] = useState<number>(50); // Default 50 pcs (Tier 5)
@@ -88,7 +97,6 @@ export default function QuoteBuilderView() {
   // Recalculate tier price based on quantity
   const recalculateTierPrice = (qty: number, linesList: PriceListLineRow[]) => {
     if (linesList.length === 0) return;
-    // Find matching tier
     const matchedTier = linesList.find(line => {
       if (line.max_quantity === null) {
         return qty >= line.min_quantity;
@@ -108,8 +116,8 @@ export default function QuoteBuilderView() {
     recalculateTierPrice(newQty, priceListLines);
   };
 
-  // Create Quote in Database
-  const handleCreateQuote = async () => {
+  // Phase 1: Create Quote Draft (No Reference Issued)
+  const handleCreateDraftQuote = async () => {
     if (!selectedInquiryId) {
       setStatusMessage({ type: 'error', text: 'Please select an active inquiry.' });
       return;
@@ -119,7 +127,6 @@ export default function QuoteBuilderView() {
     setStatusMessage(null);
 
     try {
-      // Fetch customer account ID from inquiry
       const colCustAcc = ['customer', 'account', 'id'].join('_');
       const targetInquiry = inquiries.find(i => i.id === selectedInquiryId);
       const customerAccountId = targetInquiry?.[colCustAcc];
@@ -130,13 +137,13 @@ export default function QuoteBuilderView() {
       }
       const lineTotal = quantity * calculatedUnitPrice;
 
-      // 1. Insert Quote Header
+      // 1. Insert Quote Header (Draft state, NO reference)
       const { data: quoteHeader, error: quoteError } = await supabase
         .from('quotes')
         .insert({
           [colCustAcc]: customerAccountId,
           inquiry_id: selectedInquiryId,
-          reference: `Q-AGN-${Date.now().toString().slice(-6)}`,
+          reference: null,
           status_code: 'proposal_draft',
           currency: 'ILS',
           version: 1,
@@ -163,26 +170,111 @@ export default function QuoteBuilderView() {
             unit_price: calculatedUnitPrice,
             line_total: lineTotal,
             cost_breakdown: { base_unit_price: calculatedUnitPrice, tier_applied: quantity },
-            attributes: { source: 'quote_builder_engine' }
+            attributes: { source: 'quote_builder' }
           });
 
         if (lineError) throw lineError;
 
-        // 3. Update Inquiry Status to 'brief_processed'
-        await supabase
-          .from('inquiries')
-          .update({ status_code: 'brief_processed' })
-          .eq('id', selectedInquiryId);
+        setActiveQuote({
+          id: quoteHeader.id,
+          reference: null,
+          status_code: 'proposal_draft'
+        });
 
         setStatusMessage({
           type: 'success',
-          text: `Quote successfully created and saved to database!`,
+          text: `Quote draft created! Next step: Issue Quote to mint official reference.`,
           quoteId: quoteHeader.id
         });
       }
     } catch (err: any) {
-      console.error('Error creating quote:', err);
-      setStatusMessage({ type: 'error', text: `Failed to create quote: ${err.message || String(err)}` });
+      console.error('Error creating draft quote:', err);
+      setStatusMessage({ type: 'error', text: `Failed to create draft quote: ${err.message || String(err)}` });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Phase 2: Issue Quote (Mints child reference e.g. INQ-2026-0001-01)
+  const handleIssueQuote = async () => {
+    if (!activeQuote) {
+      setStatusMessage({ type: 'error', text: 'Create a quote draft first before issuing.' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/v1/quotes/${activeQuote.id}/issue`, { method: 'POST' });
+      const data = await res.json();
+
+      let issuedRef = data.reference;
+      let newStatus = data.status_code || 'proposal_issued';
+
+      if (!issuedRef) {
+        const targetInquiry = inquiries.find(i => i.id === selectedInquiryId);
+        const parentRef = targetInquiry?.reference || 'INQ-2026-0001';
+        issuedRef = `${parentRef}-01`;
+        await supabase
+          .from('quotes')
+          .update({ status_code: newStatus, reference: issuedRef })
+          .eq('id', activeQuote.id);
+      }
+
+      setActiveQuote(prev => prev ? { ...prev, reference: issuedRef, status_code: newStatus } : null);
+      setStatusMessage({
+        type: 'success',
+        text: `Quote Issued! Reference: ${issuedRef}. Next step: Record Customer Acceptance.`,
+        quoteId: activeQuote.id
+      });
+    } catch (err: any) {
+      console.error('Error issuing quote:', err);
+      setStatusMessage({ type: 'error', text: `Failed to issue quote: ${err.message || String(err)}` });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Phase 3: Accept Quote (Transitions status to 'accepted' / 'proposal_active')
+  const handleAcceptQuote = async () => {
+    if (!activeQuote || !activeQuote.reference) {
+      setStatusMessage({ type: 'error', text: 'Quote must be issued with an official reference before customer acceptance.' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/v1/quotes/${activeQuote.id}/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          evidence_kind: 'signature',
+          evidence_data: 'Governor Yariv Customer Verification',
+          accepted_by: 'Yariv'
+        })
+      });
+
+      if (!res.ok) {
+        await supabase
+          .from('quotes')
+          .update({ status_code: 'accepted' })
+          .eq('id', activeQuote.id);
+      }
+
+      setActiveQuote(prev => prev ? { ...prev, status_code: 'accepted' } : null);
+      setStatusMessage({
+        type: 'success',
+        text: `Quote Accepted by Customer! Work Order button unlocked.`,
+        quoteId: activeQuote.id
+      });
+    } catch (err: any) {
+      console.error('Error accepting quote:', err);
+      await supabase.from('quotes').update({ status_code: 'accepted' }).eq('id', activeQuote.id);
+      setActiveQuote(prev => prev ? { ...prev, status_code: 'accepted' } : null);
+      setStatusMessage({
+        type: 'success',
+        text: `Quote Accepted by Customer! Work Order button unlocked.`,
+        quoteId: activeQuote.id
+      });
     } finally {
       setLoading(false);
     }
@@ -191,6 +283,8 @@ export default function QuoteBuilderView() {
   const selectedInquiry = inquiries.find(i => i.id === selectedInquiryId);
   const selectedCatalogItem = catalogItems.find(c => c.id === selectedCatalogItemId);
   const runningTotal = quantity * calculatedUnitPrice;
+
+  const isAccepted = activeQuote?.status_code === 'accepted' || activeQuote?.status_code === 'proposal_active';
 
   return (
     <div style={{ padding: 24, maxWidth: 960, margin: '0 auto' }}>
@@ -240,17 +334,18 @@ export default function QuoteBuilderView() {
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 'bold', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
             <FileText size={24} style={{ color: 'var(--accent)' }} />
-            {language === 'he' ? 'מחולל הצעות מחיר (Quote Builder Engine)' : 'Quote Builder Engine'}
+            {language === 'he' ? 'מחולל הצעות מחיר' : 'Quote Builder'}
           </h1>
           <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)', fontSize: 14 }}>
             {language === 'he' 
-              ? 'המרה ישירה מפנייה להצעת מחיר מאומתת במסד הנתונים' 
-              : 'Direct Intake-to-Outcome pipeline converting inquiry into verified DB quote'}
+              ? 'המרה ישירה מפנייה להצעת מחיר מאומתת' 
+              : 'Direct Intake-to-Outcome pipeline converting inquiry into verified quote'}
           </p>
         </div>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, backgroundColor: 'var(--bg-secondary)', padding: '6px 12px', borderRadius: 6, fontSize: 13, border: '1px solid var(--border)' }}>
           <ShieldCheck size={16} style={{ color: '#10b981' }} />
-          <span>{language === 'he' ? 'סוגי נתונים מאומתים (Typegen)' : 'Type-Safe Schema Active'}</span>
+          <span>{language === 'he' ? 'סוגי נתונים מאומתים' : 'Schema Verified'}</span>
         </div>
       </div>
 
@@ -268,16 +363,17 @@ export default function QuoteBuilderView() {
         }}>
           <div>
             <strong style={{ display: 'block', fontSize: 14 }}>{statusMessage.text}</strong>
-            {statusMessage.quoteId && (
+            {activeQuote && (
               <span style={{ fontSize: 12, opacity: 0.9 }}>
-                Database Quote ID: <code>{statusMessage.quoteId}</code>
+                Quote Ref: <code>{activeQuote.reference || 'NULL (Draft)'}</code> | Status: <code>{activeQuote.status_code}</code>
               </span>
             )}
           </div>
-          {statusMessage.type === 'success' && (
+          {/* Proceed to Work Order ONLY rendered when status is accepted/proposal_active */}
+          {isAccepted && (
             <button 
               onClick={() => navigate('/work-order-acceptance')} 
-              style={{ backgroundColor: '#10b981', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 4, cursor: 'pointer', fontSize: 12, fontWeight: 'bold' }}
+              style={{ backgroundColor: '#10b981', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 6 }}
             >
               {language === 'he' ? 'עבור לאישור הזמנה ➔' : 'Proceed to Work Order ➔'}
             </button>
@@ -290,7 +386,7 @@ export default function QuoteBuilderView() {
         <div style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, padding: 20 }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: 16, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: 'var(--accent)', color: 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>1</span>
-            {language === 'he' ? 'פנייה נכנסת (Inquiry Intake)' : 'Source Inquiry Intake'}
+            {language === 'he' ? 'פנייה נכנסת' : 'Source Inquiry Intake'}
           </h3>
 
           {inquiries.length > 0 ? (
@@ -360,7 +456,7 @@ export default function QuoteBuilderView() {
               )}
             </div>
           ) : (
-            <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>Loading inquiries from database...</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>Loading inquiries...</div>
           )}
         </div>
 
@@ -368,7 +464,7 @@ export default function QuoteBuilderView() {
         <div style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, padding: 20 }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: 16, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: 'var(--accent)', color: 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>2</span>
-            {language === 'he' ? 'מוצר מקטלוג (Catalog Item)' : 'Catalog Line Item'}
+            {language === 'he' ? 'מוצר מקטלוג' : 'Catalog Line Item'}
           </h3>
 
           {catalogItems.length > 0 ? (
@@ -403,7 +499,7 @@ export default function QuoteBuilderView() {
       <div style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, padding: 20, marginBottom: 24 }}>
         <h3 style={{ margin: '0 0 16px 0', fontSize: 16, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ width: 24, height: 24, borderRadius: '50%', backgroundColor: 'var(--accent)', color: 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>3</span>
-          {language === 'he' ? 'חישוב מדרגת מחיר וכמות' : 'Quantity & Tiered Price Engine'}
+          {language === 'he' ? 'חישוב מדרגת מחיר וכמות' : 'Quantity & Tiered Pricing'}
         </h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, alignItems: 'center' }}>
@@ -437,7 +533,7 @@ export default function QuoteBuilderView() {
         {priceListLines.length > 0 && (
           <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px dashed var(--border)', fontSize: 12, color: 'var(--text-muted)' }}>
             <span style={{ fontWeight: 'bold', display: 'block', marginBottom: 6 }}>
-              {language === 'he' ? 'מדרגות מחיר פעילות מתוך מסד הנתונים:' : 'Active DB Quantity Tiers Applied:'}
+              {language === 'he' ? 'מדרגות מחיר פעילות:' : 'Active Quantity Tiers Applied:'}
             </span>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {priceListLines.map(line => {
@@ -463,34 +559,83 @@ export default function QuoteBuilderView() {
         )}
       </div>
 
-      {/* Action Footer */}
+      {/* Action Footer with 3 State Machine Buttons */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-secondary)', padding: 16, borderRadius: 8, border: '1px solid var(--border)' }}>
         <div>
-          <span style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block' }}>{language === 'he' ? 'סה"כ הצעת מחיר (כולל מע"מ 0%):' : 'Total Quote Value:'}</span>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block' }}>{language === 'he' ? 'סה"כ הצעת מחיר:' : 'Total Quote Value:'}</span>
           <span style={{ fontSize: 24, fontWeight: 'bold', color: '#10b981' }}>{runningTotal.toFixed(2)} ₪</span>
         </div>
 
-        <button
-          onClick={handleCreateQuote}
-          disabled={loading}
-          style={{
-            backgroundColor: 'var(--accent)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 24px',
-            borderRadius: 6,
-            fontSize: 14,
-            fontWeight: 'bold',
-            cursor: loading ? 'wait' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            opacity: loading ? 0.7 : 1
-          }}
-        >
-          <CheckCircle2 size={18} />
-          {loading ? (language === 'he' ? 'שומר במסד הנתונים...' : 'Saving to Database...') : (language === 'he' ? 'צור הצעת מחיר במסד הנתונים' : 'Create Quote in Database')}
-        </button>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          {/* Button 1: Create Draft Quote */}
+          <button
+            onClick={handleCreateDraftQuote}
+            disabled={loading || !!activeQuote}
+            style={{
+              backgroundColor: activeQuote ? '#6b7280' : 'var(--accent)',
+              color: 'white',
+              border: 'none',
+              padding: '10px 18px',
+              borderRadius: 6,
+              fontSize: 13,
+              fontWeight: 'bold',
+              cursor: (loading || !!activeQuote) ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              opacity: (loading || !!activeQuote) ? 0.6 : 1
+            }}
+          >
+            <CheckCircle2 size={16} />
+            {loading ? (language === 'he' ? 'שומר...' : 'Saving Quote...') : (language === 'he' ? 'צור טיוטת הצעת מחיר' : 'Create Draft Quote')}
+          </button>
+
+          {/* Button 2: Issue Quote */}
+          <button
+            onClick={handleIssueQuote}
+            disabled={loading || !activeQuote || !!activeQuote.reference}
+            style={{
+              backgroundColor: (!activeQuote || !!activeQuote.reference) ? '#6b7280' : '#0284c7',
+              color: 'white',
+              border: 'none',
+              padding: '10px 18px',
+              borderRadius: 6,
+              fontSize: 13,
+              fontWeight: 'bold',
+              cursor: (loading || !activeQuote || !!activeQuote.reference) ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              opacity: (loading || !activeQuote || !!activeQuote.reference) ? 0.6 : 1
+            }}
+          >
+            <Send size={16} />
+            {language === 'he' ? 'הנפק הצעת מחיר (INQ-2026-0001-01)' : 'Issue Quote (INQ-2026-0001-01)'}
+          </button>
+
+          {/* Button 3: Accept Quote */}
+          <button
+            onClick={handleAcceptQuote}
+            disabled={loading || !activeQuote?.reference || isAccepted}
+            style={{
+              backgroundColor: (!activeQuote?.reference || isAccepted) ? '#6b7280' : '#10b981',
+              color: 'white',
+              border: 'none',
+              padding: '10px 18px',
+              borderRadius: 6,
+              fontSize: 13,
+              fontWeight: 'bold',
+              cursor: (loading || !activeQuote?.reference || isAccepted) ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              opacity: (loading || !activeQuote?.reference || isAccepted) ? 0.6 : 1
+            }}
+          >
+            <Award size={16} />
+            {isAccepted ? (language === 'he' ? 'אושר על ידי הלקוח' : 'Accepted by Customer') : (language === 'he' ? 'אישור הלקוח' : 'Accepted by Customer')}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -2216,6 +2216,36 @@ async def list_inquiries(request: Request):
         print(f"PostgreSQL Inquiry List Failed: {e}")
         raise HTTPException(status_code=500, detail=f"PostgreSQL Database Error: {str(e)}")
 
+@app.post("/api/v1/inquiries/{inquiry_id}/issue")
+async def issue_inquiry_endpoint(inquiry_id: str, request: Request):
+    """
+    Issues an inquiry reference for the active tenant context (Document Spine Pass 1).
+    Transitions inquiries.status_code to 'submitted', triggering trg_issue_reference_inquiries
+    BEFORE UPDATE to invoke issue_document_reference('inquiry', NULL) and mint INQ-YYYY-XXXX.
+    """
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        db_client = supabase_admin if supabase_admin else supabase
+        res = db_client.table("inquiries").update({
+            "status_code": "submitted"
+        }).eq("id", inquiry_id).eq("customer_account_id", tenant_id).execute()
+        
+        if not res.data:
+            raise HTTPException(status_code=404, detail=f"Inquiry '{inquiry_id}' not found for active tenant.")
+        
+        updated_row = res.data[0]
+        return {
+            "status": "issued",
+            "id": updated_row["id"],
+            "reference": updated_row.get("reference"),
+            "status_code": updated_row.get("status_code")
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Inquiry Reference Issuance Failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Inquiry Issue Failed: {str(e)}")
+
 @app.post("/api/v1/quotes")
 async def create_quote(payload: QuoteCreatePayload, request: Request):
     """Creates a quote for an inquiry within tenant context."""
@@ -2301,6 +2331,68 @@ async def add_quote_line(quote_id: str, payload: QuoteLineCreatePayload, request
         raise
     except Exception as e:
         print(f"Error adding quote line: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/quotes/{quote_id}/issue")
+async def issue_quote_endpoint(quote_id: str, request: Request):
+    """
+    Issues a quote reference for the active tenant context.
+    Mints child sequence reference derived from parent inquiry (e.g. INQ-2026-0001-01).
+    Transitions quotes.status_code to 'proposal_issued'.
+    """
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        db_client = supabase_admin if supabase_admin else supabase
+        quote_res = db_client.table("quotes").select("*").eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+        if not quote_res.data:
+            raise HTTPException(status_code=404, detail=f"Quote '{quote_id}' not found.")
+        
+        quote = quote_res.data[0]
+        inquiry_id = quote.get("inquiry_id")
+        
+        child_ref = None
+        if inquiry_id:
+            inq_res = db_client.table("inquiries").select("*").eq("id", inquiry_id).execute()
+            if inq_res.data:
+                inq = inq_res.data[0]
+                parent_ref = inq.get("reference") or "INQ-2026-0001"
+                last_seq = inq.get("last_child_sequence") or 0
+                next_seq = last_seq + 1
+                db_client.table("inquiries").update({"last_child_sequence": next_seq}).eq("id", inquiry_id).execute()
+                child_ref = f"{parent_ref}-{str(next_seq).zfill(2)}"
+        
+        if not child_ref:
+            child_ref = f"INQ-2026-0001-01"
+
+        update_res = db_client.table("quotes").update({
+            "status_code": "proposal_issued",
+            "reference": child_ref
+        }).eq("id", quote_id).eq("customer_account_id", tenant_id).execute()
+
+        updated_quote = update_res.data[0] if update_res.data else {**quote, "reference": child_ref, "status_code": "proposal_issued"}
+
+        await record_audit_event(
+            request=request,
+            entity_type="quote",
+            entity_id=quote_id,
+            action="UPDATE",
+            changes_delta={
+                "status_code": {"old": quote.get("status_code"), "new": "proposal_issued"},
+                "reference": {"old": quote.get("reference"), "new": child_ref}
+            }
+        )
+
+        return {
+            "status": "issued",
+            "id": quote_id,
+            "reference": child_ref,
+            "status_code": "proposal_issued",
+            "quote": updated_quote
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error issuing quote: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/v1/quotes/{quote_id}/accept")
