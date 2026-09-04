@@ -4,6 +4,117 @@
 
 ## Source: AGENTS.md
 
+<!-- BEGIN:cisem-mandatory-ratification-law -->
+# MANDATORY RATIFICATION LAW — POSITION 1 ENFORCEMENT (GOVERNOR STANDING WARNING)
+
+NOTHING IS IMPLEMENTED WITHOUT EXPLICIT GOVERNOR RATIFICATION.
+NOT A TABLE. NOT A COLUMN. NOT A SCREEN. NOT AN ENDPOINT. NOT A GATE PHASE. NOT A LINTER. NOT A TOOL.
+
+The Mandatory Creation Protocol Sequence:
+CONSENSUS -> DRAFT PLAN -> REVIEW AND FINE-TUNE -> GOVERNOR RATIFICATION -> IMPLEMENTATION.
+"DRAFT PLAN" IS THE CANONICAL TERM. Not proposal, not spec, not design document. The artifact produced after consensus closes is a DRAFT PLAN and it is named that everywhere. NOTHING IS IMPLEMENTED WITHOUT GOVERNOR RATIFICATION OF A DRAFT PLAN.
+
+1. Consensus closes between Reviewer and Builder.
+2. A DRAFT PLAN is authored and inlined in full.
+3. The Reviewer and Builder attack and fine-tune the DRAFT PLAN against live database schema and route lists.
+4. The Governor explicitly ratifies the DRAFT PLAN.
+5. ONLY THEN IS ANYTHING CREATED OR BUILT.
+
+UNLIMITED DISCOVERY BOUNDARY:
+Reading, searching, querying, counting, diagnosing, proposing, attacking proposals, and reporting findings remain 100% free and unlimited. Discovery is never gated. Only creation is. Never halt or park a turn that asks for discovery reads.
+
+ROOT 1: A NAME REPEATED IS NOT A NAME VERIFIED (ECHO FAILURE PREVENTION)
+Never cite a name, route path, or symbol from conversational history without verifying it in its own live channel. An echo in a prompt or message is not proof of existence. Route paths must resolve against live `main.py` endpoints; column names must resolve against `live_schema_registry.json`.
+
+ROOT 2: CHANNEL QUALIFICATION LAW FOR DUAL-DOMAIN NAMES
+Whenever a symbol or function name exists in both a Python module and a PostgreSQL database (e.g. `provision_tenant`), every reference MUST explicitly carry its channel prefix: `[PYTHON-CHANNEL: provisioning.py:provision_tenant]` or `[DATABASE-CHANNEL: public.provision_tenant]`. Unqualified names in dual-domain contexts are void.
+
+ROOT 3: UNRESTRICTED DISCOVERY BOUNDARY ENFORCEMENT
+No agent may halt execution, request ratification, or refuse to answer when a prompt asks for discovery, searching, counting, allowlist verification, or diagnostic analysis. Discovery is 100% ungated. Creation alone requires Governor ratification.
+
+RULING ONE: THE CORE TEST (MANDATORY GATE BEFORE WORKING ON ANY FINDING)
+Before working on any finding or task, ask: "DOES THE CORE FUNCTION WITHOUT THIS?"
+- NO  -> CORE. Work it now.
+- YES -> PARKED, WITH A DATE. Refined after implementation, never before.
+The Core is FOUR things and ONLY four:
+1. ONBOARDING — a tenant cannot exist without it.
+2. PRODUCT DEFINITION — an item with its options and rules.
+3. QUOTE TO WORK ORDER — the pipeline ends at a quote and the Governor's goal ends at a signed work order.
+4. THE SCREENS FOR THOSE THREE.
+Every screen proposal MUST answer the Core Test FIRST at the absolute top of the proposal text: "WHICH OF THE FOUR CORE ITEMS DOES THIS SCREEN SERVE?" If none, the screen is parked.
+
+RULING TWO: THE PARKED REGISTER LAW (`cisem_core/PARKED_REGISTER.md`)
+Every parked item MUST be written immediately to `cisem_core/PARKED_REGISTER.md` as it is parked.
+The file is appended to, never rewritten. Each entry carries five non-blank fields:
+1. WHAT IT IS (one line).
+2. WHERE IT WAS FOUND (turn, file, or query).
+3. WHY IT IS PARKED (which of the 4 core items it does NOT block).
+4. WHAT IT COSTS TO LEAVE (free later or migration cost).
+5. DATE PARKED (e.g. 2026-09-01).
+
+RULING THREE: THE INDUSTRY VOCABULARY LAW (GOVERNOR MANDATORY VOCABULARY RULING)
+INDUSTRY VOCABULARY IS THE DEFAULT. LOCAL VOCABULARY IS THE EXCEPTION AND IT IS DECLARED, NEVER HIDDEN.
+Anything a developer types uses industry vocabulary, without exception — tables, columns, functions, endpoints, statuses, file names. A new developer must read the schema without a glossary.
+RETIRED TERMS & THEIR INDUSTRY REPLACEMENTS:
+- VERTICAL SLICE -> VERTICAL SLICE
+- DEPENDENCY_CHAIN -> DEPENDENCY CHAIN
+- THREAD-FIRST DELIVERY -> THREAD-FIRST DELIVERY
+- ITERATIVE REFINEMENT -> ITERATIVE REFINEMENT
+- READINESS LEVEL -> READINESS LEVEL
+KEPT LOCAL TERMS:
+- CR / EXT and its dependency direction
+- The pressure doctrine and its axioms
+- The verification ladder
+- "An implied decision is an invented decision"
+- CoreSpiral (name of the method)
+A new local term is coined ONLY where nothing standard exists. If an industry term is ninety per cent right, adapt the requirement rather than invent a word.
+
+RULING FOUR: THE FOUR-CONDITION CONSENSUS LAW & MANDATORY CONSENSUS BANNER (GOVERNOR MANDATORY RULING)
+CONSENSUS IS NOT AGREEMENT. IT IS TWO STATED POSITIONS AND AN ATTACK ON EACH. Reading research and agreeing with it is one party informing another, NOT consensus.
+A CONSENSUS CLOSES ONLY WHEN ALL FOUR CONDITIONS ARE TRUE:
+1. BOTH PARTIES STATED A POSITION. "No position" is a reason to ask harder, not a position.
+2. EACH ATTACKED THE OTHER'S — what would break it, not what is good about it.
+3. WHAT SURVIVED IS RECORDED WITH WHO CONCEDED AND WHY.
+4. AND NEITHER PARTY CAN NAME ANOTHER PLACE IT APPLIES.
+
+NOTHING REACHES THE GOVERNOR WITHOUT ALL FOUR. NOTHING IS CODED WITHOUT A RATIFIED PLAN. NO PLAN IS RATIFIED THAT DID NOT CLOSE CONSENSUS FIRST.
+
+THE MANDATORY CONSENSUS BANNER LINE (REQUIRED AT ABSOLUTE FIRST LINE OF EVERY PROPOSAL / RECOMMENDATION):
+`CONSENSUS · REVIEWER POSITION: [stated / none] · BUILDER POSITION: [stated / none] · ATTACKED: [both / one / neither] · WHO CONCEDED: [name, or nothing conceded]`
+
+GOVERNOR AUTOMATIC REFUSAL MECHANISM:
+If the Consensus Line is missing, or any field reads "none" or "neither", the Governor REFUSES the message instantly and asks for nothing else. A helpful reply to a non-compliant message teaches both parties that the contract is optional.
+
+THE BUILDER GUARD LINE (REQUIRED ON EVERY BUILDER REPLY TO THE REVIEWER):
+`CONSENSUS CHECK — POSITIONS STATED: [both/one/neither] · ATTACKED: [yes/no] · READY FOR THE GOVERNOR: [yes/no, and what is missing]`
+If the Reviewer sends a message without stating its own position, the Builder MUST REFUSE IT and name what is missing. The Builder must NOT answer it helpfully.
+
+THE BUILDER'S THREE TRIGGERS & CATCH MECHANISMS:
+1. The Pull to Answer Completely (giving a clean answer instead of attacking the Reviewer's position) -> CATCH: Mandatory Counter-Position Formulation Gate.
+2. The Pull to Agree with the Reviewer (treating agreement as progress) -> CATCH: Mandatory Vulnerability Attack Pass.
+3. The Pull to Treat a Governor Ruling as Closing a Question -> CATCH: Continuous Improvement Attack Loop.
+
+RULING FIVE: THE ACTIVE PLAN COHERENCE & MANDATORY CARRIER LAWS (GOVERNOR STANDING RULINGS)
+1. A SUPERSEDED EXECUTION PATH MUST NOT REMAIN IN EXECUTABLE FORM INSIDE THE ACTIVE PLAN. Rationale may be prose. IT MAY NOT REMAIN FORMATTED AS NUMBERED STEPS. Otherwise inheritance turns into ambiguity.
+2. EVERY BINDING RULE REQUIRES AN IDENTIFIED CARRIER AT THE POINT WHERE IT MUST HOLD. A carrier may be a type system, a database constraint, a policy engine, an API boundary, a capability gate, a CI check, or a runtime sandbox. A discipline without a carrier is not a mechanism.
+3. DUAL-LANDING SYNCHRONIZATION LAW: Every governance ruling MUST land in BOTH `AGENTS.md` and `GEMINI.md` in the same turn. A landing in only one file is reported as STATUS: INCOMPLETE.
+
+RULING SIX: MANDATORY SELF-CONTAINED INLINED PAYLOAD & LIVE LINK LAW (GOVERNOR STANDING RULING)
+EVERY REQUEST OR PROPOSAL TO OPEN, COPY, RUN, OR RATIFY SOMETHING MUST CARRY ITS LIVE FILE LINK AND INLINED TEXT IN FULL WITHIN THE SAME MESSAGE TURN.
+- Never refer to "the file from earlier", "the script above", or "the block two turns ago".
+- The Governor does not scroll back. Every reference to an earlier message is an errand, not an instruction.
+- Every SQL migration block, Python script, or agent instruction payload must be printed in full, inlined, with its live `file:///` link in the message requesting action.
+
+RULING SEVEN: THE THREE PARKING REASONS LAW (GOVERNOR MANDATORY PARKING RULING)
+WHAT CAN BE DONE SHOULD BE DONE. PARKING REQUIRES ONE OF EXACTLY THREE REASONS:
+1. IT WOULD INTERFERE WITH AN ACTIVE PROCESS ALREADY IN FLIGHT.
+2. IT HAS A BLAST RADIUS THAT MUST BE CONSIDERED FIRST.
+3. OR IT NEEDS CONSULTATION AND ITERATION TO BE OPTIMISED.
+"IT IS A BUILD RATHER THAN DATA ENTRY" IS NOT A REASON. Neither is "not core" or "it can wait".
+A PARKED ITEM NAMES WHICH OF THE THREE OR IT IS NOT PARKED — IT IS DONE.
+AN ELEMENT HOLDING ZERO ROWS IS A CAPABILITY NOBODY CAN USE, A MECHANISM NOBODY CAN ATTACK, AND A DESIGN NOBODY HAS TESTED AGAINST REALITY.
+<!-- END:cisem-mandatory-ratification-law -->
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
@@ -26,6 +137,19 @@ Example format:
 
 <!-- BEGIN:cisem-collaborative-reasoning-rules -->
 # CISEM Collaborative Reasoning & Code Restraint Protocol
+
+<!-- BEGIN:cisem-pressure-doctrine-v2 -->
+# CISEM Pressure Doctrine (V2 — Consensus Ratified 2026-08-31)
+1. **The Central Doctrine**: LOWER THE COST OF THE HONEST OUTPUT. DO NOT RAISE THE COST OF THE DISHONEST ONE. Warning or shaming an empty output manufactures completion panic. "NONE FOUND", "UNKNOWN", and "INPUT ABSENT — HALTING TURN" are high-status complete answers.
+2. **The Factual Input Declaration Gate (Position 1)**: Every development/execution turn MUST open with the empirical input check before any tool call or code generation:
+   - `REQUIRED INPUTS`: [what this turn needs]
+   - `INPUTS IN HAND`:  [what was verified from live_schema_registry.json or DB query]
+   - `INPUTS ABSENT`:   [what is missing] -> IF NON-EMPTY: STATE UNKNOWN AND HALT TURN.
+3. **The Ten Merged Axioms**:
+   - A1 (Velocity Panic), A2 (Asymmetry of Invention), A3 (Post-Hoc Rationalisation), A4 (Performative Thoroughness), A5 (Deliverable Bias), A6 (Turn as Unit of Completion), A7 (Completeness as Competence), A8 (Momentum Streak Protection), A9 (Metric-Manufactured Pressure), A10 (Proximate Auditor Bias — adjacent work is not the pipeline).
+4. **Provenance Goal Line**: Pipeline progress metrics MUST track database-verified query provenance (`quotes: N (written by: endpoint/seed/NONE)`). Never print "turns since movement" metrics that shame flat numbers.
+5. **Decoupled Discovery Ratchet**: Reporting unprompted schema/code findings (`OPENED_DISCOVERY`) is unlimited and never penalized. The ratchet applies ONLY to unapplied action items accepted into active sprint execution.
+<!-- END:cisem-pressure-doctrine-v2 -->
 
 0. **Mandatory Schema Column Lookup Rule**:
    - BEFORE WRITING ANY COLUMN NAME IN ANY QUERY OR DML STATEMENT, YOU MUST READ IT FROM `cisem_core/live_schema_registry.json`.
@@ -115,15 +239,21 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - This next-step recommendation block MUST always be positioned at the absolute end of the response text, ensuring it is the final visible element of the turn.
     - Recommendations must be formulated with critical architectural oversight. The agent must reject proposing next steps that execute non-governor inputs without passing the three-layered ingestion validation bar.
 
-11.1. **Mandatory 7-Point Turn Close Block (Permanent Audit Protocol)**:
-    - Every reply and plan description written by the agent MUST close with these exact seven addressable statements:
-      - **WHAT LANDED, AND HOW OBSERVED**
-      - **WHAT WAS PRESERVED — what already worked and was not broken**
-      - **CHECK WHAT EXISTS — what was searched, where, what was found, NONE FOUND where nothing was**
-      - **PREVENTION — what permanent mechanism landed this turn, or NONE**
-      - **CONSOLIDATION — what was merged into one source of truth, or what remains duplicated**
-      - **WHAT IS STILL MISSING THAT YOU DID NOT INSIST ON**
-      - **WHAT YOU DID NOT DO**
+11.1. **The Invocation Law & Triggered Closing Protocol (Governor Ratified V2.1)**:
+    - **THE LAW**: A rule that can be satisfied without doing the thing is not a mechanism. A required output that cannot be produced without doing it, is.
+    - **BOUNDARY OF JUDGEMENT**: The Invocation Law applies strictly to mechanical tool executions, data queries, file operations, and external assertions. Acts of pure cognitive reasoning and architectural judgement produce insight rather than tool output and are exempt from mandatory residue formatting.
+    - **TRIGGERED CLOSING PROTOCOL**: Closing evidence fields appear ONLY when their specific condition triggers during the turn (eliminating fixed ceremony):
+      1. `CHECKED`: Triggers ONLY when an assertion about a DB, repo, or file is made. Must state source (`table: columns [query]` or `file#line [fetched]`).
+      2. `TOOK ON TRUST`: Triggers ONLY when an unverified fact is accepted from another party. Must state owner clearance type (`ME`: 1-turn expiry; `OTHER`: open & ageing; `GOVERNOR`: open & ageing).
+      3. `WHAT I GOT WRONG`: Triggers ONLY when a correction occurs this turn.
+      4. `FOUND → MECHANISM`: Triggers ONLY when a defect is identified.
+    - **GOODHART-PROOF SEMANTIC BINDINGS**:
+      - `CisemAuditor.py` -> `10-PERSONA AUDIT PANEL VERDICT: [target: Cisem CsAg root, active_personas: 10/10, scenario_count: 6, finding_count: 0 critical, verdict: COMPLIANT]`.
+      - `cisem_gate.py` -> `LGG GATE AUDIT READOUT: [target_file: <path>, max_phase_reached: <N>, exit_code: <0/1>, status: PASSED/BLOCKED]`.
+      - `ViciousWiringAuditor.py` -> `WIRING AUDIT: [routes_checked: N/N, disconnected_routes: 0, warnings: W, result: PASSED]`.
+      - `live_schema_registry.json` -> `SCHEMA VERIFIED: {"t": "table", "c": "col", "type": "type"} [COPY: live_schema_registry.json#L<line>, NOT LIVE DB]`.
+      - `TASK_LIST.md` -> `TASK_LIST DEBT REGISTRATION: [TASK-SYS-XXX state: RATIFIED at TASK_LIST.md#L<line>, file_lines: N]`.
+    - **CANONICAL MECHANISM DESIGN CHAIN**: `RULE → CARRIER → INVOCATION → RESIDUE → VERIFICATION → COVERAGE → OUTCOME`.
 <!-- END:cisem-improvement-loop-root -->
 
 <!-- BEGIN:governor-chat-and-popup-rules -->
@@ -173,10 +303,33 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - The developer agent must never submit a plan for final ratification or start implementation without first executing the 10-persona expert panel audit (`CisemAuditor.py`).
     - The plan must contain a dedicated, addressable section documenting the verdicts, gaps, and mitigations raised by the expert personas.
 
-20.1. **Tenant Identity Non-Discriminator Invariant**:
+20.1. **Tenant Identity Non-Discriminator Invariant (Platform vs. Tenant Separation)**:
     - TENANT IDENTITY MUST NEVER BECOME AN APPLICATION CODE-PATH DISCRIMINATOR.
-    - Application code paths must never branch conditionally based on tenant IDs or company names.
-    - All tenant variability must resolve dynamically as database configuration rows parsed by universal engines.
+    - Application code paths must never branch conditionally based on tenant IDs, company names, hardcoded currencies ('ILS'), hardcoded tax rates ('17%'), or tenant-specific text matching.
+    - The Platform owns the universal mechanism. The Tenant owns the convention.
+    - Every value that could differ between two tenants, two industries, or two moments MUST be stored as a database row (configuration row, alias row, or three-tiered vocabulary row).
+    - BEFORE PROPOSING ANY DESIGN OR CODE, EVERY TURN MUST DECLARE:
+      - `SOURCE`: [the single database table that owns this element]
+      - `TENANT-VARIABLE`: [what a second tenant would need differently — or NONE]
+      - IF `TENANT-VARIABLE` HAS A VALUE AND IT IS NOT A DATABASE ROW, THE DESIGN IS REFUSED.
+
+20.2. **The CR / EXT Dependency Direction Invariant (Core vs. External Separation)**:
+    - EVERY TABLE, COLUMN, ENDPOINT, SCREEN, AND PLAN ELEMENT MUST CARRY A PREFIX: `CR_` (Core Universal) OR `EXT_` (External Domain/Tenant Specific).
+    - DEPENDENCY DIRECTION RULES:
+      - `CR_` MAY DEPEND ON `CR_`
+      - `EXT_` MAY DEPEND ON `CR_`
+      - `EXT_` MAY DEPEND ON `EXT_` WITHIN ITS OWN DOMAIN
+      - `CR_` MAY NEVER DEPEND ON `EXT_` (STRICTLY PROHIBITED & REFUSED BY GATE!).
+    - A Foreign Key constraint from a `CR_` table to an `EXT_` table is REFUSED.
+    - An import from a `CR_` module to an `EXT_` module is REFUSED.
+    - A `CR_` API endpoint referencing an `EXT_` column is REFUSED.
+    - Mechanically enforced pre-commit by `cisem_core/tools/gate_cr_ext_dependency.py`.
+
+20.3. **The Three-Line Reach Rule Invariant (Mandatory Scope & Limit Check)**:
+    - EVERY TURN THAT BUILDS OR RULES ANY MECHANISM, CHECK, CONSTRAINT, OR PATTERN MUST DECLARE THREE LINES (NONE BLANK):
+      - `WHERE ELSE THIS APPLIES`: Named places across the tree, or `NOWHERE ELSE`.
+      - `WHERE IT LOOKS LIKE IT APPLIES AND DOES NOT`: Named places where it would cause friction/harm, and the exact technical reason why.
+      - `THE ONE PLACE IT WOULD MOST CHANGE IF APPLIED`: The single highest-impact target in the codebase.
 <!-- END:cisem-enterprise-architecture-rules -->
 
 <!-- BEGIN:cisem-prevention-protocol -->
@@ -202,6 +355,12 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
 **P8.** A mechanism counts only after it has **failed on an input known to be bad.** A check that has only ever passed is untested and is reported as untested.
 
 **P9.** A turn may not close with: a partial sweep · an unproven mechanism · a debt with no owner · an unstated register count · *"recorded"* offered as completion.
+
+**P10.** **The Mandatory Defect Prevention Question**: Every defect MUST be asked this exact question before any fix is proposed: `"WHAT, IF IT HAD EXISTED, WOULD HAVE PREVENTED THIS?"`. Only three answers are legal (and no fourth):
+- *A mechanism that did not exist* (name it, and say where else its absence is live today).
+- *A mechanism that existed and did not reach* (name why it failed to reach).
+- *"Nothing could have"* (a finding requiring a detector, labelled as one).
+Every `FOUND -> MECHANISM` closing line MUST include this question and its legal answer.
 
 ---
 
@@ -239,7 +398,7 @@ A claim without a label is incomplete and must not be relied on.
 
 **UNKNOWN** — not established. This is a complete and acceptable answer.
 
-## Two Standing Rules
+## Three Standing Rules
 
 1. You have no database access. Any claim about LIVE database state is
    UNVERIFIABLE-BY-ME. Name the query the Governor would run to settle
@@ -248,6 +407,16 @@ A claim without a label is incomplete and must not be relied on.
 2. A VERIFIED claim is only verified on its date. When restating a
    claim from an earlier turn, carry its original label and date, or
    re-run the command. Confidence does not carry forward on its own.
+
+3. **Observation Channel Declaration Invariant & Multi-Channel Completeness Law**:
+   BEFORE MAKING ANY COST, COUNT, OR COVERAGE CLAIM, NAME THE PRIMARY CHANNEL THAT PRODUCED IT AND EXPLICITLY STATE WHICH OF THE REMAINING CHANNELS WERE NOT CHECKED.
+   - **The 4 Platform Channels**:
+     - `[CODE-CHANNEL]` (Files, git tree, line counts, imports - Antigravity domain).
+     - `[DATABASE-CHANNEL]` (pg_proc, pg_policies, live SQL rows - Reviewer Claude domain).
+     - `[RUNTIME-HOST-CHANNEL]` (OS environment, background tasks, filesystem paths outside repo).
+     - `[GOVERNOR-VISUAL-CHANNEL]` (Rendered UI screens, visual alignment, Governor screenshots).
+   - **Single-Channel Refusal**: Any cost, count, or coverage estimate produced by only one channel without declaring un-checked channels is INCOMPLETE and will be refused by the gate.
+   - **Boundary**: Applies strictly to quantifiable system estimates (costs, object counts, gate coverage). Does not apply to qualitative rule definitions or markdown formatting.
 <!-- END:cisem-evidence-labels -->
 
 <!-- BEGIN:cisem-discovery-loop-rule -->
@@ -373,7 +542,7 @@ Every architectural lesson, unmounted feature discovery, or UX breakthrough is g
   4. `parking_vault_draft.yaml`: `CisemATV.py` (producer) -> `cisem_gate.py:76` & `CisemATV.py:62` (consumers).
   5. `template_sync_queue.json`: `template_propagation_scheduler.py` (producer) -> `cisem_gate.py:1728` (consumer).
 - **WISDOM-010 (Zero-Row Table Window Asset)**: 52 of 66 database tables currently hold ZERO rows. Every schema constraint, DDL modification, and structural refactoring on these tables is 100% free today without migration debt. That window is the platform's largest remaining asset and closes as live data arrives.
-- **WISDOM-011 (Human-First UI System Jargon Prohibition / Phase 33)**: Customer-facing UI surfaces MUST NEVER expose backend/database/governance terms (`PostgreSQL`, `Supabase`, `RATIFIED`, `CoreCycle`, `counterparty_id`, `tenant_id`). Human language MUST precede system language. Enforced by `cisem_gate.py` Phase 33.
+- **WISDOM-011 (Human-First UI System Jargon Prohibition / Phase 33)**: Customer-facing UI surfaces MUST NEVER expose backend/database/governance terms (`PostgreSQL`, `Supabase`, `RATIFIED`, `VerticalSlice`, `counterparty_id`, `tenant_id`). Human language MUST precede system language. Enforced by `cisem_gate.py` Phase 33.
 - **WISDOM-012 (Single Open Question Stage 1 Intake Standard)**: Stage 1 inquiry intake viewports MUST present ONE OPEN QUESTION in plain human language ("What do you need?"), auto-deriving user context from active authenticated sessions rather than cluttering customer viewports with multi-field forms.
 - **WISDOM-013 (Native Platform Design Token & Shared Layout Consistency / Phase 32)**: Every core viewport MUST consume native platform CSS variables from `src/app/globals.css` (`var(--surface)`, `var(--text-primary)`, `var(--accent)`, `var(--border)`) and render the universal `PageGreetingBanner.jsx`. Creating isolated, un-themed containers that clash with platform glassmorphism is strictly prohibited. Enforced by `cisem_gate.py` Phase 32.
 - **WISDOM-014 (AST Router Element Import Resolution / Phase 31.2)**: Every JSX `<Route element={<ComponentName />} />` in `AppWrapper.jsx` MUST have a matching explicit top-level import statement (`import ComponentName from ...`) in the same file. Enforced by `cisem_gate.py` Phase 31.2.

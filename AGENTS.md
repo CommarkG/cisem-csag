@@ -233,15 +233,21 @@ The agent is CISEM's top expert builder and planner. This is not a request. It i
     - This next-step recommendation block MUST always be positioned at the absolute end of the response text, ensuring it is the final visible element of the turn.
     - Recommendations must be formulated with critical architectural oversight. The agent must reject proposing next steps that execute non-governor inputs without passing the three-layered ingestion validation bar.
 
-11.1. **Mandatory 7-Point Turn Close Block (Permanent Audit Protocol)**:
-    - Every reply and plan description written by the agent MUST close with these exact seven addressable statements:
-      - **WHAT LANDED, AND HOW OBSERVED**
-      - **WHAT WAS PRESERVED — what already worked and was not broken**
-      - **CHECK WHAT EXISTS — what was searched, where, what was found, NONE FOUND where nothing was**
-      - **PREVENTION — what permanent mechanism landed this turn, or NONE**
-      - **CONSOLIDATION — what was merged into one source of truth, or what remains duplicated**
-      - **WHAT IS STILL MISSING THAT YOU DID NOT INSIST ON**
-      - **WHAT YOU DID NOT DO**
+11.1. **The Invocation Law & Triggered Closing Protocol (Governor Ratified V2.1)**:
+    - **THE LAW**: A rule that can be satisfied without doing the thing is not a mechanism. A required output that cannot be produced without doing it, is.
+    - **BOUNDARY OF JUDGEMENT**: The Invocation Law applies strictly to mechanical tool executions, data queries, file operations, and external assertions. Acts of pure cognitive reasoning and architectural judgement produce insight rather than tool output and are exempt from mandatory residue formatting.
+    - **TRIGGERED CLOSING PROTOCOL**: Closing evidence fields appear ONLY when their specific condition triggers during the turn (eliminating fixed ceremony):
+      1. `CHECKED`: Triggers ONLY when an assertion about a DB, repo, or file is made. Must state source (`table: columns [query]` or `file#line [fetched]`).
+      2. `TOOK ON TRUST`: Triggers ONLY when an unverified fact is accepted from another party. Must state owner clearance type (`ME`: 1-turn expiry; `OTHER`: open & ageing; `GOVERNOR`: open & ageing).
+      3. `WHAT I GOT WRONG`: Triggers ONLY when a correction occurs this turn.
+      4. `FOUND → MECHANISM`: Triggers ONLY when a defect is identified.
+    - **GOODHART-PROOF SEMANTIC BINDINGS**:
+      - `CisemAuditor.py` -> `10-PERSONA AUDIT PANEL VERDICT: [target: Cisem CsAg root, active_personas: 10/10, scenario_count: 6, finding_count: 0 critical, verdict: COMPLIANT]`.
+      - `cisem_gate.py` -> `LGG GATE AUDIT READOUT: [target_file: <path>, max_phase_reached: <N>, exit_code: <0/1>, status: PASSED/BLOCKED]`.
+      - `ViciousWiringAuditor.py` -> `WIRING AUDIT: [routes_checked: N/N, disconnected_routes: 0, warnings: W, result: PASSED]`.
+      - `live_schema_registry.json` -> `SCHEMA VERIFIED: {"t": "table", "c": "col", "type": "type"} [COPY: live_schema_registry.json#L<line>, NOT LIVE DB]`.
+      - `TASK_LIST.md` -> `TASK_LIST DEBT REGISTRATION: [TASK-SYS-XXX state: RATIFIED at TASK_LIST.md#L<line>, file_lines: N]`.
+    - **CANONICAL MECHANISM DESIGN CHAIN**: `RULE → CARRIER → INVOCATION → RESIDUE → VERIFICATION → COVERAGE → OUTCOME`.
 <!-- END:cisem-improvement-loop-root -->
 
 <!-- BEGIN:governor-chat-and-popup-rules -->

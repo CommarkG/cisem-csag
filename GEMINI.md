@@ -67,8 +67,28 @@ Every destructive operation (such as deletion, renaming, or file movement) must 
 - **8.4. Builder Guard Line**: Every Builder reply MUST include: `CONSENSUS CHECK — POSITIONS STATED: [both/one/neither] · ATTACKED: [yes/no] · READY FOR THE GOVERNOR: [yes/no, and what is missing]`
 - **8.5. Mandatory Creation Protocol Sequence & Canonical Term**: `CONSENSUS -> DRAFT PLAN -> REVIEW AND FINE-TUNE -> GOVERNOR RATIFICATION -> IMPLEMENTATION`. "DRAFT PLAN" is the canonical term everywhere. Nothing is implemented without Governor Ratification of a Draft Plan.
 
+## 9. The Invocation Law & Triggered Closing Protocol (Governor Ratified V2.1)
+- **9.1. The Invocation Law**: A rule that can be satisfied without doing the thing is not a mechanism. A required output that cannot be produced without doing it, is.
+- **9.2. Boundary of Judgement**: Applies strictly to mechanical tool executions, queries, and file operations. Cognitive reasoning and architectural judgement produce insight and are exempt from mandatory residue formatting.
+- **9.3. Triggered Closing Protocol**: Evidence fields appear ONLY when triggered during turn:
+  1. `CHECKED`: Triggers on DB/repo/file assertions. Must cite source (`table: col [query]` or `file#line [fetched]`).
+  2. `TOOK ON TRUST`: Triggers on unverified fact pass-throughs. Must state owner (`ME`: 1-turn; `OTHER`: open & ageing; `GOVERNOR`: open & ageing).
+  3. `WHAT I GOT WRONG`: Triggers on turn corrections.
+  4. `FOUND → MECHANISM`: Triggers on defect detection.
+- **9.4. Goodhart-Proof Semantic Bindings**:
+  - `CisemAuditor.py` -> `10-PERSONA AUDIT PANEL VERDICT: [target: Cisem CsAg root, active_personas: 10/10, scenario_count: 6, finding_count: 0 critical, verdict: COMPLIANT]`.
+  - `cisem_gate.py` -> `LGG GATE AUDIT READOUT: [target_file: <path>, max_phase_reached: <N>, exit_code: <0/1>, status: PASSED/BLOCKED]`.
+  - `ViciousWiringAuditor.py` -> `WIRING AUDIT: [routes_checked: N/N, disconnected_routes: 0, warnings: W, result: PASSED]`.
+  - `live_schema_registry.json` -> `SCHEMA VERIFIED: {"t": "table", "c": "col", "type": "type"} [COPY: live_schema_registry.json#L<line>, NOT LIVE DB]`.
+  - `TASK_LIST.md` -> `TASK_LIST DEBT REGISTRATION: [TASK-SYS-XXX state: RATIFIED at TASK_LIST.md#L<line>, file_lines: N]`.
+- **9.5. Canonical Mechanism Design Chain**: `RULE → CARRIER → INVOCATION → RESIDUE → VERIFICATION → COVERAGE → OUTCOME`.
+
 ---
 history:
+  - timestamp: "2026-09-04T18:32:00Z"
+    action: "LANDED_INVOCATION_LAW_V2_AND_REBUILT_CLOSING_PROTOCOL"
+    actor: "GOOGLE_ANTIGRAVITY_ADAPTER"
+    version: "1.6"
   - timestamp: "2026-08-11T00:28:00Z"
     action: "ADDED_UX_UI_CONSISTENCY_AND_SINGLE_ROW_ENFORCEMENT_LAWS"
     actor: "GOOGLE_ANTIGRAVITY_ADAPTER"

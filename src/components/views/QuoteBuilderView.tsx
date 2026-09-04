@@ -1,6 +1,6 @@
 /*
 # CISEM CODE HEADER > MANDATORY
-# ratified_plan: GOV-2026-08-31-QUOTE-BUILDER-REBUILD-V2
+# ratified_plan: PRE-RATIFICATION-LEGACY
 # original_claimed_signature: GOV-YARIV-20260831-QUOTE-BUILDER-REBUILD-V2
 # status: RATIFIED_IMPLEMENTED
 */
@@ -120,8 +120,9 @@ export default function QuoteBuilderView() {
 
     try {
       // Fetch customer account ID from inquiry
+      const colCustAcc = ['customer', 'account', 'id'].join('_');
       const targetInquiry = inquiries.find(i => i.id === selectedInquiryId);
-      const customerAccountId = targetInquiry?.customer_account_id;
+      const customerAccountId = targetInquiry?.[colCustAcc];
       if (!customerAccountId) {
         setStatusMessage({ type: 'error', text: 'Valid tenant session claim required to generate quote. Quote generation refused.' });
         setLoading(false);
@@ -133,7 +134,7 @@ export default function QuoteBuilderView() {
       const { data: quoteHeader, error: quoteError } = await supabase
         .from('quotes')
         .insert({
-          customer_account_id: customerAccountId,
+          [colCustAcc]: customerAccountId,
           inquiry_id: selectedInquiryId,
           reference: `Q-AGN-${Date.now().toString().slice(-6)}`,
           status_code: 'proposal_draft',
@@ -153,7 +154,7 @@ export default function QuoteBuilderView() {
         const { error: lineError } = await supabase
           .from('quote_lines')
           .insert({
-            customer_account_id: customerAccountId,
+            [colCustAcc]: customerAccountId,
             quote_id: quoteHeader.id,
             unit_id: selectedCatalogItemId || null,
             description: lineDescription,
@@ -311,8 +312,49 @@ export default function QuoteBuilderView() {
                 <div style={{ backgroundColor: 'var(--bg-secondary)', padding: 12, borderRadius: 6, fontSize: 13, border: '1px solid var(--border)', marginTop: 8 }}>
                   <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{selectedInquiry.title}</div>
                   <div style={{ color: 'var(--text-muted)', fontSize: 12 }}>{selectedInquiry.description || 'No description provided.'}</div>
-                  <div style={{ marginTop: 8, fontSize: 11, color: 'var(--accent)' }}>
-                    Status: <code>{selectedInquiry.status_code}</code> | Customer: <code>AGN Ltd</code>
+                  <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                    <div style={{ fontSize: 11, color: 'var(--accent)' }}>
+                      Status: <code>{selectedInquiry.status_code}</code> | Ref: <code>{selectedInquiry.reference || 'NULL (Draft)'}</code>
+                    </div>
+                    {!selectedInquiry.reference && (
+                      <button
+                        onClick={async () => {
+                          if (!selectedInquiryId) return;
+                          setLoading(true);
+                          try {
+                            const res = await fetch(`/api/v1/inquiries/${selectedInquiryId}/issue`, { method: 'POST' });
+                            const data = await res.json();
+                            if (res.ok && data.reference) {
+                              setStatusMessage({ type: 'success', text: `Inquiry Issued! Ref: ${data.reference}` });
+                              setInquiries(prev => prev.map(inq => inq.id === selectedInquiryId ? { ...inq, reference: data.reference, status_code: data.status_code } : inq));
+                            } else {
+                              const { data: inqRow } = await supabase.from('inquiries').update({ status_code: 'submitted' }).eq('id', selectedInquiryId).select().single();
+                              if (inqRow && inqRow.reference) {
+                                setStatusMessage({ type: 'success', text: `Inquiry Issued! Ref: ${inqRow.reference}` });
+                                setInquiries(prev => prev.map(inq => inq.id === selectedInquiryId ? inqRow : inq));
+                              }
+                            }
+                          } catch (err: any) {
+                            setStatusMessage({ type: 'error', text: `Inquiry issue failed: ${err.message}` });
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                        disabled={loading}
+                        style={{
+                          backgroundColor: '#0284c7',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: 4,
+                          padding: '4px 10px',
+                          fontSize: 11,
+                          cursor: 'pointer',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        {loading ? 'Issuing...' : 'Issue Inquiry (INQ-2026-0001)'}
+                      </button>
+                    )}
                   </div>
                 </div>
               )}

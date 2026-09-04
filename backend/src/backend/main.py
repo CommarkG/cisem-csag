@@ -2216,6 +2216,36 @@ async def list_inquiries(request: Request):
         print(f"PostgreSQL Inquiry List Failed: {e}")
         raise HTTPException(status_code=500, detail=f"PostgreSQL Database Error: {str(e)}")
 
+@app.post("/api/v1/inquiries/{inquiry_id}/issue")
+async def issue_inquiry_endpoint(inquiry_id: str, request: Request):
+    """
+    Issues an inquiry reference for the active tenant context (Document Spine Pass 1).
+    Transitions inquiries.status_code to 'submitted', triggering trg_issue_reference_inquiries
+    BEFORE UPDATE to invoke issue_document_reference('inquiry', NULL) and mint INQ-YYYY-XXXX.
+    """
+    tenant_id = extract_tenant_from_request(request)
+    try:
+        db_client = supabase_admin if supabase_admin else supabase
+        res = db_client.table("inquiries").update({
+            "status_code": "submitted"
+        }).eq("id", inquiry_id).eq("customer_account_id", tenant_id).execute()
+        
+        if not res.data:
+            raise HTTPException(status_code=404, detail=f"Inquiry '{inquiry_id}' not found for active tenant.")
+        
+        updated_row = res.data[0]
+        return {
+            "status": "issued",
+            "id": updated_row["id"],
+            "reference": updated_row.get("reference"),
+            "status_code": updated_row.get("status_code")
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Inquiry Reference Issuance Failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Inquiry Issue Failed: {str(e)}")
+
 @app.post("/api/v1/quotes")
 async def create_quote(payload: QuoteCreatePayload, request: Request):
     """Creates a quote for an inquiry within tenant context."""

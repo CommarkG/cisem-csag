@@ -26,6 +26,7 @@
 | `cisem_core/2026-08-14__GoogleAntigravity__CISEM__DeletionEvidenceLog__V1.0.yaml` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/CisemSync.py` | `1.3` | `UNVERSIONED` | MISMATCH (1.3 vs UNVERSIONED) |
 | `cisem_core/CisemSyncSandbox.py` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
+| `cisem_core/PARKED_REGISTER.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/build.js` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/find_loose_pages.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/find_transcript_blink.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
@@ -47,6 +48,7 @@
 | `cisem_core/update_registry_v1.44.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
 | `cisem_core/update_registry_v1.8.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
 | `cisem_core/upload_to_drive.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/architecture/2026-09-04__AntigravityLocal__YarivGovernor__NamingAndNumberingPolicy__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/archive/2026-08-05__AntigravityLocal__CisemCloud__AlignmentAudit__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/archive/2026-08-05__CISEM__AntigravityLocal__HardeningAuditReport__V1.0.md` | `1.0` | `1.0` | MATCH |
 | `cisem_core/archive/2026-08-05__CISEM__Multi_Model_Code_Review_and_Independent_Audit_Layer__V1.0.md` | `1.0` | `1.0` | MATCH |
@@ -279,6 +281,10 @@
 | `cisem_core/code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PayloadCatalogEnrichmentHook__V1.0.ts` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_PayloadMediaCollectionSchema__V1.0.ts` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/code/2026-08-08__AntigravityLocal__YarivHuman__SaaS_RootLayoutComponent__V1.0.tsx` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/communication_hub/CONSENSUS_REGISTER.md` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
+| `cisem_core/communication_hub/GOVERNANCE_RULINGS.md` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
+| `cisem_core/communication_hub/PARKED_REGISTER.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/communication_hub/TASK_LIST.md` | `1.2` | `UNVERSIONED` | MISMATCH (1.2 vs UNVERSIONED) |
 | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpAdapter__V0.1.py` | `0.1` | `0.1` | MATCH |
 | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpWatcher__V0.1.py` | `0.4` | `0.1` | MISMATCH (0.4 vs 0.1) |
 | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__GasOrchestrator__V0.1.js` | `0.1` | `0.1` | MATCH |
@@ -353,32 +359,26 @@
 | `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__MasterProductAndPricingEngineBlueprint__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__OptimalFileLengthResearch__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
 | `cisem_core/downloads/2026-08-30__AntigravityLocal__YarivGovernor__WorkspaceArchivingReport__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
-| `cisem_core/downloads/AGENTS.md` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/AdminView.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/CisemATV.py` | `1.1` | `UNVERSIONED` | MISMATCH (1.1 vs UNVERSIONED) |
-| `cisem_core/downloads/CisemAuditor.py` | `2.3` | `UNVERSIONED` | MISMATCH (2.3 vs UNVERSIONED) |
-| `cisem_core/downloads/CollaborationHub.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/Header.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/P1__Pipeline__Intent_to_Sustained__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
-| `cisem_core/downloads/PageGreetingBanner.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/QuoteBuilderView.tsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/Sidebar.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/SignInView.tsx` | `3.0` | `UNVERSIONED` | MISMATCH (3.0 vs UNVERSIONED) |
-| `cisem_core/downloads/TemplateHubView.tsx` | `1.0` | `UNVERSIONED` | MISMATCH (1.0 vs UNVERSIONED) |
-| `cisem_core/downloads/UniversalOnboardingViewport.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/ViciousWiringAuditor.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/WelcomeModal.jsx` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/audit_all_references.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/audit_infrastructure_code.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/audit_missing_ratified_docs.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/audit_ui_system.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/check_content.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/check_walkthrough.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/cisem_gate.py` | `3.1` | `UNVERSIONED` | MISMATCH (3.1 vs UNVERSIONED) |
-| `cisem_core/downloads/debug_gate_phase8.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/extract_verification_manifest.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/find_offending_file.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
-| `cisem_core/downloads/fix_and_gate.py` | `UNSTATED` | `UNVERSIONED` | OK (UNVERSIONED) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__DomainArchitectureAndExtensionSpecification__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__OnboardingWizardStepOneSchema__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__PeerPlatformDecoupledExchangeSpecification__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__ProcessFrameworkAndThreeLayerArchitectureSpecification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__ProcessFrameworkAndThreeLayerArchitectureSpecification__V1.1.md` | `UNSTATED` | `1.1` | MISMATCH (UNSTATED vs 1.1) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__ProcessFrameworkAndThreeLayerArchitectureSpecification__V1.2.md` | `UNSTATED` | `1.2` | MISMATCH (UNSTATED vs 1.2) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__ProcessFrameworkAndThreeLayerArchitectureSpecification__V1.3.md` | `UNSTATED` | `1.3` | MISMATCH (UNSTATED vs 1.3) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__ProcessFrameworkAndThreeLayerArchitectureSpecification__V1.4.md` | `UNSTATED` | `1.4` | MISMATCH (UNSTATED vs 1.4) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__ProcessFrameworkAndThreeLayerArchitectureSpecification__V2.0.md` | `UNSTATED` | `2.0` | MISMATCH (UNSTATED vs 2.0) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA1_AbsenceDoctrineSpecification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA1_AbsenceDoctrineSpecification__V1.1.md` | `UNSTATED` | `1.1` | MISMATCH (UNSTATED vs 1.1) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA1_AbsenceDoctrineSpecification__V1.2.md` | `UNSTATED` | `1.2` | MISMATCH (UNSTATED vs 1.2) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA1_AbsenceDoctrineSpecification__V1.3.md` | `UNSTATED` | `1.3` | MISMATCH (UNSTATED vs 1.3) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA2_LayerModelAndVocabularySpecification__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA2_LayerModelAndVocabularySpecification__V1.1.md` | `UNSTATED` | `1.1` | MISMATCH (UNSTATED vs 1.1) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA2_LayerModelAndVocabularySpecification__V1.2.md` | `UNSTATED` | `1.2` | MISMATCH (UNSTATED vs 1.2) |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA3EntityAliasingSpecification__V1.0.md` | `1.0` | `1.0` | MATCH |
+| `cisem_core/downloads/2026-09-01__AntigravityLocal__YarivGovernor__SubArtifactA3EntityAliasingSpecification__V1.1.md` | `1.1` | `1.1` | MATCH |
+| `cisem_core/downloads/2026-09-04__AntigravityLocal__YarivGovernor__CommunicationHubSpecificationAndResponse__V1.0.md` | `UNSTATED` | `1.0` | MISMATCH (UNSTATED vs 1.0) |
+| `cisem_core/downloads/2026-09-04__AntigravityLocal__YarivGovernor__CommunicationHubSpecificationAndResponse__V2.0.md` | `2.0` | `2.0` | MATCH |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |
 | ... (Truncated directory entries) | N/A | N/A | SUMMARIZED |

@@ -1249,3 +1249,149 @@ Call log:
   src\utils\treeHelpers.js: Missing mandatory code header block.
   Rule: Cumulative header violations must not increase. The baseline count is 26.
   Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-09-04T15:40:19.638860Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 30!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\StepOneIdentity.tsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\components\views\CatalogueListView.tsx: Missing mandatory code header block.
+  src\components\views\QuoteBuilderView.tsx: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\types\database.types.ts: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-09-04T16:56:45.718761Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 30!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\StepOneIdentity.tsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\components\views\CatalogueListView.tsx: Missing mandatory code header block.
+  src\components\views\QuoteBuilderView.tsx: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\types\database.types.ts: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-09-04T16:57:22.128029Z] [Phase 22] [BLOCK] CISEM_GATE_BLOCKED -- Phase 22.5: TypeScript/JSX Code Header Audit failed (Ratchet Violation).
+  Violations count increased from baseline of 26 to 29!
+  Current Violations:
+  src\app\layout.tsx: Missing mandatory code header block.
+  src\app\page.tsx: Missing mandatory code header block.
+  src\components\layout\Sidebar.jsx: Missing mandatory code header block.
+  src\components\onboarding\OnboardingTour.jsx: Missing mandatory code header block.
+  src\components\onboarding\StepOneIdentity.tsx: Missing mandatory code header block.
+  src\components\onboarding\WelcomeModal.jsx: Missing mandatory code header block.
+  src\components\shared\AddItemModal.jsx: Missing mandatory code header block.
+  src\components\shared\AdminCommentPanel.jsx: Missing mandatory code header block.
+  src\components\shared\CommandPalette.jsx: Missing mandatory code header block.
+  src\components\shared\DefineFieldsModal.jsx: Missing mandatory code header block.
+  src\components\shared\Modal.jsx: Missing mandatory code header block.
+  src\components\shared\NotificationTray.jsx: Missing mandatory code header block.
+  src\components\shared\PageGreetingBanner.jsx: Missing mandatory code header block.
+  src\components\shared\TagInput.jsx: Missing mandatory code header block.
+  src\components\shared\TaskDetailPanel.jsx: Missing mandatory code header block.
+  src\components\shared\ToastContainer.jsx: Missing mandatory code header block.
+  src\components\views\CatalogueListView.tsx: Missing mandatory code header block.
+  src\stores\useAdminStore.js: Missing mandatory code header block.
+  src\stores\useCollabStore.js: Missing mandatory code header block.
+  src\stores\useNotificationStore.js: Missing mandatory code header block.
+  src\stores\useOnboardingStore.js: Missing mandatory code header block.
+  src\stores\useTaskStore.js: Missing mandatory code header block.
+  src\stores\useTenantSessionStore.js: Missing mandatory code header block.
+  src\stores\useUIStore.js: Missing mandatory code header block.
+  src\types\database.types.ts: Missing mandatory code header block.
+  src\utils\seedData.js: Missing mandatory code header block.
+  src\utils\tenantStorageAdapter.js: Missing mandatory code header block.
+  src\utils\translations.js: Missing mandatory code header block.
+  src\utils\treeHelpers.js: Missing mandatory code header block.
+  Rule: Cumulative header violations must not increase. The baseline count is 26.
+  Fix: Resolve violations, or request the Governor to update the baseline file.
+[2026-09-04T16:57:48.550706Z] [Phase 24] [BLOCK] CISEM_GATE_BLOCKED -- Phase 24: ZeroFabricationGate violation.
+  cisem_core\tools\gate_industry_vocabulary.py: Contains swallowed DB exception returning silent empty list/dict
+[2026-09-04T16:58:22.485008Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T17:01:50.094611Z] [Phase 33] [BLOCK] CISEM_GATE_BLOCKED -- Phase 33: Customer Surface System Jargon Violation in QuoteBuilderView.tsx.
+  Forbidden backend/schema term 'customer_account_id' was detected on human UI surface!
+  Rule: Human language MUST precede system language. Customer surfaces MUST NOT display database or schema terms.
+  Fix: Remove 'customer_account_id' from QuoteBuilderView.tsx and replace with plain human language.
+[2026-09-04T17:03:27.442050Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34: Playwright Pre-Render Audit Failed.
+  Output:
+[NAVIGATION ERROR]: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+[CRITICAL FAILURE]: Playwright detected 1 uncaught console or dead script errors!
+  - NAV_ERROR: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/inquiry-intake
+Call log:
+[2m  - navigating to "http://localhost:4321/#/inquiry-intake", waiting until "domcontentloaded"[22m
+
+
+  Rule: Pre-render verification MUST pass with zero DOM errors before compilation succeeds.
+[2026-09-04T17:04:06.962946Z] [Phase 34] [BLOCK] CISEM_GATE_BLOCKED -- Phase 34.5: CANNOT VERIFY. Logged-In Playwright DOM Assertion Audit Failed.
+  Output:
+==========================================================================
+CISEM LOGGED-IN SESSION PLAYWRIGHT E2E TEST > V3.0
+Target URL: http://localhost:4321/#/signin
+==========================================================================
+
+[TARGET CHECK] Connecting to application target URL...
+
+[CRITICAL ERROR] Application target URL is OFFLINE or UNREACHABLE: Page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4321/#/signin
+Call log:
+  - navigating to "http://localhost:4321/#/signin", waiting until "domcontentloaded"
+
+  Rule: Connection refusal is NOT a failed assertion -- IT IS A TEST THAT DID NOT RUN.
+  Result: CANNOT VERIFY. Aborting test execution.
+
+[PROCESS RECORD WRITTEN] cisem_core/last_run.json (SHA256: 55f3a659e463)
+
+  Rule: NO UI change ships without passing automated logged-in session DOM assertions. If server is offline, execution BLOCKS.
+[2026-09-04T17:04:23.727442Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.
+[2026-09-04T17:05:43.714231Z] [Phase None] [BLOCK] CISEM_GATE_BLOCKED -- Context pack in .agents/reviewer/ is stale. Run python cisem_core/tools/generate_reviewer_pack.py to update.

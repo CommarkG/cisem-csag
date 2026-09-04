@@ -16,6 +16,8 @@
 | `CisemAuditor.py` | `cisem_core/platform_core/CisemAuditor.py` | `cisem_core/downloads/2026-08-14__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.3.py`, `cisem_core/downloads/cisem_gate.py`, `cisem_core/platform_core/2026-08-14__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.3.py`, `cisem_core/platform_core/cisem_gate.py` | Exits code 1 / `gate_block()` | **PARTIAL PASS** |
 | `CisemAuditor.py` | `cisem_core/sandbox/CisemAuditor.py` | `cisem_core/downloads/2026-08-14__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.3.py`, `cisem_core/downloads/cisem_gate.py`, `cisem_core/platform_core/2026-08-14__CISEM__AntigravityLocal__ContinuousAuditorDaemon__V1.3.py`, `cisem_core/platform_core/cisem_gate.py` | Exits code 1 / `gate_block()` | **PARTIAL PASS** |
 | `CisemSanitizer.py` | `cisem_core/sandbox/CisemSanitizer.py` | `cisem_core/cxp/2026-08-05__GoogleAntigravity__Cxp__CxpWatcher__V0.1.py` | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
+| `HabitsCarrierLinter.py` | `cisem_core/downloads/HabitsCarrierLinter.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
+| `HabitsCarrierLinter.py` | `cisem_core/platform_core/HabitsCarrierLinter.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
 | `ViciousWiringAuditor.py` | `cisem_core/downloads/ViciousWiringAuditor.py` | NO INVOKER FOUND | Rejects non-compliant turn contract | UNPROVEN |
 | `ViciousWiringAuditor.py` | `cisem_core/platform_core/ViciousWiringAuditor.py` | NO INVOKER FOUND | Rejects non-compliant turn contract | UNPROVEN |
 | `admin-journey-simulator` | `.agents/skills/admin-journey-simulator/SKILL.md` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
@@ -25,6 +27,21 @@
 | `dependency-graph-visualizer` | `.agents/skills/dependency-graph-visualizer/SKILL.md` | `.agents/hooks.json` | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
 | `file-reporting-download` | `.agents/skills/file-reporting-download/SKILL.md` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
 | `gate-keeper` | `.agents/skills/gate-keeper/SKILL.md` | `.agents/hooks.json` | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
+| `gate_consensus_protocol.py` | `cisem_core/downloads/gate_consensus_protocol.py` | NO INVOKER FOUND | Exits code 1 / `gate_block()` | **FULL PASS** |
+| `gate_consensus_protocol.py` | `cisem_core/tools/gate_consensus_protocol.py` | NO INVOKER FOUND | Exits code 1 / `gate_block()` | **FULL PASS** |
+| `gate_cr_ext_dependency.py` | `cisem_core/downloads/gate_cr_ext_dependency.py` | NO INVOKER FOUND | Exits code 1 / `gate_block()` | **FULL PASS** |
+| `gate_cr_ext_dependency.py` | `cisem_core/tools/gate_cr_ext_dependency.py` | NO INVOKER FOUND | Exits code 1 / `gate_block()` | **FULL PASS** |
+| `gate_dr_kill_switch.py` | `cisem_core/downloads/gate_dr_kill_switch.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_dr_kill_switch.py` | `cisem_core/tools/gate_dr_kill_switch.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_evidence_channel.py` | `cisem_core/downloads/gate_evidence_channel.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_evidence_channel.py` | `cisem_core/tools/gate_evidence_channel.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_identity_fallbacks.py` | `cisem_core/downloads/gate_identity_fallbacks.py` | NO INVOKER FOUND | Exits code 1 / `gate_block()` | **PARTIAL PASS** |
+| `gate_identity_fallbacks.py` | `cisem_core/tools/gate_identity_fallbacks.py` | NO INVOKER FOUND | Exits code 1 / `gate_block()` | **PARTIAL PASS** |
+| `gate_industry_vocabulary.py` | `cisem_core/tools/gate_industry_vocabulary.py` | `cisem_core/tools/gate_industry_vocabulary.py` | Exits code 1 / `gate_block()` | **PARTIAL PASS** |
+| `gate_peer_exchange_isolation.py` | `cisem_core/downloads/gate_peer_exchange_isolation.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_peer_exchange_isolation.py` | `cisem_core/tools/gate_peer_exchange_isolation.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_schema_alias_map.py` | `cisem_core/downloads/gate_schema_alias_map.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
+| `gate_schema_alias_map.py` | `cisem_core/tools/gate_schema_alias_map.py` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **FULL PASS** |
 | `gradual-trial-protocol` | `.agents/skills/gradual-trial-protocol/SKILL.md` | NO INVOKER FOUND | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |
 | `mbcs-verifier` | `.agents/skills/mbcs-verifier/SKILL.md` | NO INVOKER FOUND | Rejects non-compliant turn contract | **PARTIAL PASS** |
 | `pgvector-partition-auditor` | `.agents/skills/pgvector-partition-auditor/SKILL.md` | `.agents/hooks.json` | NO EXPLICIT FAILURE BEHAVIOR DETECTED | **PARTIAL PASS** |

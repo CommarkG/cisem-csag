@@ -32,7 +32,8 @@ def scan_file(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
-    except Exception:
+    except Exception as e:
+        sys.stderr.write(f"Warning reading {file_path}: {e}\n")
         return {}
 
     findings = {}

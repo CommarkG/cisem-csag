@@ -57,7 +57,7 @@ def write_run_record(script_name, exit_code, passed_count, failed_count, stdout_
     print(f"\n[PROCESS RECORD WRITTEN] cisem_core/last_run.json (SHA256: {sha256_hash[:12]})")
 
 def run_e2e_test():
-    target_base = os.environ.get("FRONTEND_URL", "http://localhost:4321")
+    target_base = os.environ.get("FRONTEND_URL", "http://localhost:3000")
     target_url = f"{target_base}/#/signin"
     stdout_buffer = []
     

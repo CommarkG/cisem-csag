@@ -12,12 +12,12 @@
     "last_maturity_score": null
   },
   "maturity_score_threshold": 70,
-  "last_reset": "2026-09-01T09:40:32.504133+00:00",
+  "last_reset": "2026-09-04T17:05:21.712260+00:00",
   "ratified_plan": "CISEM-IP-20260806-CONTEXT-ADAPTIVE-V1.0",
   "governor_signature": "GOV-YARIV-20260806-CONTEXT-ADAPTIVE-V1.0",
   "turns_log": [
     {
-      "timestamp": "2026-09-01T09:40:33.934369Z",
+      "timestamp": "2026-09-04T17:05:23.987271Z",
       "action": "cisem_gate.py"
     }
   ]
