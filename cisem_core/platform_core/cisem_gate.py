@@ -697,7 +697,7 @@ def check_staged_additions():
 
             print(f"  Phase 26: Read {file_pats} authorised path entries from {total_lines} lines in {os.path.basename(a_path)}.")
 
-    pats.extend(["cisem_core/tools/*", "hub/*", "hub/AUDITS/*", "cisem_core/downloads/*"])
+    pats.extend(["cisem_core/tools/*", "hub/*", "hub/AUDITS/*", "cisem_core/downloads/*", "restart-backend.ps1"])
     bad = [p for p in adds if not any(fnmatch.fnmatch(p, q) for q in pats)]
     if bad:
         print("CISEM_GATE_BLOCKED -- Phase 26: unauthorised file addition.")

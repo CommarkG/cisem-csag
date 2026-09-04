@@ -205,20 +205,18 @@ export default function QuoteBuilderView() {
     setLoading(true);
     try {
       const res = await fetch(`/api/v1/quotes/${activeQuote.id}/issue`, { method: 'POST' });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Server returned status ${res.status}`);
+      }
       const data = await res.json();
 
-      let issuedRef = data.reference;
-      let newStatus = data.status_code || 'issued';
-
-      if (!issuedRef) {
-        const targetInquiry = inquiries.find(i => i.id === selectedInquiryId);
-        const parentRef = targetInquiry?.reference || 'INQ-2026-0001';
-        issuedRef = `${parentRef}-01`;
-        await supabase
-          .from('quotes')
-          .update({ status_code: newStatus, reference: issuedRef })
-          .eq('id', activeQuote.id);
+      if (!data.reference) {
+        throw new Error('Quote issuance failed: Database did not return an official document reference.');
       }
+
+      const issuedRef: string = data.reference;
+      const newStatus: string = data.status_code || 'issued';
 
       setActiveQuote(prev => prev ? { ...prev, reference: issuedRef, status_code: newStatus } : null);
       setStatusMessage({

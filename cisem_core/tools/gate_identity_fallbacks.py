@@ -18,7 +18,7 @@ with open(baseline_path, 'r', encoding='utf-8') as f:
 
 components_dir = r'C:\Users\finky\Desktop\AntiGravity\Cisem CsAg\src\components'
 string_fallback_pattern = re.compile(r'(\b[\w\.]+\s*\|\|\s*[\'"][^\'"]+[\'"])')
-identity_terms = ['company', 'tenant', 'user', 'role', 'owner', 'author', 'dima', 'agn', 'admin', 'guest']
+identity_terms = ['company', 'tenant', 'user', 'role', 'owner', 'author', 'dima', 'agn', 'admin', 'guest', 'inq', 'inquiry', 'quote', 'ref', 'reference']
 
 identity_findings = []
 
