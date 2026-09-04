@@ -195,6 +195,15 @@ export default function QuoteBuilderView() {
     }
   };
 
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token || (typeof window !== 'undefined' ? localStorage.getItem('cisem_access_token') || localStorage.getItem('cisem_auth_token') : null);
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+  };
+
   // Phase 2: Issue Quote (Mints child reference e.g. INQ-2026-0001-01)
   const handleIssueQuote = async () => {
     if (!activeQuote) {
@@ -204,7 +213,11 @@ export default function QuoteBuilderView() {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/quotes/${activeQuote.id}/issue`, { method: 'POST' });
+      const headers = await getAuthHeaders();
+      const res = await fetch(`/api/v1/quotes/${activeQuote.id}/issue`, {
+        method: 'POST',
+        headers
+      });
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.detail || `Server returned status ${res.status}`);
@@ -241,9 +254,10 @@ export default function QuoteBuilderView() {
 
     setLoading(true);
     try {
+      const headers = await getAuthHeaders();
       const res = await fetch(`/api/v1/quotes/${activeQuote.id}/accept`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           evidence_kind: 'signature',
           evidence_data: 'Governor Yariv Customer Verification',
@@ -416,17 +430,17 @@ export default function QuoteBuilderView() {
                           if (!selectedInquiryId) return;
                           setLoading(true);
                           try {
-                            const res = await fetch(`/api/v1/inquiries/${selectedInquiryId}/issue`, { method: 'POST' });
+                            const headers = await getAuthHeaders();
+                            const res = await fetch(`/api/v1/inquiries/${selectedInquiryId}/issue`, {
+                              method: 'POST',
+                              headers
+                            });
                             const data = await res.json();
                             if (res.ok && data.reference) {
                               setStatusMessage({ type: 'success', text: `Inquiry Issued! Ref: ${data.reference}` });
                               setInquiries(prev => prev.map(inq => inq.id === selectedInquiryId ? { ...inq, reference: data.reference, status_code: data.status_code } : inq));
                             } else {
-                              const { data: inqRow } = await supabase.from('inquiries').update({ status_code: 'issued' }).eq('id', selectedInquiryId).select().single();
-                              if (inqRow && inqRow.reference) {
-                                setStatusMessage({ type: 'success', text: `Inquiry Issued! Ref: ${inqRow.reference}` });
-                                setInquiries(prev => prev.map(inq => inq.id === selectedInquiryId ? inqRow : inq));
-                              }
+                              throw new Error(data.detail || 'Inquiry issuance failed.');
                             }
                           } catch (err: any) {
                             setStatusMessage({ type: 'error', text: `Inquiry issue failed: ${err.message}` });
